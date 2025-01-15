@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
-        // robotContainer.testDrive(drive, vision);
+        robotContainer.testDrive(drive, vision);
         // robotContainer.testCANivore(driveMotor, motor);
     }
 
@@ -129,6 +129,10 @@ public class Robot extends TimedRobot {
         // cycleTracker.printAllData();
     }
 
+    @Override
+    public void autonomousExit(){
+        drive.changeAllianceRotation();
+    }
 
         
 }

@@ -42,16 +42,7 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void initialize() {
-        //Todo Test
-        // drive.changeAllianceRotation();
-        switch (DriverStation.getAlliance().get()) {
-            case Red:
-                drive.setYawCommand(drive.getHeading() + 180);
-                break;
-            case Blue:
-                drive.setYawCommand(drive.getHeading());
-                break;
-        }
+        
     }
 
     @Override

@@ -272,8 +272,11 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command setYawCommand(double degrees) {
         return runOnce(
-            () -> pigeon2.setYaw(degrees, 5)
+            () -> setYaw(degrees)
         );
+    }
+    public void setYaw(double degrees){
+        pigeon2.setYaw(degrees, 5);
     }
 
     public Command runStop() {
@@ -305,16 +308,15 @@ public class SwerveDrive extends SubsystemBase {
         return frontLeft.getTurnMotor();
     }
 
-    public void changeAllianceRotation(){
-        //Need to Turn on Bot(front) facing towards the red alliance on robot start   
-        pigeon2.setYaw(
-            pigeon2.getYaw().getValueAsDouble()+
-            switch (DriverStation.getRawAllianceStation()) {
-                case Unknown -> 0;//180
-                case Blue1,Blue2,Blue3 -> 0;
-                case Red1,Red2,Red3 -> 180;
-            }
-        );
+    public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
+        switch (DriverStation.getAlliance().get()) {
+            case Red:
+                setYaw(getHeading() + 180);
+                break;
+            case Blue:
+                setYaw(getHeading());
+                break;
+        }
     }
 
     
