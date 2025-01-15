@@ -15,7 +15,7 @@ public class Intake extends IntakeTemplate {
         public static final double MIN_SPEED = 0;
     }
     
-    private static TalonEx motor = TalonEx.create(0)
+    private static TalonEx motor = TalonEx.create(54)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)

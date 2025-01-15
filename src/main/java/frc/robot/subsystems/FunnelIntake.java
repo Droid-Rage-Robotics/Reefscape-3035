@@ -24,28 +24,28 @@ public class FunnelIntake extends SubsystemBase {
         }
     }
 
-    private static TalonEx intakeLMotor = TalonEx.create(0)
+    private static TalonEx intakeLMotor = TalonEx.create(69)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("funnel")
         .withIsEnabled(true)
         .withCurrentLimit(50);
-    private static TalonEx intakeRMotor = TalonEx.create(0)
+    private static TalonEx intakeRMotor = TalonEx.create(68)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("funnel")
         .withIsEnabled(true)
         .withCurrentLimit(50);
-    private static TalonEx beltLMotor = TalonEx.create(0)
+    private static TalonEx beltLMotor = TalonEx.create(67)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("funnel")
         .withIsEnabled(true)
         .withCurrentLimit(50);
-    private static TalonEx beltRMotor = TalonEx.create(0)
+    private static TalonEx beltRMotor = TalonEx.create(66)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)

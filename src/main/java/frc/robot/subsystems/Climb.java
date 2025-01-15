@@ -18,7 +18,7 @@ public class Climb extends ArmAbsoluteTemplate {
         public static final double OFFSET = 0;
     }
     
-    private static SparkMaxEx motor = SparkMaxEx.create(0)
+    private static SparkMaxEx motor = SparkMaxEx.create(71)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
@@ -34,7 +34,7 @@ public class Climb extends ArmAbsoluteTemplate {
         super(
         new CANMotorEx[]{motor}, 
         new PIDController(0,0,0), 
-        new ArmFeedforward(0, 0, 0, 0, 0), 
+        new ArmFeedforward(0, 0, 0, 0), 
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.PID, "Climb", 0, encoder);
         motor.setIsEnabled(isEnabled);
