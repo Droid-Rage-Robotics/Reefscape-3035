@@ -276,20 +276,6 @@ public class SwerveDrive extends SubsystemBase {
         );
     }
 
-    public Command toggleFieldOriented() {
-        return runOnce(() -> DriveOptions.IS_FIELD_ORIENTED.set(
-                !isFieldOriented()
-            )
-        );
-    }
-
-    public Command toggleSquareInputs() {
-        return runOnce(() -> DriveOptions.IS_SQUARED_INPUTS.set(
-                !isSquaredInputs()
-            )
-        );
-    }
-
     public Command runStop() {
         return runOnce(this::stop);
     }

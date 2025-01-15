@@ -53,11 +53,11 @@ public abstract class CANMotorEx {
     public class IsEnabledBuilder {
         public CurrentLimitBuilder withIsEnabled(boolean isEnabled) {
             isEnabledWriter = ShuffleboardValue
-                .create(isEnabled, motorID + "/Is Enabled", subSystemName)
+                .create(isEnabled, subSystemName +"/"+ motorID + "/Is Enabled", subSystemName)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build();
             outputWriter = ShuffleboardValue
-                .create(0.0, motorID +"/Output", subSystemName)
+                .create(0.0, subSystemName +"/"+ motorID +"/Output", subSystemName)
                 .build();
             return new CurrentLimitBuilder();
 

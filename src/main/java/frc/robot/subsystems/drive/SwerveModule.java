@@ -85,7 +85,6 @@ public class SwerveModule {
     }
 
     public static SwerveModule.SubsystemNameBuilder create() {
-
         SwerveModule module = new SwerveModule();
         return module.new SubsystemNameBuilder();
     }
@@ -94,10 +93,10 @@ public class SwerveModule {
             podName = pod;
             subsystemName = name;
             turnPositionWriter = ShuffleboardValue.create(0.0, 
-            "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
+            "Module/Module " + podName + "/Turn Position (Radians)", 
                 name).build();
             drivePositionWriter = ShuffleboardValue.create(0.0, 
-                "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
+                "Module/Module " + podName + "/Drive Position (Radians)", 
                 name).build();
                 return new DriveIDBuilder();
         }
@@ -191,9 +190,9 @@ public class SwerveModule {
     // }
 
     public double getDrivePos() {
-            // drivePositionWriter.write(driveMotor.getPosition());
-            return driveMotor.getPosition();
-        }
+        drivePositionWriter.write(driveMotor.getPosition());
+        return driveMotor.getPosition();
+    }
     
     public double getTurningPosition() {
         turnPositionWriter.write(turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);

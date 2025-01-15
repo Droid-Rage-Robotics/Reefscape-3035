@@ -8,6 +8,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -29,16 +30,19 @@ import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     private final SwerveDrive drive;
-    private final Carriage coralSubsystem;
-    private final Elevator elevator;
+    // private final Carriage coralSubsystem;
+    // private final Elevator elevator;
     private final Vision vision;
-    public AutoChooser(
-        SwerveDrive drive, Carriage coralSubsystem, 
-        Elevator elevator, Vision vision)
+    public AutoChooser
+    (
+            SwerveDrive drive, Vision vision)
+    // (
+    //     SwerveDrive drive, Carriage coralSubsystem, 
+    //     Elevator elevator, Vision vision)
      {
         this.drive = drive;
-        this.coralSubsystem = coralSubsystem;
-        this.elevator = elevator;
+        // this.coralSubsystem = coralSubsystem;
+        // this.elevator = elevator;
         this.vision = vision;
 
         NamedCommands.registerCommand("resetPose",
@@ -78,13 +82,14 @@ public class AutoChooser {
 
         NamedCommands.registerCommand("scoreL4",
             new SequentialCommandGroup(
-                coralSubsystem.setPositionCommand(CarriageValue.L4),
-                coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+                // coralSubsystem.setPositionCommand(CarriageValue.L4),
+                // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
             )
         );
 
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
+            // .
             .withSize(1, 3);
         addTuningAuto(drive);
 

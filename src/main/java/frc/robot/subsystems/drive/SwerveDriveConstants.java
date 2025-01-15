@@ -50,7 +50,7 @@ public class SwerveDriveConstants {
         private SwerveDriveConfig(double value) {
             this.value = value;
             shuffleboardValue = ShuffleboardValue.create(value, 
-                "Constants/"+SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName())
+                "SwerveConstants/"+ SwerveDriveConfig.class.getSimpleName()+"/"+ name(), SwerveDrive.class.getSimpleName())
                 // .withWidget(BuiltInWidgets.kAccelerometer)
                 .build();
         }
@@ -62,17 +62,20 @@ public class SwerveDriveConstants {
         }
     }
 
-    public enum DriveOptions implements ShuffleboardValueEnum<Boolean> { 
+    public enum DriveOptions { 
         IS_FIELD_ORIENTED(true),
         IS_SQUARED_INPUTS(true)
         ;
-        private final ShuffleboardValue<Boolean> shuffleboardValue;
+        // private final ShuffleboardValue<Boolean> shuffleboardValue;
+        private final boolean value;
         private DriveOptions(boolean value) {
-            shuffleboardValue = ShuffleboardValue.create(value, "Constants/"+
-                DriveOptions.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
+            this.value = value;
         } 
-        @Override 
-        public ShuffleboardValue<Boolean> getNum() { return shuffleboardValue; }
+        public boolean get(){
+            return value;
+        }
+        // @Override 
+        // public ShuffleboardValue<Boolean> getNum() { return shuffleboardValue; }
     }
 
     public enum Speed {
@@ -85,11 +88,11 @@ public class SwerveDriveConstants {
         private final ShuffleboardValue<Double> shuffleboardAngularValue;
         private Speed(double translationalSpeed, double angularSpeed) {
             shuffleboardTranslationalValue = ShuffleboardValue.create(translationalSpeed, 
-                "Constants/"+Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
+                "SwerveConstants/"+Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
             shuffleboardAngularValue = ShuffleboardValue.create(translationalSpeed, 
-                "Constants/"+Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
+                "SwerveConstants/"+Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
         }
