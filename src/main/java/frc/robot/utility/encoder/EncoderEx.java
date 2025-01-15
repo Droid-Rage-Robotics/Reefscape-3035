@@ -20,7 +20,7 @@ public abstract class EncoderEx {
     public ShuffleboardValue<Double> degreeWriter;
     public ShuffleboardValue<Double> radianWriter;
     public ShuffleboardValue<Double> rawWriter;
-    public ShuffleboardValue<Boolean> isConnectedWriter;
+    // public ShuffleboardValue<Boolean> isConnectedWriter;
     public String subsystemName;
     // protected String subSystemName;
     public int deviceID;

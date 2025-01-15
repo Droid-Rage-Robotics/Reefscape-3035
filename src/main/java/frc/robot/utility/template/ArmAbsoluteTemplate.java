@@ -46,13 +46,12 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
 
     @Override
     protected void setVoltage(double voltage) {
-        if (encoder.isConnectedWriter.get()){
+        // if (encoder.isConnectedWriter.get()){
             for (CANMotorEx motor: motors) {
                 motor.setVoltage(-voltage);
                 //IMPORTANT: This flips the voltage to work right. Might NEED to change
             }
-        }
-        
+        // }
     }
     @Override
     public double getEncoderPosition() {
