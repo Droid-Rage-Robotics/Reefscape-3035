@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.SparkMaxEx;
@@ -35,10 +34,10 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.get() / 2, SwerveDriveConfig.TRACK_WIDTH.get() / 2),  // Front Left --
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2),   // Front Right +-
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, SwerveDriveConfig.TRACK_WIDTH.get() / 2), // Back Left -+
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
+        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),  // Front Left --
+        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),   // Front Right +-
+        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
+        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2)   // Back Right ++
     );
 
     
@@ -46,26 +45,26 @@ public class SwerveDrive extends SubsystemBase {
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
         .withTurnMotor(2, Direction.Reversed, true)
-        .withEncoder(10, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get, EncoderDirection.Reversed);
+        .withEncoder(10, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(5, Direction.Forward, true)
         .withTurnMotor(4, Direction.Reversed, true)
-        .withEncoder(11, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
+        .withEncoder(11, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
                 EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(7, Direction.Forward, true)
         .withTurnMotor(6, Direction.Reversed, true)
-        .withEncoder(12, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get, EncoderDirection.Reversed);
+        .withEncoder(12, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(8, Direction.Reversed, true)
-        .withEncoder(13, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get, EncoderDirection.Reversed);
+        .withEncoder(13, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
@@ -103,9 +102,9 @@ public class SwerveDrive extends SubsystemBase {
         .withWidget(BuiltInWidgets.kToggleSwitch)
         .build();
     protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
-        ("none", "SwerveDrive/Pose", this.getSubsystem()).build();
+        ("none", "Current/Pose", this.getSubsystem()).build();
     private final ShuffleboardValue<Double> forwardVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Forward Velocity Writer", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(0.0, "Current/Velocity", this.getSubsystem()).build();
 
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
@@ -282,8 +281,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public TrapezoidProfile.Constraints getThetaConstraints() {
         return new TrapezoidProfile.Constraints(
-            SwerveDriveConfig.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get(),
-            SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.get());
+            SwerveDriveConfig.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue(),
+            SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue());
     }
 
     public Command driveAutoReset(){
