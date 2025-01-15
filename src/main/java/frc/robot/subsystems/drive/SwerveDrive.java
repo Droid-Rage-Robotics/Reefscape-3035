@@ -117,7 +117,7 @@ public class SwerveDrive extends SubsystemBase {
 
         poseConfigs.MountPosePitch = 0;//Up-Down//0
         poseConfigs.MountPoseRoll = 0;//Side-Side//90
-        poseConfigs.MountPoseYaw = 180;//Heading//180;
+        poseConfigs.MountPoseYaw = 0;//Heading//180;
         pigeon2.getConfigurator().apply(poseConfigs);   
         isEnabledWriter.set(isEnabled);     
     }

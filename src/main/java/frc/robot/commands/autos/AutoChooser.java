@@ -8,6 +8,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -90,11 +91,12 @@ public class AutoChooser {
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             // .
+            .withWidget(BuiltInWidgets.kComboBoxChooser)
             .withSize(1, 3);
         addTuningAuto(drive);
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
-        autoChooser.setDefaultOption("VisionTest", Autos.testVision(drive, vision));
+        autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
 
     }
     
@@ -107,7 +109,7 @@ public class AutoChooser {
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
-        autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
+        autoChooser.setDefaultOption("SplineTest", TuningAutos.splineTest(drive));
         // // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
         autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
