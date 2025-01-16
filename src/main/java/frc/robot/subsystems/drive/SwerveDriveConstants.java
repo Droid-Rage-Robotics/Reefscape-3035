@@ -1,11 +1,9 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
-import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 public class SwerveDriveConstants {
-    public enum SwerveDriveConfig implements ShuffleboardValueEnum<Double> {
+    public enum SwerveDriveConfig {
         PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(2 * (2 * Math.PI)),
         TRACK_WIDTH(Units.inchesToMeters(28.5)),//Units.inchesToMeters(28.5)
         WHEEL_BASE(Units.inchesToMeters(28.5)),//Units.inchesToMeters(28.5)
@@ -14,7 +12,7 @@ public class SwerveDriveConstants {
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
 
         MAX_SPEED_METERS_PER_SECOND(SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
-        MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() / 10),
+        MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() / 10),
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
@@ -44,18 +42,11 @@ public class SwerveDriveConstants {
 
         DEFAULT_HEADING_OFFSET(0),
         ;
-        private final ShuffleboardValue<Double> shuffleboardValue;
         
         public double value;
         private SwerveDriveConfig(double value) {
             this.value = value;
-            shuffleboardValue = ShuffleboardValue.create(value, 
-                "SwerveConstants/"+ SwerveDriveConfig.class.getSimpleName()+"/"+ name(), SwerveDrive.class.getSimpleName())
-                // .withWidget(BuiltInWidgets.kAccelerometer)
-                .build();
         }
-        @Override 
-        public ShuffleboardValue<Double> getNum() { return shuffleboardValue; }
         
         public double getValue() {
             return value;
@@ -84,23 +75,17 @@ public class SwerveDriveConstants {
         SLOW(.9, 0.3),
         SUPER_SLOW(0.05, 0.05),
         ;
-        private final ShuffleboardValue<Double> shuffleboardTranslationalValue;
-        private final ShuffleboardValue<Double> shuffleboardAngularValue;
+        private final double translationalValue;
+        private final double angularValue;
         private Speed(double translationalSpeed, double angularSpeed) {
-            shuffleboardTranslationalValue = ShuffleboardValue.create(translationalSpeed, 
-                "SwerveConstants/"+Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
-                .withSize(3, 3)
-                .build();
-            shuffleboardAngularValue = ShuffleboardValue.create(translationalSpeed, 
-                "SwerveConstants/"+Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
-                .withSize(3, 3)
-                .build();
+            this.translationalValue = translationalSpeed;
+            this.angularValue = angularSpeed;
         }
         public double getTranslationalSpeed() {
-            return shuffleboardTranslationalValue.get();
+            return translationalValue;
         }
         public double getAngularSpeed() {
-            return shuffleboardAngularValue.get();
+            return angularValue;
         }
     }
 }

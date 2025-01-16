@@ -100,7 +100,7 @@ public class SwerveDriveTeleop extends Command {
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
-            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
+            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
             drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);

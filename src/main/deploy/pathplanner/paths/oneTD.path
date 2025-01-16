@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.122174657534247,
+        "y": 6.887392979452056
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.544477739726027,
+        "y": 5.865646404109588
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.153809931506849,
+        "y": 5.159439212328767
+      },
+      "prevControl": {
+        "x": 6.1905821917808215,
+        "y": 6.331442636986301
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -122.19573393471315
+  },
+  "reversed": false,
+  "folder": "Reefscape- 2025",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 178.4088597288055
+  },
+  "useDefaultConstraints": true
+}

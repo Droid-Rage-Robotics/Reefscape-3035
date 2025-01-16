@@ -128,12 +128,12 @@ public class AutoChooser {
                 drive::getSpeeds,
                 drive::setFeedforwardModuleStates,
                 new PPHolonomicDriveController(
-                        new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.get()),  // Translation PID constants
-                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.get(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.get(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.get())),  // Rotation PID constants
+                        new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),  // Translation PID constants
+                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),  // Rotation PID constants
                 config,
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red
