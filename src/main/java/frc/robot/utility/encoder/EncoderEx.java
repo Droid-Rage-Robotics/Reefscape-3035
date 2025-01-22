@@ -27,8 +27,15 @@ public abstract class EncoderEx {
     
 
     public class DirectionBuilder {
-        public SubsystemNameBuilder withDirection(EncoderDirection direction) {
+        public OffsetBuilder withDirection(EncoderDirection direction) {
             setDirection(direction);
+            return new OffsetBuilder();
+        }
+    }
+    
+    public class OffsetBuilder {
+        public SubsystemNameBuilder withOffset(double offset) {
+            setOffset(offset);
             return new SubsystemNameBuilder();
         }
     }
@@ -82,9 +89,7 @@ public abstract class EncoderEx {
     }
     public abstract double getVelocity();
     public abstract double getPosition();
-    public double getDegree() {
-        return getPosition() * 360;
-    }
+    public abstract double getDegree();
     
     public double getRadian() {
         return getPosition() * (2*Math.PI);

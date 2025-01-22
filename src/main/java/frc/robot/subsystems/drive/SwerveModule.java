@@ -121,9 +121,10 @@ public class SwerveModule {
         public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad, EncoderDirection absoluteEncoderReversed){
             turnEncoder = CANcoderEx.create(absoluteEncoderId)
                 .withDirection(absoluteEncoderReversed)
+                .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)
                 .withSubsystemBase(podName.name(), subsystemName)
-                .withRange(EncoderRange.ZERO_TO_ONE)
-                .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD);
+                .withRange(EncoderRange.ZERO_TO_ONE);
+                
 
             turningPidController = new PIDController(SwerveDriveConfig.TURN_KP.getValue(), 0.0, 0.0);
             turningPidController.enableContinuousInput(0, 2 * Math.PI);// Was -Math.PI, Math.PI but changed to 0 and 2PI

@@ -5,23 +5,14 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-
-public class CANcoderEx extends EncoderEx{
+public class CANcoderEx extends EncoderEx {
     private final CANcoder encoder;
-    private CANcoderConfiguration config = new CANcoderConfiguration();
+    private CANcoderConfiguration config;
     private CANBus canbus;
     private double positionConversionFactor, velocityConversionFactor;
 
     public CANcoderEx(CANcoder encoder) {
         this.encoder = encoder;
-    }
-
-    public double getVelocity() {
-        return encoder.getVelocity().getValueAsDouble()*velocityConversionFactor;
-    }
-        
-    public double getPosition() {
-        return encoder.getPosition().getValueAsDouble()*positionConversionFactor;
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -30,7 +21,8 @@ public class CANcoderEx extends EncoderEx{
         encoder.canbus = canbus;
         return encoder.new DirectionBuilder();
     }
-      public static DirectionBuilder create(int deviceID) {
+    
+    public static DirectionBuilder create(int deviceID) {
         CANcoderEx encoder = new CANcoderEx(new CANcoder(deviceID));
         encoder.deviceID = deviceID;
         return encoder.new DirectionBuilder();
@@ -62,13 +54,22 @@ public class CANcoderEx extends EncoderEx{
     public double getAbsolutePosition() {
         return encoder.getAbsolutePosition().getValueAsDouble();
     }
+    
+    public double getVelocity() {
+        return encoder.getVelocity().getValueAsDouble() * velocityConversionFactor;
+    }
+
+    public double getPosition() {
+        return encoder.getPosition().getValueAsDouble() * positionConversionFactor;
+    }
+
+    public CANBus getCanbus() {
+        return canbus;
+    }
 
     @Override
     public int getDeviceID() {
         return encoder.getDeviceID();
-    }
-     public CANBus getCANBus() {
-        return canbus;
     }
 
     @Override
@@ -76,8 +77,14 @@ public class CANcoderEx extends EncoderEx{
         config.MagnetSensor.MagnetOffset = offset;
     }
 
-    public boolean isConnected(){
-        return encoder.isConnected();
+    @Override
+    public double getDegree() {
+        return getPosition()*(360);
+    }
+
+    @Override
+    public double getRadian() {
+        return getPosition()*(2*Math.PI);
     }
 }
 
