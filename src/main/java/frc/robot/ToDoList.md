@@ -9,11 +9,17 @@ TO DO:
 - MAKE ROBOT CONTAINER TRACK CYCLES
 
 
-- Make the DT all Talons
+- Make the DT all Talons - Anyone
 - Make the new DT be a part of CANivore 
-- Test Anti-Tip Code on the Ground
+- Test Anti-Tip Code on the Ground - Anyone
+- Begin tuning drivetrain and Pathplanner - Lucky with help
+- fix ArmAbsolute File to use accurate Abs Encoder - Ryan
+- add Subsystem Gearing math for Encoders - Sophie with engineers
+- Several auto pathings
+
 
 Test:
+
 - Make Batteries
 - Limelight Autos
 - Field Centric Rest on Blue and Red
