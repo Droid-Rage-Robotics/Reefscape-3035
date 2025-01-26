@@ -27,6 +27,7 @@ public class Climb extends ArmAbsoluteTemplate {
         .withCurrentLimit(50);
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
+        .withOffset(0)
         .withSubsystemBase("Climb", Climb.class.getSimpleName());
         
     public Climb(boolean isEnabled) {

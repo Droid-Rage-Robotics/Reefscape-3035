@@ -1,104 +1,79 @@
-// package frc.robot.utility.encoder;
+package frc.robot.utility.encoder;
 
-// import edu.wpi.first.wpilibj.DutyCycleEncoder;
-// import frc.robot.DroidRageConstants.EncoderDirection;
-// import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-// public class AbsoluteDutyEncoderRIO { 
-//     protected final DutyCycleEncoder encoder;
-//     public EncoderDirection encoderDirection;
-
-//     // protected double positionOffset=0;
-//     public ShuffleboardValue<Double> degreeWriter;
-//     public ShuffleboardValue<Double> radianWriter;
-//     public ShuffleboardValue<Double> rawWriter;
-//     public  ShuffleboardValue<Boolean> isConnectedWriter;
-//     public String name;
-                
-
-//     private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder){
-//         this.encoder=encoder;
-//     }
-
-//     public static DirectionBuilder create(int deviceID) {
-//         AbsoluteDutyEncoderRIO encoder = new AbsoluteDutyEncoderRIO(
-//             new DutyCycleEncoder(deviceID));
-//         return encoder.new DirectionBuilder();
-//     }
-//     public class DirectionBuilder {
-//         public OffsetWriter withDirection(EncoderDirection direction) {
-//             encoderDirection = direction;
-//             return new OffsetWriter();
-//         }
-//     }
-//     public class OffsetWriter {
-//         public BaseWriter withOffset(double offset) {
-//             // encoder.setPositionOffset(offset/(2*Math.PI));
-//             // encoder.set
-//             return new BaseWriter();
-//         }
-//     }
-//     public class BaseWriter {
-//         @SuppressWarnings("unchecked")
-//         public <T extends AbsoluteDutyEncoderRIO> T withSubsystemBase(String subsystemBaseName) {
-//             name = subsystemBaseName;
-//             rawWriter = ShuffleboardValue   
-//                 .create(0.0, name+"/EncoderPos/Raw", name)
-//                 .build();
-//             degreeWriter = ShuffleboardValue
-//                 .create(0.0, name+"/EncoderPos/Degree", name)
-//                 .build();
-//             radianWriter = ShuffleboardValue
-//                 .create(0.0, name+"/EncoderPos/Radian", name)
-//                 .build();
-//             isConnectedWriter = ShuffleboardValue.create
-//                 (true, name+"/EncoderPos/isConnected", name)
-//                 .build();
-//             return (T) AbsoluteDutyEncoderRIO.this;
-//         }
-//     }
-
-//     /**
-//      * Make sure to put this periodic in 
-//      */
-//     public void periodic(){
-//         rawWriter.set(getPosition());//0-1
-//         degreeWriter.set(getDegrees());//0-360
-//         radianWriter.set(getRadian());//PI-2*PI
-//         isConnectedWriter.set(encoder.isConnected());
-
-//     }
-
+public class AbsoluteDutyEncoderRIO extends EncoderEx {
+    private final DutyCycleEncoder encoder;
+    private EncoderDirection direction;
+    private double offset = 0;
+    private final int deviceID;
     
-//     public double getDegrees() {
-//         return getPosition()*(360);
-//     }
-//     public double getRadian() {
-//         return getPosition()*(2*Math.PI);
-//     }
+    public String name;
+    
+    private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder, int deviceID){
+        this.encoder=encoder;
+        this.deviceID = deviceID;
+        encoder.setAssumedFrequency(975.6);
+    }
+    
+    public static DirectionBuilder create(int deviceID) {
+        AbsoluteDutyEncoderRIO encoder = new AbsoluteDutyEncoderRIO(
+            new DutyCycleEncoder(deviceID), deviceID);
+        return encoder.new DirectionBuilder();
+    }
+    
+    @Override
+    public void setOffset(double offset) {
+        this.offset = offset;
+    }
 
-//     /**
-//      * 
-//      * @return The Absolute Position of the Encoder 
-//      */
-//     public double getPosition(){
-//         encoder.get();
-//         // double givenPos = encoder.getAbsolutePosition();
+    @Override
+    public void setDirection(EncoderDirection direction) {
+        switch (direction) {
+            case Forward -> encoder.setInverted(false);
+            case Reversed -> encoder.setInverted(true);
+        }
+        this.direction = direction;
+    }
 
-//         // if(isInverted){ //To invert values based on direction - Works
-//         //     givenPos = 1-givenPos;
-//         // }
+    @Override
+    public int getDeviceID() {
+        return deviceID;
+    }
 
-//         // // givenPos -= encoder.getPositionOffset();
-        
-//         // if(givenPos<0){ //To account for negative values/rollovers - no work
-//         //     givenPos=1-Math.abs(givenPos); 
-//         //     //^^ In this case the givePos will be negative; or 1-Math.abs(givenPos)
-//         // }
+    @Override
+    public void setRange(EncoderRange range) {}
 
-        
-//         // return givenPos-encoder.getPositionOffset();
+    @Override
+    public double getDegree() {
+        return getPosition()*(360);
+    }
+    
+    @Override
+    public double getRadian() {
+        return getPosition()*(2*Math.PI);
+    }
 
-//         return 0;
-//     }
-// }
+    @Override
+    public double getVelocity() {
+        return 0;
+    }
+
+    public double getPosition() {
+        double givenPos = encoder.get();
+
+        // Handle direction inversion
+        if (direction == EncoderDirection.Reversed) {
+            givenPos = 1 - givenPos;
+        }
+
+        // Correct for rollover (values between 0 and 1)
+        if (givenPos < 0) {
+            givenPos = 1 + givenPos;  // Wrap around positive
+        } else if (givenPos >= 1) {
+            givenPos = givenPos - 1;  // Wrap around to stay between 0 and 1
+        }
+
+        return givenPos - offset;
+    }
+}

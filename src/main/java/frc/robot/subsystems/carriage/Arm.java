@@ -27,6 +27,7 @@ public class Arm extends ArmAbsoluteTemplate {
         .withCurrentLimit(50);
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
+        .withOffset(0)
         .withSubsystemBase("arm", Carriage.class.getSimpleName());
         
     public Arm(boolean isEnabled) {
