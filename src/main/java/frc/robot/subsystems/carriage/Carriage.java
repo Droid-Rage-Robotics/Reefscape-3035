@@ -3,9 +3,12 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import lombok.Getter;
 
+@Getter
 public class Carriage {
     public enum CarriageValue{
         START(0, 0),
@@ -16,8 +19,8 @@ public class Carriage {
         L3(0, 0),
         L4(0, 0);
 
-        private final double armAngle;
-        private final double pivotAngle;
+        @Getter private final double armAngle;
+        @Getter private final double pivotAngle;
 
 
         private CarriageValue(double armAngle, double pivotAngle){
@@ -25,13 +28,13 @@ public class Carriage {
             this.pivotAngle = pivotAngle;
         }
         
-        public double getArmAngle(){
-            return armAngle;
-        }
+        // public double getArmAngle(){
+        //     return armAngle;
+        // }
 
-        public double getPivotAngle(){
-            return pivotAngle;
-        }
+        // public double getPivotAngle(){
+        //     return pivotAngle;
+        // }
     }
 
     public enum CarriageIntakeValue {
@@ -50,17 +53,18 @@ public class Carriage {
         }
     }
 
-    private final Arm arm;
-    private final Pivot pivot;
-    private final Intake intake;
+    @Getter private final Arm arm;
+    @Getter private final Pivot pivot;
+    @Getter private final Intake coralIntake;
     private final DigitalInput coralLimitSwitch;
 
     private CarriageValue position = CarriageValue.START;
+    @Getter public double outtakeCount = 0;
 
     public Carriage(Arm arm, Pivot pivot, Intake intake){
         this.arm = arm;
         this.pivot = pivot;
-        this.intake = intake;
+        this.coralIntake = intake;
         this.coralLimitSwitch = new DigitalInput(0);
     }
 
@@ -90,7 +94,8 @@ public class Carriage {
                 case L1,L2,L3,L4 -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                        pivot.setTargetPositionCommand(targetPos.getPivotAngle()),
+                        new InstantCommand(()->incrementOuttakeCount())
                 );                   
                 default -> 
                     new ParallelCommandGroup(
@@ -103,21 +108,25 @@ public class Carriage {
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
         return Commands.sequence(
-            intake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
+            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
         );
     }
 
-    public Arm getCoralArm(){
-        return arm;
+    public void incrementOuttakeCount() {
+        outtakeCount++;
     }
 
-    public Pivot getCoralPivot(){
-        return pivot;
-    }
+    // public Arm getCoralArm(){
+    //     return arm;
+    // }
 
-    public Intake getCoralIntake(){
-        return intake;
-    }
+    // public Pivot getCoralPivot(){
+    //     return pivot;
+    // }
+
+    // public Intake getCoralIntake(){
+    //     return intake;
+    // }
 
     public boolean isCoralIn(){
         return coralLimitSwitch.get();

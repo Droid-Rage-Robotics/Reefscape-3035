@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.carriage.Carriage;
 
 public class CycleTracker {
     private final String filePath;
@@ -33,5 +34,9 @@ public class CycleTracker {
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
+    }
+
+    public void printAllData(Carriage carriage) {
+        printOut("Outtake Count: " + Double.toString(carriage.getOuttakeCount()));
     }
 }
