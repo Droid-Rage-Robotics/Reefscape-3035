@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import lombok.Getter;
 
+@Getter
 public class Carriage {
     public enum CarriageValue{
         START(0, 0),
