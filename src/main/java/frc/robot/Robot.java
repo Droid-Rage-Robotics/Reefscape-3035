@@ -22,6 +22,7 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utility.InfoTracker.CycleTracker;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
@@ -32,16 +33,19 @@ public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     private final Elevator elevator = new Elevator(false);
-    // private final Carriage carriage = new Carriage(
-    // //     new Arm(false), 
-    // //     new Pivot(false), 
-    // //     new Intake(false));
+    private final CycleTracker cycleTracker = new CycleTracker();
+    private final Carriage carriage = new Carriage(
+        new Arm(false), 
+        new Pivot(false), 
+        new Intake(false)
+    );
     // private final Climb climb = new Climb(false);
     private final Light light = new Light();
 
     private RobotContainer robotContainer = new RobotContainer();
     // private AutoChooser autoChooser = new AutoChooser(drive, vision);
     // private static final Alert rioIdAlert = new Alert("RIO: ", AlertType.kInfo);
+    public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
@@ -50,6 +54,7 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
+        teleopRan = false;
     }
     
     @Override
@@ -62,7 +67,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        // cycleTracker.printAllData();
+        if(teleopRan) {
+            cycleTracker.printAllData(carriage);
+        }
     }
     
     @Override
@@ -104,6 +111,7 @@ public class Robot extends TimedRobot {
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         robotContainer.testDrive(drive, vision);
         // robotContainer.testCANivore(driveMotor, motor);
+        teleopRan = true;
     }
 
     @Override
