@@ -118,7 +118,8 @@ public class SwerveModule {
     }
     public class EncoderBuilder{
         @SuppressWarnings("unchecked")
-        public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad, EncoderDirection absoluteEncoderReversed){
+        public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad,
+            EncoderDirection absoluteEncoderReversed){
             turnEncoder = CANcoderEx.create(absoluteEncoderId)
                 .withDirection(absoluteEncoderReversed)
                 .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)

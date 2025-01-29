@@ -40,25 +40,17 @@ public class AbsoluteDutyEncoderRIO extends EncoderEx {
     public int getDeviceID() {
         return deviceID;
     }
-
-    @Override
-    public void setRange(EncoderRange range) {}
-
-    @Override
-    public double getDegree() {
-        return getPosition()*(360);
-    }
     
     @Override
-    public double getRadian() {
-        return getPosition()*(2*Math.PI);
-    }
+    public void setRange(EncoderRange range) {
 
+    }
     @Override
     public double getVelocity() {
         return 0;
     }
 
+    @Override
     public double getPosition() {
         double givenPos = encoder.get();
 

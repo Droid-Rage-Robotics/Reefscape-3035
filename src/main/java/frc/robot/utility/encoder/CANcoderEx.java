@@ -76,16 +76,6 @@ public class CANcoderEx extends EncoderEx {
     public void setOffset(double offset) {
         config.MagnetSensor.MagnetOffset = offset;
     }
-
-    @Override
-    public double getDegree() {
-        return getPosition()*(360);
-    }
-
-    @Override
-    public double getRadian() {
-        return getPosition()*(2*Math.PI);
-    }
 }
 
 

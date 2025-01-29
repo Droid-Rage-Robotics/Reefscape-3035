@@ -50,14 +50,4 @@ public class SparkAbsoluteEncoderEx extends EncoderEx {
     public void setOffset(double offset) {
         // DOES NOTHING, but it is here for compatibility
     }
-
-    @Override
-    public double getDegree() {
-        return getPosition()*(360);
-    }
-
-    @Override
-    public double getRadian() {
-        return getPosition()*(2*Math.PI);
-    }
 }

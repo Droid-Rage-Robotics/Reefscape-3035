@@ -22,7 +22,6 @@ public abstract class EncoderEx {
     public ShuffleboardValue<Double> rawWriter;
     // public ShuffleboardValue<Boolean> isConnectedWriter;
     public String subsystemName;
-    // protected String subSystemName;
     public int deviceID;
     
 
@@ -41,7 +40,6 @@ public abstract class EncoderEx {
     }
 
     public class SubsystemNameBuilder {
-        
         public <T extends EncoderEx> T withSubsystemBase(String encoderName, SubsystemBase subsystemBase) {
             return withSubsystemBase(encoderName, subsystemBase.getClass().getSimpleName());
         }
@@ -65,23 +63,18 @@ public abstract class EncoderEx {
         }
     }
 
-    public class RangeBuilder {
-        @SuppressWarnings("unchecked")
-        public <T extends EncoderEx> T withRange(EncoderRange range) {
-            setRange(range);
-            return (T) EncoderEx.this;
-        }
-    }
+    // public class RangeBuilder {
+    //     @SuppressWarnings("unchecked")
+    //     public <T extends EncoderEx> T withRange(EncoderRange range) {
+    //         setRange(range);
+    //         return (T) EncoderEx.this;
+    //     }
+    // }
     public CANcoderEx withRange(EncoderRange range){
         setRange(range);
         return (CANcoderEx) this;
     }
     
-    public CANcoderEx withOffset(double offset) {
-        setOffset(offset);
-        return (CANcoderEx) this;
-    }
-
     public void periodic() {
         rawWriter.set(getPosition());
         degreeWriter.set(getDegree());
@@ -89,8 +82,9 @@ public abstract class EncoderEx {
     }
     public abstract double getVelocity();
     public abstract double getPosition();
-    public abstract double getDegree();
-    
+    public double getDegree(){
+        return getPosition() * 360;
+    }    
     public double getRadian() {
         return getPosition() * (2*Math.PI);
     }

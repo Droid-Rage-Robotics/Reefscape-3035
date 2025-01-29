@@ -3,11 +3,11 @@ package frc.robot.utility.template;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.encoder.SparkAbsoluteEncoderEx;
+import frc.robot.utility.encoder.EncoderEx;
 import frc.robot.utility.motor.CANMotorEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
-    protected SparkAbsoluteEncoderEx encoder;
+    protected EncoderEx encoder;
     public ArmAbsoluteTemplate(
         CANMotorEx[] motors,
         PIDController controller,
@@ -18,7 +18,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         Control control,
         String subsystemName,
         int mainNum,
-        SparkAbsoluteEncoderEx encoder
+        EncoderEx encoder
     ){
         super(motors, controller, feedforward, 
         maxPosition, minPosition, offset, control, 
