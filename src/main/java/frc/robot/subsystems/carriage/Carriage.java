@@ -18,6 +18,7 @@ public class Carriage {
         L3(0, 0),
         L4(0, 0);
 
+        //A Plugin tat creates a method to returns these without creating our own getters
         @Getter private final double armAngle;
         @Getter private final double pivotAngle;
 
@@ -26,14 +27,6 @@ public class Carriage {
             this.armAngle = armAngle;
             this.pivotAngle = pivotAngle;
         }
-        
-        // public double getArmAngle(){
-        //     return armAngle;
-        // }
-
-        // public double getPivotAngle(){
-        //     return pivotAngle;
-        // }
     }
 
     public enum CarriageIntakeValue {
@@ -114,18 +107,6 @@ public class Carriage {
     public void incrementOuttakeCount() {
         outtakeCount++;
     }
-
-    // public Arm getCoralArm(){
-    //     return arm;
-    // }
-
-    // public Pivot getCoralPivot(){
-    //     return pivot;
-    // }
-
-    // public Intake getCoralIntake(){
-    //     return intake;
-    // }
 
     public boolean isCoralIn(){
         return coralLimitSwitch.get();
