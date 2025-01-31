@@ -11,16 +11,21 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.DroidRageConstants;
+import lombok.Getter;
 
 public class TalonEx extends CANMotorEx {
-    private final TalonFX motor;
-    private CANBus canbus;
+    @Getter private final TalonFX talon;
+    @Getter private CANBus canbus;
+    @Getter private double velocity;
+    @Getter private double position;
+    @Getter private double speed;
+    @Getter private int deviceID;
+    @Getter private double voltage;
     private TalonFXConfiguration configuration = new TalonFXConfiguration();
     private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
     
     private TalonEx(TalonFX motor) {
-        this.motor = motor;
-        // motor.getConfigurator().apply(configuration);
+        this.talon = motor;
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -35,6 +40,14 @@ public class TalonEx extends CANMotorEx {
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
     }
+    
+    public void gettersInit() {
+        velocity = talon.getVelocity().getValueAsDouble()*positionConversionFactor;
+        position = talon.getPosition().getValueAsDouble()*positionConversionFactor;
+        speed = talon.get();
+        deviceID = talon.getDeviceID();
+        voltage = talon.getMotorVoltage().getValueAsDouble();
+    }
    
     @Override
     public void setDirection(Direction direction) {
@@ -42,13 +55,13 @@ public class TalonEx extends CANMotorEx {
             case Forward -> InvertedValue.Clockwise_Positive;
             case Reversed -> InvertedValue.CounterClockwise_Positive;
         };
-        motor.getConfigurator().apply(motorOutputConfigs);
+        talon.getConfigurator().apply(motorOutputConfigs);
         
     }
 
     @Override
     public void setIdleMode(ZeroPowerMode mode) {
-        motor.setNeutralMode(switch (mode) {
+        talon.setNeutralMode(switch (mode) {
             case Brake -> NeutralModeValue.Brake;
             case Coast -> NeutralModeValue.Coast;
         });
@@ -58,23 +71,20 @@ public class TalonEx extends CANMotorEx {
     public void setSupplyCurrentLimit(double currentLimit) {
         configuration.CurrentLimits.SupplyCurrentLimit = currentLimit;
         configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        motor.getConfigurator().apply(configuration);
+        talon.getConfigurator().apply(configuration);
     }
 
     @Override
-    public void setStatorCurrentLimit(double statorCurrent){
-        // CurrentLimitsConfigs configs = new CurrentLimitsConfigs();
-        // configs.StatorCurrentLimit = 50;
-        // motor.getConfigurator().apply(configs);
-        configuration.CurrentLimits.StatorCurrentLimit = statorCurrent;
+    public void setStatorCurrentLimit(double currentLimit){
+        configuration.CurrentLimits.StatorCurrentLimit = currentLimit;
         configuration.CurrentLimits.StatorCurrentLimitEnable = true;
-        motor.getConfigurator().apply(configuration);
+        talon.getConfigurator().apply(configuration);
     }
 
     @Override
-public void setPower(double power) {
+    public void setPower(double power) {
     if (isEnabledWriter.get()) {
-        motor.set(power);
+        talon.set(power);
     }
     if (DroidRageConstants.removeWriterWriter.get()) {
         outputWriter.set(power);
@@ -84,7 +94,7 @@ public void setPower(double power) {
     @Override
     public void setVoltage(double outputVolts) {
         if(isEnabledWriter.get()){
-            motor.setVoltage(outputVolts);
+            talon.setVoltage(outputVolts);
         }
         if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
             outputWriter.set(outputVolts);
@@ -93,45 +103,45 @@ public void setPower(double power) {
 
     @Override
     public void setVoltage(Voltage voltage) {
-        motor.setVoltage(voltage.in(Volts)/RobotController.getBatteryVoltage());
+        talon.setVoltage(voltage.in(Volts)/RobotController.getBatteryVoltage());
     }
     
     public void setPosition(double position) {
-        motor.setPosition(position);
+        talon.setPosition(position);
     }
 
     //Already in rotations per sec so, just covert to
-    @Override
-    public double getVelocity() {
-        return motor.getVelocity().getValueAsDouble()*positionConversionFactor;
-    }
+    // @Override
+    // public double getVelocity() {
+    //     return talon.getVelocity().getValueAsDouble()*positionConversionFactor;
+    // }
 
-    @Override
-    public double getSpeed() {
-        return motor.get();
-    }
+    // @Override
+    // public double getSpeed() {
+    //     return talon.get();
+    // }
 
-    @Override
-    public double getPosition() {
-        return motor.getPosition().getValueAsDouble()*positionConversionFactor;
-    }
+    // @Override
+    // public double getPosition() {
+    //     return talon.getPosition().getValueAsDouble()*positionConversionFactor;
+    // }
 
-    @Override
-    public int getDeviceID() {
-        return motor.getDeviceID();
-    }
+    // @Override
+    // public int getDeviceID() {
+    //     return talon.getDeviceID();
+    // }
      
-    public CANBus getCANBus() {
-        return canbus;
-    }
+    // public CANBus getCANBus() {
+    //     return canbus;
+    // }
 
-    @Override
-    public double getVoltage(){
-        return motor.getMotorVoltage().getValueAsDouble();
-    }
+    // @Override
+    // public double getVoltage(){
+    //     return talon.getMotorVoltage().getValueAsDouble();
+    // }
 
     @Override
     public void resetEncoder(int num) {
-        motor.setPosition(num);
+        talon.setPosition(num);
     }
 }
