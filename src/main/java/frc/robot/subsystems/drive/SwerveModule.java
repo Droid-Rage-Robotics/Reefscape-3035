@@ -14,7 +14,6 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.utility.encoder.CANcoderEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.encoder.EncoderEx.EncoderRange;
-import frc.robot.utility.motor.SparkMaxEx;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
@@ -54,7 +53,7 @@ public class SwerveModule {
 
     private TalonEx driveMotor;
 
-    private SparkMaxEx turnMotor;
+    private TalonEx turnMotor;
     private CANcoderEx turnEncoder;
 
     private PIDController turningPidController;
@@ -106,7 +105,7 @@ public class SwerveModule {
     public class TurnIDBuilder{
         // TODO: Fix this to be a Kraken instead of Spark Max
         public EncoderBuilder withTurnMotor(int turnMotorId, Direction turningMotorReversed, boolean isEnabled){
-            turnMotor = SparkMaxEx.create(turnMotorId)
+            turnMotor = TalonEx.create(turnMotorId)
                 .withDirection(turningMotorReversed)
                 .withIdleMode(ZeroPowerMode.Coast)
                 .withPositionConversionFactor(Constants.TURN_ENCODER_ROT_2_RAD)
@@ -214,7 +213,7 @@ public class SwerveModule {
         turnMotor.setIdleMode(ZeroPowerMode.Coast);
     }
 
-    public SparkMaxEx getTurnMotor(){
+    public TalonEx getTurnMotor(){
         return turnMotor;
     }
 
