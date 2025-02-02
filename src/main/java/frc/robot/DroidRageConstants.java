@@ -43,7 +43,7 @@ public final class DroidRageConstants {
         return Math.abs(stick) < DroidRageConstants.Gamepad.OPERATOR_STICK_DEADZONE;
     }
 
-    public static CANBus canBus = new CANBus("drive");//"drive"
+    public static CANBus driveCanBus = new CANBus("drive");//"drive"
     // public static boolean removeWriter = true; //Can be used to turn off certain writers, hopefulyl preventing loop overruns
     public static ShuffleboardValue<Boolean> removeWriterWriter = 
         ShuffleboardValue.create(false, "RemoveWritersWriter", Robot.class.getSimpleName())

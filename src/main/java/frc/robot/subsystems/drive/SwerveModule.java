@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.utility.encoder.CANcoderEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
@@ -92,7 +93,7 @@ public class SwerveModule {
     }
     public class DriveIDBuilder {
         public TurnIDBuilder withDriveMotor(int driveMotorId, Direction driveMotorReversed, boolean isEnabled){ 
-            driveMotor = TalonEx.create(driveMotorId)
+            driveMotor = TalonEx.create(driveMotorId, DroidRageConstants.driveCanBus)
                 .withDirection(driveMotorReversed)
                 .withIdleMode(ZeroPowerMode.Brake)
                 .withPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER)
@@ -105,7 +106,7 @@ public class SwerveModule {
     public class TurnIDBuilder{
         // TODO: Fix this to be a Kraken instead of Spark Max
         public EncoderBuilder withTurnMotor(int turnMotorId, Direction turningMotorReversed, boolean isEnabled){
-            turnMotor = TalonEx.create(turnMotorId)
+            turnMotor = TalonEx.create(turnMotorId, DroidRageConstants.driveCanBus)
                 .withDirection(turningMotorReversed)
                 .withIdleMode(ZeroPowerMode.Coast)
                 .withPositionConversionFactor(Constants.TURN_ENCODER_ROT_2_RAD)
@@ -119,7 +120,7 @@ public class SwerveModule {
         @SuppressWarnings("unchecked")
         public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad,
             EncoderDirection absoluteEncoderReversed){
-            turnEncoder = CANcoderEx.create(absoluteEncoderId)
+            turnEncoder = CANcoderEx.create(absoluteEncoderId, DroidRageConstants.driveCanBus)
                 .withDirection(absoluteEncoderReversed)
                 .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)
                 .withSubsystemBase(podName.name(), subsystemName)

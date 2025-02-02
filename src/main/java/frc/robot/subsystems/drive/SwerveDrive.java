@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
+import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.SparkMaxEx;
 import frc.robot.utility.motor.TalonEx;
@@ -70,7 +71,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
 
-    private final Pigeon2 pigeon2 = new Pigeon2(14);
+    private final Pigeon2 pigeon2 = new Pigeon2(14, DroidRageConstants.driveCanBus);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
