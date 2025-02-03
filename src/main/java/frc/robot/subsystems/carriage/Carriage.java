@@ -18,7 +18,10 @@ public class Carriage {
         L3(0, 0),
         L4(0, 0);
 
-        //A Plugin tat creates a method to returns these without creating our own getters
+        /*
+        @Getter is an annotation from the lombok plugin.
+        It creates a method to return stuff without creating our own getters.
+        */ 
         @Getter private final double armAngle;
         @Getter private final double pivotAngle;
 

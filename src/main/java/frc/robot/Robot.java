@@ -18,15 +18,8 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
-import frc.robot.subsystems.drive.SwerveModule;
-import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
-import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
-import frc.robot.utility.motor.CANMotorEx.Direction;
-import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {

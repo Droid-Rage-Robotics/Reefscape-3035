@@ -19,7 +19,6 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
-import frc.robot.utility.motor.SparkMaxEx;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.motor.CANMotorEx.Direction;

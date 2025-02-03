@@ -102,8 +102,7 @@ public class SwerveModule {
             return new TurnIDBuilder();
         }
     }
-    public class TurnIDBuilder{
-        // TODO: Fix this to be a Kraken instead of Spark Max
+    public class TurnIDBuilder {
         public EncoderBuilder withTurnMotor(int turnMotorId, Direction turningMotorReversed, boolean isEnabled){
             turnMotor = TalonEx.create(turnMotorId)
                 .withDirection(turningMotorReversed)
