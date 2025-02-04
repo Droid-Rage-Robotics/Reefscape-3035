@@ -31,16 +31,16 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
-    private final Elevator elevator = new Elevator(false);
-    private final CycleTracker cycleTracker = new CycleTracker();
-    private final Carriage carriage = new Carriage(
-        new Arm(false), 
-        new Pivot(false), 
-        new Intake(false)
-    );
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
+    // private final Elevator elevator = new Elevator(false);
+    // private final CycleTracker cycleTracker = new CycleTracker();
+    // private final Carriage carriage = new Carriage(
+    //     new Arm(false), 
+    //     new Pivot(false), 
+    //     new Intake(false)
+    // );
     // private final Climb climb = new Climb(false);
-    private final Light light = new Light();
+    // private final Light light = new Light();
 
     private RobotContainer robotContainer = new RobotContainer();
     // private AutoChooser autoChooser = new AutoChooser(drive, vision);
@@ -60,29 +60,29 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        if(DriverStation.isEStopped()){ //Robot Estopped
-            light.flashingColors(light.red, light.white);
-        }
+        // if(DriverStation.isEStopped()){ //Robot Estopped
+        //     light.flashingColors(light.red, light.white);
+        // }
     }
 
     @Override
     public void disabledInit() {
-        if(teleopRan) {
-            cycleTracker.printAllData(carriage);
-        }
+        // if(teleopRan) {
+        //     cycleTracker.printAllData(carriage);
+        // }
     }
     
     @Override
     public void disabledPeriodic() {
         //In Here, Try using controller to pick the auto
 
-        if(RobotController.getBatteryVoltage()<11.5){
-            light.setAllColor(light.batteryBlue);
+        // if(RobotController.getBatteryVoltage()<11.5){
+        //     light.setAllColor(light.batteryBlue);
             
-            // drive.playMusic(2);
-        } else{
-            light.flashingColors(light.yellow, light.blue);
-        }
+        //     // drive.playMusic(2);
+        // } else{
+        //     light.flashingColors(light.yellow, light.blue);
+        // }
         // light.setAllColor(light.blue);
     }
 
@@ -99,9 +99,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        if(DriverStation.isEStopped()){ //Robot Estopped
-            light.flashingColors(light.red, light.white);
-        }
+        // if(DriverStation.isEStopped()){ //Robot Estopped
+        //     light.flashingColors(light.red, light.white);
+        // }
     }
     
     @Override
