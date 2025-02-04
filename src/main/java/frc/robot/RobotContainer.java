@@ -14,7 +14,6 @@ import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.utility.motor.TalonEx;
 
 public class RobotContainer {
 	private final CommandXboxController driver =

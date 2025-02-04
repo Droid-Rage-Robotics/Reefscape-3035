@@ -20,7 +20,6 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
-import frc.robot.utility.motor.SparkMaxEx;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.motor.CANMotorEx.Direction;
@@ -45,28 +44,28 @@ public class SwerveDrive extends SubsystemBase {
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
-        .withDriveMotor(3,Direction.Forward, true)
-        .withTurnMotor(2, Direction.Reversed, true)
+        .withDriveMotor(4,Direction.Forward, true)
+        .withTurnMotor(3, Direction.Reversed, true)
         .withEncoder(10, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
-        .withDriveMotor(5, Direction.Forward, true)
-        .withTurnMotor(4, Direction.Reversed, true)
-        .withEncoder(11, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
+        .withDriveMotor(2, Direction.Forward, true)
+        .withTurnMotor(1, Direction.Reversed, true)
+        .withEncoder(12, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
                 EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
-        .withDriveMotor(7, Direction.Forward, true)
-        .withTurnMotor(6, Direction.Reversed, true)
-        .withEncoder(12, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withDriveMotor(8, Direction.Forward, true)
+        .withTurnMotor(7, Direction.Reversed, true)
+        .withEncoder(9, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
-        .withDriveMotor(9, Direction.Forward, true)
-        .withTurnMotor(8, Direction.Reversed, true)
-        .withEncoder(13, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withDriveMotor(6, Direction.Forward, true)
+        .withTurnMotor(5, Direction.Reversed, true)
+        .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
