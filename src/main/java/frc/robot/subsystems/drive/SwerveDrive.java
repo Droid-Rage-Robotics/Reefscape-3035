@@ -44,33 +44,33 @@ public class SwerveDrive extends SubsystemBase {
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
-        .withDriveMotor(4,Direction.Forward, true)
-        .withTurnMotor(3, Direction.Reversed, true)
-        .withEncoder(10, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withDriveMotor(3,Direction.Forward, true)
+        .withTurnMotor(1, Direction.Reversed, true)
+        .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
-        .withDriveMotor(2, Direction.Forward, true)
-        .withTurnMotor(1, Direction.Reversed, true)
-        .withEncoder(12, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
+        .withDriveMotor(6, Direction.Forward, true)
+        .withTurnMotor(4, Direction.Reversed, true)
+        .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
                 EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
-        .withDriveMotor(8, Direction.Forward, true)
+        .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(7, Direction.Reversed, true)
-        .withEncoder(9, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
-        .withDriveMotor(6, Direction.Forward, true)
-        .withTurnMotor(5, Direction.Reversed, true)
+        .withDriveMotor(12, Direction.Forward, true)
+        .withTurnMotor(10, Direction.Reversed, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
 
-    private final Pigeon2 pigeon2 = new Pigeon2(14, DroidRageConstants.driveCanBus);
+    private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (

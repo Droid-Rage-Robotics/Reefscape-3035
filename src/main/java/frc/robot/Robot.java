@@ -24,7 +24,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     // private final Elevator elevator = new Elevator(false);
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Carriage carriage = new Carriage(

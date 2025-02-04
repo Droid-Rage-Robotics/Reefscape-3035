@@ -187,7 +187,7 @@ public class SwerveModule {
         }
         desiredState.optimize(getState().angle);
         desiredState.optimize(getState().angle);
-        driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
+        // driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
         turnMotor.setPower(turningPidController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", desiredState.toString());
         SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", desiredState.toString());
