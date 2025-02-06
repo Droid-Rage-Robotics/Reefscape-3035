@@ -21,6 +21,7 @@ import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import lombok.Getter;
 
 public class SwerveModule {
     public enum POD{
@@ -54,9 +55,9 @@ public class SwerveModule {
         public static final double TURN_SUPPLY_CURRENT_LIMIT = 80;
     }
 
-    private TalonEx driveMotor;
+    @Getter private TalonEx driveMotor;
 
-    private TalonEx turnMotor;
+    @Getter private TalonEx turnMotor;
     private CANcoderEx turnEncoder;
 
     private PIDController turningPidController;
@@ -213,10 +214,6 @@ public class SwerveModule {
     public void brakeAndCoastMode() {
         driveMotor.setIdleMode(ZeroPowerMode.Brake);
         turnMotor.setIdleMode(ZeroPowerMode.Coast);
-    }
-
-    public TalonEx getTurnMotor(){
-        return turnMotor;
     }
 
     public void getTurnVoltage(){
