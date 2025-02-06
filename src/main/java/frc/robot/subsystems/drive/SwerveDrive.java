@@ -52,8 +52,7 @@ public class SwerveDrive extends SubsystemBase {
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Reversed, true)
-        .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
-                EncoderDirection.Reversed);
+        .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)

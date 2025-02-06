@@ -76,20 +76,20 @@ public class SwerveModule {
         return module.new SubsystemNameBuilder();
     }
     public class SubsystemNameBuilder {
-        public DriveIDBuilder withSubsystemName(String name, SwerveModule.POD pod) {
+        public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
             podName = pod;
-            subsystemName = name;
+            subsystemName = base.getClass().getSimpleName();
             turnPositionWriter = ShuffleboardValue.create(0.0, 
             "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
-                name).build();
+                subsystemName).build();
             drivePositionWriter = ShuffleboardValue.create(0.0, 
                 "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
-                name).build();
+                subsystemName).build();
                 return new DriveIDBuilder();
         }
-        public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
-            return withSubsystemName(base.getClass().getSimpleName(), pod);
-        }
+        // public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
+        //     return withSubsystemName(base.getClass().getSimpleName(), pod);
+        // }
     }
     public class DriveIDBuilder {
         public TurnIDBuilder withDriveMotor(int driveMotorId, Direction driveMotorReversed, boolean isEnabled){ 
@@ -187,7 +187,7 @@ public class SwerveModule {
         }
         desiredState.optimize(getState().angle);
         desiredState.optimize(getState().angle);
-        // driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
+        driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
         turnMotor.setPower(turningPidController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", desiredState.toString());
         SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", desiredState.toString());
