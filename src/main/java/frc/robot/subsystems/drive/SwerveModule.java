@@ -1,7 +1,9 @@
 package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
+
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,9 +17,9 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.utility.encoder.CANcoderEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.encoder.EncoderEx.EncoderRange;
-import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SwerveModule {
@@ -62,7 +64,7 @@ public class SwerveModule {
 
     private ShuffleboardValue<Double> turnPositionWriter;
     private ShuffleboardValue<Double> drivePositionWriter;
-    private static String  subsystemName;
+    private String subsystemName;
     private SwerveModule.POD podName;
 
     MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs();
@@ -80,11 +82,11 @@ public class SwerveModule {
             podName = pod;
             subsystemName = name;
             turnPositionWriter = ShuffleboardValue.create(0.0, 
-            "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
-                name).build();
+                "Module/Turn Position (Radians)" + podName.toString(), 
+                subsystemName).build();
             drivePositionWriter = ShuffleboardValue.create(0.0, 
-                "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
-                name).build();
+                "Module/Drive Position (Radians)" + podName.toString(), 
+                subsystemName).build();
                 return new DriveIDBuilder();
         }
         public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
@@ -221,6 +223,13 @@ public class SwerveModule {
         turnMotor.getVoltage();
     }
 
+    public void setTurnMotorIsEnabled(boolean isEnabled){
+        turnMotor.setIsEnabled(isEnabled);
+    }
+    
+    public void setDriveMotorIsEnabled(boolean isEnabled) {
+        driveMotor.setIsEnabled(isEnabled);
+    }
     
 
 

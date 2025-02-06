@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();
 
     private RobotContainer robotContainer = new RobotContainer();
-    // private AutoChooser autoChooser = new AutoChooser(drive, vision);
+    private AutoChooser autoChooser = new AutoChooser(drive, vision);
     // private static final Alert rioIdAlert = new Alert("RIO: ", AlertType.kInfo);
     public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -82,8 +82,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
