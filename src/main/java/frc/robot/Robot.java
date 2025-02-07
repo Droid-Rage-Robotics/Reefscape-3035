@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     //     new Intake(false)
     // );
     // private final Climb climb = new Climb(false);
-    // private final Light light = new Light();
+    private final Light light = new Light();
 
     private RobotContainer robotContainer = new RobotContainer();
     private AutoChooser autoChooser = new AutoChooser(drive, vision);

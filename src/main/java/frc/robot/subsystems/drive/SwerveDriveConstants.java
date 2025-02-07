@@ -26,8 +26,8 @@ public class SwerveDriveConstants {
         THETA_KI(0),
         THETA_KD(0),
 
-        // Turn PID
-        TURN_KP(0.5),
+        // Turn PID for Swerve Pod
+        TURN_KP(1),
 
         // Drive SVA
         DRIVE_KS(0.13), // this value is multiplied by veloicty in meteres per second
