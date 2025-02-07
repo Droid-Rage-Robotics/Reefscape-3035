@@ -26,6 +26,7 @@ public class TalonEx extends CANMotorEx {
     
     private TalonEx(TalonFX motor) {
         this.talon = motor;
+        gettersInit();
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -41,7 +42,7 @@ public class TalonEx extends CANMotorEx {
         return motor.new DirectionBuilder();
     }
     
-    public void gettersInit() {
+    private void gettersInit() {
         velocity = talon.getVelocity().getValueAsDouble()*positionConversionFactor;
         position = talon.getPosition().getValueAsDouble()*positionConversionFactor;
         speed = talon.get();

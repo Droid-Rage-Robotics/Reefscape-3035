@@ -1,12 +1,6 @@
 package frc.robot.SysID;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.InchesPerSecond;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
@@ -27,20 +21,23 @@ public class SysID {
 
   // Find Logged Data using FileZilla
 
-  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  // Mutable holders for unit-safe values (shared across all modules)
   private final MutVoltage appliedVoltage = Volts.mutable(0);
-  // Mutable holder for unit-safe linear distance values, persisted to avoid
-  // reallocation.
   private final MutAngle angle = Radians.mutable(0);
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid
-  // reallocation.
   private final MutDistance distance = Inches.mutable(0);
   private final MutAngularVelocity angularVelocity = RadiansPerSecond.mutable(0);
   private final MutLinearVelocity linearVelocity = InchesPerSecond.mutable(0);
-  // Create a new SysId routine for characterizing the shooter.
+  
+  // SysID routine
   private SysIdRoutine routine;
 
-  /** Creates a new Shooter subsystem. */
+  /**
+   * 
+   * @param motor the motor to be tested
+   * @param subsystem the subsystem of the motor
+   * @param unit sets the unit to be used: {@code Measurement.ANGLE} or {@code Measurement.DISTANCE}
+   */
+  
   public SysID(CANMotorEx motor, Subsystem subsystem, Measurement unit) {
     switch(unit){
       case ANGLE:
@@ -63,19 +60,16 @@ public class SysID {
   }
 
   /**
-   * Returns a command that will execute a quasistatic test in the given
-   * direction.
-   *
    * @param direction The direction (forward or reverse) to run the test in
+   * @return a command that will execute a quasistatic test in the given direction.
    */
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return routine.quasistatic(direction);
   }
 
   /**
-   * Returns a command that will execute a dynamic test in the given direction.
-   *
    * @param direction The direction (forward or reverse) to run the test in
+   * @return a command that will execute a dynamic test in the given direction.
    */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return routine.dynamic(direction);

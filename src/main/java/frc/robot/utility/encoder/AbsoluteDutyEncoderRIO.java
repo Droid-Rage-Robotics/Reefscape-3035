@@ -1,18 +1,26 @@
 package frc.robot.utility.encoder;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AbsoluteDutyEncoderRIO extends EncoderEx {
     private final DutyCycleEncoder encoder;
-    private EncoderDirection direction;
-    private double offset = 0;
-    private final int deviceID;
+    @Getter private final int deviceID;
+    @Getter private double velocity;
+    @Setter private double offset = 0;
+    @Setter private EncoderRange range;
+    @Setter private EncoderDirection direction;
     
     public String name;
     
     private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder, int deviceID){
         this.encoder=encoder;
         this.deviceID = deviceID;
+        switch (direction) {
+            case Forward -> encoder.setInverted(false);
+            case Reversed -> encoder.setInverted(true);
+        }
         encoder.setAssumedFrequency(975.6);
     }
     
@@ -22,33 +30,32 @@ public class AbsoluteDutyEncoderRIO extends EncoderEx {
         return encoder.new DirectionBuilder();
     }
     
-    @Override
-    public void setOffset(double offset) {
-        this.offset = offset;
-    }
+    // @Override
+    // public void setOffset(double offset) {
+    //     this.offset = offset;
+    // }
 
-    @Override
-    public void setDirection(EncoderDirection direction) {
-        switch (direction) {
-            case Forward -> encoder.setInverted(false);
-            case Reversed -> encoder.setInverted(true);
-        }
-        this.direction = direction;
-    }
+    // @Override
+    // public void setDirection(EncoderDirection direction) {
+    //     switch (direction) {
+    //         case Forward -> encoder.setInverted(false);
+    //         case Reversed -> encoder.setInverted(true);
+    //     }
+    //     this.direction = direction;
+    // }
 
-    @Override
-    public int getDeviceID() {
-        return deviceID;
-    }
+    // @Override
+    // public int getDeviceID() {
+    //     return deviceID;
+    // }
     
-    @Override
-    public void setRange(EncoderRange range) {
-
-    }
-    @Override
-    public double getVelocity() {
-        return 0;
-    }
+    // @Override
+    // public void setRange(EncoderRange range) {}
+    
+    // @Override
+    // public double getVelocity() {
+    //     return 0;
+    // }
 
     @Override
     public double getPosition() {

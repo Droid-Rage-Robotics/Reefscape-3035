@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.manual.ManualElevator;
@@ -102,6 +103,14 @@ public class RobotContainer {
 	public void testDrive(SwerveDrive drive, Vision vision){
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
 		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
+	}
+
+	public void driveSysID(DriveSysID sysID){
+		driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
+		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
 	}
 
 	public void sysID(SysID sysID){

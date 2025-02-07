@@ -15,15 +15,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.DroidRageConstants;
+import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import lombok.Getter;
 
 //Set Voltage instead of set Power
 //Set them to 90 to 100%
@@ -35,40 +38,41 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),  // Front Left --
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),   // Front Right +-
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2)   // Back Right ++
+        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),  // Front Left --
+        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),   // Front Right +-
+        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
+        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2)   // Back Right ++
     );
 
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
-        .withTurnMotor(1, Direction.Reversed, true)
+        .withTurnMotor(1, Direction.Forward, true)
         .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
-        .withTurnMotor(4, Direction.Reversed, true)
+        .withTurnMotor(4, Direction.Forward, true)
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
                 EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
-        .withTurnMotor(7, Direction.Reversed, true)
+        .withTurnMotor(7, Direction.Forward, true)
         .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
-        .withTurnMotor(10, Direction.Reversed, true)
+        .withTurnMotor(10, Direction.Forward, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
-    private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
+    @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
+    private DriveSysID sysId;   
 
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
@@ -117,9 +121,13 @@ public class SwerveDrive extends SubsystemBase {
 
         poseConfigs.MountPosePitch = 0;//Up-Down//0
         poseConfigs.MountPoseRoll = 0;//Side-Side//90
-        poseConfigs.MountPoseYaw = 0;//Heading//180;
+        poseConfigs.MountPoseYaw = 180;//Heading//180;
         pigeon2.getConfigurator().apply(poseConfigs);   
-        isEnabledWriter.set(isEnabled);     
+        isEnabledWriter.set(isEnabled);
+        for(int num = 0; num<4; num++){
+            swerveModules[num].setDriveMotorIsEnabled(isEnabled);
+            swerveModules[num].setTurnMotorIsEnabled(isEnabled);
+        }    
     }
 
     
@@ -317,6 +325,18 @@ public class SwerveDrive extends SubsystemBase {
                 setYaw(getHeading());
                 break;
         }
+    }
+
+    public void enableSysID() {
+        sysId = new DriveSysID(swerveModules, this);
+    }
+
+    public Command runSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysId.sysIdQuasistatic(direction);
+    }
+
+    public Command runSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysId.sysIdDynamic(direction);
     }
 
     

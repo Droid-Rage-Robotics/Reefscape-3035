@@ -48,7 +48,7 @@ public class SwerveDriveTeleop extends Command {
     @Override
     public void execute() {
         xSpeed = -y.get();
-        ySpeed = -x.get();
+        ySpeed = x.get();
         turnSpeed = -turn.get();
 
 
