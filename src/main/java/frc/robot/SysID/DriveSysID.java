@@ -5,8 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveModule;
 
 public class DriveSysID {
@@ -21,8 +21,12 @@ public class DriveSysID {
   // SysId Routine for all swerve modules
   private final SysIdRoutine routine;
 
-  /** Creates a new SysID instance for all swerve modules. */
-  public DriveSysID(SwerveModule[] swerveModules, Subsystem subsystem) {
+  /** 
+   * Creates a new SysID instance for all swerve modules.
+   * @param swerveModules the array of swerve modules to use
+   * @param drive the swerve drive subsystem
+   */
+  public DriveSysID(SwerveModule[] swerveModules, SwerveDrive drive) {
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
         new SysIdRoutine.Mechanism(
@@ -49,18 +53,20 @@ public class DriveSysID {
                     .angularVelocity(turnVelocity.mut_replace(module.getTurnMotor().getVelocity(), RotationsPerSecond));
               }
             },
-            subsystem));
+            drive));
   }
 
   /**
-   * Returns a command that will execute a quasistatic test in the given direction.
+   * @param direction The direction (forward or reverse) to run the test in
+   * @return a command that will execute a quasistatic test in the given direction.
    */
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return routine.quasistatic(direction);
   }
 
   /**
-   * Returns a command that will execute a dynamic test in the given direction.
+   * @param direction The direction (forward or reverse) to run the test in
+   * @return a command that will execute a dynamic test in the given direction.
    */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return routine.dynamic(direction);
