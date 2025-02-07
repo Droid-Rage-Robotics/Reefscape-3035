@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.657042253521126,
-        "y": 5.14463028169014
+        "x": 5.574529109589041,
+        "y": 5.865646404109588
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 4.903697183098591
       },
       "prevControl": {
-        "x": 5.0901408450704215,
-        "y": 5.3005281690140835
+        "x": 5.559503424657534,
+        "y": 5.850620719178083
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reefscape- 2025",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -61.015230771708595
