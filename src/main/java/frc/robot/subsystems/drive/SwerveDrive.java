@@ -15,15 +15,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.DroidRageConstants;
+import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
 import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import lombok.Getter;
 
 //Set Voltage instead of set Power
 //Set them to 90 to 100%
@@ -67,8 +70,9 @@ public class SwerveDrive extends SubsystemBase {
         .withTurnMotor(10, Direction.Forward, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
-    private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
+    @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
+    private DriveSysID sysId;   
 
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
@@ -321,6 +325,18 @@ public class SwerveDrive extends SubsystemBase {
                 setYaw(getHeading());
                 break;
         }
+    }
+
+    public void enableSysID() {
+        sysId = new DriveSysID(swerveModules, this);
+    }
+
+    public Command runSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysId.sysIdQuasistatic(direction);
+    }
+
+    public Command runSysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysId.sysIdDynamic(direction);
     }
 
     

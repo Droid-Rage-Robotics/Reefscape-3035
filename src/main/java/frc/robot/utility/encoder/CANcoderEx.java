@@ -10,11 +10,23 @@ import lombok.Getter;
 public class CANcoderEx extends EncoderEx {
     private final CANcoder encoder;
     private CANcoderConfiguration config = new CANcoderConfiguration();
+    @Getter private double velocity;
+    @Getter private double position;
+    @Getter private double absolutePosition;
+    @Getter private int deviceID;
     @Getter private CANBus canbus;
     private double positionConversionFactor, velocityConversionFactor;
 
     public CANcoderEx(CANcoder encoder) {
         this.encoder = encoder;
+        gettersInit();
+    }
+
+    private void gettersInit() {
+        velocity = encoder.getVelocity().getValueAsDouble() * velocityConversionFactor;
+        position = encoder.getPosition().getValueAsDouble() * positionConversionFactor;
+        absolutePosition = encoder.getAbsolutePosition().getValueAsDouble();
+        deviceID = encoder.getDeviceID();
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -53,22 +65,22 @@ public class CANcoderEx extends EncoderEx {
         config.MagnetSensor.MagnetOffset = offset;
     }
 
-    public double getAbsolutePosition() {
-        return encoder.getAbsolutePosition().getValueAsDouble();
-    }
+    // public double getAbsolutePosition() {
+    //     return encoder.getAbsolutePosition().getValueAsDouble();
+    // }
     
-    public double getVelocity() {
-        return encoder.getVelocity().getValueAsDouble() * velocityConversionFactor;
-    }
+    // public double getVelocity() {
+    //     return encoder.getVelocity().getValueAsDouble() * velocityConversionFactor;
+    // }
 
-    public double getPosition() {
-        return encoder.getPosition().getValueAsDouble() * positionConversionFactor;
-    }
+    // public double getPosition() {
+    //     return encoder.getPosition().getValueAsDouble() * positionConversionFactor;
+    // }
 
-    @Override
-    public int getDeviceID() {
-        return encoder.getDeviceID();
-    }
+    // @Override
+    // public int getDeviceID() {
+    //     return encoder.getDeviceID();
+    // }
 
     @Override
     public void setOffset(double offset) {

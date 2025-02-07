@@ -43,7 +43,7 @@ public class SparkMaxEx extends CANMotorEx{
         return motor.new DirectionBuilder();
     }
 
-    public void gettersInit() {
+    private void gettersInit() {
         encoder = sparkMax.getEncoder();
         alternateEncoder = sparkMax.getAlternateEncoder();
         velocity = sparkMax.getEncoder().getVelocity();

@@ -21,6 +21,7 @@ import frc.robot.utility.motor.CANMotorEx.Direction;
 import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import lombok.Getter;
 
 public class SwerveModule {
     public enum POD{
@@ -54,9 +55,9 @@ public class SwerveModule {
         public static final double TURN_SUPPLY_CURRENT_LIMIT = 80;
     }
 
-    private TalonEx driveMotor;
+    @Getter private TalonEx driveMotor;
 
-    private TalonEx turnMotor;
+    @Getter private TalonEx turnMotor;
     private CANcoderEx turnEncoder;
 
     private PIDController turningPidController;
@@ -189,8 +190,13 @@ public class SwerveModule {
         }
         desiredState.optimize(getState().angle);
         desiredState.optimize(getState().angle);
+<<<<<<< HEAD
+        // driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
+            turnMotor.setPower(turningPidController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
+=======
         driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
         turnMotor.setPower(turningPidController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
+>>>>>>> a2daa3fd11e1d6d2d2cb7731a030570eb77e67b5
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", desiredState.toString());
         SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", desiredState.toString());
     }
@@ -213,10 +219,6 @@ public class SwerveModule {
     public void brakeAndCoastMode() {
         driveMotor.setIdleMode(ZeroPowerMode.Brake);
         turnMotor.setIdleMode(ZeroPowerMode.Coast);
-    }
-
-    public TalonEx getTurnMotor(){
-        return turnMotor;
     }
 
     public void getTurnVoltage(){
