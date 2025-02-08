@@ -30,6 +30,10 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
+    //Commands
+    // Score High Coral
+    // Remove algae high and store
+    //Intake human
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     private final SwerveDrive drive;
     // private final Carriage coralSubsystem;

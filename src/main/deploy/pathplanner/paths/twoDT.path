@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 5.64286971830986,
-        "y": 1.8140845070422533
+        "y": 1.8140845070422529
       },
       "nextControl": null,
       "isLocked": true,
@@ -45,7 +45,7 @@
     "rotation": -91.97493401088197
   },
   "reversed": false,
-  "folder": "Reefscape- 2025",
+  "folder": "Stuff",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 121.3705513532768

@@ -3,14 +3,19 @@
   "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
-    "leftAlgae",
-    "rightAlgae",
-    "center",
+    "C",
+    "D",
+    "E",
+    "F",
+    "I",
+    "K",
+    "J",
+    "L",
+    "Stuff",
     "tests"
   ],
   "autoFolders": [
-    "algaeA",
-    "TuningAutos"
+    "tests"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

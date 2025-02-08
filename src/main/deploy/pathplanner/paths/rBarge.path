@@ -20,7 +20,7 @@
         "y": 2.197
       },
       "prevControl": {
-        "x": 4.883967391304348,
+        "x": 4.883967391304349,
         "y": 2.2641304347826083
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
     "rotation": 178.3886640263644
   },
   "reversed": false,
-  "folder": "rightAlgae",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.95260275477074
