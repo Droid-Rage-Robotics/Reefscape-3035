@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leave2FScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leave2FBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RH2CScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RH2CBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RH2DScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RH2DBack"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
