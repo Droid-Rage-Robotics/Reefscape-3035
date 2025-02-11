@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.utility.motor;
 
 import static edu.wpi.first.units.Units.Volts;
 

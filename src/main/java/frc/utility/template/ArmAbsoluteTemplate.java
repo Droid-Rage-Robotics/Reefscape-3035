@@ -1,10 +1,10 @@
-package frc.robot.utility.template;
+package frc.utility.template;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.encoder.EncoderEx;
-import frc.robot.utility.motor.CANMotorEx;
+import frc.utility.encoder.EncoderEx;
+import frc.utility.motor.CANMotorEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
     protected EncoderEx encoder;

@@ -1,15 +1,15 @@
 package frc.robot.subsystems.carriage;
 
 import frc.robot.DroidRageConstants.Control;
+import frc.utility.encoder.SparkAbsoluteEncoderEx;
+import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.template.ArmAbsoluteTemplate;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
-import frc.robot.utility.encoder.SparkAbsoluteEncoderEx;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.motor.CANMotorEx.Direction;
-import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.robot.utility.motor.SparkMaxEx;
-import frc.robot.utility.template.ArmAbsoluteTemplate;
 
 public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {

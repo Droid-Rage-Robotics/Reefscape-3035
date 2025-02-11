@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.utility.motor;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;

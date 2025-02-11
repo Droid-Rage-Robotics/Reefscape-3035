@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule.POD;
+import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.motor.TalonEx;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.DroidRageConstants;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
-import frc.robot.utility.motor.TalonEx;
-import frc.robot.utility.encoder.EncoderEx.EncoderDirection;
-import frc.robot.utility.motor.CANMotorEx.Direction;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
 //Set Voltage instead of set Power

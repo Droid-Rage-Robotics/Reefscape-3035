@@ -3,7 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 public final class DroidRageConstants {
     public enum Element{

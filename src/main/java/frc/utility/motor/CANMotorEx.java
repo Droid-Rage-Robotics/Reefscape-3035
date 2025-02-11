@@ -1,8 +1,8 @@
-package frc.robot.utility.motor;
+package frc.utility.motor;
 
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class CANMotorEx {
     // protected int deviceID; // specific and should not be in the abstract class

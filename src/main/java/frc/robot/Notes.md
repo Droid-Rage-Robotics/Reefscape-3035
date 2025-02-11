@@ -32,12 +32,13 @@ Wiring
 - Kraken has a 12V40A
 - Talon FX has a 12V30A
 - Drive Kraken has a 12V40A
-- Drive NEO has a 12V40A
+- Turn NEO has a 12V40A
+- Turn Kraken has a 12V30A??
 - CTR Absolute encoder has a 5A mini fuse
 - Pigeon has a 5A mini fuse
 - Limelight is powered by a 10A mini fuse
-- mini power modual powered my a 12V 20A fuse
+- mini power module powered my a 12V 20A fuse
 - ethernet switch is powered by a 10A mini fuse
-- Radio power modual is powered by a 10A mini fuse
+- Radio power module is powered by a 10A mini fuse
 - RoboRio has a 10A mini fuse
 - CANivore has a 10A mini fuse

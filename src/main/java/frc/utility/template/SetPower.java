@@ -1,9 +1,9 @@
-package frc.robot.utility.template;
+package frc.utility.template;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.motor.CANMotorEx;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 //Works
 public class SetPower {

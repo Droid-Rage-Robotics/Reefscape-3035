@@ -1,4 +1,4 @@
-package frc.robot.utility.encoder;
+package frc.utility.encoder;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;

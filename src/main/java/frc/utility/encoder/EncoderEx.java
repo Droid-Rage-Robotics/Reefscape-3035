@@ -1,7 +1,7 @@
-package frc.robot.utility.encoder;
+package frc.utility.encoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class EncoderEx {
     public enum EncoderRange {

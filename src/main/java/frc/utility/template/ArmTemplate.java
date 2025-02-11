@@ -1,4 +1,4 @@
-package frc.robot.utility.template;
+package frc.utility.template;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.motor.CANMotorEx;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class ArmTemplate extends SubsystemBase {
     protected final CANMotorEx[] motors;

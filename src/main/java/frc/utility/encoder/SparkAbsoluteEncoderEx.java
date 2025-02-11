@@ -1,8 +1,9 @@
-package frc.robot.utility.encoder;
+package frc.utility.encoder;
 
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.config.EncoderConfig;
-import frc.robot.utility.motor.SparkMaxEx;
+
+import frc.utility.motor.SparkMaxEx;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package frc.robot.utility;
+package frc.utility;
 
 public abstract class GearRatio {
     // (count.countPerPulse * gearRatio) - This allows 

@@ -3,11 +3,11 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.motor.CANMotorEx.Direction;
-import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.robot.utility.motor.TalonEx;
-import frc.robot.utility.template.IntakeTemplate;
+import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.TalonEx;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.template.IntakeTemplate;
 
 public class Intake extends IntakeTemplate {
     private static class Constants {

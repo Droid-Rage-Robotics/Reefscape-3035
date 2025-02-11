@@ -5,11 +5,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.motor.CANMotorEx.Direction;
-import frc.robot.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.robot.utility.motor.TalonEx;
-import frc.robot.utility.template.ElevatorTemplate;
+import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.TalonEx;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.template.ElevatorTemplate;
 
 public class Elevator extends ElevatorTemplate {
     public static class Constants {

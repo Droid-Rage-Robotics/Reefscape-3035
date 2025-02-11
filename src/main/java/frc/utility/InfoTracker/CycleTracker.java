@@ -1,4 +1,4 @@
-package frc.robot.utility.InfoTracker;
+package frc.utility.InfoTracker;
 
 import java.io.FileWriter;
 import java.io.IOException;

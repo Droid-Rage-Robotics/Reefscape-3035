@@ -1,4 +1,4 @@
-package frc.robot.utility.shuffleboard;
+package frc.utility.shuffleboard;
 
 public interface ShuffleboardValueEnum<T> {
     // public final ShuffleboardValue<T> shuffleboardValue;

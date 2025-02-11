@@ -1,4 +1,4 @@
-package frc.robot.utility.encoder;
+package frc.utility.encoder;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import lombok.Getter;

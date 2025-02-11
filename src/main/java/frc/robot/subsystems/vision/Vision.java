@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.utility.shuffleboard.ShuffleboardValue;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {

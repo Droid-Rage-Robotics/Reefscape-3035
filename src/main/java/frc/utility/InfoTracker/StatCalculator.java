@@ -1,4 +1,4 @@
-package frc.robot.utility.InfoTracker;
+package frc.utility.InfoTracker;
 
 import java.util.ArrayList;
 import java.util.Collections;
