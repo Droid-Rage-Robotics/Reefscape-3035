@@ -42,7 +42,7 @@ public class Elevator extends ElevatorTemplate {
         }
     }
 
-    private static TalonEx motor = TalonEx.create(70)
+    private static TalonEx motorRight = TalonEx.create(70)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
@@ -50,18 +50,30 @@ public class Elevator extends ElevatorTemplate {
         .withIsEnabled(true)
         .withCurrentLimit(50);
 
+    private static TalonEx motorLeft = TalonEx.create(70)
+        .withDirection(Direction.Forward)
+        .withIdleMode(ZeroPowerMode.Coast)
+        .withPositionConversionFactor(1)
+        .withSubsystemName("Elevator")
+        .withIsEnabled(true)
+        .withCurrentLimit(50);
+    
+    private static TalonEx[] motors = {motorRight, motorLeft};
+    
     public Elevator(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motor}, 
+        new CANMotorEx[]{motorRight, motorLeft}, 
         new PIDController(0, 0, 0), 
         new ElevatorFeedforward(0, 0, 0, 0), 
         Constants.MAX_POSITION, 
         Constants.MIN_POSITION, 
         Control.PID, "Elevator", 0);
-        motor.setIsEnabled(isEnabled);
+        for (TalonEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
     }
 
     public Command setPositionCommand(ElevatorValue target) {
-        return new InstantCommand(()->setTargetPosition(target.getHeight()));
+        return new InstantCommand(()->motorRight.setPower(1));
     }
 }
