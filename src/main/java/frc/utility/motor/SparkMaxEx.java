@@ -6,6 +6,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.DroidRageConstants;
 import lombok.Getter;
+import lombok.Setter;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -14,20 +16,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class SparkMaxEx extends CANMotorEx{
     @Getter private final SparkMax sparkMax;
-    @Getter private RelativeEncoder encoder;
-    @Getter private RelativeEncoder alternateEncoder;
-    @Getter private double velocity;
-    @Getter private double position;
-    @Getter private double speed;
-    @Getter private SparkAbsoluteEncoder absoluteEncoder;
-    @Getter private int deviceID;
-    @Getter private double voltage;
-    @Getter private double current;
+    @Setter(onMethod = @__(@Override)) private double StatorCurrentLimit; // No use; here for compatibility
     private final SparkMaxConfig config = new SparkMaxConfig();
     
     private SparkMaxEx(SparkMax motor) {
         this.sparkMax = motor;
-        gettersInit();
     }
 
     public static DirectionBuilder create(int deviceID) {
@@ -41,18 +34,6 @@ public class SparkMaxEx extends CANMotorEx{
         CANMotorEx motor = new SparkMaxEx(new SparkMax(deviceID, motorType));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
-    }
-
-    private void gettersInit() {
-        encoder = sparkMax.getEncoder();
-        alternateEncoder = sparkMax.getAlternateEncoder();
-        velocity = sparkMax.getEncoder().getVelocity();
-        position = sparkMax.getEncoder().getPosition();
-        absoluteEncoder = sparkMax.getAbsoluteEncoder();
-        speed = sparkMax.get();
-        deviceID = sparkMax.getDeviceId();
-        voltage = sparkMax.getBusVoltage();
-        current = sparkMax.getOutputCurrent();
     }
 
     @Override
@@ -96,27 +77,27 @@ public class SparkMaxEx extends CANMotorEx{
         });
     }
 
-    // public RelativeEncoder getEncoder() {
-    //     return sparkMax.getEncoder();
-    // }
+    public RelativeEncoder getEncoder() {
+        return sparkMax.getEncoder();
+    }
 
-    // public RelativeEncoder getAlternateEncoder() {
-    //     return sparkMax.getAlternateEncoder();
-    // }
+    public RelativeEncoder getAlternateEncoder() {
+        return sparkMax.getAlternateEncoder();
+    }
 
-    // @Override
-    // public double getVelocity() {
-    //     return sparkMax.getEncoder().getVelocity();
-    // }
+    @Override
+    public double getVelocity() {
+        return sparkMax.getEncoder().getVelocity();
+    }
 
-    // @Override
-    // public double getPosition() {
-    //     return sparkMax.getEncoder().getPosition();
-    // }
+    @Override
+    public double getPosition() {
+        return sparkMax.getEncoder().getPosition();
+    }
 
-    // public SparkAbsoluteEncoder getAbsoluteEncoder() {
-    //     return sparkMax.getAbsoluteEncoder();
-    // }
+    public SparkAbsoluteEncoder getAbsoluteEncoder() {
+        return sparkMax.getAbsoluteEncoder();
+    }
 
     public void follow(SparkMaxEx leader, boolean invert) {
         config.follow(leader.getSparkMax(), invert);
@@ -126,33 +107,28 @@ public class SparkMaxEx extends CANMotorEx{
         sparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    // @Override
-    // public int getDeviceID() {
-    //     return sparkMax.getDeviceId();
-    // }
+    @Override
+    public int getDeviceID() {
+        return sparkMax.getDeviceId();
+    }
 
-    // @Override
-    // public double getSpeed(){
-    //     return sparkMax.get();
-    // }
+    @Override
+    public double getSpeed(){
+        return sparkMax.get();
+    }
 
     //Casting the double to an int
     @Override
     public void setSupplyCurrentLimit(double currentLimit) {
         config.smartCurrentLimit((int) currentLimit);
     }
-
-    @Override
-    public void setStatorCurrentLimit(double currentLimit) {
-        //DOES NOTHING, but it is here for compatibility with the TalonEx class
-    }
         
-    // @Override
-    // public double getVoltage(){
-    //     // return motor.getAppliedOutput();//motor controller's applied output duty cycle.
-    //     // return sparkMax.getBusVoltage();//voltage fed into the motor controller.
-    //     return sparkMax.getOutputCurrent();//motor controller's output current in Amps.
-    // }
+    @Override
+    public double getVoltage(){
+        // return motor.getAppliedOutput();//motor controller's applied output duty cycle.
+        // return sparkMax.getBusVoltage();//voltage fed into the motor controller.
+        return sparkMax.getOutputCurrent();//motor controller's output current in Amps.
+    }
 
     @Override
     public void resetEncoder(int num) {

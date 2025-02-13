@@ -11,22 +11,15 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.DroidRageConstants;
-import lombok.Getter;
 
 public class TalonEx extends CANMotorEx {
-    @Getter private final TalonFX talon;
-    @Getter private CANBus canbus;
-    @Getter private double velocity;
-    @Getter private double position;
-    @Getter private double speed;
-    @Getter private int deviceID;
-    @Getter private double voltage;
+    private final TalonFX talon;
+    private CANBus canbus;
     private TalonFXConfiguration configuration = new TalonFXConfiguration();
     private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
     
     private TalonEx(TalonFX motor) {
         this.talon = motor;
-        gettersInit();
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -40,14 +33,6 @@ public class TalonEx extends CANMotorEx {
         TalonEx motor = new TalonEx(new TalonFX(deviceID));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
-    }
-    
-    private void gettersInit() {
-        velocity = talon.getVelocity().getValueAsDouble()*positionConversionFactor;
-        position = talon.getPosition().getValueAsDouble()*positionConversionFactor;
-        speed = talon.get();
-        deviceID = talon.getDeviceID();
-        voltage = talon.getMotorVoltage().getValueAsDouble();
     }
    
     @Override
@@ -111,35 +96,35 @@ public class TalonEx extends CANMotorEx {
         talon.setPosition(position);
     }
 
-    //Already in rotations per sec so, just covert to
-    // @Override
-    // public double getVelocity() {
-    //     return talon.getVelocity().getValueAsDouble()*positionConversionFactor;
-    // }
+    // Already in rotations per sec so, just covert to
+    @Override
+    public double getVelocity() {
+        return talon.getVelocity().getValueAsDouble()*positionConversionFactor;
+    }
 
-    // @Override
-    // public double getSpeed() {
-    //     return talon.get();
-    // }
+    @Override
+    public double getSpeed() {
+        return talon.get();
+    }
 
-    // @Override
-    // public double getPosition() {
-    //     return talon.getPosition().getValueAsDouble()*positionConversionFactor;
-    // }
+    @Override
+    public double getPosition() {
+        return talon.getPosition().getValueAsDouble()*positionConversionFactor;
+    }
 
-    // @Override
-    // public int getDeviceID() {
-    //     return talon.getDeviceID();
-    // }
+    @Override
+    public int getDeviceID() {
+        return talon.getDeviceID();
+    }
      
-    // public CANBus getCANBus() {
-    //     return canbus;
-    // }
+    public CANBus getCANBus() {
+        return canbus;
+    }
 
-    // @Override
-    // public double getVoltage(){
-    //     return talon.getMotorVoltage().getValueAsDouble();
-    // }
+    @Override
+    public double getVoltage(){
+        return talon.getMotorVoltage().getValueAsDouble();
+    }
 
     @Override
     public void resetEncoder(int num) {

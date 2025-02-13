@@ -6,21 +6,16 @@ import lombok.Setter;
 
 public class AbsoluteDutyEncoderRIO extends EncoderEx {
     private final DutyCycleEncoder encoder;
-    @Getter private final int deviceID;
-    @Getter private double velocity;
-    @Setter private double offset = 0;
-    @Setter private EncoderRange range;
-    @Setter private EncoderDirection direction;
+    @Getter(onMethod = @__(@Override)) private final int deviceID; // Should work
+    @Setter(onMethod = @__(@Override)) private double offset = 0; // Should work
+    @Getter(onMethod = @__(@Override)) private double velocity; // No use; here for compatibility
+    @Setter(onMethod = @__(@Override)) private EncoderRange range; // No use; here for compatibility
     
     public String name;
     
     private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder, int deviceID){
         this.encoder=encoder;
         this.deviceID = deviceID;
-        switch (direction) {
-            case Forward -> encoder.setInverted(false);
-            case Reversed -> encoder.setInverted(true);
-        }
         encoder.setAssumedFrequency(975.6);
     }
     
@@ -29,33 +24,15 @@ public class AbsoluteDutyEncoderRIO extends EncoderEx {
             new DutyCycleEncoder(deviceID), deviceID);
         return encoder.new DirectionBuilder();
     }
-    
-    // @Override
-    // public void setOffset(double offset) {
-    //     this.offset = offset;
-    // }
 
-    // @Override
-    // public void setDirection(EncoderDirection direction) {
-    //     switch (direction) {
-    //         case Forward -> encoder.setInverted(false);
-    //         case Reversed -> encoder.setInverted(true);
-    //     }
-    //     this.direction = direction;
-    // }
-
-    // @Override
-    // public int getDeviceID() {
-    //     return deviceID;
-    // }
-    
-    // @Override
-    // public void setRange(EncoderRange range) {}
-    
-    // @Override
-    // public double getVelocity() {
-    //     return 0;
-    // }
+    @Override
+    public void setDirection(EncoderDirection direction) {
+        switch (direction) {
+            case Forward -> encoder.setInverted(false);
+            case Reversed -> encoder.setInverted(true);
+        }
+        this.direction = direction;
+    }
 
     @Override
     public double getPosition() {
