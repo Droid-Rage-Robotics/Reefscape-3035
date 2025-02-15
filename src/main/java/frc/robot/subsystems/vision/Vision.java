@@ -26,7 +26,7 @@ public class Vision extends SubsystemBase {
 
     Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
     // AprilTagFieldLayout layout = new AprilTagFieldLayout(null);
-    public static final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
 
     // AprilTagDetector;
     // AprilTagDetection detection= new AprilTagDetection("", 1, 0, 0, null, gettX(), gettA(), null)
@@ -45,14 +45,7 @@ public class Vision extends SubsystemBase {
     HttpCamera httpCamera = new
         HttpCamera("Limelight", "http://roborio-3035-FRC.local:5801");
     // http://roborio-2928-FRC.local:5801 - Works
-    
-    // http://limelight.local:5801
-    // http://10.30.35.56:5801/
-    // http://10.30.35.106:5801/
-    // http://frcvision.local:1181/stream.mjpg
-    // http://frcvision.local:1181/stream.mjpg
 
-    // CameraServer.startAutomaticCapture(limelightFeed);
     LimelightHelpers.LimelightResults llresult;
     // Initialize Limelight network tables
     public Vision() {

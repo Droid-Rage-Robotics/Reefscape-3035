@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
 import frc.robot.commands.IntakeElementInCommand;
+import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -103,6 +104,7 @@ public class RobotContainer {
 	public void testDrive(SwerveDrive drive, Vision vision){
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
 		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
+		driver.x().onTrue(new AutoAim(drive, vision));
 	}
 
 	public void driveSysID(DriveSysID sysID){
