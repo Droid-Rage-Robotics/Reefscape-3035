@@ -42,7 +42,7 @@ public class SysID {
     switch(unit){
       case ANGLE:
         routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(motor::setVoltage, log -> {
-        log.motor("shooter-wheel")
+        log.motor("motor")
             .voltage(appliedVoltage.mut_replace(motor.getVoltage() * RobotController.getBatteryVoltage(), Volts))
             .angularPosition(angle.mut_replace(motor.getPosition(), Rotations))
             .angularVelocity(angularVelocity.mut_replace(motor.getVelocity(), RotationsPerSecond));
@@ -50,10 +50,38 @@ public class SysID {
       );
       case DISTANCE:
         routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(motor::setVoltage, log -> {
-        log.motor("shooter-wheel")
+        log.motor("motor")
             .voltage(appliedVoltage.mut_replace(motor.getVoltage() * RobotController.getBatteryVoltage(), Volts))
             .linearPosition(distance.mut_replace(motor.getPosition(), Inches))
             .linearVelocity(linearVelocity.mut_replace(motor.getVelocity(), InchesPerSecond));
+        }, subsystem)
+      );
+    }
+  }
+  public SysID(CANMotorEx[] motor, Subsystem subsystem, Measurement unit) {
+    switch(unit){
+      case ANGLE:
+        routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism((motor[0]::setVoltage), log -> {
+        log.motor("motor0")
+            .voltage(appliedVoltage.mut_replace(motor[0].getVoltage() * RobotController.getBatteryVoltage(), Volts))
+            .angularPosition(angle.mut_replace(motor[0].getPosition(), Rotations))
+            .angularVelocity(angularVelocity.mut_replace(motor[0].getVelocity(), RotationsPerSecond));
+        log.motor("motor1")
+            .voltage(appliedVoltage.mut_replace(motor[1].getVoltage() * RobotController.getBatteryVoltage(), Volts))
+            .angularPosition(angle.mut_replace(motor[1].getPosition(), Rotations))
+            .angularVelocity(angularVelocity.mut_replace(motor[1].getVelocity(), RotationsPerSecond));
+        }, subsystem)
+      );
+      case DISTANCE:
+        routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(motor[0]::setVoltage, log -> {
+          log.motor("shooter-wheel")
+            .voltage(appliedVoltage.mut_replace(motor[0].getVoltage() * RobotController.getBatteryVoltage(), Volts))
+            .linearPosition(distance.mut_replace(motor[0].getPosition(), Inches))
+            .linearVelocity(linearVelocity.mut_replace(motor[0].getVelocity(), InchesPerSecond));
+          log.motor("motor1")
+            .voltage(appliedVoltage.mut_replace(motor[1].getVoltage() * RobotController.getBatteryVoltage(), Volts))
+            .linearPosition(distance.mut_replace(motor[1].getPosition(), Inches))
+            .linearVelocity(linearVelocity.mut_replace(motor[1].getVelocity(), InchesPerSecond));
         }, subsystem)
       );
     }
