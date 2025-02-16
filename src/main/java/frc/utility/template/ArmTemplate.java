@@ -117,7 +117,11 @@ public class ArmTemplate extends SubsystemBase {
         return radian;
     }
 
-    public CANMotorEx getMotors(){
+    public CANMotorEx getMotor(){
         return motors[mainNum];
+    }
+    
+    public CANMotorEx[] getAllMotor() {
+        return motors;
     }
 }

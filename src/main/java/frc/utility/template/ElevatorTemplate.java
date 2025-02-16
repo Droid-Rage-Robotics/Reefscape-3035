@@ -119,7 +119,11 @@ public class ElevatorTemplate extends SubsystemBase {
         return position;
     }
 
-    public CANMotorEx getMotors(){
+    public CANMotorEx getMotor() {
         return motors[mainNum];
+    }
+
+    public CANMotorEx[] getAllMotor() {
+        return motors;
     }
 }

@@ -9,13 +9,15 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class SetPower {
     private final CANMotorEx[] motors;
     private final ShuffleboardValue<Double> powerWriter;
+    private final int mainNum;
 
     public SetPower(
         CANMotorEx[] motors,
-        String name
+        String name,
+        int mainNum
     ){
         this.motors=motors;
-
+        this.mainNum=mainNum;
         powerWriter = ShuffleboardValue
             .create(0.0, name+"/Power", name)
             .build();
@@ -34,4 +36,12 @@ public class SetPower {
             motor.setPower(power);
         }
     }
+   
+    public CANMotorEx getMotor() {
+        return motors[mainNum];
+    }
+
+    public CANMotorEx[] getAllMotor() {
+        return motors;
+    } 
 }
