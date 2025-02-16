@@ -18,7 +18,7 @@ public class Arm extends ArmAbsoluteTemplate {
         public static final double OFFSET = 0;
     }
     
-    private static SparkMaxEx motor = SparkMaxEx.create(55)
+    private static SparkMaxEx motor = SparkMaxEx.create(17)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
