@@ -42,7 +42,7 @@ public class Elevator extends ElevatorTemplate {
         }
     }
 
-    private static TalonEx motorRight = TalonEx.create(70)
+    private static TalonEx motorRight = TalonEx.create(15)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
@@ -50,7 +50,7 @@ public class Elevator extends ElevatorTemplate {
         .withIsEnabled(true)
         .withCurrentLimit(50);
 
-    private static TalonEx motorLeft = TalonEx.create(70)
+    private static TalonEx motorLeft = TalonEx.create(14)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)

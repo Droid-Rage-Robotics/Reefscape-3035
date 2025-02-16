@@ -18,7 +18,7 @@ public class Climb extends ArmAbsoluteTemplate {
         public static final double OFFSET = 0;
     }
     
-    private static SparkMaxEx motor = SparkMaxEx.create(71)
+    private static SparkMaxEx motor = SparkMaxEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
