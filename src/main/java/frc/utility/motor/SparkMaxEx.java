@@ -3,16 +3,15 @@ package frc.utility.motor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.DroidRageConstants;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class SparkMaxEx extends CANMotorEx{
     @Getter private final SparkMax sparkMax;
@@ -85,6 +84,12 @@ public class SparkMaxEx extends CANMotorEx{
         return sparkMax.getAlternateEncoder();
     }
 
+    public AbsoluteEncoder getAbsoluteEncoder() {
+        return sparkMax.getAbsoluteEncoder();
+    }
+
+    
+
     @Override
     public double getVelocity() {
         return sparkMax.getEncoder().getVelocity();
@@ -93,10 +98,6 @@ public class SparkMaxEx extends CANMotorEx{
     @Override
     public double getPosition() {
         return sparkMax.getEncoder().getPosition();
-    }
-
-    public SparkAbsoluteEncoder getAbsoluteEncoder() {
-        return sparkMax.getAbsoluteEncoder();
     }
 
     public void follow(SparkMaxEx leader, boolean invert) {
