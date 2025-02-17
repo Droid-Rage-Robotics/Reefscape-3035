@@ -3,9 +3,9 @@ package frc.utility.motor;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
@@ -16,10 +16,11 @@ public class TalonEx extends CANMotorEx {
     private final TalonFX talon;
     private CANBus canbus;
     private TalonFXConfiguration configuration = new TalonFXConfiguration();
-    private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
+    private TalonFXConfigurator configurator;
     
     private TalonEx(TalonFX motor) {
         this.talon = motor;
+        configurator = talon.getConfigurator();
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -37,12 +38,12 @@ public class TalonEx extends CANMotorEx {
    
     @Override
     public void setDirection(Direction direction) {
-        motorOutputConfigs.Inverted = switch (direction) {
+        configuration.MotorOutput.Inverted = switch (direction) {
             case Forward -> InvertedValue.Clockwise_Positive;
             case Reversed -> InvertedValue.CounterClockwise_Positive;
         };
-        talon.getConfigurator().apply(motorOutputConfigs);
-        
+        configurator.apply(configuration);
+
     }
 
     @Override
@@ -57,14 +58,14 @@ public class TalonEx extends CANMotorEx {
     public void setSupplyCurrentLimit(double currentLimit) {
         configuration.CurrentLimits.SupplyCurrentLimit = currentLimit;
         configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        talon.getConfigurator().apply(configuration);
+        configurator.apply(configuration);
     }
 
     @Override
     public void setStatorCurrentLimit(double currentLimit){
         configuration.CurrentLimits.StatorCurrentLimit = currentLimit;
         configuration.CurrentLimits.StatorCurrentLimitEnable = true;
-        talon.getConfigurator().apply(configuration);
+        configurator.apply(configuration);
     }
 
     @Override
