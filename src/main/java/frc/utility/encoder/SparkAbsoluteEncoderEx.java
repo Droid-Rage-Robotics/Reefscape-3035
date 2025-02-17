@@ -1,19 +1,19 @@
 package frc.utility.encoder;
 
-import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.config.EncoderConfig;
 
 import frc.utility.motor.SparkMaxEx;
 import lombok.Setter;
 
 public class SparkAbsoluteEncoderEx extends EncoderEx {
-    protected final SparkAbsoluteEncoder encoder;
+    protected final AbsoluteEncoder encoder;
     protected final SparkMaxEx motor;
     private final EncoderConfig config = new EncoderConfig();
     @Setter(onMethod = @__(@Override)) private EncoderRange range; // No use; here for compatibility
     @Setter(onMethod = @__(@Override)) private double offset; // No use; here for compatibility
     
-    private SparkAbsoluteEncoderEx(SparkAbsoluteEncoder encoder, SparkMaxEx motor) {
+    private SparkAbsoluteEncoderEx(AbsoluteEncoder encoder, SparkMaxEx motor) {
         this.encoder = encoder;
         this.motor = motor;
     }
