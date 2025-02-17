@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,6 +27,10 @@ import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.InfoTracker.CycleTracker;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -30,16 +38,33 @@ public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
     // private final Elevator elevator = new Elevator(false);
     private final Intake intake = new Intake(false);
+    private Climb climb = new Climb(false);
+
+    private static SparkMaxEx talon = SparkMaxEx.create(17)
+        .withDirection(Direction.Forward)
+        .withIdleMode(ZeroPowerMode.Coast)
+        .withPositionConversionFactor(1)
+        .withSubsystemName("Pivot")
+        .withIsEnabled(true)
+        .withCurrentLimit(50);
+    // private static TalonEx talon = TalonEx.create(17)
+    //     .withDirection(Direction.Forward)
+    //     .withIdleMode(ZeroPowerMode.Brake)
+    //     .withPositionConversionFactor(1)
+    //     .withSubsystemName("Pivot")
+    //     .withIsEnabled(true)
+    //     .withCurrentLimit(50);
+
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Carriage carriage = new Carriage(
     //     new Arm(false), 
     //     new Pivot(false), 
     //     new Intake(false)
     // );
-    // private final Climb climb = new Climb(false);
-    private final Light light = new Light();
+    // private final Light light = new Light();
+
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    private final SysID sysID = new SysID(intake.getMotor(), intake, Measurement.DISTANCE);
+    // private final SysID sysID = new SysID(intake.getMotor(), intake, Measurement.DISTANCE);
 
     private RobotContainer robotContainer = new RobotContainer();
     private AutoChooser autoChooser = new AutoChooser(drive, vision);
@@ -54,6 +79,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         teleopRan = false;
+        // configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        // talon.getConfigurator().apply(configuration);
     }
     
     @Override
@@ -109,8 +136,13 @@ public class Robot extends TimedRobot {
 		DriverStation.silenceJoystickConnectionWarning(true);
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
-        robotContainer.sysID(sysID);
-        robotContainer.testDrive(drive, vision);
+        // robotContainer.sysID(sysID);
+        // robotContainer.testDrive(drive, vision);
+        // robotContainer.testIntake(intake);
+        // robotContainer.testMotor(motorR, motorL);
+        robotContainer.testMotor(talon);
+        // robotContainer.testClimb(climb);
+
         // robotContainer.testCANivore(driveMotor, motor);
         teleopRan = true;
     }
