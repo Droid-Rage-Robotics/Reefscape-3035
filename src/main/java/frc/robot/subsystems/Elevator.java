@@ -2,19 +2,26 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
+import frc.robot.commands.DisabledCommand;
+import frc.utility.GearRatio;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ElevatorTemplate;
+import lombok.Getter;
 
 public class Elevator extends ElevatorTemplate {
+    // 2
+    //Gear Ratio: 9:1
     public static class Constants {
         public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 10;   
+        public static final double MAX_POSITION = 20;   //40
     }
 
     public enum ElevatorValue {
@@ -23,27 +30,24 @@ public class Elevator extends ElevatorTemplate {
         INTAKE_HPS(0),
         CLIMB(1),
         
-        L1(2),
-        L2(3),
+        L1(10),
+        L2(20),
         L3(4),
         L4(0),
         LOW(0),
         HIGH(0)
         ;
 
-        private final double height;
+        @Getter private final double height;
 
         private ElevatorValue(double height) {
             this.height = height;
         }
-
-        public double getHeight() {
-            return height;
-        }
     }
 
+    // GearRatio.Type type = GearRatio.Type.DISTANCE;
     private static TalonEx motorRight = TalonEx.create(15)
-        .withDirection(Direction.Forward)
+        .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("Elevator")
@@ -63,17 +67,22 @@ public class Elevator extends ElevatorTemplate {
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
-        new PIDController(0, 0, 0), 
-        new ElevatorFeedforward(0, 0, 0, 0), 
-        Constants.MAX_POSITION, 
+        new PIDController(0.8, 0, 0), 
+        new ElevatorFeedforward(0, 0.23, 0, 0), 
+        new TrapezoidProfile.Constraints(0, 0),
+        Constants.MAX_POSITION,
         Constants.MIN_POSITION, 
-        Control.PID, "Elevator", 0);
+        Control.FEEDFORWARD, "Elevator", 0);
         for (TalonEx motor: motors) {
             motor.setIsEnabled(isEnabled);
         }
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+
+        // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
 
     public Command setPositionCommand(ElevatorValue target) {
-        return new InstantCommand(()->motorRight.setPower(1));
+        return setTargetPositionCommand(target.getHeight());
+        // return new InstantCommand(()->motorRight.setPower(1));
     }
 }

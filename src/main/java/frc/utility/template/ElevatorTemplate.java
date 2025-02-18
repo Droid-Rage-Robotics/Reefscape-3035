@@ -2,6 +2,7 @@ package frc.utility.template;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +22,9 @@ public class ElevatorTemplate extends SubsystemBase {
     private final ShuffleboardValue<Double> targetWriter;
     private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
+    private final TrapezoidProfile profile;
+    private TrapezoidProfile.State setPoint = new TrapezoidProfile.State();
+    private TrapezoidProfile.State goal = new TrapezoidProfile.State();
 
     /**
      * @param motors - The Motors to Control
@@ -36,6 +40,7 @@ public class ElevatorTemplate extends SubsystemBase {
         CANMotorEx[] motors,
         PIDController controller,
         ElevatorFeedforward feedforward,
+        TrapezoidProfile.Constraints constraints,
         double maxPosition,
         double minPosition,
         Control control,
@@ -49,6 +54,8 @@ public class ElevatorTemplate extends SubsystemBase {
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
         this.mainNum=mainNum;
+
+        profile = new TrapezoidProfile(constraints);
 
         positionWriter = ShuffleboardValue
             .create(0.0, name+"/Position", name)
@@ -74,7 +81,13 @@ public class ElevatorTemplate extends SubsystemBase {
                 +feedforward.calculate(1,1)); //To Change #
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
-        };        
+            case TRAPEZOID_PROFILE:
+                setPoint = profile.calculate(0.02, setPoint, goal);
+                
+                setVoltage(controller.calculate(getEncoderPosition(), setPoint.position)
+                        + feedforward.calculate(setPoint.position, setPoint.velocity));
+                break;
+        }       
     }
 
     @Override
