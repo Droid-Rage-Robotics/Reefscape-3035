@@ -127,6 +127,8 @@ public class RobotContainer {
 // 			driver.leftTrigger().whileTrue(new InstantCommand(() -> motor2.setPower(.4)))
 // 				.onFalse(new InstantCommand(() -> motor2.setPower(0)));
 // 	}
-
+	public void elevator(Elevator elevator) {
+		driver.a().whileTrue(elevator.work());
+	}
 
 }

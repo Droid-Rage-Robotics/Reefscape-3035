@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -42,7 +43,7 @@ public class Elevator extends ElevatorTemplate {
         }
     }
 
-    private static TalonEx motorRight = TalonEx.create(70)
+    private static TalonEx motorRight = TalonEx.create(15)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
@@ -50,7 +51,7 @@ public class Elevator extends ElevatorTemplate {
         .withIsEnabled(true)
         .withCurrentLimit(50);
 
-    private static TalonEx motorLeft = TalonEx.create(70)
+    private static TalonEx motorLeft = TalonEx.create(14)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
@@ -73,7 +74,7 @@ public class Elevator extends ElevatorTemplate {
         }
     }
 
-    public Command setPositionCommand(ElevatorValue target) {
-        return new InstantCommand(()->motorRight.setPower(1));
+    public Command work() {
+        return new RunCommand(()->motorLeft.setPower(1));
     }
 }
