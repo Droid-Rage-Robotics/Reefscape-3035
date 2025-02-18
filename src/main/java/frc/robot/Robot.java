@@ -31,10 +31,6 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-<<<<<<< HEAD
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
-    private final Elevator elevator = new Elevator(false);
-=======
     private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Intake intake = new Intake(false);
@@ -49,7 +45,6 @@ private Arm arm = new Arm(false);
     //         .withIsEnabled(true)
     //         .withCurrentLimit(50);
 
->>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Carriage carriage = new Carriage(
     //     new Arm(false), 
@@ -129,10 +124,6 @@ private Arm arm = new Arm(false);
 		DriverStation.silenceJoystickConnectionWarning(true);
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
-<<<<<<< HEAD
-        robotContainer.elevator(elevator);
-        robotContainer.testDrive(drive, vision);
-=======
         // robotContainer.sysID(sysID);
         // robotContainer.testDrive(drive, vision);
         // robotContainer.testIntake(motor);
@@ -141,7 +132,6 @@ private Arm arm = new Arm(false);
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
 
->>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
         // robotContainer.testCANivore(driveMotor, motor);
         teleopRan = true;
     }

@@ -46,14 +46,9 @@ public class Elevator extends ElevatorTemplate {
         }
     }
 
-<<<<<<< HEAD
-    private static TalonEx motorRight = TalonEx.create(15)
-        .withDirection(Direction.Forward)
-=======
     // GearRatio.Type type = GearRatio.Type.DISTANCE;
     private static TalonEx motorRight = TalonEx.create(15)
         .withDirection(Direction.Reversed)
->>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("Elevator")
@@ -87,13 +82,13 @@ public class Elevator extends ElevatorTemplate {
         // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
 
-<<<<<<< HEAD
-    public Command work() {
-        return new RunCommand(()->motorLeft.setPower(1));
-=======
     public Command setPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
->>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
+    }
+
+    public Command work() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'work'");
     }
 }
