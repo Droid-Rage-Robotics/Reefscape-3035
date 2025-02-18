@@ -11,6 +11,8 @@ import frc.robot.SysID.SysID;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
+// import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
@@ -131,13 +133,13 @@ public class RobotContainer {
 // 	}
 
 
-	public void testIntake(Intake intake){
-		// driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.5)))
-		// .onFalse(new InstantCommand(()->motor.setPower(0.02)));
-		// driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-.5)))
-		// 		.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
-		driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(60))
-			.onFalse(intake.setTargetPositionCommand(00));
+	public void testIntake(TalonEx motor){
+		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
+		.onFalse(new InstantCommand(()->motor.setPower(0.02)));
+		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
+				.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(60))
+		// 	.onFalse(intake.setTargetPositionCommand(00));
 	}
 	
 	public void testMotor(SparkMaxEx motor) {
@@ -163,16 +165,36 @@ public class RobotContainer {
 		// .onFalse(intake.setTargetPositionCommand(00));
 	}
 	
+	public void testMotor(TalonEx motorO) {
+		driver.rightTrigger()
+				.onTrue(new InstantCommand(() -> motorO.setPower(-.2)))
+				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
+		driver.leftTrigger()
+				.onTrue(new InstantCommand(() -> motorO.setPower(.2)))
+				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
+		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
+		// .onFalse(intake.setTargetPositionCommand(00));
+	}
+	
 	public void testMotor(TalonFX motorO) {
 		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.set(-.5)))
+				.onTrue(new InstantCommand(() -> motorO.set(-.2)))
 				.onFalse(new InstantCommand(() -> motorO.set(0)));
 		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.set(.5)))
+				.onTrue(new InstantCommand(() -> motorO.set(.2)))
 				.onFalse(new InstantCommand(() -> motorO.set(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
 	}
+
+	// public void testElevator(Elevator elevator) {
+	// 	driver.povUp()
+	// 		.onTrue(elevator.setPositionCommand(ElevatorValue.L1));
+	// 	driver.povDown()
+	// 		.onTrue(elevator.setPositionCommand(ElevatorValue.L2));
+	// 	driver.povRight()
+	// 		.onTrue(elevator.setPositionCommand(ElevatorValue.START));
+	// }
 
 	public void testClimb(Climb climb){
 		driver.povUp()
