@@ -14,6 +14,7 @@ import frc.robot.SysID.SysID;
 import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Intake;
@@ -31,17 +32,18 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
-    // private final Elevator elevator = new Elevator(true);
-    // private final Intake intake = new Intake(false);
-    // private Climb climb = new Climb(false);
-
-    private static TalonEx motor = TalonEx.create(19)
-            .withDirection(Direction.Forward)
-            .withIdleMode(ZeroPowerMode.Coast)
-            .withPositionConversionFactor(1)
-            .withSubsystemName("Carriage/Intake")
-            .withIsEnabled(true)
-            .withCurrentLimit(50);
+    private final Elevator elevator = new Elevator(false);
+    private final Intake intake = new Intake(false);
+    private Climb climb = new Climb(false);
+    private Pivot pivot = new Pivot(false);
+private Arm arm = new Arm(false);
+    // private static TalonEx motor = TalonEx.create(19)
+    //         .withDirection(Direction.Forward)
+    //         .withIdleMode(ZeroPowerMode.Coast)
+    //         .withPositionConversionFactor(1)
+    //         .withSubsystemName("Carriage/Intake")
+    //         .withIsEnabled(true)
+    //         .withCurrentLimit(50);
 
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Carriage carriage = new Carriage(
@@ -124,7 +126,7 @@ public class Robot extends TimedRobot {
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
         // robotContainer.testDrive(drive, vision);
-        robotContainer.testIntake(motor);
+        // robotContainer.testIntake(motor);
         // robotContainer.testMotor(motorR, motorL);
         // robotContainer.testMotor(motor);
         // robotContainer.testClimb(climb);

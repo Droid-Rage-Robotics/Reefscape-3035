@@ -22,7 +22,7 @@ public class Arm extends ArmAbsoluteTemplate {
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
-        .withSubsystemName("carriage")
+        .withSubsystemName("arm")
         .withIsEnabled(true)
         .withCurrentLimit(50);
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
@@ -34,9 +34,9 @@ public class Arm extends ArmAbsoluteTemplate {
         super(
         new CANMotorEx[]{motor}, 
         new PIDController(0,0,0), 
-        new ArmFeedforward(0, 0, 0, 0, 0), 
+        new ArmFeedforward(0, 0, 0, 0), 
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.PID, "carriage", 0, encoder);
+        Control.PID, "arm", 0, encoder);
         motor.setIsEnabled(isEnabled);
     }
 }

@@ -68,8 +68,8 @@ public class Elevator extends ElevatorTemplate {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
         new PIDController(0.8, 0, 0), 
-        new ElevatorFeedforward(0, 0.23, 0, 0), 
-        new TrapezoidProfile.Constraints(0, 0),
+        new ElevatorFeedforward(.1, 0.23, 0, 0.1), 
+        new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION,
         Constants.MIN_POSITION, 
         Control.FEEDFORWARD, "Elevator", 0);

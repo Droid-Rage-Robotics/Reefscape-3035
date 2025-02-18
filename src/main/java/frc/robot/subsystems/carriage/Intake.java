@@ -19,7 +19,7 @@ public class Intake extends IntakeTemplate {
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
-        .withSubsystemName("Carriage/Intake")
+        .withSubsystemName("Intake")
         .withIsEnabled(true)
         .withCurrentLimit(50);
 
@@ -28,7 +28,7 @@ public class Intake extends IntakeTemplate {
         new CANMotorEx[]{motor}, 
         new PIDController(0.03,0,0), 
         new SimpleMotorFeedforward(0.64, 0.000515,0), Constants.MAX_SPEED, Constants.MIN_SPEED, 
-        Control.FEEDFORWARD, "Carriage/Intake", 0);
+        Control.FEEDFORWARD, "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
     }
