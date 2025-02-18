@@ -4,6 +4,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.config.EncoderConfig;
 
 import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.SparkMaxEx.EncoderType;
 import lombok.Setter;
 
 public class SparkAbsoluteEncoderEx extends EncoderEx {
@@ -19,7 +20,7 @@ public class SparkAbsoluteEncoderEx extends EncoderEx {
     }
 
     public static DirectionBuilder create(SparkMaxEx motor) {
-        SparkAbsoluteEncoderEx encoder = new SparkAbsoluteEncoderEx(motor.getAbsoluteEncoder(), motor);
+        SparkAbsoluteEncoderEx encoder = new SparkAbsoluteEncoderEx(motor.getEncoder(EncoderType.Absolute), motor);
         return encoder.new DirectionBuilder();
     }
     

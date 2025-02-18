@@ -14,6 +14,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class SparkMaxEx extends CANMotorEx{
+    public enum EncoderType {
+        Relative,
+        Alternate,
+        Absolute
+    }
+    
     @Getter private final SparkMax sparkMax;
     @Setter(onMethod = @__(@Override)) private double StatorCurrentLimit; // No use; here for compatibility
     private final SparkMaxConfig config = new SparkMaxConfig();
@@ -76,19 +82,27 @@ public class SparkMaxEx extends CANMotorEx{
         });
     }
 
-    public RelativeEncoder getEncoder() {
-        return sparkMax.getEncoder();
-    }
+    // public RelativeEncoder getEncoder() {
+    //     return sparkMax.getEncoder();
+    // }
 
-    public RelativeEncoder getAlternateEncoder() {
-        return sparkMax.getAlternateEncoder();
-    }
+    // public RelativeEncoder getAlternateEncoder() {
+    //     return sparkMax.getAlternateEncoder();
+    // }
 
-    public AbsoluteEncoder getAbsoluteEncoder() {
-        return sparkMax.getAbsoluteEncoder();
-    }
+    // public AbsoluteEncoder getAbsoluteEncoder() {
+    //     return sparkMax.getAbsoluteEncoder();
+    // }
 
-    
+    @SuppressWarnings("unchecked")
+    public <T> T getEncoder(EncoderType type) {
+        switch(type) {
+            case Relative: return (T) sparkMax.getEncoder();
+            case Alternate: return (T) sparkMax.getAlternateEncoder();
+            case Absolute: return (T) sparkMax.getAbsoluteEncoder();
+            default: return null;
+        }
+    }
 
     @Override
     public double getVelocity() {
