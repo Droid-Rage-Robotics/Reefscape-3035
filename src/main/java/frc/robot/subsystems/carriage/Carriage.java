@@ -35,6 +35,7 @@ public class Carriage {
     public enum CarriageIntakeValue {
         INTAKE(0),
         OUTTAKE(0),
+        HOLD(0),
         STOP(0);
 
         private final double intakeSpeed;

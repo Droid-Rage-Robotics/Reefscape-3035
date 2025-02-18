@@ -52,6 +52,7 @@ public final class DroidRageConstants {
 
     public enum Control{
         PID,
-        FEEDFORWARD
+        FEEDFORWARD,
+        TRAPEZOID_PROFILE
     }
 }

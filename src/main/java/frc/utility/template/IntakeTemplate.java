@@ -101,12 +101,16 @@ public class IntakeTemplate extends SubsystemBase{
     }
 
     public double getEncoderPosition() {
-        double position = motors[mainNum].getPosition();
+        double position = motors[mainNum].getVelocity();
         speedWriter.write(position);
         return position;
     }
 
-    public CANMotorEx getMotors(){
+    public CANMotorEx getMotor() {
         return motors[mainNum];
+    }
+
+    public CANMotorEx[] getAllMotor() {
+        return motors;
     }
 }

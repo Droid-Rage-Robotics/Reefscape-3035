@@ -3,9 +3,9 @@ package frc.utility.motor;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Voltage;
@@ -15,11 +15,13 @@ import frc.robot.DroidRageConstants;
 public class TalonEx extends CANMotorEx {
     private final TalonFX talon;
     private CANBus canbus;
-    private TalonFXConfiguration configuration = new TalonFXConfiguration();
-    private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
+    private TalonFXConfiguration config;
+    private TalonFXConfigurator configure;
     
     private TalonEx(TalonFX motor) {
         this.talon = motor;
+        config = new TalonFXConfiguration(); // Use to change configs
+        configure = talon.getConfigurator(); // Use to apply configs
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
@@ -37,12 +39,11 @@ public class TalonEx extends CANMotorEx {
    
     @Override
     public void setDirection(Direction direction) {
-        motorOutputConfigs.Inverted = switch (direction) {
+        config.MotorOutput.Inverted = switch (direction) {
             case Forward -> InvertedValue.Clockwise_Positive;
             case Reversed -> InvertedValue.CounterClockwise_Positive;
         };
-        talon.getConfigurator().apply(motorOutputConfigs);
-        
+        configure.apply(config);
     }
 
     @Override
@@ -55,27 +56,27 @@ public class TalonEx extends CANMotorEx {
 
     @Override
     public void setSupplyCurrentLimit(double currentLimit) {
-        configuration.CurrentLimits.SupplyCurrentLimit = currentLimit;
-        configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        talon.getConfigurator().apply(configuration);
+        config.CurrentLimits.SupplyCurrentLimit = currentLimit;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        configure.apply(config);
     }
 
     @Override
     public void setStatorCurrentLimit(double currentLimit){
-        configuration.CurrentLimits.StatorCurrentLimit = currentLimit;
-        configuration.CurrentLimits.StatorCurrentLimitEnable = true;
-        talon.getConfigurator().apply(configuration);
+        config.CurrentLimits.StatorCurrentLimit = currentLimit;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        configure.apply(config);
     }
 
     @Override
     public void setPower(double power) {
-    if (isEnabledWriter.get()) {
-        talon.set(power);
+        if (isEnabledWriter.get()) {
+            talon.set(power);
+        }
+        if (DroidRageConstants.removeWriterWriter.get()) {
+            outputWriter.set(power);
+        }
     }
-    if (DroidRageConstants.removeWriterWriter.get()) {
-        outputWriter.set(power);
-    }
-}
 
     @Override
     public void setVoltage(double outputVolts) {

@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.SysID.DriveSysID;
+import frc.robot.SysID.SysID;
+import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -21,21 +23,43 @@ import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.InfoTracker.CycleTracker;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
+<<<<<<< HEAD
     private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     private final Elevator elevator = new Elevator(false);
+=======
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
+    private final Elevator elevator = new Elevator(false);
+    private final Intake intake = new Intake(false);
+    private Climb climb = new Climb(false);
+    private Pivot pivot = new Pivot(false);
+private Arm arm = new Arm(false);
+    // private static TalonEx motor = TalonEx.create(19)
+    //         .withDirection(Direction.Forward)
+    //         .withIdleMode(ZeroPowerMode.Coast)
+    //         .withPositionConversionFactor(1)
+    //         .withSubsystemName("Carriage/Intake")
+    //         .withIsEnabled(true)
+    //         .withCurrentLimit(50);
+
+>>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Carriage carriage = new Carriage(
     //     new Arm(false), 
     //     new Pivot(false), 
     //     new Intake(false)
     // );
-    // private final Climb climb = new Climb(false);
-    private final Light light = new Light();
-    private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
+    // private final Light light = new Light();
+
+    // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
+    // private final SysID sysID = new SysID(intake.getMotor(), intake, Measurement.DISTANCE);
 
     private RobotContainer robotContainer = new RobotContainer();
     private AutoChooser autoChooser = new AutoChooser(drive, vision);
@@ -105,8 +129,19 @@ public class Robot extends TimedRobot {
 		DriverStation.silenceJoystickConnectionWarning(true);
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
+<<<<<<< HEAD
         robotContainer.elevator(elevator);
         robotContainer.testDrive(drive, vision);
+=======
+        // robotContainer.sysID(sysID);
+        // robotContainer.testDrive(drive, vision);
+        // robotContainer.testIntake(motor);
+        // robotContainer.testMotor(motorR, motorL);
+        // robotContainer.testMotor(motor);
+        // robotContainer.testClimb(climb);
+        // robotContainer.testElevator(elevator);
+
+>>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
         // robotContainer.testCANivore(driveMotor, motor);
         teleopRan = true;
     }

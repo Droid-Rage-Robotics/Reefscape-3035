@@ -23,14 +23,14 @@ public class AutoAim extends Command {//TODO: Test this
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1));
-        turnController.setTolerance(.03);//-27 degrees to 27 degrees
+        turnController.setTolerance(2);//-27 degrees to 27 degrees
         
         distanceController = new ProfiledPIDController(
-            0., //.034
+            0.0, //.034
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1));
-        distanceController.setTolerance(0.01);//Some sort of distance thing
+        distanceController.setTolerance(.5);//Some sort of distance thing
         
         
 
@@ -47,7 +47,7 @@ public class AutoAim extends Command {//TODO: Test this
 
   @Override
   public void execute(){
-    drive.drive(distanceController.calculate(vision.gettY(), 0), 
+    drive.drive(-distanceController.calculate(vision.gettA(), 4),
             0, 
             turnController.calculate(vision.gettX(),0));
   }

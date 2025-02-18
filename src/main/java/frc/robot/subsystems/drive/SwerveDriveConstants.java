@@ -27,7 +27,7 @@ public class SwerveDriveConstants {
         THETA_KD(0),
 
         // Turn PID for Swerve Pod
-        TURN_KP(1),
+        TURN_KP(.8),//1
 
         // Drive SVA
         DRIVE_KS(0.13), // this value is multiplied by veloicty in meteres per second
@@ -38,7 +38,11 @@ public class SwerveDriveConstants {
         BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.9),
         BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(2.22),
         FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.277),
+<<<<<<< HEAD
         FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.51),
+=======
+        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.4095),
+>>>>>>> 69e3a8b515b71a22ef9e2710e39eaf4582abc592
         
 
         DEFAULT_HEADING_OFFSET(0),
