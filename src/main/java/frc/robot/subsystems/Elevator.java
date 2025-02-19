@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
 import frc.utility.GearRatio;
@@ -84,5 +85,10 @@ public class Elevator extends ElevatorTemplate {
     public Command setPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
+    }
+
+    public Command work() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'work'");
     }
 }

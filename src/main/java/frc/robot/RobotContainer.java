@@ -11,6 +11,7 @@ import frc.robot.SysID.SysID;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Elevator;
 // import frc.robot.subsystems.Elevator;
 // import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Intake;
@@ -131,7 +132,9 @@ public class RobotContainer {
 // 			driver.leftTrigger().whileTrue(new InstantCommand(() -> motor2.setPower(.4)))
 // 				.onFalse(new InstantCommand(() -> motor2.setPower(0)));
 // 	}
-
+	public void elevator(Elevator elevator) {
+		driver.a().whileTrue(elevator.work());
+	}
 
 	public void testIntake(TalonEx motor){
 		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
