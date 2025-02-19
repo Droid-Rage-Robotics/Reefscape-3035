@@ -181,6 +181,11 @@ public class RobotContainer {
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
+
+		if(motorO.getTemp() > 100){
+			motorO.setSupplyCurrentLimit(motorO.supplyCurrentLimit-2);
+		}
+
 	}
 	
 	public void testMotor(TalonFX motorO) {

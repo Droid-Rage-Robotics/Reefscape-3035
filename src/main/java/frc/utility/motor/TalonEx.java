@@ -131,4 +131,7 @@ public class TalonEx extends CANMotorEx {
     public void resetEncoder(int num) {
         talon.setPosition(num);
     }
+    public double getTemp(){
+        return talon.getDeviceTemp().getValueAsDouble();
+    }
 }

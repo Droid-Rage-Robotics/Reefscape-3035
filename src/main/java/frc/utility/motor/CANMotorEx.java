@@ -14,6 +14,7 @@ public abstract class CANMotorEx {
     protected ShuffleboardValue<Double> outputWriter;
     protected String subSystemName;
     public int motorID;
+    public double supplyCurrentLimit;
     
     public enum Direction {
         Forward,
