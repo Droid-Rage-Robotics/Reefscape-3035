@@ -12,9 +12,13 @@ import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorValue;
+import frc.robot.subsystems.carriage.Carriage;
 // import frc.robot.subsystems.Elevator;
 // import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Intake;
+import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
+import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.motor.SparkMaxEx;
@@ -138,9 +142,9 @@ public class RobotContainer {
 
 	public void testIntake(TalonEx motor){
 		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
-		.onFalse(new InstantCommand(()->motor.setPower(0.02)));
+			.onFalse(new InstantCommand(()->motor.setPower(0.02)));
 		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
-				.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+			.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(60))
 		// 	.onFalse(intake.setTargetPositionCommand(00));
 	}
@@ -198,6 +202,28 @@ public class RobotContainer {
 	// 	driver.povRight()
 	// 		.onTrue(elevator.setPositionCommand(ElevatorValue.START));
 	// }
+
+	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
+		driver.povUp()
+			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.L4));
+		driver.povDown()
+			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
+		driver.povRight()
+			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+
+		driver.rightTrigger()
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE));
+		driver.leftTrigger()
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE));
+			
+		// driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(1)))
+		// 		.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+		// driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
+		// 		.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+	}
 
 	public void testClimb(Climb climb){
 		driver.povUp()

@@ -33,24 +33,17 @@ public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
     private final Elevator elevator = new Elevator(false);
-    private final Intake intake = new Intake(false);
     private Climb climb = new Climb(false);
-    private Pivot pivot = new Pivot(false);
-private Arm arm = new Arm(false);
-    // private static TalonEx motor = TalonEx.create(19)
-    //         .withDirection(Direction.Forward)
-    //         .withIdleMode(ZeroPowerMode.Coast)
-    //         .withPositionConversionFactor(1)
-    //         .withSubsystemName("Carriage/Intake")
-    //         .withIsEnabled(true)
-    //         .withCurrentLimit(50);
+    // private Pivot pivot = new Pivot(false);
+    // private Arm arm = new Arm(false);
+    // private final Intake intake = new Intake(false);
 
     // private final CycleTracker cycleTracker = new CycleTracker();
-    // private final Carriage carriage = new Carriage(
-    //     new Arm(false), 
-    //     new Pivot(false), 
-    //     new Intake(false)
-    // );
+    private final Carriage carriage = new Carriage(
+        new Arm(false), 
+        new Pivot(false), 
+        new Intake(false)
+    );
     // private final Light light = new Light();
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
@@ -131,6 +124,7 @@ private Arm arm = new Arm(false);
         // robotContainer.testMotor(motor);
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
+        robotContainer.testCarriage(elevator, carriage);
 
         // robotContainer.testCANivore(driveMotor, motor);
         teleopRan = true;

@@ -29,14 +29,15 @@ public class Elevator extends ElevatorTemplate {
         START(0),
         GROUND(0),
         INTAKE_HPS(0),
-        CLIMB(1),
+        CLIMB(0),
         
         L1(10),
         L2(20),
-        L3(4),
-        L4(0),
-        LOW(0),
-        HIGH(0)
+        L3(27),
+        L4(34),
+
+        LOW(19),
+        HIGH(30)
         ;
 
         @Getter private final double height;

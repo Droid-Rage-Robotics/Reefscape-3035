@@ -33,9 +33,9 @@ public class Carriage {
     }
 
     public enum CarriageIntakeValue {
-        INTAKE(0),
-        OUTTAKE(0),
-        HOLD(0),
+        INTAKE(100),
+        OUTTAKE(100),
+        HOLD(10),
         STOP(0);
 
         private final double intakeSpeed;
@@ -52,7 +52,7 @@ public class Carriage {
     @Getter private final Arm arm;
     @Getter private final Pivot pivot;
     @Getter private final Intake coralIntake;
-    private final DigitalInput coralLimitSwitch;
+    // private final DigitalInput coralLimitSwitch;
 
     private CarriageValue position = CarriageValue.START;
     @Getter public double outtakeCount = 0;
@@ -61,7 +61,7 @@ public class Carriage {
         this.arm = arm;
         this.pivot = pivot;
         this.coralIntake = intake;
-        this.coralLimitSwitch = new DigitalInput(0);
+        // this.coralLimitSwitch = new DigitalInput(0);
     }
 
     public CarriageValue getPosition() {
@@ -112,7 +112,7 @@ public class Carriage {
         outtakeCount++;
     }
 
-    public boolean isCoralIn(){
-        return coralLimitSwitch.get();
-    }
+    // public boolean isCoralIn(){
+    //     return coralLimitSwitch.get();
+    // }
 }
