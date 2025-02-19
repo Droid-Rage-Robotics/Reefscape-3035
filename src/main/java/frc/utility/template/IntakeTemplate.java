@@ -2,6 +2,7 @@ package frc.utility.template;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,11 +21,16 @@ public class IntakeTemplate extends SubsystemBase{
     private final ShuffleboardValue<Double> targetWriter;
     private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
+    private final TrapezoidProfile profile;
+    private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
+    private final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+
 
     public IntakeTemplate(
         CANMotorEx[] motors,
         PIDController controller,
         SimpleMotorFeedforward feedforward,
+        TrapezoidProfile.Constraints constraints,
         double maxSpeed,
         double minSpeed,
         Control control,
@@ -38,6 +44,8 @@ public class IntakeTemplate extends SubsystemBase{
         this.maxSpeed=maxSpeed;
         this.minSpeed=minSpeed;
         this.mainNum=mainNum;
+
+        profile = new TrapezoidProfile(constraints);
 
         speedWriter = ShuffleboardValue
             .create(0.0, name+"/Speed", name)
@@ -62,6 +70,12 @@ public class IntakeTemplate extends SubsystemBase{
                 setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
                 +feedforward.calculate(1,1)); //To Change #
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+                break;
+            case TRAPEZOID_PROFILE:
+                current = profile.calculate(0.02, current, goal);
+
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
                 break;
         };        
     }

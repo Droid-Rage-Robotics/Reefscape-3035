@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
@@ -45,6 +46,7 @@ public class Climb extends ArmTemplate {
         new CANMotorEx[]{motor}, 
         new PIDController(3.5,0,0), 
         new ArmFeedforward(0.46, .655, .0859,.003587), 
+        new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.PID, "Climb", 0);
         motor.setIsEnabled(isEnabled);

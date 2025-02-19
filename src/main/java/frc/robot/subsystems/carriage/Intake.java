@@ -2,6 +2,7 @@ package frc.robot.subsystems.carriage;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -27,7 +28,9 @@ public class Intake extends IntakeTemplate {
         super(
         new CANMotorEx[]{motor}, 
         new PIDController(0.03,0,0), 
-        new SimpleMotorFeedforward(0.64, 0.000515,0), Constants.MAX_SPEED, Constants.MIN_SPEED, 
+        new SimpleMotorFeedforward(0.64, 0.000515,0), 
+        new TrapezoidProfile.Constraints(0, 0),
+        Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change

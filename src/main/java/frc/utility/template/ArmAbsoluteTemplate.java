@@ -1,7 +1,9 @@
 package frc.utility.template;
 
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.EncoderEx;
 import frc.utility.motor.CANMotorEx;
@@ -12,6 +14,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         CANMotorEx[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
+        TrapezoidProfile.Constraints constraints,
         double maxPosition,
         double minPosition,
         double offset,
@@ -20,7 +23,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         int mainNum,
         EncoderEx encoder
     ){
-        super(motors, controller, feedforward, 
+        super(motors, controller, feedforward, constraints,
         maxPosition, minPosition, offset, control, 
         subsystemName, mainNum);
         this.encoder=encoder;
@@ -40,6 +43,12 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
                 +feedforward.calculate(1,1)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+                break;
+            case TRAPEZOID_PROFILE:
+                current = profile.calculate(0.02, current, goal);
+
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
                 break;
         };   
     }

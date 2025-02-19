@@ -23,8 +23,8 @@ public class ElevatorTemplate extends SubsystemBase {
     private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
     private final TrapezoidProfile profile;
-    private TrapezoidProfile.State setPoint = new TrapezoidProfile.State();
-    private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
+    private final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
 
     /**
      * @param motors - The Motors to Control
@@ -83,10 +83,10 @@ public class ElevatorTemplate extends SubsystemBase {
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
-                setPoint = profile.calculate(0.02, setPoint, goal);
+                current = profile.calculate(0.02, current, goal);
                 
-                setVoltage(controller.calculate(getEncoderPosition(), setPoint.position)
-                        + feedforward.calculate(setPoint.position, setPoint.velocity));
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
                 break;
         }       
     }

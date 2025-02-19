@@ -10,6 +10,7 @@ import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ArmAbsoluteTemplate;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {
@@ -35,6 +36,7 @@ public class Arm extends ArmAbsoluteTemplate {
         new CANMotorEx[]{motor}, 
         new PIDController(0,0,0), 
         new ArmFeedforward(0, 0, 0, 0), 
+        new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.PID, "arm", 0, encoder);
         motor.setIsEnabled(isEnabled);

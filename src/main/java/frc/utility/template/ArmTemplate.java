@@ -2,6 +2,7 @@ package frc.utility.template;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,11 +23,15 @@ public class ArmTemplate extends SubsystemBase {
     protected final ShuffleboardValue<Double> targetRadianWriter;
     protected final ShuffleboardValue<Double> targetDegreeWriter;
     protected final int mainNum;
+    protected final TrapezoidProfile profile;
+    protected TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
+    protected final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
 
     public ArmTemplate(
         CANMotorEx[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
+        TrapezoidProfile.Constraints constraints,
         double maxPosition,
         double minPosition,
         double offset,
@@ -42,6 +47,8 @@ public class ArmTemplate extends SubsystemBase {
         this.minPosition=minPosition;
         this.offset=offset;
         this.mainNum=mainNum;
+
+        profile = new TrapezoidProfile(constraints);
 
         positionDegreeWriter = ShuffleboardValue
             .create(0.0, subsystemName+"/PositionDegree", subsystemName)
@@ -71,6 +78,12 @@ public class ArmTemplate extends SubsystemBase {
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
                 +feedforward.calculate(1,1)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+                break;
+            case TRAPEZOID_PROFILE:
+                current = profile.calculate(0.02, current, goal);
+
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
                 break;
         };        
     }

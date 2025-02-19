@@ -2,6 +2,7 @@ package frc.robot.subsystems.carriage;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
@@ -36,6 +37,7 @@ public class Pivot extends ArmAbsoluteTemplate {
         new CANMotorEx[]{motor}, 
         new PIDController(0,0,0), 
         new ArmFeedforward(0, 0, 0, 0), 
+        new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.PID, "pivot", 0, encoder);
         motor.setIsEnabled(isEnabled);
