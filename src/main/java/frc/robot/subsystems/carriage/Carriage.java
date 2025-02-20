@@ -10,13 +10,13 @@ import lombok.Getter;
 
 public class Carriage {
     public enum CarriageValue{
-        START(0, 0),
-        INTAKE_HPS(0, 0),
-        INTAKE_GROUND(0, 0),
+        START(180, 100),
+        INTAKE_HPS(170, 100),
+        INTAKE_GROUND(170, 155),
         L1(0, 0),
         L2(0, 0),
         L3(0, 0),
-        L4(0, 0);
+        L4(170, 195);
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -34,7 +34,7 @@ public class Carriage {
 
     public enum CarriageIntakeValue {
         INTAKE(100),
-        OUTTAKE(100),
+        OUTTAKE(-100),
         HOLD(10),
         STOP(0);
 
@@ -61,6 +61,10 @@ public class Carriage {
         this.arm = arm;
         this.pivot = pivot;
         this.coralIntake = intake;
+        arm.setTargetPosition(CarriageValue.START.armAngle);
+        pivot.setTargetPosition(CarriageValue.START.pivotAngle);
+        intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
+
         // this.coralLimitSwitch = new DigitalInput(0);
     }
 

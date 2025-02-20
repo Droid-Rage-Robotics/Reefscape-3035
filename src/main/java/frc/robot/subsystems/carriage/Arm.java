@@ -14,9 +14,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 0;
-        public static final double MIN_POSITION = 0;
-        public static final double OFFSET = 0;
+        public static final double MAX_POSITION = 340;
+        public static final double MIN_POSITION = 135;
+        public static final double OFFSET = Math.PI;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(17)
@@ -26,6 +26,7 @@ public class Arm extends ArmAbsoluteTemplate {
         .withSubsystemName("arm")
         .withIsEnabled(true)
         .withCurrentLimit(50);
+    
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
         .withOffset(0)
@@ -33,8 +34,8 @@ public class Arm extends ArmAbsoluteTemplate {
         
     public Arm(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motor}, 
-        new PIDController(0,0,0), 
+        new SparkMaxEx[]{motor}, 
+        new PIDController(1.3,0,0), 
         new ArmFeedforward(0, 0, 0, 0), 
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 

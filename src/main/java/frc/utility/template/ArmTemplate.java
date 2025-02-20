@@ -22,6 +22,7 @@ public class ArmTemplate extends SubsystemBase {
     protected final ShuffleboardValue<Double> positionDegreeWriter;
     protected final ShuffleboardValue<Double> targetRadianWriter;
     protected final ShuffleboardValue<Double> targetDegreeWriter;
+    protected final ShuffleboardValue<Double> voltageWriter;
     protected final int mainNum;
     protected final TrapezoidProfile profile;
     protected TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -62,6 +63,9 @@ public class ArmTemplate extends SubsystemBase {
         targetRadianWriter = ShuffleboardValue
             .create(0.0, subsystemName+"/TargetRadian", subsystemName)
             .build();
+        voltageWriter = ShuffleboardValue
+                .create(0.0, subsystemName + "/Voltage", subsystemName)
+                .build();
     }
 
     @Override
@@ -111,6 +115,7 @@ public class ArmTemplate extends SubsystemBase {
         return controller.getSetpoint();
     }
     protected void setVoltage(double voltage) {
+        voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -124,7 +129,8 @@ public class ArmTemplate extends SubsystemBase {
     }
 
     public double getEncoderPosition() {
-        double radian = motors[mainNum].getPosition();
+        double radian = motors[mainNum].getPosition()+offset;
+        // + Consants.OFFSET) % Consants.RADIANS_PER_ROTATION
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;

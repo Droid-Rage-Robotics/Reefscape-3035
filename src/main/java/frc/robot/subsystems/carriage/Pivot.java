@@ -1,5 +1,7 @@
 package frc.robot.subsystems.carriage;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -14,9 +16,9 @@ import frc.utility.template.ArmAbsoluteTemplate;
 
 public class Pivot extends ArmAbsoluteTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 0;
-        public static final double MIN_POSITION = 0;
-        public static final double OFFSET = 0;
+        public static final double MAX_POSITION = 245;
+        public static final double MIN_POSITION = 50;//100
+        public static final double OFFSET = Math.PI;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(18)
@@ -34,12 +36,12 @@ public class Pivot extends ArmAbsoluteTemplate {
 
     public Pivot(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motor}, 
-        new PIDController(0,0,0), 
-        new ArmFeedforward(0, 0, 0, 0), 
+        new SparkMaxEx[]{motor}, 
+        new PIDController(1.25,0,0), 
+        new ArmFeedforward(0, 0.00, 0, 0), 
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.PID, "pivot", 0, encoder);
+        Control.FEEDFORWARD, "pivot", 0, encoder);
         motor.setIsEnabled(isEnabled);
         
     }

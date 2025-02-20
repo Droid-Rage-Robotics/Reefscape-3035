@@ -7,11 +7,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.EncoderEx;
 import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.TalonEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
     protected EncoderEx encoder;
     public ArmAbsoluteTemplate(
-        CANMotorEx[] motors,
+        SparkMaxEx[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
         TrapezoidProfile.Constraints constraints,
@@ -41,7 +43,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
-                +feedforward.calculate(1,1)); 
+                +feedforward.calculate(getEncoderPosition(),.5)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
@@ -56,15 +58,17 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     @Override
     protected void setVoltage(double voltage) {
         // if (encoder.isConnectedWriter.get()){
+            voltageWriter.set(voltage);
             for (CANMotorEx motor: motors) {
-                motor.setVoltage(-voltage);
+                motor.setVoltage(voltage);
                 //IMPORTANT: This flips the voltage to work right. Might NEED to change
             }
         // }
     }
     @Override
     public double getEncoderPosition() {
-        double radian = encoder.getRadian();
+        // double radian = encoder.getRadian() + offset;
+        double radian = (encoder.getRadian() + offset) % (Math.PI*2);
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
