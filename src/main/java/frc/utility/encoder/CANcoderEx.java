@@ -45,9 +45,9 @@ public class CANcoderEx extends EncoderEx {
         }
     }
 
-    public void setMagnetSensorOffset(double offset) {
-        config.MagnetSensor.MagnetOffset = offset;
-    }
+    // public void setMagnetSensorOffset(double offset) {
+    //     config.MagnetSensor.MagnetOffset = offset;
+    // }
 
     public double getAbsolutePosition() {
         return encoder.getAbsolutePosition().getValueAsDouble();
