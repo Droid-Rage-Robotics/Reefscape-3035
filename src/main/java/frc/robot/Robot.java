@@ -8,25 +8,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.SysID.DriveSysID;
-import frc.robot.SysID.SysID;
-import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Light;
 import frc.robot.subsystems.carriage.Arm;
+import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
-import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.InfoTracker.CycleTracker;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.utility.motor.SparkMaxEx;
-import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -34,16 +24,12 @@ public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
     private final Elevator elevator = new Elevator(true);
     private Climb climb = new Climb(false);
-    // private Pivot pivot = new Pivot(false);
-    // private Arm arm = new Arm(false);
-    // private final Intake intake = new Intake(false);
-
-    // private final CycleTracker cycleTracker = new CycleTracker();
     private final Carriage carriage = new Carriage(
-        new Arm(true), 
-        new Pivot(true), 
-        new Intake(true)
+        new Arm(false), 
+        new Pivot(false), 
+        new Intake(false)
     );
+    // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
@@ -51,7 +37,7 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robotContainer = new RobotContainer();
     private AutoChooser autoChooser = new AutoChooser(drive, vision);
-    // private static final Alert rioIdAlert = new Alert("RIO: ", AlertType.kInfo);
+    private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
@@ -83,13 +69,17 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         //In Here, Try using controller to pick the auto
 
-        // if(RobotController.getBatteryVoltage()<11.5){
-        //     light.setAllColor(light.batteryBlue);
+        if(RobotController.getBatteryVoltage()<11.5){
+            batteryAlert.set(true);
+
+            // light.setAllColor(light.batteryBlue);
             
-        //     // drive.playMusic(2);
-        // } else{
-        //     light.flashingColors(light.yellow, light.blue);
-        // }
+            // drive.playMusic(2);
+        } 
+        else{
+            batteryAlert.set(false);
+            // light.flashingColors(light.yellow, light.blue);
+        }
         // light.setAllColor(light.blue);
     }
 
