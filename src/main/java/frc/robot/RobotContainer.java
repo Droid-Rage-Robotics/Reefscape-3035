@@ -219,15 +219,24 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
-		driver.rightTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE));
-		driver.leftTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE));
+		// driver.rightTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		// driver.leftTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 			
+		driver.rightTrigger()
+			.onTrue(carriage.getCoralIntake().setPowerCommand(1))
+			.onFalse(carriage.getCoralIntake().setPowerCommand(.03));
+		driver.leftTrigger()
+			.onTrue(carriage.getCoralIntake().setPowerCommand(-1))
+			.onFalse(carriage.getCoralIntake().setPowerCommand(-.03));
+
 		// driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(1)))
-		// 		.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+		// 	.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 		// driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
-		// 		.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
+		// 	.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 	}
 
 	public void testClimb(Climb climb){
