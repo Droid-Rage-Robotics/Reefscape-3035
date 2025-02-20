@@ -22,13 +22,13 @@ public class Elevator extends ElevatorTemplate {
     //Gear Ratio: 9:1
     public static class Constants {
         public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 20;   //40
+        public static final double MAX_POSITION = 40;   //40
     }
 
     public enum ElevatorValue {
         START(0),
-        GROUND(0),
-        INTAKE_HPS(0),
+        GROUND(1),
+        INTAKE_HPS(10),
         CLIMB(0),
         
         L1(10),
@@ -69,7 +69,7 @@ public class Elevator extends ElevatorTemplate {
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
-        new PIDController(0.8, 0, 0), 
+        new PIDController(0.6, 0, 0), 
         new ElevatorFeedforward(.1, 0.23, 0, 0.1), 
         new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION,
