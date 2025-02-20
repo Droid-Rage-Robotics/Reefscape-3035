@@ -3,6 +3,8 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -17,7 +19,7 @@ public class Intake extends IntakeTemplate {
     }
     
     private static TalonEx motor = TalonEx.create(19)
-        .withDirection(Direction.Forward)
+        .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("Intake")
@@ -31,8 +33,12 @@ public class Intake extends IntakeTemplate {
         new SimpleMotorFeedforward(0.64, 0.000515,0), 
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
-        Control.FEEDFORWARD, "Intake", 0);
+        Control.PID, "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
+    }
+
+    public Command setPowerCommand(double power){
+        return new InstantCommand(()->motor.setPower(power));
     }
 }

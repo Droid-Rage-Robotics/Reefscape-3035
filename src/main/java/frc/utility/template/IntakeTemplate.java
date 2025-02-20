@@ -60,24 +60,24 @@ public class IntakeTemplate extends SubsystemBase{
 
     @Override
     public void periodic() {
-        switch(control){
-            case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
-                // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
-                //.37 is kG ^^
-                break;
-            case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
-                +feedforward.calculate(1,1)); //To Change #
-                //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
-                break;
-            case TRAPEZOID_PROFILE:
-                current = profile.calculate(0.02, current, goal);
+        // switch(control){
+        //     case PID:
+        //         setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
+        //         // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
+        //         //.37 is kG ^^
+        //         break;
+        //     case FEEDFORWARD:
+        //         setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+        //         +feedforward.calculate(1,1)); //To Change #
+        //         //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+        //         break;
+        //     case TRAPEZOID_PROFILE:
+        //         current = profile.calculate(0.02, current, goal);
 
-                setVoltage(controller.calculate(getEncoderPosition(), current.position)
-                        + feedforward.calculate(current.position, current.velocity));
-                break;
-        };        
+        //         setVoltage(controller.calculate(getEncoderPosition(), current.position)
+        //                 + feedforward.calculate(current.position, current.velocity));
+        //         break;
+        // };        
     }
 
     @Override
