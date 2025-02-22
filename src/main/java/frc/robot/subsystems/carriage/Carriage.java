@@ -11,12 +11,14 @@ import lombok.Getter;
 public class Carriage {
     public enum CarriageValue{
         START(180, 100),
-        INTAKE_HPS(170, 100),
+        INTAKE_HPS(322, 251),
         INTAKE_GROUND(170, 155),
+        ALGAE_LOW(333, 239),
+        ALGAE_HIGH(333, 239),
         L1(0, 0),
-        L2(0, 0),
-        L3(0, 0),
-        L4(170, 195);
+        L2(214, 250),
+        L3(214, 250),
+        L4(232, 251);
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -29,6 +31,11 @@ public class Carriage {
         private CarriageValue(double armAngle, double pivotAngle){
             this.armAngle = armAngle;
             this.pivotAngle = pivotAngle;
+        }
+        
+        private CarriageValue(CarriageValue value) {
+            this.armAngle = value.armAngle;
+            this.pivotAngle = value.pivotAngle;
         }
     }
 

@@ -6,3 +6,4 @@ Add Encoder Reset Button on all subsystems; look last year and year before
 Add a Temperature Control on Krakens to change stator and supply
 Fix Shuffleboard for arm and pivot
 Use alerts
+Fix intake buttons
