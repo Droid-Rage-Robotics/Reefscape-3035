@@ -87,9 +87,4 @@ public class Elevator extends ElevatorTemplate {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
     }
-
-    public Command work() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'work'");
-    }
 }

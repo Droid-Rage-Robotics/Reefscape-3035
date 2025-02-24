@@ -29,16 +29,17 @@ public class Intake extends IntakeTemplate {
     public Intake(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(0.03,0,0), 
-        new SimpleMotorFeedforward(0.64, 0.000515,0), 
+        new PIDController(0,0,0), //.15
+        // new SimpleMotorFeedforward(0.025, 0.01,0.01),
+        new SimpleMotorFeedforward(1.6, 1, 0.1),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
-        Control.PID, "Intake", 0);
+        Control.FEEDFORWARD, "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
     }
 
-    public Command setPowerCommand(double power){
-        return new InstantCommand(()->motor.setPower(power));
-    }
+    // public Command setPowerCommand(double power){
+    //     return new InstantCommand(()->motor.setPower(power));
+    // }
 }

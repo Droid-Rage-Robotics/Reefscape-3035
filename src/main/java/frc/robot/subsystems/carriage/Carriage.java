@@ -114,9 +114,10 @@ public class Carriage {
     }
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
-        return Commands.sequence(
-            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
-        );
+        return coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed());
+        // return Commands.sequence(
+            // coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
+        // );
     }
 
     public void incrementOuttakeCount() {

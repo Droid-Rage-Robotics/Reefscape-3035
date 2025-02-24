@@ -136,9 +136,6 @@ public class RobotContainer {
 // 			driver.leftTrigger().whileTrue(new InstantCommand(() -> motor2.setPower(.4)))
 // 				.onFalse(new InstantCommand(() -> motor2.setPower(0)));
 // 	}
-	public void elevator(Elevator elevator) {
-		driver.a().whileTrue(elevator.work());
-	}
 
 	public void testIntake(TalonEx motor){
 		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
@@ -182,9 +179,10 @@ public class RobotContainer {
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
 
-		if(motorO.getTemp() > 100){
-			motorO.setSupplyCurrentLimit(motorO.supplyCurrentLimit-2);
-		}
+		motorO.testTemp(100, 2, 0);
+		// if(motorO.getTemp() > 100){
+		// 	motorO.setSupplyCurrentLimit(motorO.supplyCurrentLimit-2);
+		// }
 
 	}
 	
@@ -219,19 +217,19 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
-		// driver.rightTrigger()
-		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		// driver.leftTrigger()
-		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
-		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-			
 		driver.rightTrigger()
-			.onTrue(carriage.getCoralIntake().setPowerCommand(1))
-			.onFalse(carriage.getCoralIntake().setPowerCommand(.03));
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 		driver.leftTrigger()
-			.onTrue(carriage.getCoralIntake().setPowerCommand(-1))
-			.onFalse(carriage.getCoralIntake().setPowerCommand(-.03));
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+			
+		// driver.rightTrigger()
+		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))
+		// 	.onFalse(carriage.getCoralIntake().setPowerCommand(.03));
+		// driver.leftTrigger()
+		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(-1))
+		// 	.onFalse(carriage.getCoralIntake().setPowerCommand(-.03));
 
 		// driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(1)))
 		// 	.onFalse(new InstantCommand(() -> motor.setPower(0.02)));

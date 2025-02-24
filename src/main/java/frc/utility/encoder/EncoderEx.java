@@ -26,8 +26,15 @@ public abstract class EncoderEx {
     
 
     public class DirectionBuilder {
-        public OffsetBuilder withDirection(EncoderDirection direction) {
+        public PositionConversionFactorBuilder withDirection(EncoderDirection direction) {
             setDirection(direction);
+            return new PositionConversionFactorBuilder();
+        }
+    }
+
+    public class PositionConversionFactorBuilder {
+        public OffsetBuilder withPositionConversionFactor(double positionConversionFactor) {
+            setPositionConversionFactor(positionConversionFactor);
             return new OffsetBuilder();
         }
     }
@@ -87,6 +94,14 @@ public abstract class EncoderEx {
     }    
     public double getRadian() {
         return getPosition() * (2*Math.PI);
+    }
+
+    protected void setPositionConversionFactor(double positionConversionFactor) {
+        this.positionConversionFactor = positionConversionFactor;
+    }
+
+    protected void setVelocityConversionFactor(double velocityConversionFactor) {
+        this.velocityConversionFactor = velocityConversionFactor;
     }
     public abstract void setDirection(EncoderDirection direction);
     public abstract int getDeviceID();

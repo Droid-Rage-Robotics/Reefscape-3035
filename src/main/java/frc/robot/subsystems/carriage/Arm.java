@@ -29,7 +29,8 @@ public class Arm extends ArmAbsoluteTemplate {
     
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
-        .withOffset(0)
+        .withPositionConversionFactor(2 * Math.PI)
+        .withOffset(Constants.OFFSET)
         .withSubsystemBase("arm", Carriage.class.getSimpleName());
         
     public Arm(boolean isEnabled) {
@@ -38,7 +39,7 @@ public class Arm extends ArmAbsoluteTemplate {
         new PIDController(1.3,0,0), 
         new ArmFeedforward(0, 0, 0, 0), 
         new TrapezoidProfile.Constraints(0, 0),
-        Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
+        Constants.MAX_POSITION, Constants.MIN_POSITION, 0, 
         Control.PID, "arm", 0, encoder);
         motor.setIsEnabled(isEnabled);
     }

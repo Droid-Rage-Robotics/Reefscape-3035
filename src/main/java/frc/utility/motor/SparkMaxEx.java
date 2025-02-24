@@ -4,11 +4,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.DroidRageConstants;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +23,7 @@ public class SparkMaxEx extends CANMotorEx{
     @Getter private final SparkMax sparkMax;
     @Setter(onMethod = @__(@Override)) private double StatorCurrentLimit; // No use; here for compatibility
     private final SparkMaxConfig config = new SparkMaxConfig();
+    private Alert canAlert = new Alert("Sticky Fault", AlertType.kWarning);
     
     private SparkMaxEx(SparkMax motor) {
         this.sparkMax = motor;
@@ -39,6 +40,11 @@ public class SparkMaxEx extends CANMotorEx{
         CANMotorEx motor = new SparkMaxEx(new SparkMax(deviceID, motorType));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
+    }
+
+    @Override
+    public void setAlert() {
+        canAlert.set(sparkMax.getStickyFaults().can);
     }
 
     @Override
@@ -149,4 +155,6 @@ public class SparkMaxEx extends CANMotorEx{
     public void resetEncoder(int num) {
         sparkMax.getEncoder().setPosition(num);
     }
+
+    
 }

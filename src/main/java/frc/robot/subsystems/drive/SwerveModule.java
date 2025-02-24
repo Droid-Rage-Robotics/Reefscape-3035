@@ -124,6 +124,7 @@ public class SwerveModule {
             EncoderDirection absoluteEncoderReversed){
             turnEncoder = CANcoderEx.create(absoluteEncoderId, DroidRageConstants.driveCanBus)
                 .withDirection(absoluteEncoderReversed)
+                .withPositionConversionFactor(1)
                 .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)
                 .withSubsystemBase(podName.name(), subsystemName)
                 .withRange(EncoderRange.ZERO_TO_ONE);

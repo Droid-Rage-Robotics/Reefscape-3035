@@ -2,13 +2,16 @@ package frc.utility.motor;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.DroidRageConstants;
 
@@ -17,6 +20,8 @@ public class TalonEx extends CANMotorEx {
     private CANBus canbus;
     private TalonFXConfiguration config;
     private TalonFXConfigurator configure;
+    private Alert talonTempAlert = new Alert("Temperature Warning", AlertType.kWarning);
+    private Alert canAlert = new Alert("CAN Fault", AlertType.kWarning);
     
     private TalonEx(TalonFX motor) {
         this.talon = motor;
@@ -35,6 +40,12 @@ public class TalonEx extends CANMotorEx {
         TalonEx motor = new TalonEx(new TalonFX(deviceID));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
+    }
+
+    @Override
+    public void setAlert() {
+        canAlert.set(talon.getStickyFault_Hardware().getValue()); // TODO: Set to correct sticky fault
+        talonTempAlert.set(talon.getStickyFault_DeviceTemp().getValue());
     }
    
     @Override
@@ -59,6 +70,8 @@ public class TalonEx extends CANMotorEx {
         config.CurrentLimits.SupplyCurrentLimit = currentLimit;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         configure.apply(config);
+        // talonTempAlert = new Alert(subSystemName + motorID + "Temp", AlertType.kWarning);
+        // talonTempAlert.set(false);
     }
 
     @Override
@@ -131,7 +144,15 @@ public class TalonEx extends CANMotorEx {
     public void resetEncoder(int num) {
         talon.setPosition(num);
     }
-    public double getTemp(){
-        return talon.getDeviceTemp().getValueAsDouble();
+    public void testTemp(double tempToCheck, double lowerSupply, double lowerStator){
+
+        if(talon.getDeviceTemp().getValueAsDouble() > tempToCheck){
+            talonTempAlert.set(true);
+            setSupplyCurrentLimit(config.CurrentLimits.SupplyCurrentLimit - lowerSupply);
+            setStatorCurrentLimit(config.CurrentLimits.StatorCurrentLimit - lowerStator);
+        }
+        // return talon.getDeviceTemp().getValueAsDouble();
     }
+
+    
 }

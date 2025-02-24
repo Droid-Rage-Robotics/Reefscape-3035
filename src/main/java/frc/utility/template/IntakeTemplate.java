@@ -20,6 +20,7 @@ public class IntakeTemplate extends SubsystemBase{
     private final ShuffleboardValue<Double> speedWriter;
     private final ShuffleboardValue<Double> targetWriter;
     private final ShuffleboardValue<Double> voltageWriter;
+    private final ShuffleboardValue<Double> errorWriter;
     private final int mainNum;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -56,28 +57,32 @@ public class IntakeTemplate extends SubsystemBase{
         voltageWriter = ShuffleboardValue
             .create(0.0, name+"/Voltage", name)
             .build();
+        errorWriter = ShuffleboardValue
+            .create(0.0, name + "/Error", name)
+            .build();
     }
 
     @Override
     public void periodic() {
-        // switch(control){
-        //     case PID:
-        //         setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
-        //         // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
-        //         //.37 is kG ^^
-        //         break;
-        //     case FEEDFORWARD:
-        //         setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
-        //         +feedforward.calculate(1,1)); //To Change #
-        //         //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
-        //         break;
-        //     case TRAPEZOID_PROFILE:
-        //         current = profile.calculate(0.02, current, goal);
+        switch(control){
+            case PID:
+                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
+                // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
+                //.37 is kG ^^
+                break;
+            case FEEDFORWARD:
+                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+                +feedforward.calculate(1,1)); //To Change #
+                // calculateWithVelocities
+                //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+                break;
+            case TRAPEZOID_PROFILE:
+                current = profile.calculate(0.02, current, goal);
 
-        //         setVoltage(controller.calculate(getEncoderPosition(), current.position)
-        //                 + feedforward.calculate(current.position, current.velocity));
-        //         break;
-        // };        
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
+                break;
+        };        
     }
 
     @Override
@@ -94,6 +99,7 @@ public class IntakeTemplate extends SubsystemBase{
      */
     public void setTargetPosition(double target) {
         if(target>maxSpeed||target<minSpeed) return;
+        controller.setSetpoint(target);
         targetWriter.set(target);
     }
 
@@ -116,6 +122,7 @@ public class IntakeTemplate extends SubsystemBase{
 
     public double getEncoderPosition() {
         double position = motors[mainNum].getVelocity();
+        errorWriter.write(getTargetPosition()-position);
         speedWriter.write(position);
         return position;
     }

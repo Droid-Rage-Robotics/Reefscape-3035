@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.SysID.SysID;
+import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -21,22 +24,25 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
-    private final Elevator elevator = new Elevator(true);
-    private Climb climb = new Climb(false);
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
+    private final Elevator elevator = new Elevator(false);
+    // private Climb climb = new Climb(false);
+    private Intake intake = new Intake(false);
+    private Pivot pivot= new Pivot(true);
+    private Arm arm = new Arm(false);
     private final Carriage carriage = new Carriage(
-        new Arm(false), 
-        new Pivot(false), 
-        new Intake(false)
+        arm, 
+        pivot,
+        intake
     );
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    // private final SysID sysID = new SysID(intake.getMotor(), intake, Measurement.DISTANCE);
+    // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
 
     private RobotContainer robotContainer = new RobotContainer();
-    private AutoChooser autoChooser = new AutoChooser(drive, vision);
+    // private AutoChooser autoChooser = new AutoChooser(drive, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -86,8 +92,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = autoChooser.getAutonomousCommand();
-        // autonomousCommand = new InstantCommand();
+        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -114,7 +120,8 @@ public class Robot extends TimedRobot {
         // robotContainer.testMotor(motor);
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
-        robotContainer.testCarriage(elevator, carriage);
+
+        // robotContainer.testCarriage(elevator, carriage);
 
         // robotContainer.testCANivore(driveMotor, motor);
         teleopRan = true;
@@ -145,7 +152,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit(){
-        drive.changeAllianceRotation();
+        // drive.changeAllianceRotation();
     }
 
         

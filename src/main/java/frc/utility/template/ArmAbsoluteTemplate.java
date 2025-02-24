@@ -43,7 +43,8 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
-                +feedforward.calculate(getEncoderPosition(),.5)); 
+                +feedforward.calculate(getEncoderPosition(),.1)); 
+                // + feedforward.calculate(getTargetPosition(), .5)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
@@ -68,7 +69,8 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     @Override
     public double getEncoderPosition() {
         // double radian = encoder.getRadian() + offset;
-        double radian = (encoder.getRadian() + offset) % (Math.PI*2);
+        // double radian = (encoder.getRadian() + offset) % (Math.PI);
+        double radian = encoder.getPosition();
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
