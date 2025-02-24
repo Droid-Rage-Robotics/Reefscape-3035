@@ -31,8 +31,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
-        .withPositionConversionFactor(2 * Math.PI)
-        .withOffset(Constants.OFFSET)
+        // .withPositionConversionFactor(2 * Math.PI)
+        .withOffset(0)
         .withSubsystemBase("pivot", Carriage.class.getSimpleName());
 
     public Pivot(boolean isEnabled) {
@@ -45,7 +45,7 @@ public class Pivot extends ArmAbsoluteTemplate {
         //                 0.05276), 
         //OLD PROGEJCT - 0.079284, 0.12603, 2.3793, 0.05276
         new TrapezoidProfile.Constraints(0, 0),
-        Constants.MAX_POSITION, Constants.MIN_POSITION, 0, 
+        Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.FEEDFORWARD, "pivot", 0, encoder);
         motor.setIsEnabled(isEnabled);
         

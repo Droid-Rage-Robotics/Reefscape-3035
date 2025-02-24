@@ -26,18 +26,19 @@ public abstract class EncoderEx {
     
 
     public class DirectionBuilder {
-        public PositionConversionFactorBuilder withDirection(EncoderDirection direction) {
+        public OffsetBuilder withDirection(EncoderDirection direction) {
             setDirection(direction);
-            return new PositionConversionFactorBuilder();
-        }
-    }
-
-    public class PositionConversionFactorBuilder {
-        public OffsetBuilder withPositionConversionFactor(double positionConversionFactor) {
-            setPositionConversionFactor(positionConversionFactor);
+            // return new PositionConversionFactorBuilder();
             return new OffsetBuilder();
         }
     }
+
+    // public class PositionConversionFactorBuilder {
+    //     public OffsetBuilder withPositionConversionFactor(double positionConversionFactor) {
+    //         setPositionConversionFactor(positionConversionFactor);
+    //         return new OffsetBuilder();
+    //     }
+    // }
     
     public class OffsetBuilder {
         public SubsystemNameBuilder withOffset(double offset) {

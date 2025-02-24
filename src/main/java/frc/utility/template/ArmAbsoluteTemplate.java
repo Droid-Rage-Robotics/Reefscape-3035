@@ -1,6 +1,9 @@
 package frc.utility.template;
 
 
+import org.opencv.core.Mat;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -68,9 +71,8 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     }
     @Override
     public double getEncoderPosition() {
-        // double radian = encoder.getRadian() + offset;
-        // double radian = (encoder.getRadian() + offset) % (Math.PI);
-        double radian = encoder.getPosition();
+        double raw = encoder.getPosition();
+        double radian = MathUtil.inputModulus((raw * (2 * Math.PI)) + offset, 0, (2 * Math.PI));
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
