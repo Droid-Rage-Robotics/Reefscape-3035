@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "lLeave"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LH2IBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LH2JScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LH2JBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LH2LScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LH2LBack"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
