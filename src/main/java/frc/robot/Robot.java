@@ -24,17 +24,17 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
+    // private final Elevator elevator = new Elevator(false);
     // private Climb climb = new Climb(false);
-    private Intake intake = new Intake(false);
-    private Pivot pivot= new Pivot(true);
-    private Arm arm = new Arm(false);
-    private final Carriage carriage = new Carriage(
-        arm, 
-        pivot,
-        intake
-    );
+    // private Intake intake = new Intake(false);
+    // private Pivot pivot= new Pivot(true);
+    // private Arm arm = new Arm(false);
+    // private final Carriage carriage = new Carriage(
+    //     arm, 
+    //     pivot,
+    //     intake
+    // );
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer = new RobotContainer();
     // private AutoChooser autoChooser = new AutoChooser(drive, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
-    public boolean teleopRan;
+    // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
-        teleopRan = false;
+        // teleopRan = false;
     }
     
     @Override
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
-        // robotContainer.testDrive(drive, vision);
+        robotContainer.testDrive(drive, vision);
         // robotContainer.testIntake(motor);
         // robotContainer.testMotor(motorR, motorL);
         // robotContainer.testMotor(motor);
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
         // robotContainer.testCarriage(elevator, carriage);
 
         // robotContainer.testCANivore(driveMotor, motor);
-        teleopRan = true;
+        // teleopRan = true;
     }
 
     @Override
