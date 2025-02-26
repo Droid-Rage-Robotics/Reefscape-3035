@@ -48,26 +48,26 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
-        .withTurnMotor(1, Direction.Forward, true)
+        .withTurnMotor(1, Direction.Reversed, true)
         .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
-        .withTurnMotor(4, Direction.Forward, true)
+        .withTurnMotor(4, Direction.Reversed, true)
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
                 EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
-        .withTurnMotor(7, Direction.Forward, true)
+        .withTurnMotor(7, Direction.Reversed, true)
         .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
-        .withTurnMotor(10, Direction.Forward, true)
+        .withTurnMotor(10, Direction.Reversed, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
