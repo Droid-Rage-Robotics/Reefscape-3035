@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -40,9 +42,10 @@ public class Robot extends TimedRobot {
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
+    private final Field2d field = new Field2d();
 
     private RobotContainer robotContainer = new RobotContainer();
-    // private AutoChooser autoChooser = new AutoChooser(drive, vision);
+    private AutoChooser autoChooser = new AutoChooser(drive, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -53,12 +56,17 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
+        // field.getRobotObject().
         // teleopRan = false;
+        ComplexWidgetBuilder.create(field, "Field", "Misc")
+            .withWidget(BuiltInWidgets.kField)
+            .withSize(1, 3);
     }
     
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        field.setRobotPose(drive.getPose());
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
@@ -92,8 +100,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

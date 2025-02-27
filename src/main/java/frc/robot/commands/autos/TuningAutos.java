@@ -13,16 +13,16 @@ public final class TuningAutos {
             // PathPlannerFollow.
             // drive.
             PathPlannerFollow.create(drive, "ForwardTest")
-            .setMaxVelocity(6)
-            .setAcceleration(6)
+            .setMaxVelocity(1)
+            .setAcceleration(1)
                 .build()
         );
     }
     public static Command backTest(SwerveDrive drive) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "BackwardTest")
-                .setMaxVelocity(3)
-                .setAcceleration(5)
+                .setMaxVelocity(1)
+                .setAcceleration(1)
                 .build()
         );
     }
