@@ -35,10 +35,10 @@ public class AutoChooser {
     // Remove algae high and store
     //Intake human
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-    private final SwerveDrive drive;
+    // private final SwerveDrive drive;
     // private final Carriage coralSubsystem;
     // private final Elevator elevator;
-    private final Vision vision;
+    // private final Vision vision;
     public AutoChooser
     (
             SwerveDrive drive, Vision vision)
@@ -46,10 +46,10 @@ public class AutoChooser {
     //     SwerveDrive drive, Carriage coralSubsystem, 
     //     Elevator elevator, Vision vision)
      {
-        this.drive = drive;
+        // this.drive = drive;
         // this.coralSubsystem = coralSubsystem;
         // this.elevator = elevator;
-        this.vision = vision;
+        // this.vision = vision;
 
         NamedCommands.registerCommand("resetPose",
         new ResetPoseVision(drive, vision)
@@ -63,35 +63,35 @@ public class AutoChooser {
         //     )
         // TODO: Does this work?^^^^^^^
         // );
-        NamedCommands.registerCommand("shoot",
-            new InstantCommand()
-            // algaeSubSystem.setIntakePositionCommand(IntakeValue.AUTO_SHOOT)
-        );
+        // NamedCommands.registerCommand("shoot",
+        //     new InstantCommand()
+        //     // algaeSubSystem.setIntakePositionCommand(IntakeValue.AUTO_SHOOT)
+        // );
 
-         NamedCommands.registerCommand("pickGroundAlgae",
-            new InstantCommand()
-        );
+        //  NamedCommands.registerCommand("pickGroundAlgae",
+        //     new InstantCommand()
+        // );
 
-         NamedCommands.registerCommand("pickLowAlgae",
-            new SequentialCommandGroup(
-                // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
-                // algaeSubSystem.setPositionCommand(ArmValue.LOW)
-            )
-        );
+        //  NamedCommands.registerCommand("pickLowAlgae",
+        //     new SequentialCommandGroup(
+        //         // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
+        //         // algaeSubSystem.setPositionCommand(ArmValue.LOW)
+        //     )
+        // );
 
-         NamedCommands.registerCommand("pickHighAlgae",
-            new SequentialCommandGroup(
-                // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
-                // algaeSubSystem.setPositionCommand(ArmValue.HIGH)
-            )
-        );
+        //  NamedCommands.registerCommand("pickHighAlgae",
+        //     new SequentialCommandGroup(
+        //         // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
+        //         // algaeSubSystem.setPositionCommand(ArmValue.HIGH)
+        //     )
+        // );
 
-        NamedCommands.registerCommand("scoreL4",
-            new SequentialCommandGroup(
-                // coralSubsystem.setPositionCommand(CarriageValue.L4),
-                // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
-            )
-        );
+        // NamedCommands.registerCommand("scoreL4",
+        //     new SequentialCommandGroup(
+        //         // coralSubsystem.setPositionCommand(CarriageValue.L4),
+        //         // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+        //     )
+        // );
 
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
@@ -102,6 +102,10 @@ public class AutoChooser {
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
         autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
+        autoChooser.addOption("left", Autos.left(drive, vision));
+        autoChooser.addOption("middle", Autos.middle(drive, vision));
+        autoChooser.addOption("right", Autos.right(drive, vision));
+
 
     }
     
@@ -161,15 +165,15 @@ public class AutoChooser {
         }
     }
 
-    public Command autoAlgaePickCommand(){
-        return new SequentialCommandGroup(
-            // algaeSubsystem.setIntakePositionCommand(IntakeValue.INTAKE),
-            // algaeSubsystem.setPositionCommand(ArmValue.AUTO_GROUND),
-            // new WaitUntilCommand(()-> algaeSubsystem.isAlgaeIn()).withTimeout(2),
-            // new ParallelCommandGroup(
-            //     algaeSubsystem.setIntakePositionCommand(IntakeValue.READY_SHOOT),
-            //     algaeSubsystem.setPositionCommand(ArmValue.SHOOT)
-            // )
-        );
-    }
+    // public Command autoAlgaePickCommand(){
+    //     return new SequentialCommandGroup(
+    //         // algaeSubsystem.setIntakePositionCommand(IntakeValue.INTAKE),
+    //         // algaeSubsystem.setPositionCommand(ArmValue.AUTO_GROUND),
+    //         // new WaitUntilCommand(()-> algaeSubsystem.isAlgaeIn()).withTimeout(2),
+    //         // new ParallelCommandGroup(
+    //         //     algaeSubsystem.setIntakePositionCommand(IntakeValue.READY_SHOOT),
+    //         //     algaeSubsystem.setPositionCommand(ArmValue.SHOOT)
+    //         // )
+    //     );
+    // }
 }
