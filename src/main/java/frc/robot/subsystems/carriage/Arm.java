@@ -29,7 +29,7 @@ public class Arm extends ArmAbsoluteTemplate {
     
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
-        .withPositionConversionFactor(2 * Math.PI)
+        // .withPositionConversionFactor(2 * Math.PI)
         .withOffset(Constants.OFFSET)
         .withSubsystemBase("arm", Carriage.class.getSimpleName());
         

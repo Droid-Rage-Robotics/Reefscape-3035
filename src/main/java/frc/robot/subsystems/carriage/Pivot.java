@@ -31,8 +31,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
-        .withPositionConversionFactor(1)
-        .withOffset(Constants.OFFSET)
+        // .withPositionConversionFactor(1)
+        .withOffset(0)
         .withSubsystemBase("pivot", Carriage.class.getSimpleName());
 
     public Pivot(boolean isEnabled) {

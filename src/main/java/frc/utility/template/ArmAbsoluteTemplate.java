@@ -1,6 +1,6 @@
 package frc.utility.template;
 
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -9,7 +9,6 @@ import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.EncoderEx;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
-import frc.utility.motor.TalonEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
     protected EncoderEx encoder;
@@ -67,6 +66,18 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
             }
         // }
     }
+    
+    // THIS WORKS
+    // @Override 
+    // public double getEncoderPosition() {
+    //     double raw = encoder.getPosition();
+    //     double radian = MathUtil.inputModulus((raw * (2 * Math.PI)) + offset, 0, (2 * Math.PI));
+    //     positionRadianWriter.write(radian);
+    //     positionDegreeWriter.write(Math.toDegrees(radian));
+    //     return radian;
+    // }
+
+    // TEST THIS
     @Override
     public double getEncoderPosition() {
         // double radian = encoder.getRadian() + offset;
@@ -77,10 +88,6 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
-
-        // positionRadianWriter.write(encoder.getRadian());
-        // positionDegreeWriter.write(encoder.getDegrees());
-        // return encoder.getDegrees();
     }
     
 }

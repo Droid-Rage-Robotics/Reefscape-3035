@@ -1,5 +1,6 @@
 package frc.utility.encoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
@@ -26,18 +27,19 @@ public abstract class EncoderEx {
     
 
     public class DirectionBuilder {
-        public PositionConversionFactorBuilder withDirection(EncoderDirection direction) {
+        public OffsetBuilder withDirection(EncoderDirection direction) {
             setDirection(direction);
-            return new PositionConversionFactorBuilder();
-        }
-    }
-
-    public class PositionConversionFactorBuilder {
-        public OffsetBuilder withPositionConversionFactor(double positionConversionFactor) {
-            setPositionConversionFactor(positionConversionFactor);
+            // return new PositionConversionFactorBuilder();
             return new OffsetBuilder();
         }
     }
+
+    // public class PositionConversionFactorBuilder {
+    //     public OffsetBuilder withPositionConversionFactor(double positionConversionFactor) {
+    //         setPositionConversionFactor(positionConversionFactor);
+    //         return new OffsetBuilder();
+    //     }
+    // }
     
     public class OffsetBuilder {
         public SubsystemNameBuilder withOffset(double offset) {
@@ -89,11 +91,45 @@ public abstract class EncoderEx {
     }
     public abstract double getVelocity();
     public abstract double getPosition();
-    public double getDegree(){
-        return getPosition() * 360;
-    }    
+    
+    // Probably not work
+    // public double getDegree(){
+    //     return getPosition() * 360;
+    // }    
+    // public double getRadian() {
+    //     return getPosition() * (2*Math.PI);
+    // }
+
+    /**
+     * @param offset the offset in degrees to include in calculations
+     * @return encoder position in degrees
+     */
+    public double getDegree(double offset) {
+        return MathUtil.inputModulus((getPosition() * 360) + offset, 0, 360);
+    }
+
+    /**
+     * 
+     * @return encoder position in degrees
+     */
+    public double getDegree() {
+        return MathUtil.inputModulus(getPosition() * 360, 0, 360);
+    } 
+
+    /**
+     * @param offset the radian offset to include in calculations
+     * @return encoder position in radians
+     */
+    public double getRadian(double offset) {
+        return MathUtil.inputModulus((getPosition() * (2 * Math.PI)) + offset, 0, (2 * Math.PI));
+    }
+
+    /**
+     *
+     * @return encoder position in radians
+     */
     public double getRadian() {
-        return getPosition() * (2*Math.PI);
+        return MathUtil.inputModulus(getPosition() * (2 * Math.PI), 0, (2 * Math.PI));
     }
 
     protected void setPositionConversionFactor(double positionConversionFactor) {
