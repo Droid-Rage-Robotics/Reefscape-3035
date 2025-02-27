@@ -1,6 +1,7 @@
 package frc.utility.template;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -69,8 +70,10 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     @Override
     public double getEncoderPosition() {
         // double radian = encoder.getRadian() + offset;
-        // double radian = (encoder.getRadian() + offset) % (Math.PI);
-        double radian = encoder.getPosition();
+        // double radian = (encoder.getPosition()/2) + offset;
+        // double radian = MathUtil.inputModulus(((encoder.getPosition()/2) + offset), 0, Math.PI * 2);
+        double radian = (encoder.getRadian() + offset) % (Math.PI*2);
+        // double radian = encoder.getPosition();
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;

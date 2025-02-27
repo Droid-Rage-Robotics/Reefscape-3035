@@ -31,16 +31,16 @@ public class SparkAbsoluteEncoderEx extends EncoderEx {
 
     @Override
     public double getPosition() { //Raw Position
-        config.positionConversionFactor(positionConversionFactor);
-        double rawPos = encoder.getPosition();
-        double convertedPos = (rawPos - offset) % positionConversionFactor;
+        // config.positionConversionFactor(positionConversionFactor);
+        // double rawPos = encoder.getPosition();
+        // double convertedPos = (rawPos - offset) % positionConversionFactor;
 
-        if(convertedPos < 0) {
-            convertedPos += positionConversionFactor;
-        }
+        // if(convertedPos < 0) {
+        //     convertedPos += positionConversionFactor;
+        // }
 
-        return convertedPos;
-        
+        // return convertedPos;
+        return encoder.getPosition();
 
     }
 
