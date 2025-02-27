@@ -18,28 +18,28 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
-    private boolean turn180;
+    // private boolean turn180;
     private volatile double xSpeed, ySpeed, turnSpeed;
     private Rotation2d heading;
-    private double turnSetPoint = 0;
-    private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
-    private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
-    private static final PIDController turnPID = new PIDController(.003, 0, 0);
+    // private double turnSetPoint = 0;
+    // private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
+    // private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
+    // private static final PIDController turnPID = new PIDController(.003, 0, 0);
 
     public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
-        antiTipX.setTolerance(25);
-        antiTipY.setTolerance(25);
-        turnPID.setTolerance(1);
+        // antiTipX.setTolerance(25);
+        // antiTipY.setTolerance(25);
+        // turnPID.setTolerance(1);
 
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
             .whileFalse(drive.setSpeed(Speed.NORMAL));
 
         driver.b().onTrue(drive.setYawCommand(0));
-        this.turn180 = driver.a().getAsBoolean();
+        // this.turn180 = driver.a().getAsBoolean();
         
         addRequirements(drive);
     }
@@ -51,9 +51,9 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void execute() {
-        xSpeed = -y.get();
-        ySpeed = x.get();
-        turnSpeed = -turn.get();
+        xSpeed = y.get();
+        ySpeed = -x.get();
+        turnSpeed = turn.get();
 
 
         // Square inputs
@@ -87,16 +87,16 @@ public class SwerveDriveTeleop extends Command {
         //     turnSpeed = turnPID.calculate(drive.getHeading(), turnSetPoint);
         // }
 
-        // Apply Anti-Tip
-        double xTilt = drive.getRoll(); //Is this Roll or pitch
-        double yTilt = drive.getPitch();// Is this Roll or pitch
+        // // Apply Anti-Tip
+        // double xTilt = drive.getRoll(); //Is this Roll or pitch
+        // double yTilt = drive.getPitch();// Is this Roll or pitch
 
-        if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
-            if (Math.abs(xTilt) > 10)
-                xSpeed = -antiTipX.calculate(xTilt, 0);
-            if (Math.abs(yTilt) >10)
-                ySpeed = -antiTipY.calculate(yTilt, 0);
-        }
+        // if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
+        //     if (Math.abs(xTilt) > 10)
+        //         xSpeed = -antiTipX.calculate(xTilt, 0);
+        //     if (Math.abs(yTilt) >10)
+        //         ySpeed = -antiTipY.calculate(yTilt, 0);
+        // }
 
         // Apply deadzone
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;

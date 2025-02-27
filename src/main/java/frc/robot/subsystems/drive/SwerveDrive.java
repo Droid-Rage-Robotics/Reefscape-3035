@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,27 +49,30 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
-        .withTurnMotor(1, Direction.Forward, true)
-        .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withTurnMotor(1, Direction.Reversed, true)
+        .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Reversed);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
-        .withTurnMotor(4, Direction.Forward, true)
+        .withTurnMotor(4, Direction.Reversed, true)
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
-                EncoderDirection.Reversed);
+        EncoderDirection.Reversed);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
-        .withTurnMotor(7, Direction.Forward, true)
-        .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withTurnMotor(7, Direction.Reversed, true)
+        .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Reversed);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
-        .withTurnMotor(10, Direction.Forward, true)
-        .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, EncoderDirection.Reversed);
+        .withTurnMotor(10, Direction.Reversed, true)
+        .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Reversed);
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
@@ -114,14 +118,16 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
         for (SwerveModule swerveModule: swerveModules) {
-            swerveModule.brakeMode();
-            // swerveModule.coastMode();
+            // swerveModule.brakeMode();
+            swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
 
+        // Pigeon Wires arefacing the front of the robot
         poseConfigs.MountPosePitch = 0;//Up-Down//0
-        poseConfigs.MountPoseRoll = 0;//Side-Side//90
+        poseConfigs.MountPoseRoll = 90;//Side-Side//90
         poseConfigs.MountPoseYaw = 180;//Heading//180;
+        // pigeon2.getConfigurator().apply(new Pigeon2Configuration());
         pigeon2.getConfigurator().apply(poseConfigs);   
         isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
@@ -165,7 +171,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getHeading() {//Yaw
-        return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
+        return -Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
     }
 
     public double getPitch() {

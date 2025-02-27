@@ -8,15 +8,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
-// import frc.robot.subsystems.Elevator;
-// import frc.robot.subsystems.Elevator.ElevatorValue;
-import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -110,8 +106,25 @@ public class RobotContainer {
 
 	public void testDrive(SwerveDrive drive, Vision vision){
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
+		// drive.setDefaultCommand(
+		// 	new SwerveDriveTeleopOLD( //Slow Mode and Gyro Reset in the Default Command
+		// 		drive,
+		// 		driver::getLeftX,
+		// 		driver::getLeftY,
+		// 		driver::getRightX,
+		// 		driver,
+		// 		false//No Work; Do no use this
+		// 		)
+		// 	);
+			// drive.setDefaultCommand(
+			// 		new SwerveOLD( // Slow Mode and Gyro Reset in the Default Command
+			// 				drive,
+			// 				driver::getLeftX,
+			// 				driver::getLeftY,
+			// 				driver::getRightX
+			// 				));
 		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
-		driver.x().onTrue(new AutoAim(drive, vision));
+		// driver.x().onTrue(new AutoAim(drive, vision));
 	}
 
 	public void driveSysID(DriveSysID sysID){
