@@ -17,7 +17,7 @@ public class SwerveDriveConstants {
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
         // Translational PID
-        TRANSLATIONAL_KP(3),
+        TRANSLATIONAL_KP(5),//3
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
 

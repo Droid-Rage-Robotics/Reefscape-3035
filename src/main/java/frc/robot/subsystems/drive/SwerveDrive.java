@@ -119,8 +119,8 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
         for (SwerveModule swerveModule: swerveModules) {
-            // swerveModule.brakeMode();
-            swerveModule.coastMode();
+            swerveModule.brakeMode();
+            // swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
 
@@ -130,7 +130,6 @@ public class SwerveDrive extends SubsystemBase {
         // poseConfigs.MountPosePitch = 0;//Up-Down//0
         // poseConfigs.MountPoseRoll =0;//Side-Side//90
         // poseConfigs.MountPoseYaw = 00;//Heading//180;
-        // pigeon2.getConfigurator().apply(new Pigeon2Configuration());
         pigeon2.getConfigurator().apply(new MountPoseConfigs());   
         isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
