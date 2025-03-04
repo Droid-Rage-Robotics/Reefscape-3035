@@ -17,7 +17,7 @@ public class SwerveDriveConstants {
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
         // Translational PID
-        TRANSLATIONAL_KP(5),//3
+        TRANSLATIONAL_KP(7),//3
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
 
@@ -34,17 +34,17 @@ public class SwerveDriveConstants {
         DRIVE_KV(2.7), //this value is the voltage that iwll be constantly applied
         // DRIVE_KA = 0.12,
 
-        // Bevel Gears to the Right ->
+        // Bevel Gears to the Left <-
         // BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
         // BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
-        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.),
-        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.),
+        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
+        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
 
-        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.9),
-        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(2.22),
-        FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.277),
-        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.4095),
-        
+
+        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.26),
+        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.84),
+        FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(2.917),
+        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.63),        
 
         DEFAULT_HEADING_OFFSET(0),
         ;

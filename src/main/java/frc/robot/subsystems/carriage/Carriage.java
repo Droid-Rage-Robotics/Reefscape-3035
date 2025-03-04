@@ -12,6 +12,7 @@ public class Carriage {
     public enum CarriageValue{
         START(180, 100),
         INTAKE_HPS(322, 251),
+        INTAKE_HPS_BLOCK(322, 251),
         INTAKE_GROUND(170, 155),
         ALGAE_LOW(333, 239),
         ALGAE_HIGH(333, 239),

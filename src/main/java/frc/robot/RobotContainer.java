@@ -17,6 +17,7 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
 
@@ -151,9 +152,9 @@ public class RobotContainer {
 // 	}
 
 	public void testIntake(TalonEx motor){
-		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
+		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.7)))
 			.onFalse(new InstantCommand(()->motor.setPower(0.02)));
-		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
+		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-.7)))
 			.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(60))
 		// 	.onFalse(intake.setTargetPositionCommand(00));
@@ -167,7 +168,7 @@ public class RobotContainer {
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
 	}
-	public void testMotor(TalonEx motorO, TalonEx motorT) {
+	public void testMotor(CANMotorEx motorO, CANMotorEx motorT) {
 		driver.rightTrigger()
 			.onTrue(new InstantCommand(() -> motorO.setPower(-.5)))
 			.onTrue(new InstantCommand(() -> motorT.setPower(-.5)))
@@ -184,10 +185,10 @@ public class RobotContainer {
 	
 	public void testMotor(TalonEx motorO) {
 		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(-.2)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(-1)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(.2)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(1)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));

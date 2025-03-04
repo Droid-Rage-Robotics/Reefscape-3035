@@ -53,9 +53,9 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void execute() {
-        xSpeed = -y.get();
-        ySpeed = x.get();
-        turnSpeed = -turn.get();
+        xSpeed = -y.get(); //Forward
+        ySpeed = -x.get(); //Strafe
+        turnSpeed = -turn.get(); //Turn
 
 
         // Square inputs
@@ -71,7 +71,7 @@ public class SwerveDriveTeleop extends Command {
             double modifiedYSpeed = ySpeed;
 
             
-            heading = Rotation2d.fromDegrees(-drive.getHeading());
+            heading = drive.getRotation2d();
 
             modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
             modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
