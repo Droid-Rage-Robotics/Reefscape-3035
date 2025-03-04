@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
@@ -93,6 +95,7 @@ public class SwerveDrive extends SubsystemBase {
     private DriveSysID sysId;   
 
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
+        private final Field2d field = new Field2d();
     // private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
@@ -149,6 +152,10 @@ public class SwerveDrive extends SubsystemBase {
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }    
+
+        ComplexWidgetBuilder.create(field, "Field", "Misc")
+            .withWidget(BuiltInWidgets.kField)
+            .withSize(1, 3);
     }
 
     
@@ -165,6 +172,7 @@ public class SwerveDrive extends SubsystemBase {
         pitchWriter.set(getPitch());
         locationWriter.set(getPose().getTranslation().toString());
         forwardVelocityWriter.write(getForwardVelocity());
+        field.setRobotPose(getPose());
     }
 
     @Override
