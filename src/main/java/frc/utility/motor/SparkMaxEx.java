@@ -142,6 +142,7 @@ public class SparkMaxEx extends CANMotorEx{
     @Override
     public void setSupplyCurrentLimit(double currentLimit) {
         config.smartCurrentLimit((int) currentLimit);
+        burnFlash();
     }
         
     @Override
