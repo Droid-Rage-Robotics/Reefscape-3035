@@ -31,7 +31,7 @@ public class Intake extends IntakeTemplate {
         new CANMotorEx[]{motor}, 
         new PIDController(0,0,0), //.15
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
-        new SimpleMotorFeedforward(1.6, 1, 0.1),  
+        new SimpleMotorFeedforward(1.3, .5, 0.1),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, "Intake", 0);
