@@ -161,9 +161,11 @@ public class RobotContainer {
 	}
 	
 	public void testMotor(SparkMaxEx motor) {
-		driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(.5)))
+		driver.rightTrigger()
+		.whileTrue(new InstantCommand(() -> motor.setPower(1)))
 				.onFalse(new InstantCommand(() -> motor.setPower(0)));
-		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-.5)))
+		driver.leftTrigger()
+		.whileTrue(new InstantCommand(() -> motor.setPower(-1)))
 				.onFalse(new InstantCommand(() -> motor.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
@@ -227,16 +229,16 @@ public class RobotContainer {
 		driver.povDown()
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
-		driver.povRight()
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+		// driver.povRight()
+		// 	.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
+		// 	.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
-		driver.rightTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		driver.leftTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		// driver.rightTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		// driver.leftTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 			
 		// driver.rightTrigger()
 		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))

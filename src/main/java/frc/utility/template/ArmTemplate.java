@@ -130,7 +130,7 @@ public class ArmTemplate extends SubsystemBase {
 
     public double getEncoderPosition() {
         double radian = motors[mainNum].getPosition()+offset;
-        // + Consants.OFFSET) % Consants.RADIANS_PER_ROTATION
+        // + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION
         positionRadianWriter.write(radian);
         positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;

@@ -20,7 +20,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         double maxPosition,
         double minPosition,
         double offset,
-        Control control,
+        Control control,    
         String subsystemName,
         int mainNum,
         EncoderEx encoder
@@ -43,9 +43,9 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
-                +feedforward.calculate(getEncoderPosition(),.1)); 
+                +feedforward.calculate(getEncoderPosition(),.2)); 
                 // + feedforward.calculate(getTargetPosition(), .5)); 
-                //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+                //ks * Math.signum(velocity) + kg * Math.cos(pos) + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
                 current = profile.calculate(0.02, current, goal);
@@ -58,16 +58,15 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
 
     @Override
     protected void setVoltage(double voltage) {
-        // if (encoder.isConnectedWriter.get()){
-            voltageWriter.set(voltage);
-            for (CANMotorEx motor: motors) {
-                motor.setVoltage(voltage);
-                //IMPORTANT: This flips the voltage to work right. Might NEED to change
-            }
-        // }
+        // if (!encoder.isConnectedWriter.get()) return;
+        voltageWriter.set(voltage);
+        for (CANMotorEx motor: motors) {
+            motor.setVoltage(voltage);
+        }
     }
     
-    // THIS WORKS
+    // THIS WORKS 
+    // Later comment WHAT???
     // @Override 
     // public double getEncoderPosition() {
     //     double raw = encoder.getPosition();
@@ -80,9 +79,6 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     // TEST THIS
     @Override
     public double getEncoderPosition() {
-        // double radian = encoder.getRadian() + offset;
-        // double radian = (encoder.getPosition()/2) + offset;
-        // double radian = MathUtil.inputModulus(((encoder.getPosition()/2) + offset), 0, Math.PI * 2);
         double radian = (encoder.getRadian() + offset) % (Math.PI*2);
         // double radian = encoder.getPosition();
         positionRadianWriter.write(radian);
