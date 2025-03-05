@@ -38,7 +38,7 @@ public class Arm extends ArmAbsoluteTemplate {
         new SparkMaxEx[]{motor}, 
         new PIDController(1.8,0,0), 
         new ArmFeedforward(0, 0.25, 0.3, 0.09), 
-        new TrapezoidProfile.Constraints(1, 1),
+        new TrapezoidProfile.Constraints(.1, .1),
         Constants.MAX_POSITION, Constants.MIN_POSITION, 
                 Constants.OFFSET, 
         Control.FEEDFORWARD, "arm", 0, encoder);

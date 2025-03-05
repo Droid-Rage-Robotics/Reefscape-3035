@@ -26,7 +26,7 @@ public class ArmTemplate extends SubsystemBase {
     protected final int mainNum;
     protected final TrapezoidProfile profile;
     protected TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
-    protected final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+    protected TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
 
     public ArmTemplate(
         CANMotorEx[] motors,
@@ -84,6 +84,7 @@ public class ArmTemplate extends SubsystemBase {
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
+                goal = new TrapezoidProfile.State(targetRadianWriter.get(),01);
                 current = profile.calculate(0.02, current, goal);
 
                 setVoltage(controller.calculate(getEncoderPosition(), current.position)

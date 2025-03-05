@@ -223,22 +223,22 @@ public class RobotContainer {
 	// }
 
 	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
-		driver.povUp()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L4));
-		driver.povDown()
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
+		// driver.povUp()
+		// 	.onTrue(carriage.setPositionCommand(CarriageValue.L4))
+		// 	.onTrue(elevator.setPositionCommand(ElevatorValue.L4));
+		// driver.povDown()
+		// 	.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
+		// 	.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
 		// driver.povRight()
 		// 	.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 		// 	.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
-		// driver.rightTrigger()
-		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		// driver.leftTrigger()
-		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
-		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		driver.rightTrigger()
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		driver.leftTrigger()
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 			
 		// driver.rightTrigger()
 		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))
