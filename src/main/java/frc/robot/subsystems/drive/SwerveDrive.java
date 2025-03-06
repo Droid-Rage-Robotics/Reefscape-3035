@@ -253,7 +253,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        if (!isEnabledWriter.get()) return;
+        // if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND

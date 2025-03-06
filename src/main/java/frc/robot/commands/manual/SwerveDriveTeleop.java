@@ -39,7 +39,7 @@ public class SwerveDriveTeleop extends Command {
             .whileFalse(drive.setSpeed(Speed.NORMAL));
 
         driver.b().onTrue(drive.setYawCommand(0));
-        driver.povRight().onTrue(drive.setYawCommand(90));
+        // driver.povRight().onTrue(drive.setYawCommand(90));
 
         // this.turn180 = driver.a().getAsBoolean();
         
