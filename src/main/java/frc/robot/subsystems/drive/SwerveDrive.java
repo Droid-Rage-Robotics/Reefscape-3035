@@ -44,22 +44,14 @@ public class SwerveDrive extends SubsystemBase {
     //left
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
             new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Left --
+                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Left ++
             new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
                     -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Right +-
             new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
                     SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
             new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right ++
+                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right --
     );
-    // public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-    //     new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),  // Front Left --
-    //     new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),   // Front Right +-
-    //     new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
-    //     new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2)   // Back Right ++
-    // );
-    //TODO: Front Left -- c/ Back Right ++ might need to be flipped
-
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
