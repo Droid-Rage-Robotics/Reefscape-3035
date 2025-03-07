@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule;
@@ -18,19 +17,21 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
-    // private boolean turn180;
-    private volatile double xSpeed, ySpeed, turnSpeed;
+    // private final Supplier<Boolean> turn180Supplier;
+    private boolean turn180;
+    private volatile double xSpeed, ySpeed, turnSpeed, turnSetPoint;
     private Rotation2d heading;
     // private double turnSetPoint = 0;
     // private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     // private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
-    // private static final PIDController turnPID = new PIDController(.003, 0, 0);
+    private static final PIDController turnPID = new PIDController(.03, 0, 0);
 
     public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
+        // this.turn180Supplier = ()->driver.x().getAsBoolean();
         // antiTipX.setTolerance(25);
         // antiTipY.setTolerance(25);
         // turnPID.setTolerance(1);
@@ -40,6 +41,12 @@ public class SwerveDriveTeleop extends Command {
 
         driver.b().onTrue(drive.setYawCommand(0));
         // driver.povRight().onTrue(drive.setYawCommand(90));
+        if (driver.x().getAsBoolean()){
+            turnSetPoint = drive.getHeading() + 180;
+            turn180 = true;
+        }
+
+        // driver.a().debounce(2)
 
         // this.turn180 = driver.a().getAsBoolean();
         
@@ -80,14 +87,9 @@ public class SwerveDriveTeleop extends Command {
             ySpeed = modifiedYSpeed;
         }
 
-        // // Apply Turn 180
-        // if (turn180) {
-        //     turnSetPoint =drive.getHeading()-180;
-        //     turn180 = false;
-        // }
-        // if (!turnPID.atSetpoint()) {
-        //     turnSpeed = turnPID.calculate(drive.getHeading(), turnSetPoint);
-        // }
+        
+       
+        
 
         // // Apply Anti-Tip
         // double xTilt = drive.getRoll(); //Is this Roll or pitch

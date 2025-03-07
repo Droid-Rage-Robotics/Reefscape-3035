@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -107,11 +108,12 @@ public class RobotContainer {
 	}
 
 	public void testDrive(SwerveDrive drive, Vision vision){
-		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
+		// drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
 
 		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
 
 		driver.povUp().onTrue(new AutoAim(drive, vision, driver,7));
+		driver.x().onTrue(new Turn180Degrees(drive,driver));
 		// driver.povRight().onTrue(new AutoAim(drive, vision, driver, 10));
 		// driver.povLeft().onTrue(new AutoAim(drive, vision, driver, -10));
 
