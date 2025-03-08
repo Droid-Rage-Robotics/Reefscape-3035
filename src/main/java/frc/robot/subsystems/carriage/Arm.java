@@ -14,13 +14,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 340;
-        public static final double MIN_POSITION = 135;
+        public static final double MAX_POSITION = 220;
+        public static final double MIN_POSITION = 50;
         public static final double OFFSET = Math.PI;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(17)
-        .withDirection(Direction.Forward)
+        .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName("arm")
@@ -30,17 +30,18 @@ public class Arm extends ArmAbsoluteTemplate {
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)
         // .withPositionConversionFactor(2 * Math.PI)
-        .withOffset(Constants.OFFSET)
+        .withOffset(0) // Not Used
         .withSubsystemBase("arm", Carriage.class.getSimpleName());
         
     public Arm(boolean isEnabled) {
         super(
         new SparkMaxEx[]{motor}, 
-        new PIDController(1.3,0,0), 
-        new ArmFeedforward(0, 0, 0, 0), 
-        new TrapezoidProfile.Constraints(0, 0),
-        Constants.MAX_POSITION, Constants.MIN_POSITION, 0, 
-        Control.PID, "arm", 0, encoder);
+        new PIDController(1.8,0,0), 
+        new ArmFeedforward(0.0, 0.25, 0.38, 0.12), 
+        new TrapezoidProfile.Constraints(.1, .1),
+        Constants.MAX_POSITION, Constants.MIN_POSITION, 
+                Constants.OFFSET, 
+        Control.FEEDFORWARD, "arm", 0, encoder);
         motor.setIsEnabled(isEnabled);
     }
 }

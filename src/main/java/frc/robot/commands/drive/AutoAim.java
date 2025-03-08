@@ -1,38 +1,35 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.Light;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-// @Deprecated
-public class AutoAim extends Command {//TODO: Test this
+
+public class AutoAim extends Command {
   private SwerveDrive drive;
   // private Light light;
   private Vision vision;
-  private ProfiledPIDController turnController, distanceController; // Or a normal PID Control
-  public AutoAim(SwerveDrive drive, Vision vision//, Light light
-  ) {
-        turnController = new ProfiledPIDController(
-            0.5, 
-            0,
-            0.0000,
-            new TrapezoidProfile.Constraints(1.525, 1));
-        turnController.setTolerance(2);//-27 degrees to 27 degrees
-        
-        distanceController = new ProfiledPIDController(
-            0.0, //.034
-            0,
-            0.0000,
-            new TrapezoidProfile.Constraints(1.525, 1));
-        distanceController.setTolerance(.5);//Some sort of distance thing
-        
-        
+  private CommandXboxController driver;
+  private double angleGoal;
+  private ProfiledPIDController turnController, distanceController; // Can also use a normal PID Control
+  public AutoAim(SwerveDrive drive, Vision vision, CommandXboxController driver, double angleGoal) {
+    this.driver = driver;
+    this.angleGoal = angleGoal;
+    turnController = new ProfiledPIDController(
+        0.09, //.1
+        0,
+        0,
+        new TrapezoidProfile.Constraints(1.525, 1));
+    turnController.setTolerance(.5);//-27 degrees to 27 degrees
+    
+    distanceController = new ProfiledPIDController(
+        0.1, //.034
+        0,
+        0,
+        new TrapezoidProfile.Constraints(1.525, 1));
+    distanceController.setTolerance(3);
 
     addRequirements(drive, vision);
     this.drive = drive;
@@ -47,18 +44,22 @@ public class AutoAim extends Command {//TODO: Test this
 
   @Override
   public void execute(){
-    drive.drive(-distanceController.calculate(vision.gettA(), 4),
-            0, 
-            turnController.calculate(vision.gettX(),0));
+    if(vision.gettV()){
+      drive.drive(distanceController.calculate(vision.gettY(), -2),
+          0,
+          turnController.calculate(vision.gettX(), angleGoal));//
+    }
   }
+
   // Returns true when the command should end.
   @Override
+
   public boolean isFinished() {
     // Should be Moved to LightCommand
     //   light.setAllColor(light.red);
     // if(turnController.atSetpoint()&&distanceController.atSetpoint()){
     //   light.setAllColor(light.green);
     // }
-    return turnController.atSetpoint()&&distanceController.atSetpoint();
+    return turnController.atSetpoint()&&distanceController.atSetpoint() || !driver.povUp().getAsBoolean();
   }
 }

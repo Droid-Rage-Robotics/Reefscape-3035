@@ -21,31 +21,34 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.SparkMaxEx;
+import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
-    // private final Elevator elevator = new Elevator(false);
-    // // private Climb climb = new Climb(false);
-    // private Intake intake = new Intake(false);
-    // private Pivot pivot= new Pivot(true);
-    // private Arm arm = new Arm(false);
-    // private final Carriage carriage = new Carriage(
-    //     arm, 
-    //     pivot,
-    //     intake
-    // );
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final Elevator elevator = new Elevator(false);
+    // // // // private Climb climb = new Climb(false);
+    private Intake intake = new Intake(false);
+    private Pivot pivot= new Pivot(false);
+    private Arm arm = new Arm(false);
+    private final Carriage carriage = new Carriage(
+        arm, 
+        pivot,
+        intake
+    );
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
-    private final Field2d field = new Field2d();
 
     private RobotContainer robotContainer = new RobotContainer();
-    private AutoChooser autoChooser = new AutoChooser(drive, vision);
+    // private AutoChooser autoChooser = new AutoChooser(drive, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -56,17 +59,13 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
-        // field.getRobotObject().
         // teleopRan = false;
-        ComplexWidgetBuilder.create(field, "Field", "Misc")
-            .withWidget(BuiltInWidgets.kField)
-            .withSize(1, 3);
+        
     }
     
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        field.setRobotPose(drive.getPose());
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
@@ -100,8 +99,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = autoChooser.getAutonomousCommand();
-        // autonomousCommand = new InstantCommand();
+        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -118,6 +117,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        // if (autonomousCommand != null) {
+        //     autonomousCommand.cancel();
+        // }
 		DriverStation.silenceJoystickConnectionWarning(true);
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
@@ -160,6 +162,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit(){
+        if (autonomousCommand != null) {
+        autonomousCommand.cancel();
+        }
         // drive.changeAllianceRotation();
     }
 

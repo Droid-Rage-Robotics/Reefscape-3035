@@ -11,7 +11,7 @@ public class SparkAbsoluteEncoderEx extends EncoderEx {
     protected final AbsoluteEncoder encoder;
     protected final SparkMaxEx motor;
     private final EncoderConfig config = new EncoderConfig();
-    @Setter(onMethod = @__(@Override)) private double offset; // No use; offset calculations in EncoderEx.java
+    @Setter(onMethod = @__(@Override)) private double offset; // No use
     @Setter(onMethod = @__(@Override)) private EncoderRange range; // No use; here for compatibility
     
     private SparkAbsoluteEncoderEx(AbsoluteEncoder encoder, SparkMaxEx motor) {
@@ -25,16 +25,7 @@ public class SparkAbsoluteEncoderEx extends EncoderEx {
     }
 
     @Override
-    public double getPosition() { //Raw Position
-        // config.positionConversionFactor(positionConversionFactor);
-        // double rawPos = encoder.getPosition();
-        // double convertedPos = (rawPos - offset) % positionConversionFactor;
-
-        // if(convertedPos < 0) {
-        //     convertedPos += positionConversionFactor;
-        // }
-
-        // return convertedPos;
+    public double getPosition() {
         return encoder.getPosition();
 
     }

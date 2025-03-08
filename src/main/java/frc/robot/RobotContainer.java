@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.Turn180Degrees;
+import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -17,6 +19,7 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
 
@@ -105,26 +108,15 @@ public class RobotContainer {
 	}
 
 	public void testDrive(SwerveDrive drive, Vision vision){
-		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
-		// drive.setDefaultCommand(
-		// 	new SwerveDriveTeleopOLD( //Slow Mode and Gyro Reset in the Default Command
-		// 		drive,
-		// 		driver::getLeftX,
-		// 		driver::getLeftY,
-		// 		driver::getRightX,
-		// 		driver,
-		// 		false//No Work; Do no use this
-		// 		)
-		// 	);
-			// drive.setDefaultCommand(
-			// 		new SwerveOLD( // Slow Mode and Gyro Reset in the Default Command
-			// 				drive,
-			// 				driver::getLeftX,
-			// 				driver::getLeftY,
-			// 				driver::getRightX
-			// 				));
+		// drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
+
 		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
-		// driver.x().onTrue(new AutoAim(drive, vision));
+
+		driver.povUp().onTrue(new AutoAim(drive, vision, driver,7));
+		driver.x().onTrue(new Turn180Degrees(drive,driver));
+		// driver.povRight().onTrue(new AutoAim(drive, vision, driver, 10));
+		// driver.povLeft().onTrue(new AutoAim(drive, vision, driver, -10));
+
 	}
 
 	public void driveSysID(DriveSysID sysID){
@@ -151,23 +143,25 @@ public class RobotContainer {
 // 	}
 
 	public void testIntake(TalonEx motor){
-		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(1)))
+		driver.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.7)))
 			.onFalse(new InstantCommand(()->motor.setPower(0.02)));
-		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
+		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-.7)))
 			.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(60))
 		// 	.onFalse(intake.setTargetPositionCommand(00));
 	}
 	
 	public void testMotor(SparkMaxEx motor) {
-		driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(.5)))
+		driver.rightTrigger()
+		.whileTrue(new InstantCommand(() -> motor.setPower(1)))
 				.onFalse(new InstantCommand(() -> motor.setPower(0)));
-		driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-.5)))
+		driver.leftTrigger()
+		.whileTrue(new InstantCommand(() -> motor.setPower(-1)))
 				.onFalse(new InstantCommand(() -> motor.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
 	}
-	public void testMotor(TalonEx motorO, TalonEx motorT) {
+	public void testMotor(CANMotorEx motorO, CANMotorEx motorT) {
 		driver.rightTrigger()
 			.onTrue(new InstantCommand(() -> motorO.setPower(-.5)))
 			.onTrue(new InstantCommand(() -> motorT.setPower(-.5)))
@@ -184,10 +178,10 @@ public class RobotContainer {
 	
 	public void testMotor(TalonEx motorO) {
 		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(-.2)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(-1)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(.2)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(1)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));
@@ -230,12 +224,12 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
-		driver.rightTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		driver.leftTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		// driver.rightTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		// driver.leftTrigger()
+		// 	.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+		// 	.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 			
 		// driver.rightTrigger()
 		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))

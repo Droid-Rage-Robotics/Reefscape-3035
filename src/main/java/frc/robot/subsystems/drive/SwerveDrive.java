@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
@@ -37,49 +39,55 @@ public class SwerveDrive extends SubsystemBase {
         ANTI_TIP,
         ;
     }
-
+    // Translation2d(x,y) == Translation2d(front, left)
+    //front +; back -
+    //left
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),  // Front Left --
-        new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2),   // Front Right +-
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
-        new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2, -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2)   // Back Right ++
+            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Left ++
+            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Right +-
+            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
+            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right --
     );
-
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
-        .withDriveMotor(3,Direction.Reversed, true)
-        .withTurnMotor(1, Direction.Reversed, true)
+        .withDriveMotor(3,Direction.Forward, true)
+        .withTurnMotor(1, Direction.Forward, true)
         .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Reversed);
+        EncoderDirection.Forward);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
-        .withDriveMotor(6, Direction.Reversed, true)
-        .withTurnMotor(4, Direction.Reversed, true)
+        .withDriveMotor(6, Direction.Forward, true)
+        .withTurnMotor(4, Direction.Forward, true)
         // .withTurnMotor(4, Direction.Reversed, true)
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
-        EncoderDirection.Reversed);
+        EncoderDirection.Forward);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
-        .withDriveMotor(9, Direction.Reversed, true)
-        .withTurnMotor(7, Direction.Reversed, true)
+        .withDriveMotor(9, Direction.Forward, true)
+        .withTurnMotor(7, Direction.Forward, true)
         .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Reversed);
+        EncoderDirection.Forward);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
-        .withDriveMotor(12, Direction.Reversed, true)
-        .withTurnMotor(10, Direction.Reversed, true)
+        .withDriveMotor(12, Direction.Forward, true)
+        .withTurnMotor(10, Direction.Forward, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Reversed);
+        EncoderDirection.Forward);
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
     private DriveSysID sysId;   
 
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
+        private final Field2d field = new Field2d();
     // private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
@@ -136,6 +144,10 @@ public class SwerveDrive extends SubsystemBase {
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }    
+
+        ComplexWidgetBuilder.create(field, "Field", "Misc")
+            .withWidget(BuiltInWidgets.kField)
+            .withSize(1, 3);
     }
 
     
@@ -152,6 +164,7 @@ public class SwerveDrive extends SubsystemBase {
         pitchWriter.set(getPitch());
         locationWriter.set(getPose().getTranslation().toString());
         forwardVelocityWriter.write(getForwardVelocity());
+        field.setRobotPose(getPose());
     }
 
     @Override
@@ -232,7 +245,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        if (!isEnabledWriter.get()) return;
+        // if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
