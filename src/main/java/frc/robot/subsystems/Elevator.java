@@ -27,14 +27,14 @@ public class Elevator extends ElevatorTemplate {
 
     public enum ElevatorValue {
         START(0),
-        GROUND(1),
+        GROUND(2),
         INTAKE_HPS(10),
         CLIMB(0),
         
         L1(10),
         L2(20),
         L3(27),
-        L4(34),
+        L4(5),
 
         LOW(19),
         HIGH(30)
@@ -69,8 +69,8 @@ public class Elevator extends ElevatorTemplate {
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
-        new PIDController(0.6, 0, 0), 
-        new ElevatorFeedforward(.1, 0.23, 0, 0.1), 
+        new PIDController(0.45, 0, 0), //.6
+        new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1
         new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION,
         Constants.MIN_POSITION, 
