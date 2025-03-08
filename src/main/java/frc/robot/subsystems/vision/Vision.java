@@ -26,7 +26,7 @@ public class Vision extends SubsystemBase {
 
     Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
     // AprilTagFieldLayout layout = new AprilTagFieldLayout(null);
-    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+    // public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
 
     // AprilTagDetector;
     // AprilTagDetection detection= new AprilTagDetection("", 1, 0, 0, null, gettX(), gettA(), null)
