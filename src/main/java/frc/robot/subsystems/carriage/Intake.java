@@ -14,8 +14,8 @@ import frc.utility.template.IntakeTemplate;
 
 public class Intake extends IntakeTemplate {
     private static class Constants {
-        public static final double MAX_SPEED = 100;
-        public static final double MIN_SPEED = -100;
+        public static final double MAX_SPEED = 160;
+        public static final double MIN_SPEED = -160;
     }
     
     private static TalonEx motor = TalonEx.create(19)
@@ -29,9 +29,9 @@ public class Intake extends IntakeTemplate {
     public Intake(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(0,0,0), //.15
+        new PIDController(0.05,0,0), //.15
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
-        new SimpleMotorFeedforward(1.3, .5, 0.1),  
+        new SimpleMotorFeedforward(.0, .5, 0.25),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, "Intake", 0);
