@@ -10,18 +10,18 @@ import lombok.Getter;
 
 public class Carriage {
     public enum CarriageValue{
-        START(150, 160),
-        INTAKE_HPS(210, 251),
-        INTAKE_HPS_BLOCK(322, 251), //When CLocked by a coral at HPS
+        START(90, 210),
+        INTAKE_HPS(190, 140),
+        INTAKE_HPS_BLOCK(190, 251), //When Bloocked by a coral at HPS
 
-        INTAKE_GROUND(110,160),// 95//160
-        ALGAE_LOW(333, 239),
-        ALGAE_HIGH(333, 239),
-        L1(0, 0),
-        L2(214, 250),
-        L3(214, 250),
+        INTAKE_GROUND(195,130),
+        ALGAE_LOW(130, 239),
+        ALGAE_HIGH(130, 239),
+        L1(125, 225),//123//245
+        L2(109, 210),//109//250
+        L3(L2),//121//224
 
-        L4(215,180);//180 //180
+        L4(195,130);//
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -43,20 +43,20 @@ public class Carriage {
     }
 
     public enum CarriageIntakeValue {
-        INTAKE(100),
-        OUTTAKE(-100),
+        INTAKE(50),
+        OUTTAKE(-130),
         HOLD(10),
         STOP(0);
 
-        private final double intakeSpeed;
+        @Getter private final double intakeSpeed;
 
         private CarriageIntakeValue(double intakeSpeed){
             this.intakeSpeed = intakeSpeed;
         }
 
-        public double getIntakeSpeed(){
-            return intakeSpeed;
-        }
+        // public double getIntakeSpeed(){
+        //     return intakeSpeed;
+        // }
     }
 
     @Getter private final Arm arm;
@@ -118,6 +118,7 @@ public class Carriage {
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
         return coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed());
+        // return Commands.sequence(coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()));
         // return Commands.sequence(
             // coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
         // );

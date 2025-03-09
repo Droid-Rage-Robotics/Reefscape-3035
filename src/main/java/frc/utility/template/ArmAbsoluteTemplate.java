@@ -43,7 +43,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
-                +feedforward.calculate(getEncoderPosition(),.2)); 
+                +feedforward.calculate(getEncoderPosition(),.7)); 
                 // + feedforward.calculate(getTargetPosition(), .5)); 
                 //ks * Math.signum(velocity) + kg * Math.cos(pos) + kv * velocity + ka * acceleration; ^^
                 break;

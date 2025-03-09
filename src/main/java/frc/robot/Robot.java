@@ -6,14 +6,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.SysID.SysID;
-import frc.robot.SysID.SysID.Measurement;
-import frc.robot.commands.autos.AutoChooser;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
@@ -21,11 +16,6 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.utility.motor.SparkMaxEx;
-import frc.utility.motor.TalonEx;
-import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -33,7 +23,7 @@ public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(true);
     // // // // private Climb climb = new Climb(false);
-    private Intake intake = new Intake(false);
+    private Intake intake = new Intake(true);
     private Pivot pivot = new Pivot(false);
     private Arm arm = new Arm(false);
     private final Carriage carriage = new Carriage(
@@ -54,7 +44,7 @@ public class Robot extends TimedRobot {
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
-		.build();
+		.build();   
     private Command autonomousCommand;
   
     @Override
