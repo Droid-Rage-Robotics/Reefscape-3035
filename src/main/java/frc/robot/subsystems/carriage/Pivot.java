@@ -16,8 +16,8 @@ import frc.utility.template.ArmAbsoluteTemplate;
 
 public class Pivot extends ArmAbsoluteTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 230;
-        public static final double MIN_POSITION = 70;//100
+        public static final double MAX_POSITION = 230;//200
+        public static final double MIN_POSITION = 100;//100
         public static final double OFFSET = Math.PI;
     }
     

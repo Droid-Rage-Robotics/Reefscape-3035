@@ -6,22 +6,23 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import lombok.Getter;
 
 public class Carriage {
     public enum CarriageValue{
-        START(90, 210),
-        INTAKE_HPS(190, 140),
-        INTAKE_HPS_BLOCK(190, 251), //When Bloocked by a coral at HPS
+        START(90, 190),
+        INTAKE_HPS(80, 220),
+        INTAKE_HPS_BLOCK(115, 165), //When Blocked by a coral at HPS
 
-        INTAKE_GROUND(195,130),
+        INTAKE_GROUND(185,135),
         ALGAE_LOW(130, 239),
         ALGAE_HIGH(130, 239),
-        L1(125, 225),//123//245
-        L2(109, 210),//109//250
+        L1(105, 228),//5//245
+        L2(105, 230),//109//250
         L3(L2),//121//224
 
-        L4(195,130);//
+        L4(115,230);//
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -89,7 +90,9 @@ public class Carriage {
                 case START -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        new WaitCommand(1.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                       
                     );
                 case INTAKE_HPS -> 
                     new SequentialCommandGroup(
