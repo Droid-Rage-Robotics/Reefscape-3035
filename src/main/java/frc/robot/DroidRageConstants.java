@@ -5,14 +5,14 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public final class DroidRageConstants {
     private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
-        .create("NONE", "Element", "Misc").build();
+        .create(Element.NONE.toString(), "Element", "Misc").build();
     public enum Element{
         ALGAE,
         CORAL,
@@ -28,10 +28,31 @@ public final class DroidRageConstants {
     //     );
     // }
     public static Command setElement(CarriageValue position) {
-
-        return new InstantCommand();
+        return SuppliedCommand.create(() -> Commands.sequence(
+            switch (position) {
+                case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND ->
+                    new ParallelCommandGroup(
+                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.ALGAE),
+                        new InstantCommand(()->elementWriter.set(element.toString()))
+                    );
+                case INTAKE_HPS, INTAKE_HPS_BLOCK ->
+                    new ParallelCommandGroup(
+                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.CORAL),
+                        new InstantCommand(()->elementWriter.set(element.toString()))
+                    );
+                default ->
+                    new ParallelCommandGroup(
+                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.NONE),
+                        new InstantCommand(()->elementWriter.set(element.toString()))
+                    );
+            }
+        ));
+        // return SuppliedCommand.create(()-> Commands.sequence(
+                
+        // ));
+        // return new InstantCommand();
         // return SuppliedCommand.create(
-        //     () -> Commands.sequence(
+        //     () -> Command.sequence(
         //         switch(position){
         //             default:
         //                 break;
