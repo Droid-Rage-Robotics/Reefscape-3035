@@ -5,11 +5,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.DroidRageConstants;
+import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
 public class Carriage {
+
+    private final ShuffleboardValue<String> positionWriter = 
+        ShuffleboardValue.create("None", "CarriagePosition", "Carriage").build();
+    
     public enum CarriageValue{
         START(90, 190),
         INTAKE_HPS(80, 220),
@@ -47,7 +54,9 @@ public class Carriage {
         INTAKE(50),
         OUTTAKE(-130),
         OUTTAKE_L1(-50),
-        HOLD(10),
+        // HOLD(10),
+        HOLD_ALGAE(10),
+        HOLD_CORAL(1),
         STOP(0);
 
         @Getter private final double intakeSpeed;
@@ -66,7 +75,7 @@ public class Carriage {
     @Getter private final Intake coralIntake;
     // private final DigitalInput coralLimitSwitch;
 
-    private CarriageValue position = CarriageValue.START;
+    private CarriageValue position;
     @Getter public double outtakeCount = 0;
 
     public Carriage(Arm arm, Pivot pivot, Intake intake){
@@ -76,7 +85,8 @@ public class Carriage {
         arm.setTargetPosition(CarriageValue.START.armAngle);
         pivot.setTargetPosition(CarriageValue.START.pivotAngle);
         intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
-
+        position = CarriageValue.START;
+        positionWriter.set(position.name());
         // this.coralLimitSwitch = new DigitalInput(0);
     }
 
@@ -85,8 +95,11 @@ public class Carriage {
     }
     
     public Command setPositionCommand(CarriageValue targetPos) {
-        position = targetPos;
+        // position = targetPos;
+        // positionWriter.set(position.name());
         return Commands.sequence(
+            new InstantCommand(()-> position = targetPos),
+            new InstantCommand(() -> positionWriter.set(position.name())),
             switch (targetPos) {
                 case START -> 
                     new SequentialCommandGroup(
@@ -121,11 +134,10 @@ public class Carriage {
     }
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
-        return coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed());
-        // return Commands.sequence(coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()));
-        // return Commands.sequence(
-            // coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
-        // );
+        return Commands.sequence(
+            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()),
+            DroidRageConstants.setElement(getPosition())
+        );
     }
 
     public void incrementOuttakeCount() {

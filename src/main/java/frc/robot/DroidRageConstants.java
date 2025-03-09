@@ -2,22 +2,77 @@ package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.SuppliedCommand;
+import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public final class DroidRageConstants {
+    private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
+        .create("NONE", "Element", "Misc").build();
     public enum Element{
-            ALGAE,
-            CORAL
+        ALGAE,
+        CORAL,
+        NONE
     }
     public static Element element = Element.ALGAE;
-    public static InstantCommand flipElement(){
-        return new InstantCommand(
-            ()->{
-                    if (element == Element.ALGAE) element = Element.CORAL;
-                    else if (element == Element.CORAL) element = Element.ALGAE;
-            }
-        );
+    // public static InstantCommand flipElement(){
+    //     return new InstantCommand(
+    //         ()->{
+    //             if (element == Element.ALGAE) element = Element.CORAL;
+    //             else if (element == Element.CORAL) element = Element.ALGAE;
+    //         }
+    //     );
+    // }
+    public static Command setElement(CarriageValue position) {
+
+        return new InstantCommand();
+        // return SuppliedCommand.create(
+        //     () -> Commands.sequence(
+        //         switch(position){
+        //             default:
+        //                 break;
+        //         }
+
+            // Commands.runOnce(() -> logPosition(targetPosition)),
+            // switch (position) {
+            //         case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND:
+            //         return Commands.sequence(
+            //         new InstantCommand(()->DroidRageConstants.element =
+            //         DroidRageConstants.Element.CORAL),
+            //         new InstantCommand(()-> elementWriter.set(element.toString()))
+            //         );
+            //         case INTAKE_HPS, INTAKE_HPS_BLOCK:
+            //         return new SequentialCommandGroup(
+            //         new InstantCommand(() -> DroidRageConstants.element =
+            //         DroidRageConstants.Element.CORAL),
+            //         new InstantCommand(() -> elementWriter.set(element.toString())));
+            //         case L1,L2,L3,L4,START:
+            //         return new InstantCommand();
+            //         default:
+            //             return new InstantCommand();
+                
+            // }
+        //     )
+        // );
+        // switch (position){
+        //     case ALGAE_HIGH,ALGAE_LOW,INTAKE_GROUND:
+        //     return Commands.sequence(
+        //         new InstantCommand(()->DroidRageConstants.element = DroidRageConstants.Element.CORAL),
+        //         new InstantCommand(()-> elementWriter.set(element.toString()))
+        //     );
+        //     case INTAKE_HPS, INTAKE_HPS_BLOCK:
+        //         return new SequentialCommandGroup(
+        //                 new InstantCommand(() -> DroidRageConstants.element = DroidRageConstants.Element.CORAL),
+        //                 new InstantCommand(() -> elementWriter.set(element.toString())));
+        //     case L1,L2,L3,L4,START:
+        //         return new InstantCommand();
+        //     default:
+        //         return new InstantCommand();
+        // }
     }
 
      

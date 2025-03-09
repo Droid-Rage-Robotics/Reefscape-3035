@@ -25,11 +25,11 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final Elevator elevator = new Elevator(true);
+    private final Elevator elevator = new Elevator(false);
     // private Climb climb = new Climb(false);
-    private Intake intake = new Intake(true);
-    private Pivot pivot = new Pivot(true);
-    private Arm arm = new Arm(true);
+    private Intake intake = new Intake(false);
+    private Pivot pivot = new Pivot(false);
+    private Arm arm = new Arm(false);
     private final Carriage carriage = new Carriage(
         arm, 
         pivot,

@@ -1,14 +1,13 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.TeleopIntakeCommand;
+import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.ManualElevator;
@@ -59,8 +58,6 @@ public class RobotContainer {
 		// 	.onTrue(coralSubsystem.setPositionCommand(CarriageValue.INTAKE_GROUND));
 		
 
-		driver.b()
-			.onTrue(DroidRageConstants.flipElement());
 
 		//coral algae
 		//ground ground pickup povDown 
@@ -217,7 +214,7 @@ public class RobotContainer {
 
 	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
 		elevator.setDefaultCommand(new ManualElevator(elevator, driver::getRightY));
-		driver.povUp()
+		driver.povUp()//ALgae
 			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
 			
@@ -225,7 +222,7 @@ public class RobotContainer {
 		// driver.povDown()
 			// .onTrue(carriage.setPositionCommand(CarriageValue.L2));
 			// .onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
-		driver.povRight()
+		driver.povRight()//Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
@@ -244,14 +241,14 @@ public class RobotContainer {
 			.onTrue(elevator.setPositionCommand(ElevatorValue.L1));
 
 
+		
 		driver.rightTrigger()
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		driver.leftTrigger()
-			.onTrue(new TeleopIntakeCommand(carriage))
 			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
+			.onFalse(new TeleopCommands().TeleopHoldCommand(carriage));
+		driver.leftTrigger()
+			.onTrue(new TeleopCommands().TeleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-			
 		// driver.rightTrigger()
 		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))
 		// 	.onFalse(carriage.getCoralIntake().setPowerCommand(.03));
