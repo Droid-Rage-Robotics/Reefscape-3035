@@ -7,3 +7,10 @@ Add a Temperature Control on Krakens to change stator and supply
 Fix Shuffleboard for arm and pivot
 Use alerts
 Fix intake buttons
+
+
+Make the arm go out before elevator go up or pull out and bring in
+
+Make the L1 outtake slower
+Roborio needs a cover
+Skipping Elevator Chain - Maybe reset the eleevtor if ever is under 0

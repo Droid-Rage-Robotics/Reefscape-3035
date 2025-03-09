@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.TeleopIntakeCommand;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.ManualElevator;
@@ -217,6 +218,7 @@ public class RobotContainer {
 	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
 		elevator.setDefaultCommand(new ManualElevator(elevator, driver::getRightY));
 		driver.povUp()
+			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
 			
 			// .onTrue(elevator.setPositionCommand(ElevatorValue.L4));
@@ -224,8 +226,8 @@ public class RobotContainer {
 			// .onTrue(carriage.setPositionCommand(CarriageValue.L2));
 			// .onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
 		driver.povRight()
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS));
-			// .onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 
 			
 		driver.x()
@@ -246,7 +248,8 @@ public class RobotContainer {
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 		driver.leftTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE))
+			.onTrue(new TeleopIntakeCommand(carriage))
+			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 			
 		// driver.rightTrigger()

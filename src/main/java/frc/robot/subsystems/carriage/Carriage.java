@@ -22,7 +22,7 @@ public class Carriage {
         L2(105, 230),//109//250
         L3(L2),//121//224
 
-        L4(115,230);//
+        L4(115,225);//
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -46,6 +46,7 @@ public class Carriage {
     public enum CarriageIntakeValue {
         INTAKE(50),
         OUTTAKE(-130),
+        OUTTAKE_L1(-50),
         HOLD(10),
         STOP(0);
 
@@ -131,6 +132,9 @@ public class Carriage {
         outtakeCount++;
     }
 
+    public boolean isL1(){
+        return position == CarriageValue.L1;
+    }
     // public boolean isCoralIn(){
     //     return coralLimitSwitch.get();
     // }

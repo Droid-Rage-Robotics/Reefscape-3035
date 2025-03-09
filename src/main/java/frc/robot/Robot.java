@@ -25,23 +25,23 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final Elevator elevator = new Elevator(true);
     // private Climb climb = new Climb(false);
-    private Intake intake = new Intake(false);
-    private Pivot pivot = new Pivot(false);
-    private Arm arm = new Arm(false);
+    private Intake intake = new Intake(true);
+    private Pivot pivot = new Pivot(true);
+    private Arm arm = new Arm(true);
     private final Carriage carriage = new Carriage(
         arm, 
         pivot,
         intake
     );
-    private static TalonEx motor = TalonEx.create(16)
-        .withDirection(Direction.Forward)
-        .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
-        .withSubsystemName("Climb")
-        .withIsEnabled(true)
-        .withCurrentLimit(50);
+    // private static TalonEx motor = TalonEx.create(16)
+    //     .withDirection(Direction.Forward)
+    //     .withIdleMode(ZeroPowerMode.Coast)
+    //     .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
+    //     .withSubsystemName("Climb")
+    //     .withIsEnabled(true)
+    //     .withCurrentLimit(50);
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
@@ -128,11 +128,11 @@ public class Robot extends TimedRobot {
         // robotContainer.testDrive(drive, vision);
         // robotContainer.testIntake(motor);
         // robotContainer.testMotor(motorR, motorL);
-        robotContainer.testMotor(motor);
+        // robotContainer.testMotor(motor);
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
 
-        // robotContainer.testCarriage(elevator, carriage);
+        robotContainer.testCarriage(elevator, carriage);
 
         // robotContainer.testCANivore(driveMotor, motor);
         // teleopRan = true;
