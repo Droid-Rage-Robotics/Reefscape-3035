@@ -33,7 +33,7 @@ Wiring
 - Talon FX has a 12V30A
 - Drive Kraken has a 12V40A
 - Turn NEO has a 12V40A
-- Turn Kraken has a 12V30A??
+- Turn Kraken has a 12V30A
 - CTR Absolute encoder has a 5A mini fuse
 - Pigeon has a 5A mini fuse
 - Limelight is powered by a 10A mini fuse
