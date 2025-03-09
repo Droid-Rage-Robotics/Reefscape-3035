@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
@@ -16,14 +17,17 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final Elevator elevator = new Elevator(true);
-    // // // // private Climb climb = new Climb(false);
-    private Intake intake = new Intake(true);
+    private final Elevator elevator = new Elevator(false);
+    // private Climb climb = new Climb(false);
+    private Intake intake = new Intake(false);
     private Pivot pivot = new Pivot(false);
     private Arm arm = new Arm(false);
     private final Carriage carriage = new Carriage(
@@ -31,6 +35,13 @@ public class Robot extends TimedRobot {
         pivot,
         intake
     );
+    private static TalonEx motor = TalonEx.create(16)
+        .withDirection(Direction.Forward)
+        .withIdleMode(ZeroPowerMode.Coast)
+        .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
+        .withSubsystemName("Climb")
+        .withIsEnabled(true)
+        .withCurrentLimit(50);
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
@@ -117,11 +128,11 @@ public class Robot extends TimedRobot {
         // robotContainer.testDrive(drive, vision);
         // robotContainer.testIntake(motor);
         // robotContainer.testMotor(motorR, motorL);
-        // robotContainer.testMotor(motor);
+        robotContainer.testMotor(motor);
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
 
-        robotContainer.testCarriage(elevator, carriage);
+        // robotContainer.testCarriage(elevator, carriage);
 
         // robotContainer.testCANivore(driveMotor, motor);
         // teleopRan = true;

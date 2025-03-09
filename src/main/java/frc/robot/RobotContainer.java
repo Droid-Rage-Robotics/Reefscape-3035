@@ -179,10 +179,10 @@ public class RobotContainer {
 	
 	public void testMotor(TalonEx motorO) {
 		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(-1)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(.01)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(1)))
+				.onTrue(new InstantCommand(() -> motorO.setPower(-.01)))
 				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
 		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
 		// .onFalse(intake.setTargetPositionCommand(00));

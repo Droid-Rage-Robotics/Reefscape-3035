@@ -4,11 +4,13 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
+import frc.robot.commands.DisabledCommand;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ArmAbsoluteTemplate;
@@ -31,7 +33,7 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(64)
+        .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
@@ -44,11 +46,14 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(3.5,0,0), 
-        new ArmFeedforward(0.46, .655, .0859,.003587), 
+        new PIDController(0,0,0), //3.5p
+        new ArmFeedforward(0, 0, 0,0), //0.46, .655, .0859,.003587
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.PID, "Climb", 0);
         motor.setIsEnabled(isEnabled);
+
+         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+
     }
 }
