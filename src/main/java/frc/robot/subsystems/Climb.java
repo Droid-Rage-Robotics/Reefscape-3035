@@ -25,8 +25,8 @@ public class Climb extends ArmTemplate {
 
     }
     
-    public static double climb = 15;
-    public static double hold = 0;
+    public static double climb = 0;
+    public static double hold = 15;
 //3 4:1s
 //64
 //12

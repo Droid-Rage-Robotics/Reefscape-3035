@@ -54,31 +54,10 @@ public class RobotContainer {
 		driver.leftTrigger()
 				.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 				.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		// driver.rightTrigger()
-		// 	.onTrue(new IntakeElementInCommand(driver, coralSubsystem));
-		
-			
 
-		// operator.leftBumper()
-		// 	.onTrue(elevator.setPositionCommand(Elevator.ElevatorValue.LOW))
-		// 	.onTrue(coralSubsystem.setPositionCommand(CarriageValue.INTAKE_HPS));
-		// operator.rightTrigger()
-		// 	.onTrue(coralSubsystem.setPositionCommand(CarriageValue.INTAKE_GROUND));
-		
-
-
-		//coral algae
-		//ground ground pickup povDown 
-
-		//hms coral povLeft
-		//    
-
-		// l1 processor  a
-		//l2  x
-		//l3 low  b
-		//l4 high y
-
-		
+		driver.leftBumper()
+			.whileTrue(climb.setTargetPositionCommand(Climb.hold))
+			.onFalse(climb.setTargetPositionCommand(Climb.climb));
 
 		operator.y()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
@@ -100,18 +79,18 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS_BLOCK))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 		operator.povUp()// ALgae
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
+			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
-			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD));	
+			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
 
 		operator.rightBumper()
-				.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
-				.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_HIGH));
+			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_HIGH));
 		operator.leftBumper()
-				.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
-				.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_LOW));
+			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_LOW));
 	}
 
 	public void testDrive(SwerveDrive drive, Vision vision){
@@ -121,8 +100,6 @@ public class RobotContainer {
 
 		driver.povUp().onTrue(new AutoAim(drive, vision, driver,7));
 		driver.x().onTrue(new Turn180Degrees(drive,driver));
-		// driver.povRight().onTrue(new AutoAim(drive, vision, driver, 10));
-		// driver.povLeft().onTrue(new AutoAim(drive, vision, driver, -10));
 
 	}
 
@@ -142,21 +119,6 @@ public class RobotContainer {
 
 	}
 
-	public void testMotor(CANMotorEx motorO, CANMotorEx motorT) {
-		driver.rightTrigger()
-			.onTrue(new InstantCommand(() -> motorO.setPower(-.5)))
-			.onTrue(new InstantCommand(() -> motorT.setPower(-.5)))
-			.onFalse(new InstantCommand(() -> motorO.setPower(0)))
-			.onFalse(new InstantCommand(() -> motorT.setPower(0)));
-		driver.leftTrigger()
-			.onTrue(new InstantCommand(() -> motorO.setPower(.5)))
-			.onTrue(new InstantCommand(() -> motorT.setPower(.5)))
-			.onFalse(new InstantCommand(() -> motorO.setPower(0)))
-			.onFalse(new InstantCommand(() -> motorT.setPower(0)));
-		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
-		// .onFalse(intake.setTargetPositionCommand(00));
-	}
-	
 	public void testMotor(TalonEx motorO) {
 		driver.rightTrigger()
 				.onTrue(new InstantCommand(() -> motorO.setPower(.01)))
@@ -173,17 +135,6 @@ public class RobotContainer {
 		// }
 
 	}
-	
-	public void testMotor(TalonFX motorO) {
-		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.set(-.2)))
-				.onFalse(new InstantCommand(() -> motorO.set(0)));
-		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.set(.2)))
-				.onFalse(new InstantCommand(() -> motorO.set(0)));
-		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
-		// .onFalse(intake.setTargetPositionCommand(00));
-	}
 
 	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
 		elevator.setDefaultCommand(new ManualElevator(elevator, driver::getRightY));
@@ -193,10 +144,6 @@ public class RobotContainer {
 			
 		driver.povDown()
 			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD));
-			// .onTrue(elevator.setPositionCommand(ElevatorValue.L4));
-		// driver.povDown()
-			// .onTrue(carriage.setPositionCommand(CarriageValue.L2));
-			// .onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
 		driver.povRight()//Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
@@ -234,17 +181,6 @@ public class RobotContainer {
 		driver.leftTrigger()
 			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		// driver.rightTrigger()
-		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))
-		// 	.onFalse(carriage.getCoralIntake().setPowerCommand(.03));
-		// driver.leftTrigger()
-		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(-1))
-		// 	.onFalse(carriage.getCoralIntake().setPowerCommand(-.03));
-
-		// driver.rightTrigger().onTrue(new InstantCommand(() -> motor.setPower(1)))
-		// 	.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
-		// driver.leftTrigger().onTrue(new InstantCommand(() -> motor.setPower(-1)))
-		// 	.onFalse(new InstantCommand(() -> motor.setPower(0.02)));
 	}
 
 	public void testClimb(Climb climb){
