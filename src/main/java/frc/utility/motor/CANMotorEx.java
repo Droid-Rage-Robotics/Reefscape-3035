@@ -1,6 +1,7 @@
 package frc.utility.motor;
 
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
@@ -13,6 +14,7 @@ public abstract class CANMotorEx {
     protected ShuffleboardValue<Boolean> isEnabledWriter;
     protected ShuffleboardValue<Double> outputWriter;
     protected String subSystemName;
+    protected Alert tempAlert;
     public int motorID;
     public double supplyCurrentLimit;
     
@@ -103,6 +105,16 @@ public abstract class CANMotorEx {
     public void setIsEnabled(boolean isEnabled){
         this.isEnabledWriter.set(isEnabled);
     };
+
+    protected void tempAlertLogic() {
+        if (getTemp() > 35) {
+            tempAlert.set(true);
+        } 
+        
+        if (getTemp() < 35) {
+            tempAlert.set(false);
+        }
+    }
     
     public abstract void setPower(double power);
     public abstract void setVoltage(double outputVolts);
@@ -111,6 +123,7 @@ public abstract class CANMotorEx {
     public abstract double getVelocity();
     public abstract double getPosition();
     public abstract int getDeviceID();
+    public abstract double getTemp();
     public abstract double getVoltage();
     public abstract double getSpeed();
     public abstract void resetEncoder(int num);

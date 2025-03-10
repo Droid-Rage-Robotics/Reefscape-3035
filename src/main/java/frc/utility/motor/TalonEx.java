@@ -17,35 +17,36 @@ import frc.robot.DroidRageConstants;
 
 public class TalonEx extends CANMotorEx {
     private final TalonFX talon;
+    private final TalonFXConfiguration config;
+    private final TalonFXConfigurator configure;
+    // private final Alert tempAlert;
+    private final Alert canAlert;
     private CANBus canbus;
-    private TalonFXConfiguration config;
-    private TalonFXConfigurator configure;
-    private Alert talonTempAlert = new Alert("Temperature Warning", AlertType.kWarning);
-    private Alert canAlert = new Alert("CAN Fault", AlertType.kWarning);
     
-    private TalonEx(TalonFX motor) {
+    private TalonEx(int deviceID, TalonFX motor) {
         this.talon = motor;
+        tempAlert = new Alert("Temperature Warning: Motor " + deviceID, AlertType.kWarning);
+        canAlert = new Alert("CAN Fault", AlertType.kWarning);
         config = new TalonFXConfiguration(); // Use to change configs
         configure = talon.getConfigurator(); // Use to apply configs
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
-        TalonEx motor = new TalonEx(new TalonFX(deviceID, canbus));
+        TalonEx motor = new TalonEx(deviceID, new TalonFX(deviceID, canbus));
         motor.motorID = deviceID;
         motor.canbus = canbus;
         return motor.new DirectionBuilder();
     }
     
     public static DirectionBuilder create(int deviceID) {
-        TalonEx motor = new TalonEx(new TalonFX(deviceID));
+        TalonEx motor = new TalonEx(deviceID, new TalonFX(deviceID));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
     }
 
     @Override
     public void setAlert() {
-        canAlert.set(talon.getStickyFault_Hardware().getValue()); // TODO: Set to correct sticky fault
-        talonTempAlert.set(talon.getStickyFault_DeviceTemp().getValue());
+        canAlert.set(talon.getStickyFault_Hardware().getValue()); // TODO: Set to correct sticky fault        
     }
    
     @Override
@@ -70,8 +71,6 @@ public class TalonEx extends CANMotorEx {
         config.CurrentLimits.SupplyCurrentLimit = currentLimit;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         configure.apply(config);
-        // talonTempAlert = new Alert(subSystemName + motorID + "Temp", AlertType.kWarning);
-        // talonTempAlert.set(false);
     }
 
     @Override
@@ -89,6 +88,8 @@ public class TalonEx extends CANMotorEx {
         if (DroidRageConstants.removeWriterWriter.get()) {
             outputWriter.set(power);
         }
+        
+        tempAlertLogic();
     }
 
     @Override
@@ -99,6 +100,8 @@ public class TalonEx extends CANMotorEx {
         if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
             outputWriter.set(outputVolts);
         }
+        
+        tempAlertLogic();
     }
 
     @Override
@@ -141,16 +144,18 @@ public class TalonEx extends CANMotorEx {
     }
 
     @Override
+    public double getTemp(){
+        return talon.getDeviceTemp().getValueAsDouble();
+    }
+
+    @Override
     public void resetEncoder(int num) {
         talon.setPosition(num);
     }
-    public void testTemp(double tempToCheck, double lowerSupply, double lowerStator){
 
-        if(talon.getDeviceTemp().getValueAsDouble() > tempToCheck){
-            talonTempAlert.set(true);
-            setSupplyCurrentLimit(config.CurrentLimits.SupplyCurrentLimit - lowerSupply);
-            setStatorCurrentLimit(config.CurrentLimits.StatorCurrentLimit - lowerStator);
-        }
+    public void testTemp(double tempToCheck, double lowerSupply, double lowerStator){
+        if(getTemp() > tempToCheck) {}
+        
         // return talon.getDeviceTemp().getValueAsDouble();
     }
 
