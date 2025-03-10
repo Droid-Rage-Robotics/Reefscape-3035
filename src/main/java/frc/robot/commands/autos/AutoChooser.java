@@ -55,7 +55,7 @@ public class AutoChooser {
         new ResetPoseVision(drive, vision)
             
         );
-         //Put Named Commands HERE
+        //  Put Named Commands HERE
         // NamedCommands.registerCommand("readyShoot",
         //     new ParallelCommandGroup(
         //         algaeSubSystem.setIntakePositionCommand(IntakeValue.READY_SHOOT),
@@ -63,36 +63,41 @@ public class AutoChooser {
         //     )
         // TODO: Does this work?^^^^^^^
         // );
-        // NamedCommands.registerCommand("shoot",
-        //     new InstantCommand()
-        //     // algaeSubSystem.setIntakePositionCommand(IntakeValue.AUTO_SHOOT)
-        // );
+        NamedCommands.registerCommand("shoot",
+            new InstantCommand()
+            // algaeSubSystem.setIntakePositionCommand(IntakeValue.AUTO_SHOOT)
+        );
 
-        //  NamedCommands.registerCommand("pickGroundAlgae",
-        //     new InstantCommand()
-        // );
+         NamedCommands.registerCommand("pickGroundAlgae",
+            new InstantCommand()
+        );
 
-        //  NamedCommands.registerCommand("pickLowAlgae",
-        //     new SequentialCommandGroup(
-        //         // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
-        //         // algaeSubSystem.setPositionCommand(ArmValue.LOW)
-        //     )
-        // );
+         NamedCommands.registerCommand("pickLowAlgae",
+            new SequentialCommandGroup(
+                // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
+                // algaeSubSystem.setPositionCommand(ArmValue.LOW)
+            )
+        );
 
-        //  NamedCommands.registerCommand("pickHighAlgae",
-        //     new SequentialCommandGroup(
-        //         // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
-        //         // algaeSubSystem.setPositionCommand(ArmValue.HIGH)
-        //     )
-        // );
+         NamedCommands.registerCommand("pickHighAlgae",
+            new SequentialCommandGroup(
+                // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
+                // algaeSubSystem.setPositionCommand(ArmValue.HIGH)
+            )
+        );
 
-        // NamedCommands.registerCommand("scoreL4",
-        //     new SequentialCommandGroup(
-        //         // coralSubsystem.setPositionCommand(CarriageValue.L4),
-        //         // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
-        //     )
-        // );
-
+        NamedCommands.registerCommand("placeL4",
+            new SequentialCommandGroup(
+                // coralSubsystem.setPositionCommand(CarriageValue.L4),
+                // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+            )
+        );
+        NamedCommands.registerCommand("intake",
+        new SequentialCommandGroup(
+            // coralSubsystem.setPositionCommand(CarriageValue.L4),
+            // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+        )
+    );
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             // .
