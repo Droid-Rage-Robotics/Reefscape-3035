@@ -98,7 +98,7 @@ public class AutoChooser {
             // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
             )
         );
-         NamedCommands.registerCommand("reset",
+         NamedCommands.registerCommand("resetCarriage",
          new SequentialCommandGroup(
           // coralSubsystem.setPositionCommand(CarriageValue.L4),
          // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
