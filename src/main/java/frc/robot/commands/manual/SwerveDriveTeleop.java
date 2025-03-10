@@ -9,6 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
@@ -26,7 +28,7 @@ public class SwerveDriveTeleop extends Command {
     // private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
     private static final PIDController turnPID = new PIDController(.03, 0, 0);
 
-    public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver) {
+    public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
@@ -41,9 +43,13 @@ public class SwerveDriveTeleop extends Command {
 
         driver.b().onTrue(drive.setYawCommand(0));
         // driver.povRight().onTrue(drive.setYawCommand(90));
-        if (driver.x().getAsBoolean()){
-            turnSetPoint = drive.getHeading() + 180;
-            turn180 = true;
+        // if (driver.x().getAsBoolean()){
+        //     turnSetPoint = drive.getHeading() + 180;
+        //     turn180 = true;
+        // }
+
+        if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
+            drive.setSpeed(Speed.SLOW);
         }
 
         // driver.a().debounce(2)
