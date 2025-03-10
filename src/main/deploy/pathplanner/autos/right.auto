@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "reset"
+            "name": "resetCarriage"
           }
         },
         {
@@ -69,7 +69,7 @@
         {
           "type": "named",
           "data": {
-            "name": "reset"
+            "name": "resetCarriage"
           }
         },
         {
@@ -119,7 +119,7 @@
         {
           "type": "named",
           "data": {
-            "name": "reset"
+            "name": "resetCarriage"
           }
         },
         {
