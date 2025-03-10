@@ -106,7 +106,9 @@ public class ArmTemplate extends SubsystemBase {
      * Use this for initialization
      */
     public void setTargetPosition(double degree) {
-        if(degree>maxPosition||degree<minPosition) return;
+        if(degree>maxPosition||degree<minPosition) {
+            degree = getEncoderPosition();
+        };
         targetDegreeWriter.set(degree);
         targetRadianWriter.set(Math.toRadians(degree));
         controller.setSetpoint(Math.toRadians(degree));
