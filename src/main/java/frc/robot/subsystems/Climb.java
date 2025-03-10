@@ -18,26 +18,30 @@ import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 15;
-        public static final double MIN_POSITION = 0;
-        public static final double OFFSET = 0;
+        public static final double MAX_POSITION = 200;
+        public static final double MIN_POSITION = 89;
+        public static final double OFFSET = Math.PI/2;
 
 
     }
     
-    public static double climb = 0;
-    public static double hold = 15;
+    public static double climb = 90;
+    public static double hold = 180;
 //3 4:1s
 //64
 //12
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(0.00037333)//125  and 16:48 //(125/1)*(48/16) //375
+        .withPositionConversionFactor( .02)//125  and 16:48 //(125/1)*(48/16) //375
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
+        // .0605
     // 0.002666666
+
+    // 0.00037333
+
     // private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
     //     .withDirection(EncoderDirection.Forward)
     //     .withOffset(0)
@@ -46,14 +50,14 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(0,0,0), //3.5p
-        new ArmFeedforward(0, 0, 0,0), //0.46, .655, .0859,.003587
+        new PIDController(5.2,0,0), //kp: 1
+        new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.PID, "Climb", 0);
+        Control.FEEDFORWARD, "Climb", 0);
         motor.setIsEnabled(isEnabled);
-
-         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+        setTargetPosition(climb);
 
     }
 }
