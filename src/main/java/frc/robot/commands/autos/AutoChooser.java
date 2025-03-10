@@ -96,8 +96,14 @@ public class AutoChooser {
         new SequentialCommandGroup(
             // coralSubsystem.setPositionCommand(CarriageValue.L4),
             // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
-        )
-    );
+            )
+        );
+         NamedCommands.registerCommand("reset",
+         new SequentialCommandGroup(
+          // coralSubsystem.setPositionCommand(CarriageValue.L4),
+         // coralSubsystem.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+            )
+        );
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             // .
