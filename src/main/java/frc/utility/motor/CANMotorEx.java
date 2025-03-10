@@ -38,6 +38,7 @@ public abstract class CANMotorEx {
             return new PositionConversionFactorBuilder();
         }
     }
+    //Note: For some reason, fraction values do not work, calculate the value and put in the decimal point
     public class PositionConversionFactorBuilder {
         public SubstemNameBuilder withPositionConversionFactor(double positionConversionFactor) {
             setPositionConversionFactor(positionConversionFactor);

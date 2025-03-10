@@ -18,18 +18,19 @@ public class Carriage {
         ShuffleboardValue.create("None", "CarriagePosition", "Carriage").build();
     
     public enum CarriageValue{
-        START(90, 190),
-        INTAKE_HPS(80, 220),
-        INTAKE_HPS_BLOCK(115, 165), //When Blocked by a coral at HPS
+        START(45, 230),
+        INTAKE_HPS(72, 216),
+        INTAKE_HPS_BLOCK(90, 205), //When Blocked by a coral at HPS
+        HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
-        ALGAE_LOW(130, 239),
-        ALGAE_HIGH(130, 239),
+        ALGAE_LOW(90, 205),
+        ALGAE_HIGH(ALGAE_LOW),
         L1(105, 228),//5//245
         L2(105, 230),//109//250
-        L3(L2),//121//224
+        L3(L2),//121//224.
 
-        L4(115,225);//
+        L4(112,230);//
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -55,7 +56,7 @@ public class Carriage {
         OUTTAKE(-130),
         OUTTAKE_L1(-50),
         // HOLD(10),
-        HOLD_ALGAE(10),
+        HOLD_ALGAE(30),
         HOLD_CORAL(1),
         STOP(0);
 
@@ -90,6 +91,12 @@ public class Carriage {
         // this.coralLimitSwitch = new DigitalInput(0);
     }
 
+    public void carriagePeriodic(){
+        if(isElementIn()){
+            DroidRageConstants.setElement(getPosition());
+        }
+    }
+
     public CarriageValue getPosition() {
         return position;
     }
@@ -106,7 +113,12 @@ public class Carriage {
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
                         new WaitCommand(1.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
-                       
+                    );
+                case HOLD -> 
+                    new SequentialCommandGroup(
+                        arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        new WaitCommand(.5),
+                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
                 case INTAKE_HPS -> 
                     new SequentialCommandGroup(
@@ -135,8 +147,8 @@ public class Carriage {
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
         return Commands.sequence(
-            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()),
-            DroidRageConstants.setElement(getPosition())
+            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
+            // DroidRageConstants.setElement(getPosition())
         );
     }
 
@@ -147,7 +159,10 @@ public class Carriage {
     public boolean isL1(){
         return position == CarriageValue.L1;
     }
-    // public boolean isCoralIn(){
-    //     return coralLimitSwitch.get();
-    // }
+    
+    public boolean isElementIn(){
+        // return coralLimitSwitch.get();
+        return coralIntake.getTargetPosition()-coralIntake.getEncoderPosition() > 40;
+    }
+    
 }

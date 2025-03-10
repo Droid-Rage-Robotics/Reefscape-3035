@@ -33,11 +33,11 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
+        .withPositionConversionFactor(0.00037333)//125  and 16:48 //(125/1)*(48/16) //375
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
-    
+    // 0.002666666
     // private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
     //     .withDirection(EncoderDirection.Forward)
     //     .withOffset(0)

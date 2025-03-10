@@ -35,10 +35,10 @@ public class Elevator extends ElevatorTemplate {
         L2(8),//8
         L3(30),//25
 
-        L4(53),//
+        L4(55),//
   
-        LOW(19),
-        HIGH(30)
+        ALGAE_LOW(7),
+        ALGAE_HIGH(12)
         ;
 
         @Getter private final double height;
@@ -83,6 +83,15 @@ public class Elevator extends ElevatorTemplate {
 
         // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
+
+    // @Override
+    // public void periodic() {
+    //     super.periodic();
+    //     // //Ensures that the encoder is always positive
+    //     // if(getEncoderPosition()<0){
+    //     //     resetEncoder();
+    //     // }
+    // }
 
     public Command setPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());

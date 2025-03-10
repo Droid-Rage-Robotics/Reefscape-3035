@@ -16,14 +16,14 @@ import frc.utility.template.ArmAbsoluteTemplate;
 
 public class Pivot extends ArmAbsoluteTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 230;//200
+        public static final double MAX_POSITION = 240;//200
         public static final double MIN_POSITION = 100;//100
         public static final double OFFSET = Math.PI;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(18)
         .withDirection(Direction.Forward)
-        .withIdleMode(ZeroPowerMode.Coast)
+        .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
         .withSubsystemName("pivot")
         .withIsEnabled(true)
@@ -38,8 +38,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     public Pivot(boolean isEnabled) {
         super(
         new SparkMaxEx[]{motor}, 
-        new PIDController(2.7,0,0), //2.7 p
-        new ArmFeedforward(0.05, 0.19,.25,0.15), 
+        new PIDController(2.9,0,0), //2.7 p
+        new ArmFeedforward(0.055, 0.19,.25,0.15), 
 
         // new ArmFeedforward(0.079284, 0.12603, 372.93,
         //                 0.05276), 

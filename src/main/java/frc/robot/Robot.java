@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(true);
-    // private Climb climb = new Climb(false);
+    private Climb climb = new Climb(true);
     private Intake intake = new Intake(true);
     private Pivot pivot = new Pivot(true);
     private Arm arm = new Arm(true);
@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        carriage.carriagePeriodic();
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }

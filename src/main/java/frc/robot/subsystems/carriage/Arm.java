@@ -15,13 +15,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {
         public static final double MAX_POSITION = 215;
-        public static final double MIN_POSITION = 50;
+        public static final double MIN_POSITION = 45;
         public static final double OFFSET = Math.PI;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(17)
         .withDirection(Direction.Reversed)
-        .withIdleMode(ZeroPowerMode.Coast)
+        .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
         .withSubsystemName("arm")
         .withIsEnabled(true)

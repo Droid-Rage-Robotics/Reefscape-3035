@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -218,6 +219,8 @@ public class RobotContainer {
 			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
 			
+		driver.povDown()
+			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD));
 			// .onTrue(elevator.setPositionCommand(ElevatorValue.L4));
 		// driver.povDown()
 			// .onTrue(carriage.setPositionCommand(CarriageValue.L2));
@@ -225,7 +228,9 @@ public class RobotContainer {
 		driver.povRight()//Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
-
+		driver.povLeft()// Coral
+			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS_BLOCK))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
 			
 		driver.x()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
@@ -240,14 +245,22 @@ public class RobotContainer {
 		.onTrue(carriage.setPositionCommand(CarriageValue.L1))
 			.onTrue(elevator.setPositionCommand(ElevatorValue.L1));
 
+		driver.rightBumper()
+			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_HIGH));
+		driver.leftBumper()
+			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
+			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_LOW));
+			
+
 
 		
 		driver.rightTrigger()
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
 			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
-			.onFalse(new TeleopCommands().TeleopHoldCommand(carriage));
+			.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
 		driver.leftTrigger()
-			.onTrue(new TeleopCommands().TeleopOuttakeCommand(carriage))
+			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 		// driver.rightTrigger()
 		// 	.onTrue(carriage.getCoralIntake().setPowerCommand(1))
