@@ -35,37 +35,22 @@ public class AutoChooser {
     // Remove algae high and store
     //Intake human
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-    // private final SwerveDrive drive;
-    // private final Carriage coralSubsystem;
-    // private final Elevator elevator;
-    // private final Vision vision;
-    public AutoChooser
-    (
-            SwerveDrive drive, Vision vision)
-    // (
-    //     SwerveDrive drive, Carriage coralSubsystem, 
-    //     Elevator elevator, Vision vision)
+    private final SwerveDrive drive;
+    private final Carriage carriage;
+    private final Elevator elevator;
+    private final Vision vision;
+    public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision)
      {
-        // this.drive = drive;
-        // this.coralSubsystem = coralSubsystem;
-        // this.elevator = elevator;
-        // this.vision = vision;
+        this.drive = drive;
+        this.carriage = carriage;
+        this.elevator = elevator;
+        this.vision = vision;
 
         NamedCommands.registerCommand("resetPose",
-        new ResetPoseVision(drive, vision)
-            
+            new ResetPoseVision(drive, vision) 
         );
-        //  Put Named Commands HERE
-        // NamedCommands.registerCommand("readyShoot",
-        //     new ParallelCommandGroup(
-        //         algaeSubSystem.setIntakePositionCommand(IntakeValue.READY_SHOOT),
-        //         algaeSubSystem.setPositionCommand(ArmValue.SHOOT)
-        //     )
-        // TODO: Does this work?^^^^^^^
-        // );
         NamedCommands.registerCommand("shoot",
-            new InstantCommand()
-            // algaeSubSystem.setIntakePositionCommand(IntakeValue.AUTO_SHOOT)
+            carriage.setIntakeCommand(CarriageIntakeValue.AUTO_SHOOT)
         );
 
          NamedCommands.registerCommand("pickGroundAlgae",
@@ -74,8 +59,17 @@ public class AutoChooser {
 
          NamedCommands.registerCommand("pickLowAlgae",
             new SequentialCommandGroup(
-                // algaeSubSystem.setIntakePositionCommand(IntakeValue.INTAKE),
-                // algaeSubSystem.setPositionCommand(ArmValue.LOW)
+                new ParallelCommandGroup(
+                    elevator.setPositionCommand(Elevator.ElevatorValue.ALGAE_LOW),
+                    carriage.setPositionCommand(CarriageValue.ALGAE_LOW),
+                    carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
+                ),
+                new WaitCommand(.2),
+                new ParallelCommandGroup(
+                    elevator.setPositionCommand(Elevator.ElevatorValue.ALGAE_LOW.getHeight()+2),
+
+                )
+
             )
         );
 
