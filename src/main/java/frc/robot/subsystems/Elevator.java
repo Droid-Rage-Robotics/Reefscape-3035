@@ -35,10 +35,11 @@ public class Elevator extends ElevatorTemplate {
         L2(8),//8
         L3(30),//25
 
-        L4(55),//
+        L4(55),
   
         ALGAE_LOW(7),
-        ALGAE_HIGH(12)
+        ALGAE_HIGH(12),
+        BARGE(55)
         ;
 
         @Getter private final double height;
@@ -93,7 +94,7 @@ public class Elevator extends ElevatorTemplate {
     //     // }
     // }
 
-    public Command setPositionCommand(ElevatorValue target) {
+    public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
     }

@@ -30,7 +30,7 @@ public class Carriage {
         L2(105, 230),//109//250
         L3(L2),//121//224.
 
-        L4(112,230);//
+        L4(112,225);//
 
         /*
         @Getter is an annotation from the lombok plugin.

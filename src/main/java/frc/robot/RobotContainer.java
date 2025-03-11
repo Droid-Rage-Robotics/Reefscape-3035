@@ -61,36 +61,36 @@ public class RobotContainer {
 
 		operator.y()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L4));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L4));
 		operator.x()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L3))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L3));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L3));
 		operator.b()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L2))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L2));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
 		operator.a()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L1))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L1));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L1));
 
 		operator.povRight()// Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
 		operator.povLeft()// Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS_BLOCK))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
 		operator.povUp()// ALgae
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
 			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 
 		operator.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_HIGH));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_HIGH));
 		operator.leftBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_LOW));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
 	}
 
 	public void testDrive(SwerveDrive drive, Vision vision){
@@ -139,37 +139,37 @@ public class RobotContainer {
 	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
 		elevator.setDefaultCommand(new ManualElevator(elevator, driver::getRightY));
 		driver.povUp()//ALgae
-			.onTrue(elevator.setPositionCommand(ElevatorValue.GROUND))
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND))
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
 			
 		driver.povDown()
 			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD));
 		driver.povRight()//Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
 		driver.povLeft()// Coral
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS_BLOCK))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.INTAKE_HPS));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
 			
 		driver.x()
 			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L4));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L4));
 		driver.a()
 		.onTrue(carriage.setPositionCommand(CarriageValue.L3))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L3));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L3));
 		driver.b()
 		.onTrue(carriage.setPositionCommand(CarriageValue.L2))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L2));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
 		driver.y()
 		.onTrue(carriage.setPositionCommand(CarriageValue.L1))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.L1));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L1));
 
 		driver.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_HIGH));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_HIGH));
 		driver.leftBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
-			.onTrue(elevator.setPositionCommand(ElevatorValue.ALGAE_LOW));
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
 			
 
 
