@@ -116,6 +116,11 @@ public class SparkMaxEx extends CANMotorEx{
     }
 
     @Override
+    public double getTemp() {
+        return sparkMax.getMotorTemperature();
+    }
+
+    @Override
     public double getPosition() {
         return sparkMax.getEncoder().getPosition();
     }
