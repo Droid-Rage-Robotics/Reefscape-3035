@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -17,9 +18,6 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -86,11 +84,9 @@ public class Robot extends TimedRobot {
 
         if(RobotController.getBatteryVoltage()<11.5){
             batteryAlert.set(true);
-            batteryAlert.setText("Change Battery");;
+            batteryAlert.setText("Battery Voltage Low");
 
             // light.setAllColor(light.batteryBlue);
-            
-            // drive.playMusic(2);
         } 
         else{
             batteryAlert.set(false);
@@ -124,7 +120,7 @@ public class Robot extends TimedRobot {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
-        // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
         // robotContainer.testDrive(drive, vision);
@@ -134,7 +130,7 @@ public class Robot extends TimedRobot {
         // robotContainer.testClimb(climb);
         // robotContainer.testElevator(elevator);
 
-        robotContainer.testClimb(climb);
+        // robotContainer.testClimb(climb);
 
         // robotContainer.testCANivore(driveMotor, motor);
         // teleopRan = true;
