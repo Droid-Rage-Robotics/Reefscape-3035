@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
 
         if(RobotController.getBatteryVoltage()<11.5){
             batteryAlert.set(true);
+            batteryAlert.setText("Change Battery");;
 
             // light.setAllColor(light.batteryBlue);
             
