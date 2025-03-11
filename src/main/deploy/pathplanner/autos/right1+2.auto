@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "lLeave"
+            "pathName": "leave2FScore"
           }
         },
         {
@@ -29,26 +29,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LH2IBack"
+                  "pathName": "leave2FBack"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake"
-                      }
-                    }
-                  ]
+                  "name": "intake"
                 }
               }
             ]
@@ -57,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LH2JScore"
+            "pathName": "RH2CScore"
           }
         },
         {
@@ -79,26 +66,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LH2JBack"
+                  "pathName": "RH2CBack"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake"
-                      }
-                    }
-                  ]
+                  "name": "intake"
                 }
               }
             ]
@@ -107,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LH2LScore"
+            "pathName": "RH2DScore"
           }
         },
         {
@@ -129,7 +103,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LH2LBack"
+                  "pathName": "RH2DBack"
                 }
               },
               {

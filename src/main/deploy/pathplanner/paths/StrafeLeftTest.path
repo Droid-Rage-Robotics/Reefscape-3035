@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {

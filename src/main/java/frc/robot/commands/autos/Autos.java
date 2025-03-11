@@ -2,6 +2,8 @@ package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
@@ -14,15 +16,15 @@ public final class Autos {
                 .build()
         );
     }
-    public static Command left(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
+    public static Command leftOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "left")
+            PathPlannerFollow.create(drive, "left1+2")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()
         );
     }
-    public static Command middle(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
+    public static Command middle(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "middle")
                 .setMaxVelocity(6)
@@ -30,9 +32,9 @@ public final class Autos {
                 .build()
         );
     }
-    public static Command right(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
+    public static Command rightOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "right")
+            PathPlannerFollow.create(drive, "right1+2")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()
