@@ -18,28 +18,26 @@ import frc.robot.DroidRageConstants;
 public class TalonEx extends CANMotorEx {
     private final TalonFX talon;
     private final TalonFXConfiguration config;
-    private final TalonFXConfigurator configure;
-    // private final Alert tempAlert;
+    private final TalonFXConfigurator configurator;
     private final Alert canAlert;
     private CANBus canbus;
     
-    private TalonEx(int deviceID, TalonFX motor) {
+    private TalonEx(TalonFX motor) {
         this.talon = motor;
-        tempAlert = new Alert("Temperature Warning: Motor " + deviceID, AlertType.kWarning);
+        this.config = new TalonFXConfiguration(); // Use to change configs
+        this.configurator = talon.getConfigurator(); // Use to apply configs
         canAlert = new Alert("CAN Fault", AlertType.kWarning);
-        config = new TalonFXConfiguration(); // Use to change configs
-        configure = talon.getConfigurator(); // Use to apply configs
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
-        TalonEx motor = new TalonEx(deviceID, new TalonFX(deviceID, canbus));
+        TalonEx motor = new TalonEx(new TalonFX(deviceID, canbus));
         motor.motorID = deviceID;
         motor.canbus = canbus;
         return motor.new DirectionBuilder();
     }
     
     public static DirectionBuilder create(int deviceID) {
-        TalonEx motor = new TalonEx(deviceID, new TalonFX(deviceID));
+        TalonEx motor = new TalonEx(new TalonFX(deviceID));
         motor.motorID = deviceID;
         return motor.new DirectionBuilder();
     }
@@ -55,7 +53,7 @@ public class TalonEx extends CANMotorEx {
             case Forward -> InvertedValue.Clockwise_Positive;
             case Reversed -> InvertedValue.CounterClockwise_Positive;
         };
-        configure.apply(config);
+        configurator.apply(config);
     }
 
     @Override
@@ -70,14 +68,14 @@ public class TalonEx extends CANMotorEx {
     public void setSupplyCurrentLimit(double currentLimit) {
         config.CurrentLimits.SupplyCurrentLimit = currentLimit;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        configure.apply(config);
+        configurator.apply(config);
     }
 
     @Override
     public void setStatorCurrentLimit(double currentLimit){
         config.CurrentLimits.StatorCurrentLimit = currentLimit;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        configure.apply(config);
+        configurator.apply(config);
     }
 
     @Override

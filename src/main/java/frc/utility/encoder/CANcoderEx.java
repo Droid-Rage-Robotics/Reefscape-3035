@@ -2,6 +2,7 @@ package frc.utility.encoder;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -10,11 +11,15 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class CANcoderEx extends EncoderEx {
     private final CANcoder encoder;
-    private CANcoderConfiguration config = new CANcoderConfiguration();
+    private final CANcoderConfiguration config;
+    private final CANcoderConfigurator configurator;
     private double positionConversionFactor, velocityConversionFactor;
     // private final ShuffleboardValue<String> speedStateWriter;
     public CANcoderEx(CANcoder encoder) {
         this.encoder = encoder;
+        this.config = new CANcoderConfiguration();
+        this.configurator = encoder.getConfigurator();
+
         // speedStateWriter = ShuffleboardValue.create("test", "Current/State/Speed", "Swerve").build();
 
     }
@@ -41,12 +46,7 @@ public class CANcoderEx extends EncoderEx {
             case Forward:
                 config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         }
-        encoder.getConfigurator().apply(config);
-
-        //config.MotorOutput.Inverted = switch (direction) {
-        //     case Forward -> InvertedValue.Clockwise_Positive;
-        //     case Reversed -> InvertedValue.CounterClockwise_Positive;
-        // };
+        configurator.apply(config);
     }
 
     public void setRange(EncoderRange range) {
@@ -56,21 +56,19 @@ public class CANcoderEx extends EncoderEx {
             case ZERO_TO_ONE:
                 config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         }
-        encoder.getConfigurator().apply(config);
+        configurator.apply(config);
     }
-
-    // public void setMagnetSensorOffset(double offset) {
-    //     config.MagnetSensor.MagnetOffset = offset;
-    // }
 
     public double getAbsolutePosition() {
         return encoder.getAbsolutePosition().getValueAsDouble();
     }
     
+    @Override
     public double getVelocity() {
         return encoder.getVelocity().getValueAsDouble() * velocityConversionFactor;
     }
 
+    @Override
     public double getPosition() {
         return encoder.getPosition().getValueAsDouble() * positionConversionFactor;
     }
@@ -83,7 +81,7 @@ public class CANcoderEx extends EncoderEx {
     @Override
     public void setOffset(double offset) {
         config.MagnetSensor.MagnetOffset = offset;
-        encoder.getConfigurator().apply(config);
+        configurator.apply(config);
     }
 }
 
