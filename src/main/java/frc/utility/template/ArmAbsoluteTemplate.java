@@ -65,18 +65,6 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         }
     }
     
-    // THIS WORKS 
-    // Later comment WHAT???
-    // @Override 
-    // public double getEncoderPosition() {
-    //     double raw = encoder.getPosition();
-    //     double radian = MathUtil.inputModulus((raw * (2 * Math.PI)) + offset, 0, (2 * Math.PI));
-    //     positionRadianWriter.write(radian);
-    //     positionDegreeWriter.write(Math.toDegrees(radian));
-    //     return radian;
-    // }
-
-    // TEST THIS
     @Override
     public double getEncoderPosition() {
         double radian = (encoder.getRadian() + offset) % (Math.PI*2);
