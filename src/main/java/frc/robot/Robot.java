@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
@@ -33,6 +34,13 @@ public class Robot extends TimedRobot {
         pivot,
         intake
     );
+
+    private final CommandXboxController driver =
+		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
+	
+	private final CommandXboxController operator =
+		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
+
     // private static TalonEx motor = TalonEx.create(16)
     //     .withDirection(Direction.Forward)
     //     .withIdleMode(ZeroPowerMode.Coast)
@@ -46,7 +54,7 @@ public class Robot extends TimedRobot {
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
 
-    private RobotContainer robotContainer = new RobotContainer();
+    private RobotContainer robotContainer = new RobotContainer(driver, operator);
     // private AutoChooser autoChooser = new AutoChooser(drive, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
@@ -65,7 +73,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        carriage.carriagePeriodic();
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }

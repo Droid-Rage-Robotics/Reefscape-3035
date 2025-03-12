@@ -1,6 +1,7 @@
 package frc.robot.subsystems.carriage;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
@@ -92,12 +94,7 @@ public class Carriage {
         // this.coralLimitSwitch = new DigitalInput(0);
     }
 
-    public void carriagePeriodic(){
-        if(isElementIn()){
-            DroidRageConstants.setElement(getPosition());
-        }
-    }
-
+    
     public CarriageValue getPosition() {
         return position;
     }
@@ -162,8 +159,7 @@ public class Carriage {
     }
     
     public boolean isElementIn(){
-        // return coralLimitSwitch.get();
-        return coralIntake.getTargetPosition()-coralIntake.getEncoderPosition() > 40;
+        return coralIntake.isElementIn();
     }
     
 }

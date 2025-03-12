@@ -42,4 +42,8 @@ public class Intake extends IntakeTemplate {
     // public Command setPowerCommand(double power){
     //     return new InstantCommand(()->motor.setPower(power));
     // }
+    public boolean isElementIn() {
+        // return coralLimitSwitch.get();
+        return getTargetPosition() - getEncoderPosition() > 40;
+    }
 }
