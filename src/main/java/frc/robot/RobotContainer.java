@@ -26,14 +26,12 @@ import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
 
 public class RobotContainer {
-	private final CommandXboxController driver =
-		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
+	private final CommandXboxController driver, operator;
 	
-	private final CommandXboxController operator =
-		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-
-	public RobotContainer(){
+	public RobotContainer(CommandXboxController driver, CommandXboxController operator){
 		DriverStation.silenceJoystickConnectionWarning(true);
+		this.driver = driver;
+		this.operator = operator;
 	}
 
 	public void configureTeleOpBindings(
