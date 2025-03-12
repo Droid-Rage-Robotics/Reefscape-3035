@@ -13,7 +13,8 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public final class DroidRageConstants {
     private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
         .create(Element.NONE.toString(), "Element", "Misc").build();
-    public enum Element{
+    //All possible elements
+        public enum Element{
         ALGAE,
         CORAL,
         NONE
