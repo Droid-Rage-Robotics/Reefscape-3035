@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.IntakeElementInCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
@@ -21,8 +23,6 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.motor.CANMotorEx;
-import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
 
 public class RobotContainer {
@@ -44,6 +44,7 @@ public class RobotContainer {
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
+		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 
 		driver.rightTrigger()
 				.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
