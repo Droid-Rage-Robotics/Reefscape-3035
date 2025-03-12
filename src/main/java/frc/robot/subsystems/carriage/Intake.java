@@ -3,11 +3,13 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ShuffleboardValue;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.IntakeTemplate;
@@ -17,7 +19,11 @@ public class Intake extends IntakeTemplate {
         public static final double MAX_SPEED = 160;
         public static final double MIN_SPEED = -160;
     }
-    
+    private final ShuffleboardValue<Boolean> isElementInWriter = 
+        ShuffleboardValue.create(false, "IsElement", this.getSubsystem())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .build();
+
     private static TalonEx motor = TalonEx.create(19)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Coast)
@@ -29,9 +35,9 @@ public class Intake extends IntakeTemplate {
     public Intake(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(0.05,0,0), //.15
+        new PIDController(0.1,0,0), //.15
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
-        new SimpleMotorFeedforward(.0, .5, 0.25),  
+        new SimpleMotorFeedforward(.0, .6, 0.3),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, "Intake", 0);
@@ -44,6 +50,7 @@ public class Intake extends IntakeTemplate {
     // }
     public boolean isElementIn() {
         // return coralLimitSwitch.get();
-        return getTargetPosition() - getEncoderPosition() > 40;
+        isElementInWriter.set(getTargetPosition() - getEncoderPosition() > 40);
+        return isElementInWriter.get();
     }
 }
