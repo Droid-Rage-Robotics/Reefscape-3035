@@ -2,6 +2,7 @@ package frc.utility.motor;
 
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
@@ -63,6 +64,7 @@ public abstract class CANMotorEx {
             outputWriter = ShuffleboardValue
                 .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)
                 .build();
+            tempAlert = new Alert("Temperature Warning: Motor " + motorID, AlertType.kWarning);
             return new CurrentLimitBuilder();
 
         }
