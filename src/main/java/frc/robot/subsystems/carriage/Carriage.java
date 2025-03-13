@@ -116,8 +116,8 @@ public class Carriage {
         // position = targetPos;
         // positionWriter.set(position.name());
         return Commands.sequence(
-            new InstantCommand(()-> position = targetPos),
-            new InstantCommand(() -> positionWriter.set(position.name())),
+            
+            isHighReset(),
             switch (targetPos) {
                 case START -> 
                     new SequentialCommandGroup(
@@ -142,7 +142,7 @@ public class Carriage {
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.25),
+                        new WaitCommand(.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );
@@ -156,7 +156,7 @@ public class Carriage {
                 case BARGE ->
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.7),
+                        new WaitCommand(3.6),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );            
                 default -> 
@@ -165,7 +165,9 @@ public class Carriage {
                         new WaitCommand(.6),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
-            }
+            },
+            new InstantCommand(()-> position = targetPos),
+            new InstantCommand(() -> positionWriter.set(position.name()))
         );
     }
 
@@ -188,10 +190,14 @@ public class Carriage {
         return coralIntake.isElementIn();
     }
 
-    public SequentialCommandGroup isHighReset(Elevator elevator, Carriage carriage){
+    public SequentialCommandGroup isHighReset(){
         return new SequentialCommandGroup(
             new ConditionalCommand(
-                carriage.setPositionCommand(CarriageValue.RESET_HIGH),
+                new SequentialCommandGroup(
+                    arm.setTargetPositionCommand(CarriageValue.RESET_HIGH.getArmAngle()),
+                    pivot.setTargetPositionCommand(CarriageValue.RESET_HIGH.getPivotAngle()),
+                    new WaitCommand(3)
+                ),
                 new InstantCommand(), 
                 ()->position==CarriageValue.BARGE||
                     position==CarriageValue.L4||
