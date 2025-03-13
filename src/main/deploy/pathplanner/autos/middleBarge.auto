@@ -5,21 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "middlePD"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middlePD"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "placeL4"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
+            "name": "pickHAlgae"
           }
         },
         {
@@ -31,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middleScore"
+            "pathName": "middleBarge"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "placeProcessor"
+            "name": "placeBarge"
           }
         }
       ]

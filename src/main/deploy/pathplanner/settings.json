@@ -35,7 +35,7 @@
   "driveCurrentLimit": 35.0,
   "wheelCOF": 1.0,
   "flModuleX": 0.362,
-  "flModuleY":0.362,
+  "flModuleY": 0.362,
   "frModuleX": -0.362,
   "frModuleY": 0.362,
   "blModuleX": 0.362,
