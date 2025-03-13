@@ -26,13 +26,16 @@ public class Carriage {
         HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
-        ALGAE_LOW(90, 205),
+        ALGAE_LOW(90, 190),
         ALGAE_HIGH(ALGAE_LOW),
         L1(105, 228),//5//245
         L2(105, 230),//109//250
         L3(L2),//121//224.
 
-        L4(112,225);//
+        L4(112,220),
+        
+        BARGE(112, 220),
+        PROCESSOR(105, 135);
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -131,8 +134,8 @@ public class Carriage {
                 case L1,L2,L3,L4 -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        pivot.setTargetPositionCommand(targetPos.getPivotAngle()),
-                        new InstantCommand(()->incrementOuttakeCount())
+                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                        // new InstantCommand(()->incrementOuttakeCount())
                 );                   
                 default -> 
                     new ParallelCommandGroup(
