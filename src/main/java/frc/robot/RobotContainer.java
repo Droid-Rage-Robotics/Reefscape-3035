@@ -90,6 +90,8 @@ public class RobotContainer {
 		operator.leftBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
+		operator.rightTrigger()
+			.onTrue(new TeleopCommands().barge(elevator, carriage));
 	}
 
 	public void testDrive(SwerveDrive drive, Vision vision){
@@ -116,76 +118,5 @@ public class RobotContainer {
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-	}
-
-	public void testMotor(TalonEx motorO) {
-		driver.rightTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(.01)))
-				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
-		driver.leftTrigger()
-				.onTrue(new InstantCommand(() -> motorO.setPower(-.01)))
-				.onFalse(new InstantCommand(() -> motorO.setPower(0)));
-		// driver.rightTrigger().whileTrue(intake.setTargetPositionCommand(10))
-		// .onFalse(intake.setTargetPositionCommand(00));
-
-		motorO.testTemp(100, 2, 0);
-		// if(motorO.getTemp() > 100){
-		// 	motorO.setSupplyCurrentLimit(motorO.supplyCurrentLimit-2);
-		// }
-
-	}
-
-	public void testCarriage(Elevator elevator, Carriage carriage){//, TalonEx motor){
-		elevator.setDefaultCommand(new ManualElevator(elevator, driver::getRightY));
-		driver.povUp()//ALgae
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND))
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND));
-			
-		driver.povDown()
-			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD));
-		driver.povRight()//Coral
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
-		driver.povLeft()// Coral
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_HPS_BLOCK))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS));
-			
-		driver.x()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L4));
-		driver.a()
-		.onTrue(carriage.setPositionCommand(CarriageValue.L3))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L3));
-		driver.b()
-		.onTrue(carriage.setPositionCommand(CarriageValue.L2))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
-		driver.y()
-		.onTrue(carriage.setPositionCommand(CarriageValue.L1))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L1));
-
-		driver.rightBumper()
-			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_HIGH));
-		driver.leftBumper()
-			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
-			
-
-
-		
-		driver.rightTrigger()
-			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
-			.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
-		driver.leftTrigger()
-			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
-			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-	}
-
-	public void testClimb(Climb climb){
-		driver.povUp()
-			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-		driver.povDown()
-			.onTrue(climb.setTargetPositionCommand(Climb.hold));	
 	}
 }

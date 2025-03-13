@@ -26,7 +26,7 @@ public class Intake extends IntakeTemplate {
 
     private static TalonEx motor = TalonEx.create(19)
         .withDirection(Direction.Reversed)
-        .withIdleMode(ZeroPowerMode.Coast)
+        .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
         .withSubsystemName("Intake")
         .withIsEnabled(true)

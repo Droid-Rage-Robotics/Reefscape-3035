@@ -40,6 +40,14 @@ public class TeleopCommands{
         );
     }
 
+    public SequentialCommandGroup barge(Elevator elevator, Carriage carriage){
+        return new SequentialCommandGroup(
+            carriage.setPositionCommand(CarriageValue.BARGE),
+            new WaitCommand(1.5),
+            elevator.setTargetPositionCommand(ElevatorValue.BARGE)
+        );
+    }
+
     // public SequentialCommandGroup outtakeAndGrabHigh(Elevator elevator, Carriage carriage, ElevatorValue value ){
     //     return new SequentialCommandGroup(
     //         carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),

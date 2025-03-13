@@ -21,21 +21,21 @@ public class Carriage {
     
     public enum CarriageValue{
         START(45, 230),
-        INTAKE_HPS(72, 216),
+        INTAKE_HPS(72, 217),
         INTAKE_HPS_BLOCK(90, 205), //When Blocked by a coral at HPS
         HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
-        ALGAE_LOW(90, 190),
+        ALGAE_LOW(95, 190),
         ALGAE_HIGH(ALGAE_LOW),
         L1(105, 228),//5//245
         L2(105, 230),//109//250
         L3(L2),//121//224.
 
-        L4(112,230),
+        L4(112,235),
         
-        BARGE(112, 220),
-        PROCESSOR(105, 135);
+        BARGE(112, 100),
+        PROCESSOR(105, 136);
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -62,8 +62,8 @@ public class Carriage {
         OUTTAKE_L1(-50),
         AUTO_SHOOT(-130),
         // HOLD(10),
-        HOLD_ALGAE(30),
-        HOLD_CORAL(1),
+        HOLD_ALGAE(35),
+        HOLD_CORAL(3),
         STOP(0);
 
         @Getter private final double intakeSpeed;
@@ -123,9 +123,9 @@ public class Carriage {
                     );
                     
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
-                    pivot.setTargetPositionCommand(90),
+                    pivot.setTargetPositionCommand(95.),
                     arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                    new WaitCommand(.8),
+                    new WaitCommand(.6),
                     pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     
                 );
@@ -146,7 +146,7 @@ public class Carriage {
                 default -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(1),
+                        new WaitCommand(.6),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
             }
