@@ -43,10 +43,7 @@ public class RumbleCommand extends Command {
 
     @Override
     public void execute() {
-        if(elevator.getEncoderPosition()>-1){
-            intakeState = RumbleStates.ELEVATOR;
-        }
-        else if (getMatchTime() < 30 && getMatchTime() > 28) {
+        if (getMatchTime() < 30 && getMatchTime() > 28) {
             intakeState = RumbleStates.END_GAME;
         } else if ((carriage.isElementIn() && 
             driver.getRightTriggerAxis() > 0.5 && //IsIntaking
@@ -54,6 +51,8 @@ public class RumbleCommand extends Command {
             intakeState = RumbleStates.ElEMENT_IN;
         } else if (driver.getRightTriggerAxis() > 0.5) {
             intakeState = RumbleStates.INTAKE;
+        } else if (elevator.getEncoderPosition() > -1) {
+            intakeState = RumbleStates.ELEVATOR;
         } else
             intakeState = RumbleStates.NOTHING;
 
