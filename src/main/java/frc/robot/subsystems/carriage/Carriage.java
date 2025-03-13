@@ -1,9 +1,12 @@
 package frc.robot.subsystems.carriage;
 
+import java.lang.annotation.ElementType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -11,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
+import frc.robot.subsystems.Elevator;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
@@ -23,19 +27,25 @@ public class Carriage {
         START(45, 230),
         INTAKE_HPS(72, 217),
         INTAKE_HPS_BLOCK(90, 205), //When Blocked by a coral at HPS
+        HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
         ALGAE_LOW(95, 190),
         ALGAE_HIGH(ALGAE_LOW),
-        L1(105, 228),//5//245
-        L2(105, 230),//109//250
+        L1(105, 228),
+        L2(105, 223),
         L3(L2),//121//224.
 
-        L4(112,235),
+        L4(112,225),
         
         BARGE(112, 100),
-        PROCESSOR(105, 136);
+        BARGE_HOLD(135,106),
+        PROCESSOR(105, 136),
+
+        RESET_HIGH(115, 200)
+
+        ;
 
         /*
         @Getter is an annotation from the lombok plugin.
@@ -123,16 +133,16 @@ public class Carriage {
                     );
                     
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
-                    pivot.setTargetPositionCommand(95.),
+                    // pivot.setTargetPositionCommand(100),
                     arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                    new WaitCommand(.6),
+                    new WaitCommand(1),
                     pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     
                 );
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        // new WaitCommand(.1),
+                        new WaitCommand(.25),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );
@@ -142,7 +152,13 @@ public class Carriage {
                         new WaitCommand(1),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
-                );                   
+                );
+                case BARGE ->
+                    new SequentialCommandGroup(
+                        arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        new WaitCommand(.7),
+                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                    );            
                 default -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
@@ -171,5 +187,16 @@ public class Carriage {
     public boolean isElementIn(){
         return coralIntake.isElementIn();
     }
-    
+
+    public SequentialCommandGroup isHighReset(Elevator elevator, Carriage carriage){
+        return new SequentialCommandGroup(
+            new ConditionalCommand(
+                carriage.setPositionCommand(CarriageValue.RESET_HIGH),
+                new InstantCommand(), 
+                ()->position==CarriageValue.BARGE||
+                    position==CarriageValue.L4||
+                    position==CarriageValue.BARGE_HOLD)
+            
+        );
+    }
 }

@@ -42,9 +42,21 @@ public class TeleopCommands{
 
     public SequentialCommandGroup barge(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
-            carriage.setPositionCommand(CarriageValue.BARGE),
+            carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
             new WaitCommand(1.5),
-            elevator.setTargetPositionCommand(ElevatorValue.BARGE)
+            elevator.setTargetPositionCommand(ElevatorValue.BARGE),
+            new WaitCommand(2),
+            carriage.setPositionCommand(CarriageValue.BARGE)
+
+        );
+    }
+    public SequentialCommandGroup intakeHPS(Elevator elevator, Carriage carriage, CarriageValue value){
+        return new SequentialCommandGroup(
+            // carriage.getArm().setTargetPositionCommand(120),
+            // new WaitCommand(1.5),
+            elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
+            new WaitCommand(1),
+            carriage.setPositionCommand(value)
         );
     }
 
