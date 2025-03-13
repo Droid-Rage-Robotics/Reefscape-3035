@@ -55,29 +55,47 @@ public class AutoChooser {
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
             )
         );
+        NamedCommands.registerCommand("placeProcessor",
+            new ParallelCommandGroup(
+                elevator.setTargetPositionCommand(Elevator.ElevatorValue.GROUND),
+                carriage.setPositionCommand(CarriageValue.PROCESSOR),
+                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+            )
+        );
+                
 
         NamedCommands.registerCommand("pickLAlgae",
-            new AutoCommands().autoAlgaePickUp(elevator, carriage, Elevator.ElevatorValue.ALGAE_LOW)
+            new AutoCommands().autoAlgaePickUp(elevator, carriage, 
+                Elevator.ElevatorValue.ALGAE_LOW, CarriageValue.ALGAE_LOW)
         );
 
         NamedCommands.registerCommand("pickHAlgae",
-            new AutoCommands().autoAlgaePickUp(elevator, carriage, Elevator.ElevatorValue.ALGAE_HIGH)
+            new AutoCommands().autoAlgaePickUp(elevator, carriage, 
+                Elevator.ElevatorValue.ALGAE_HIGH, CarriageValue.ALGAE_HIGH)
         );
 
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
-                    carriage.setPositionCommand(CarriageValue.L4)
-                ),
+                carriage.setPositionCommand(CarriageValue.L4),
+                new WaitCommand(1.4),
+                elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
                 new WaitCommand(1),
-                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
+                new WaitCommand(3)
             )
         );
         NamedCommands.registerCommand("resetCarriage",
             new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(Elevator .ElevatorValue.L4),
-                carriage.setPositionCommand(CarriageValue.L4)
+                elevator.setTargetPositionCommand(Elevator.ElevatorValue.GROUND),
+                carriage.setPositionCommand(CarriageValue.HOLD),
+                carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL)
+            )
+        );
+        NamedCommands.registerCommand("placeBarge",
+            new ParallelCommandGroup(
+                elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
+                carriage.setPositionCommand(CarriageValue.BARGE),
+                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
             )
         );
         NamedCommands.registerCommand("intake",
@@ -117,7 +135,8 @@ public class AutoChooser {
 
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         autoChooser.addOption("left", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
-        autoChooser.addOption("middle", Autos.middle(drive, elevator, carriage, vision));
+        autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
+        // autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
         autoChooser.addOption("right", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
     }
 

@@ -10,17 +10,19 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 
 public class AutoCommands{
-    public SequentialCommandGroup autoAlgaePickUp(Elevator elevator, Carriage carriage, ElevatorValue elevatorValue) {
+    public SequentialCommandGroup autoAlgaePickUp(Elevator elevator, Carriage carriage, 
+        ElevatorValue elevatorValue, CarriageValue carriageValue) {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(elevatorValue),
-                carriage.setPositionCommand(CarriageValue.ALGAE_LOW),
+                carriage.setPositionCommand(carriageValue),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)),
-            new WaitCommand(.2),
+            new WaitCommand(.6),
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(elevatorValue.getHeight() + 2),
                 carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE)
             )
+            // new WaitCommand(1)
         );
     }
 
