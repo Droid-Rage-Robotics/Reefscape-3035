@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
@@ -23,31 +24,20 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final Elevator elevator = new Elevator(false);
-    private Climb climb = new Climb(false);
-    private Intake intake = new Intake(false);
-    private Pivot pivot = new Pivot(false);
-    private Arm arm = new Arm(false);
+    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
-        arm, 
-        pivot,
-        intake
+        new Arm(true), 
+        new Pivot(true),
+        new Intake(true)
     );
+    private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-
-    // private static TalonEx motor = TalonEx.create(16)
-    //     .withDirection(Direction.Forward)
-    //     .withIdleMode(ZeroPowerMode.Coast)
-    //     .withPositionConversionFactor(1)//125  and 16:48 //(125/1)*(16/48)
-    //     .withSubsystemName("Climb")
-    //     .withIsEnabled(true)
-    //     .withCurrentLimit(50);
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
@@ -55,7 +45,7 @@ public class Robot extends TimedRobot {
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
 
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
-    // private AutoChooser autoChooser = new AutoChooser(drive, vision);
+    private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -105,8 +95,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -171,7 +161,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
         autonomousCommand.cancel();
         }
-        // drive.changeAllianceRotation();
+        drive.changeAllianceRotation();
     }
 
         

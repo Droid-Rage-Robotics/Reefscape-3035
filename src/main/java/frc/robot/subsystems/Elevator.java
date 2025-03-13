@@ -38,7 +38,7 @@ public class Elevator extends ElevatorTemplate {
         L4(54.5),
   
         ALGAE_LOW(7),
-        ALGAE_HIGH(12),
+        ALGAE_HIGH(26),
         BARGE(54.5)
         ;
 

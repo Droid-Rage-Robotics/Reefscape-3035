@@ -77,7 +77,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
                 carriage.setPositionCommand(CarriageValue.L4),
-                new WaitCommand(1.4),
+                new WaitCommand(.5),
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
                 new WaitCommand(1),
                 carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
@@ -92,10 +92,13 @@ public class AutoChooser {
             )
         );
         NamedCommands.registerCommand("placeBarge",
-            new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
-                carriage.setPositionCommand(CarriageValue.BARGE),
-                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+            new SequentialCommandGroup(
+                new WaitCommand(1.),
+                new ParallelCommandGroup(
+                    elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
+                    carriage.setPositionCommand(CarriageValue.BARGE),
+                    carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+                )
             )
         );
         NamedCommands.registerCommand("intake",
@@ -107,6 +110,9 @@ public class AutoChooser {
                 )
             )   
             
+        );
+        NamedCommands.registerCommand("stop",
+            new WaitCommand(3)
         );
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
@@ -136,7 +142,7 @@ public class AutoChooser {
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         autoChooser.addOption("left", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
-        // autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
+        autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
         autoChooser.addOption("right", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
     }
 

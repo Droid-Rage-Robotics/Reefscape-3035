@@ -32,7 +32,7 @@ public class Carriage {
         L2(105, 230),//109//250
         L3(L2),//121//224.
 
-        L4(112,220),
+        L4(112,230),
         
         BARGE(112, 220),
         PROCESSOR(105, 135);
@@ -112,34 +112,41 @@ public class Carriage {
                 case START -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(1.5),
+                        new WaitCommand(3),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
                 case HOLD -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.5),
+                        new WaitCommand(1.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
-                case INTAKE_HPS -> 
+                    
+                case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
+                    pivot.setTargetPositionCommand(90),
+                    arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                    new WaitCommand(.8),
+                    pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                    
+                );
+                case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        // new WaitCommand(.1),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
-                    );
-                case INTAKE_GROUND ->
-                    new SequentialCommandGroup(
-                        arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
-                    );
+                        // new InstantCommand(()->incrementOuttakeCount())
+                );
                 case L1,L2,L3,L4 -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        new WaitCommand(1),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );                   
                 default -> 
-                    new ParallelCommandGroup(
+                    new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                        new WaitCommand(1),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
             }

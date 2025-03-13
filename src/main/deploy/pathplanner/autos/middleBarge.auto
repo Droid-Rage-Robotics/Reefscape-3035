@@ -24,9 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "pickHAlgae"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickHAlgae"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,15 +49,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "middleBarge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeBarge"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeBarge"
+                }
+              }
+            ]
           }
         }
       ]
