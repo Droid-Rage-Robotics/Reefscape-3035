@@ -21,6 +21,25 @@
           "data": {
             "name": "resetCarriage"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RH2FBack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
         }
       ]
     }

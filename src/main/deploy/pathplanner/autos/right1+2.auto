@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "leave2FBack"
+                  "pathName": "RH2FBack"
                 }
               },
               {
@@ -110,12 +110,6 @@
                 "type": "sequential",
                 "data": {
                   "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
                     {
                       "type": "named",
                       "data": {

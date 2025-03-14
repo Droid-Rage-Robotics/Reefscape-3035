@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "leave2FBack"
+                  "pathName": "RH2FBack"
                 }
               },
               {
@@ -57,25 +57,6 @@
           "type": "named",
           "data": {
             "name": "resetCarriage"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RH2CBack"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
           }
         }
       ]

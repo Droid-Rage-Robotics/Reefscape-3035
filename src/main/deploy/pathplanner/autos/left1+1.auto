@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "lLeave"
+            "pathName": "leave2IScore"
           }
         },
         {
@@ -57,25 +57,6 @@
           "type": "named",
           "data": {
             "name": "resetCarriage"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LH2JBack"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
           }
         }
       ]
