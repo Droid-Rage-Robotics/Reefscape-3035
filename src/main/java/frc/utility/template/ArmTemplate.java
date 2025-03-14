@@ -146,4 +146,8 @@ public class ArmTemplate extends SubsystemBase {
     public CANMotorEx[] getAllMotor() {
         return motors;
     }
+
+    public boolean atSetpoint(){
+        return controller.atSetpoint();
+    }
 }

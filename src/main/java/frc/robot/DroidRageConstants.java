@@ -28,26 +28,60 @@ public final class DroidRageConstants {
     //         }
     //     );
     // }
-    public static Command setElement(CarriageValue position) {
-        return SuppliedCommand.create(() -> Commands.sequence(
-            switch (position) {
-                case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND ->
-                    new ParallelCommandGroup(
-                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.ALGAE),
-                        new InstantCommand(()->elementWriter.set(element.toString()))
-                    );
-                case INTAKE_HPS, INTAKE_HPS_BLOCK ->
-                    new ParallelCommandGroup(
-                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.CORAL),
-                        new InstantCommand(()->elementWriter.set(element.toString()))
-                    );
-                default ->
-                    new ParallelCommandGroup(
-                        new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.NONE),
-                        new InstantCommand(()->elementWriter.set(element.toString()))
-                    );
-            }
-        ));
+    public static void setElement(CarriageValue position){
+        switch(position){
+            case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND:
+                DroidRageConstants.element = DroidRageConstants.Element.ALGAE;
+                elementWriter.set(element.toString());
+                break;
+            case INTAKE_HPS, INTAKE_HPS_BLOCK:
+                DroidRageConstants.element = DroidRageConstants.Element.CORAL;
+                elementWriter.set(element.toString());
+                break;
+            default:
+                DroidRageConstants.element = DroidRageConstants.Element.NONE;
+                elementWriter.set(element.toString());
+                break;
+        }
+    }
+    // public static Command setElement(CarriageValue position) {
+    //     return Commands.sequence(
+    //             switch (position) {
+    //                 case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND ->
+    //                     new ParallelCommandGroup(
+    //                             new InstantCommand(() -> DroidRageConstants.element = DroidRageConstants.Element.ALGAE),
+    //                             new InstantCommand(() -> elementWriter.set(element.toString())));
+    //                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->
+    //                     new ParallelCommandGroup(
+    //                             new InstantCommand(() -> DroidRageConstants.element = DroidRageConstants.Element.CORAL),
+    //                             new InstantCommand(() -> elementWriter.set(element.toString())));
+    //                 default ->
+    //                     new ParallelCommandGroup(
+    //                             new InstantCommand(() -> DroidRageConstants.element = DroidRageConstants.Element.NONE),
+    //                             new InstantCommand(() -> elementWriter.set(element.toString())));
+    //             }
+    //     );
+        // return SuppliedCommand.create(() -> Commands.sequence(
+        //     switch (position) {
+        //         case ALGAE_HIGH, ALGAE_LOW, INTAKE_GROUND ->
+        //             new ParallelCommandGroup(
+        //                 new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.ALGAE),
+        //                 new InstantCommand(()->elementWriter.set(element.toString()))
+        //             );
+        //         case INTAKE_HPS, INTAKE_HPS_BLOCK ->
+        //             new ParallelCommandGroup(
+        //                 new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.CORAL),
+        //                 new InstantCommand(()->elementWriter.set(element.toString()))
+        //             );
+        //         default ->
+        //             new ParallelCommandGroup(
+        //                 new InstantCommand(()-> DroidRageConstants.element = DroidRageConstants.Element.NONE),
+        //                 new InstantCommand(()->elementWriter.set(element.toString()))
+        //             );
+        //     }
+        // ));
+
+
         // return SuppliedCommand.create(()-> Commands.sequence(
                 
         // ));
@@ -95,7 +129,7 @@ public final class DroidRageConstants {
         //     default:
         //         return new InstantCommand();
         // }
-    }
+    // }
 
      
     public static class Gamepad {

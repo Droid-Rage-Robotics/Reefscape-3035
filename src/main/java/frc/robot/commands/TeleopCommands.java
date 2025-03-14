@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
@@ -16,9 +18,12 @@ public class TeleopCommands{
     public SequentialCommandGroup teleopOuttakeCommand(Carriage carriage){
         return new SequentialCommandGroup(
             new ConditionalCommand(
-                    carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1),
-                    carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
-                    () -> carriage.isL1())
+                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1),
+                    new ConditionalCommand(
+                            carriage.setIntakeCommand(CarriageIntakeValue.SHOOT),
+                            carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
+                            () -> carriage.isCarriageValue(CarriageValue.BARGE)),
+                () -> carriage.isCarriageValue(CarriageValue.L1))
         );
     }
 
@@ -42,21 +47,48 @@ public class TeleopCommands{
 
     public SequentialCommandGroup barge(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
-            // carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
-            // new WaitCommand(1.5),
+            carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
+            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
             elevator.setTargetPositionCommand(ElevatorValue.BARGE),
-            // new WaitCommand(.1),
+            new WaitUntilCommand(()->elevator.getEncoderPosition()>=50),
+            // new WaitCommand(1),
             carriage.setPositionCommand(CarriageValue.BARGE)
+
+
+            // carriage.setPositionCommand(CarriageValue.BARGE),
+            // new SequentialCommandGroup(
+            //     new WaitCommand(.4),
+            //     elevator.setTargetPositionCommand(ElevatorValue.BARGE)
+            // )
 
         );
     }
     public SequentialCommandGroup intakeHPS(Elevator elevator, Carriage carriage, CarriageValue value){
         return new SequentialCommandGroup(
-            // carriage.getArm().setTargetPositionCommand(120),
-            // new WaitCommand(1.5),
             elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
-            new WaitCommand(1),
+            new WaitUntilCommand(()->elevator.getEncoderPosition()<=1),
             carriage.setPositionCommand(value)
+        );
+    }
+
+    public SequentialCommandGroup resetCarriage(Elevator elevator, Carriage carriage){
+        // return new SequentialCommandGroup(
+        //     carriage.setPositionCommand(CarriageValue.INTAKE_HPS),
+        //     elevator.setTargetPositionCommand(ElevatorValue.GROUND)
+        // );
+        return new SequentialCommandGroup(
+            new ConditionalCommand(
+                new SequentialCommandGroup(
+                    carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
+                    new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+                    new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
+                    elevator.setTargetPositionCommand(ElevatorValue.GROUND)                    
+                ),
+                new SequentialCommandGroup(
+                    intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS)
+                ),
+               ()-> carriage.isCarriageValue(CarriageValue.BARGE)
+            )
         );
     }
 
@@ -79,6 +111,17 @@ public class TeleopCommands{
     //         )
     //     );
     // }
+
+    public SequentialCommandGroup goL4(Elevator elevator, Carriage carriage){
+        return new SequentialCommandGroup(
+            carriage.getArm().setTargetPositionCommand(CarriageValue.L4.getArmAngle()),
+            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+            new ParallelCommandGroup(
+                elevator.setTargetPositionCommand(ElevatorValue.L4),
+                carriage.getPivot().setTargetPositionCommand(CarriageValue.L4.getPivotAngle())
+            )
+        );
+    }
 
     public TeleopCommands(){
     }

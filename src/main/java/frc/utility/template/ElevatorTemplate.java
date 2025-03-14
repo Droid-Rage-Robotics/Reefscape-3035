@@ -67,6 +67,7 @@ public class ElevatorTemplate extends SubsystemBase {
         voltageWriter = ShuffleboardValue
             .create(0.0, name+"/Voltage", name)
             .build();
+        // controller.setTolerance(.3);
     }
 
     @Override
@@ -139,5 +140,9 @@ public class ElevatorTemplate extends SubsystemBase {
 
     public CANMotorEx[] getAllMotor() {
         return motors;
+    }
+
+    public boolean atSetPoint(){
+        return controller.atSetpoint();
     }
 }

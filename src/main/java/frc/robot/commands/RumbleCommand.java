@@ -60,7 +60,7 @@ public class RumbleCommand extends Command {
             case ElEMENT_IN:
                 driver.getHID().setRumble(RumbleType.kBothRumble, 1);
                 operator.getHID().setRumble(RumbleType.kBothRumble, 1);
-                DroidRageConstants.setElement(carriage.getPosition());
+                // DroidRageConstants.setElement(carriage.getPosition());
                 break;
             case INTAKE:
                 elementInTimer.reset();

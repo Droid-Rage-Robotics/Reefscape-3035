@@ -23,13 +23,13 @@ import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
-    private final Vision vision = new Vision();
+       private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
         new Arm(true), 
         new Pivot(true),
-        new Intake(false)
+        new Intake(true)
     );
     private Climb climb = new Climb(false);
 
@@ -117,6 +117,10 @@ public class Robot extends TimedRobot {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
+
+        // carriage.getArm().setTargetPosition(Math.toDegrees(carriage.getArm().getEncoderPosition()));
+        // carriage.getPivot().setTargetPosition(Math.toDegrees(carriage.getPivot().getEncoderPosition()));
+
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);

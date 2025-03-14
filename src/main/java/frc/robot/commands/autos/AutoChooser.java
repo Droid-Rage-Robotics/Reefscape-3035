@@ -51,7 +51,7 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("shoot",
             new ParallelCommandGroup(
-                carriage.setIntakeCommand(CarriageIntakeValue.AUTO_SHOOT),
+                carriage.setIntakeCommand(CarriageIntakeValue.SHOOT),
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
             )
         );

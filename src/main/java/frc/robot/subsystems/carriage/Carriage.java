@@ -25,8 +25,8 @@ public class Carriage {
     
     public enum CarriageValue{
         START(45, 230),
-        INTAKE_HPS(72, 217),
-        INTAKE_HPS_BLOCK(90, 205), //When Blocked by a coral at HPS
+        INTAKE_HPS(72, 228),
+        INTAKE_HPS_BLOCK(90, 213), //When Blocked by a coral at HPS
         HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
@@ -37,10 +37,10 @@ public class Carriage {
         L2(105, 223),
         L3(L2),//121//224.
 
-        L4(112,225),
+        L4(116,235),
         
         BARGE(112, 100),
-        BARGE_HOLD(135,106),
+        BARGE_HOLD(125,155),
         PROCESSOR(105, 136),
 
         RESET_HIGH(115, 200)
@@ -70,7 +70,7 @@ public class Carriage {
         INTAKE(50),
         OUTTAKE(-130),
         OUTTAKE_L1(-50),
-        AUTO_SHOOT(-130),
+        SHOOT(-200),
         // HOLD(10),
         HOLD_ALGAE(35),
         HOLD_CORAL(3),
@@ -117,7 +117,7 @@ public class Carriage {
         // positionWriter.set(position.name());
         return Commands.sequence(
             
-            isHighReset(),
+            // isHighReset(),
             switch (targetPos) {
                 case START -> 
                     new SequentialCommandGroup(
@@ -155,6 +155,7 @@ public class Carriage {
                 );
                 case BARGE ->
                     new SequentialCommandGroup(
+                        pivot.setTargetPositionCommand(109),
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
                         new WaitCommand(3.6),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
@@ -172,6 +173,7 @@ public class Carriage {
     }
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
+        DroidRageConstants.setElement(position);
         return Commands.sequence(
             coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
             // DroidRageConstants.setElement(getPosition())
@@ -182,27 +184,27 @@ public class Carriage {
         outtakeCount++;
     }
 
-    public boolean isL1(){
-        return position == CarriageValue.L1;
+    public boolean isCarriageValue(CarriageValue value){
+        return position == value;
     }
     
     public boolean isElementIn(){
         return coralIntake.isElementIn();
     }
 
-    public SequentialCommandGroup isHighReset(){
-        return new SequentialCommandGroup(
-            new ConditionalCommand(
-                new SequentialCommandGroup(
-                    arm.setTargetPositionCommand(CarriageValue.RESET_HIGH.getArmAngle()),
-                    pivot.setTargetPositionCommand(CarriageValue.RESET_HIGH.getPivotAngle()),
-                    new WaitCommand(3)
-                ),
-                new InstantCommand(), 
-                ()->position==CarriageValue.BARGE||
-                    position==CarriageValue.L4||
-                    position==CarriageValue.BARGE_HOLD)
+    // public SequentialCommandGroup isHighReset(){
+    //     return new SequentialCommandGroup(
+    //         new ConditionalCommand(
+    //             new SequentialCommandGroup(
+    //                 arm.setTargetPositionCommand(CarriageValue.RESET_HIGH.getArmAngle()),
+    //                 pivot.setTargetPositionCommand(CarriageValue.RESET_HIGH.getPivotAngle()),
+    //                 new WaitCommand(3)
+    //             ),
+    //             new InstantCommand(), 
+    //             ()->position==CarriageValue.BARGE||
+    //                 position==CarriageValue.L4)
+    //                 // position==CarriageValue.BARGE_HOLD)
             
-        );
-    }
+    //     );
+    // }
 }

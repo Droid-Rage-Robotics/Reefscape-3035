@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
@@ -59,17 +61,31 @@ public class RobotContainer {
 			.onFalse(climb.setTargetPositionCommand(Climb.climb));
 
 		operator.y()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L4))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L4));
+			.onTrue(new TeleopCommands().goL4(elevator, carriage));
 		operator.x()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L3))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L3));
+			.onTrue(
+				new SequentialCommandGroup(
+					carriage.setPositionCommand(CarriageValue.L3),
+					new WaitUntilCommand(() -> carriage.getArm().atSetpoint()),
+					elevator.setTargetPositionCommand(ElevatorValue.L3)));
 		operator.b()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L2))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
+			.onTrue(
+				new SequentialCommandGroup(
+					carriage.setPositionCommand(CarriageValue.L2),
+					new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+					elevator.setTargetPositionCommand(ElevatorValue.L2)
+				)
+			);
+			
+			// .onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
 		operator.a()
-			.onTrue(carriage.setPositionCommand(CarriageValue.L1))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.L1));
+			.onTrue(
+				new SequentialCommandGroup(
+					carriage.setPositionCommand(CarriageValue.L1),
+					new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+					elevator.setTargetPositionCommand(ElevatorValue.L1)
+				)
+			);
 
 		operator.povRight()// Coral
 			.onTrue(new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS));
@@ -79,8 +95,7 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
-			.onTrue(carriage.setPositionCommand(CarriageValue.HOLD))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
+			.onTrue(new TeleopCommands().resetCarriage(elevator, carriage));
 
 		operator.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
