@@ -85,14 +85,14 @@ public class Elevator extends ElevatorTemplate {
         // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
 
-    // @Override
-    // public void periodic() {
-    //     super.periodic();
-    //     // //Ensures that the encoder is always positive
-    //     // if(getEncoderPosition()<0){
-    //     //     resetEncoder();
-    //     // }
-    // }
+    @Override
+    public void periodic() {
+        super.periodic();
+        // //Ensures that the encoder is always positive
+        if(getEncoderPosition()<0){
+            resetEncoder();
+        }
+    }
 
     public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());

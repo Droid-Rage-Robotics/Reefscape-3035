@@ -95,7 +95,7 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
-			.onTrue(new TeleopCommands().resetCarriage(elevator, carriage));
+			.onTrue(new TeleopCommands().resetCarriageFromBarge(elevator, carriage));
 
 		operator.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
@@ -103,7 +103,7 @@ public class RobotContainer {
 		operator.leftBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
-		operator.rightTrigger()
+		driver.x()
 			.onTrue(new TeleopCommands().barge(elevator, carriage));
 	}
 

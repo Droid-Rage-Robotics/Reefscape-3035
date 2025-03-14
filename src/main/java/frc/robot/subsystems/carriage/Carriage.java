@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
@@ -31,7 +32,7 @@ public class Carriage {
         HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
-        ALGAE_LOW(95, 190),
+        ALGAE_LOW(110, 170),
         ALGAE_HIGH(ALGAE_LOW),
         L1(105, 228),
         L2(105, 223),
@@ -39,8 +40,8 @@ public class Carriage {
 
         L4(116,235),
         
-        BARGE(112, 100),
-        BARGE_HOLD(125,155),
+        BARGE(116, 110),
+        BARGE_HOLD(130,130),
         PROCESSOR(105, 136),
 
         RESET_HIGH(115, 200)
@@ -134,9 +135,11 @@ public class Carriage {
                     
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
                     // pivot.setTargetPositionCommand(100),
-                    arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                    new WaitCommand(1),
-                    pivot.setTargetPositionCommand(targetPos.getPivotAngle())
+                    pivot.setTargetPositionCommand(targetPos.getPivotAngle()),
+                    new WaitCommand(.6),
+                    arm.setTargetPositionCommand(targetPos.getArmAngle())
+                    // new WaitCommand(1
+                    // new WaitUntilCommand(()->arm.atSetpoint()),
                     
                 );
                 case INTAKE_GROUND -> 
