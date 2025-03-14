@@ -17,8 +17,8 @@
     "tests"
   ],
   "autoFolders": [
-    "left",
     "right",
+    "left",
     "tests"
   ],
   "defaultMaxVel": 3.0,
