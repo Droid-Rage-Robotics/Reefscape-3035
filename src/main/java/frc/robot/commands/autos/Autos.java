@@ -24,6 +24,22 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command leftOnePlusOne(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "left1+1")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
+    public static Command leftOne(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "left1")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
     public static Command middleProcessor(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "middleProcessor")
