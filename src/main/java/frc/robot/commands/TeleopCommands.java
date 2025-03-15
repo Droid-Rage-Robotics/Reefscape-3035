@@ -61,6 +61,7 @@ public class TeleopCommands{
             elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
             new WaitUntilCommand(()->elevator.getEncoderPosition()<=2),
             carriage.setPositionCommand(value)
+            // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
         );
     }
 

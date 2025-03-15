@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.ResetPoseVision;
+import frc.robot.commands.TeleopCommands;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
@@ -30,28 +31,14 @@ import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
-    //Commands
-    // Score High Coral
-    // Remove algae high and store
-    //Intake human
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-    // private final SwerveDrive drive;
-    // private final Carriage carriage;
-    // private final Elevator elevator;
-    // private final Vision vision;
-    public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision)
-     {
-        // this.drive = drive;
-        // this.carriage = carriage;
-        // this.elevator = elevator;
-        // this.vision = vision;
 
+    public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         NamedCommands.registerCommand("resetPose",
             new ResetPoseVision(drive, vision) 
         );
         NamedCommands.registerCommand("shoot",
             new ParallelCommandGroup(
-                carriage.setIntakeCommand(CarriageIntakeValue.SHOOT),
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
             )
         );
@@ -62,8 +49,6 @@ public class AutoChooser {
                 carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
             )
         );
-                
-
         NamedCommands.registerCommand("pickLAlgae",
             new AutoCommands().autoAlgaePickUp(elevator, carriage, 
                 Elevator.ElevatorValue.ALGAE_LOW, CarriageValue.ALGAE_LOW)
@@ -76,20 +61,19 @@ public class AutoChooser {
 
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L4),
-                new WaitCommand(.5),
-                elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
-                new WaitCommand(1),
-                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
-                new WaitCommand(3)
+                new TeleopCommands().goL4(elevator, carriage),
+                new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
             )
         );
         NamedCommands.registerCommand("resetCarriage",
-            new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(Elevator.ElevatorValue.GROUND),
-                carriage.setPositionCommand(CarriageValue.HOLD),
-                carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL)
+            new SequentialCommandGroup(
+                new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS),
+                carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
             )
+        );
+        NamedCommands.registerCommand("resetBarge",
+            new TeleopCommands().resetCarriageFromBarge(elevator, carriage)
         );
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
@@ -103,17 +87,17 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
-                new WaitCommand(4),
-                new ParallelCommandGroup(
-                    elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
-                    carriage.setPositionCommand(CarriageValue.L4)
-                )
+                // new WaitCommand(4),
+                // new ParallelCommandGroup(
+                //     elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
+                //     carriage.setPositionCommand(CarriageValue.L4)
+                // )
             )   
-            
         );
-        NamedCommands.registerCommand("stop",
-            new WaitCommand(3)
+        NamedCommands.registerCommand("out",
+            carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
         );
+
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withWidget(BuiltInWidgets.kComboBoxChooser)
@@ -123,6 +107,7 @@ public class AutoChooser {
         autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
+        carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
     }
     
     public  Command getAutonomousCommand() {
@@ -133,17 +118,23 @@ public class AutoChooser {
         autoChooser.addOption("BackTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
-        autoChooser.setDefaultOption("SplineTest", TuningAutos.splineTest(drive));
+        autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
         autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
         // // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
-        autoChooser.addOption("left", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
         autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
-        autoChooser.addOption("right", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
+
+        // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
+        // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
+
     }
 
     public static void createAutoBuilder(SwerveDrive drive){

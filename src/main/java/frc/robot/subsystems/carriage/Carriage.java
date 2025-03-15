@@ -28,7 +28,7 @@ public class Carriage {
         START(45, 230),
         INTAKE_HPS(72, 228),
         INTAKE_HPS_BLOCK(90, 213), //When Blocked by a coral at HPS
-        HPS_HOLD(134, 108),
+        // HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(185,135),
@@ -100,10 +100,10 @@ public class Carriage {
         this.arm = arm;
         this.pivot = pivot;
         this.coralIntake = intake;
-        arm.setTargetPosition(CarriageValue.START.armAngle);
-        pivot.setTargetPosition(CarriageValue.START.pivotAngle);
+        arm.setTargetPosition(CarriageValue.INTAKE_HPS.armAngle);
+        pivot.setTargetPosition(CarriageValue.INTAKE_HPS.pivotAngle);
         intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
-        position = CarriageValue.START;
+        position = CarriageValue.INTAKE_HPS;
         positionWriter.set(position.name());
         // this.coralLimitSwitch = new DigitalInput(0);
     }
