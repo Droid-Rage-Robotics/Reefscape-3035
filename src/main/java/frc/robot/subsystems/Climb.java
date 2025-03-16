@@ -19,13 +19,13 @@ import frc.utility.template.ArmTemplate;
 public class Climb extends ArmTemplate {
     public static class Constants {
         public static final double MAX_POSITION = 200;
-        public static final double MIN_POSITION = 89;
+        public static final double MIN_POSITION = 40;
         public static final double OFFSET = Math.PI/2;
 
 
     }
     
-    public static double climb = 90;
+    public static double climb = 90;//48
     public static double hold = 180;
 //3 4:1s
 //64
@@ -33,7 +33,9 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor( .02)//125  and 16:48 //(125/1)*(48/16) //375
+        .withPositionConversionFactor( .02)//.02
+        //.001 or .01
+        //125  and 16:48 //(125/1)*(48/16) //375
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
@@ -50,7 +52,7 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(5.2,0,0), //kp: 1
+        new PIDController(20,0,0), //kp: 5.2,7
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
