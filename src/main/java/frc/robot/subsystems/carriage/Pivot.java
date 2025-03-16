@@ -21,7 +21,7 @@ public class Pivot extends ArmAbsoluteTemplate {
         public static final double OFFSET = Math.PI;
     }
     
-    private static SparkMaxEx motor = SparkMaxEx.create(18)
+    private static SparkMaxEx motor = SparkMaxEx.create(27)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
