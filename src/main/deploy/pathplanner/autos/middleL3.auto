@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "placeL4"
+                  "name": "placeL3"
                 }
               }
             ]
@@ -33,18 +33,6 @@
           "type": "named",
           "data": {
             "name": "resetCarriage"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middleProc"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeProcessor"
           }
         }
       ]

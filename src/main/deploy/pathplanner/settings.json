@@ -15,6 +15,7 @@
     "tests"
   ],
   "autoFolders": [
+    "middle",
     "left",
     "right",
     "tests"

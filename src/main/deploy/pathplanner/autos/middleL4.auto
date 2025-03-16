@@ -34,18 +34,6 @@
           "data": {
             "name": "resetCarriage"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middleProc"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeProcessor"
-          }
         }
       ]
     }
