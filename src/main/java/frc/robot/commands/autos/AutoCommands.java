@@ -16,9 +16,9 @@ public class AutoCommands{
                 carriage.setPositionCommand(carriageValue),
 			    elevator.setTargetPositionCommand(elevatorValue)
             ),
-            new WaitCommand(4),
+            new WaitCommand(3.5),
             new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 2)
+                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 4)
                 // carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE)
             ),
             new WaitCommand(1)
