@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
+import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 
 public class AutoCommands{
@@ -14,12 +15,13 @@ public class AutoCommands{
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 carriage.setPositionCommand(carriageValue),
-			    elevator.setTargetPositionCommand(elevatorValue)
+			    elevator.setTargetPositionCommand(elevatorValue),
+                carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
             ),
             new WaitCommand(3.5),
             new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 4)
-                // carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE)
+                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 4),
+                carriage.setIntakeCommand(CarriageIntakeValue.STOP)
             ),
             new WaitCommand(1)
         );
