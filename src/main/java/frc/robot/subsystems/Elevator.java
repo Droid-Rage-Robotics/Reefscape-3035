@@ -32,13 +32,13 @@ public class Elevator extends ElevatorTemplate {
         CLIMB(0),
         
         L1(0),//5
-        L2(1.5),//8
-        L3(23.7),//25
+        L2(4),//8
+        L3(18.4),//29
 
-        L4(54.5),
+        L4(53.5),
   
-        ALGAE_LOW(2),
-        ALGAE_HIGH(26),
+        ALGAE_LOW(14),
+        ALGAE_HIGH(28.3),
         BARGE(54.5)
         ;
 

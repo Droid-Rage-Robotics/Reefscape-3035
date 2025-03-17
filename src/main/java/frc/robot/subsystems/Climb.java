@@ -18,16 +18,17 @@ import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 200;
-        public static final double MIN_POSITION = 40;
+        public static final double MAX_POSITION = 300;
+        public static final double MIN_POSITION = 50;
         public static final double OFFSET = Math.PI/2;
 
 
     }
     
-    public static double climb = 90;//48
-    public static double hold = 180;
-//3 4:1s
+    public static double climb = 68;//48
+    public static double hold = 290;
+    // public static double climbMore = 60;
+//3 4:1s+
 //64
 //12
     private static TalonEx motor = TalonEx.create(16)
@@ -52,14 +53,14 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(20,0,0), //kp: 5.2,7
+        new PIDController(31,0,0), //kp: 5.2,7
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.FEEDFORWARD, "Climb", 0);
         motor.setIsEnabled(isEnabled);
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
-        setTargetPosition(climb);
+        setTargetPosition(90);
 
     }
 }

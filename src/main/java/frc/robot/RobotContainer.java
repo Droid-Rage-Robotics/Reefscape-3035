@@ -56,9 +56,12 @@ public class RobotContainer {
 				.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 				.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 
-		driver.leftBumper()
-			.whileTrue(climb.setTargetPositionCommand(Climb.hold))
-			.onFalse(climb.setTargetPositionCommand(Climb.climb));
+		driver.povUp()
+			.onTrue(climb.setTargetPositionCommand(Climb.hold));
+		driver.povDown()
+			.onTrue(climb.setTargetPositionCommand(Climb.climb));
+		driver.povRight()
+			.onTrue(climb.setTargetPositionCommand(climb.getTargetPosition()-5));
 
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));

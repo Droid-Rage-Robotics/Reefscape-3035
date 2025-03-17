@@ -63,6 +63,7 @@ public class AutoChooser {
             new SequentialCommandGroup(
                 new TeleopCommands().goL4(elevator, carriage),
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
+                new WaitCommand(1.3),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
             )
         );
@@ -148,10 +149,13 @@ public class AutoChooser {
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
         autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleL1", Autos.middle(drive, elevator, carriage, vision, "L1"));
+        autoChooser.addOption("middleL1", Autos.middleL1(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
         autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
         autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
+        autoChooser.setDefaultOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
+
+        //middleL4Algae
 
         // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
@@ -159,7 +163,7 @@ public class AutoChooser {
 
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
         // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
-        autoChooser.setDefaultOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
+        autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
 
     }
 

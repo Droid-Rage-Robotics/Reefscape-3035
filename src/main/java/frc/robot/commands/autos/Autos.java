@@ -80,9 +80,25 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command middleL1(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "middleL1")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
     public static Command middle(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision, String score) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "middle" + score)
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
+    public static Command middleL4Algae(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "middleL4Algae")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()

@@ -31,16 +31,16 @@ public class Carriage {
         // HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
-        INTAKE_GROUND(185,135),
-        ALGAE_LOW(110, 170),
-        ALGAE_HIGH(ALGAE_LOW),
-        L1(105, 228),
-        L2(105, 223),
-        L3(L2),//121//224.
+        INTAKE_GROUND(197 ,139),
+        ALGAE_LOW(113, 214),
+        ALGAE_HIGH(112, 203),
+        L1(105, 234),
+        L2(105, 233),
+        L3(105, 232),//121//224.
 
-        L4(116,235),
+        L4(116,241),
         
-        BARGE(116, 110),
+        BARGE(116, 113),
         BARGE_HOLD(130,130),
         PROCESSOR(105, 136),
 
