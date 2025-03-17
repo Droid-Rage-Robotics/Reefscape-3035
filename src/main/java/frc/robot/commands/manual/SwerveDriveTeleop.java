@@ -25,14 +25,14 @@ public class SwerveDriveTeleop extends Command {
     private volatile double xSpeed, ySpeed, turnSpeed, turnSetPoint;
     private Rotation2d heading;
     // private double turnSetPoint = 0;
-    private static final PIDController antiTipY = 
-        new PIDController(0.006, 0, 0.0005);
-    private static final PIDController antiTipX = 
-        new PIDController(0.006, 0, 0.0005);
-    private static final PIDController turnPID = new PIDController(.03, 0, 0);
+    // private static final PIDController antiTipY = 
+    //     new PIDController(0.006, 0, 0.0005);
+    // private static final PIDController antiTipX = 
+    //     new PIDController(0.006, 0, 0.0005);
+    // private static final PIDController turnPID = new PIDController(.03, 0, 0);
 
-    private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
-    private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
+    // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
+    // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
     public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
@@ -40,8 +40,7 @@ public class SwerveDriveTeleop extends Command {
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
         // this.turn180Supplier = ()->driver.x().getAsBoolean();
-        antiTipX.setTolerance(25);
-        antiTipY.setTolerance(25);
+        // antiTipX.setTolerance(2);
         // turnPID.setTolerance(1);
 
 

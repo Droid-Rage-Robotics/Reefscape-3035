@@ -26,8 +26,8 @@ public class Carriage {
     
     public enum CarriageValue{
         START(45, 230),
-        INTAKE_HPS(72, 228),
-        INTAKE_HPS_BLOCK(90, 213), //When Blocked by a coral at HPS
+        INTAKE_HPS(72, 230),
+        INTAKE_HPS_BLOCK(90, 216), //When Blocked by a coral at HPS
         // HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
@@ -40,7 +40,8 @@ public class Carriage {
 
         L4(116,241),
         
-        BARGE(116, 113),
+        BARGE(116, 133
+        ),
         BARGE_HOLD(130,130),
         PROCESSOR(105, 136),
 
@@ -158,9 +159,9 @@ public class Carriage {
                 );
                 case BARGE ->
                     new SequentialCommandGroup(
-                        pivot.setTargetPositionCommand(109),
+                        pivot.setTargetPositionCommand(123),
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(3.6),
+                        new WaitCommand(.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );            
                 default -> 
