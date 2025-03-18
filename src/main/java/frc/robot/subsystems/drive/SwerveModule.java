@@ -51,8 +51,8 @@ public class SwerveModule {
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
-        public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 50;
-        public static final double DRIVE_STATOR_CURRENT_LIMIT = 90;   
+        public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 35;//50, 40
+        public static final double DRIVE_STATOR_CURRENT_LIMIT = 75;   //90, 80
         public static final double TURN_SUPPLY_CURRENT_LIMIT = 80;
     }
 

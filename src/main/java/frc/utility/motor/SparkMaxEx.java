@@ -52,9 +52,9 @@ public class SparkMaxEx extends CANMotorEx{
         if(isEnabledWriter.get()){
             sparkMax.set(power);
         }
-        if(DroidRageConstants.removeWriterWriter.get()){
-            outputWriter.set(power);
-        }
+        // if(DroidRageConstants.removeWriterWriter.get()){
+        //     outputWriter.set(power);
+        // }
     }
 
     @Override
@@ -62,9 +62,9 @@ public class SparkMaxEx extends CANMotorEx{
         if(isEnabledWriter.get()){
             sparkMax.setVoltage(outputVolts);
         }
-        if(DroidRageConstants.removeWriterWriter.get()){
-            outputWriter.set(outputVolts);
-        }
+        // if(DroidRageConstants.removeWriterWriter.get()){
+        //     outputWriter.set(outputVolts);
+        // }
     }
 
     @Override

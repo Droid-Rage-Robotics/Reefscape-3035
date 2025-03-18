@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
         new Pivot(true),
         new Intake(true)
     );
-    private Climb climb = new Climb(false);
+    // private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
         // carriage.getArm().setTargetPosition(Math.toDegrees(carriage.getArm().getEncoderPosition()));
         // carriage.getPivot().setTargetPosition(Math.toDegrees(carriage.getPivot().getEncoderPosition()));
 
-        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb);
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage);
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
         // robotContainer.testDrive(drive, vision);

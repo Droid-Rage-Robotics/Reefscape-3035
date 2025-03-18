@@ -13,7 +13,7 @@ public abstract class CANMotorEx {
     protected double positionConversionFactor;
     protected double velocityConversionFactor;
     protected ShuffleboardValue<Boolean> isEnabledWriter;
-    protected ShuffleboardValue<Double> outputWriter;
+    // protected ShuffleboardValue<Double> outputWriter;
     protected String subSystemName;
     protected Alert tempAlert;
     public int motorID;
@@ -61,9 +61,9 @@ public abstract class CANMotorEx {
                 .create(isEnabled, motorID + " Is Enabled", subSystemName)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build();
-            outputWriter = ShuffleboardValue
-                .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)
-                .build();
+            // outputWriter = ShuffleboardValue
+            //     .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)
+            //     .build();
             tempAlert = new Alert("Temperature Warning: Motor " + motorID, AlertType.kWarning);
             return new CurrentLimitBuilder();
 

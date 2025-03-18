@@ -39,8 +39,8 @@ public class RobotContainer {
 	public void configureTeleOpBindings(
 		SwerveDrive drive,
 		Elevator elevator,
-		Carriage carriage, 
-		Climb climb
+		Carriage carriage
+		// Climb climb
 		) {
 		
 		// Slow Mode and Gyro Reset in the Default Command
@@ -56,12 +56,12 @@ public class RobotContainer {
 				.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 				.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 
-		driver.povUp()
-			.onTrue(climb.setTargetPositionCommand(Climb.hold));
-		driver.povDown()
-			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-		driver.povRight()
-			.onTrue(climb.setTargetPositionCommand(climb.getTargetPosition()-5));
+		// driver.povUp()
+		// 	.onTrue(climb.setTargetPositionCommand(Climb.hold));
+		// driver.povDown()
+		// 	.onTrue(climb.setTargetPositionCommand(Climb.climb));
+		// driver.povRight()
+		// 	.onTrue(climb.setTargetPositionCommand(climb.getTargetPosition()-5));
 
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));

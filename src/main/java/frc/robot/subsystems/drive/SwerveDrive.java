@@ -97,32 +97,32 @@ public class SwerveDrive extends SubsystemBase {
     );
 
     private volatile Speed speed = Speed.NORMAL;
-    private volatile TippingState tippingState = TippingState.ANTI_TIP;
+    // private volatile TippingState tippingState = TippingState.ANTI_TIP;
     ///////
 
     
     // Shuffleboard values
-    private final ShuffleboardValue<String> tippingStateWriter = 
-        ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", this).build();
+    // private final ShuffleboardValue<String> tippingStateWriter = 
+    //     ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", this).build();
     private final ShuffleboardValue<String> speedStateWriter = 
         ShuffleboardValue.create(speed.name(), "Current/State/Speed", this).build();
     
-    private final ShuffleboardValue<Double> headingWriter = 
-        ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
-    private final ShuffleboardValue<Double> rollWriter = 
-        ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
-    private final ShuffleboardValue<Double> pitchWriter =   
-        ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
-    private final ShuffleboardValue<String> locationWriter = 
-        ShuffleboardValue.create("", "Current/Robot Location", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Double> headingWriter = 
+    //     ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Double> rollWriter = 
+    //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Double> pitchWriter =   
+    //     ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
+    // private final ShuffleboardValue<String> locationWriter = 
+    //     ShuffleboardValue.create("", "Current/Robot Location", this.getSubsystem()).build();
     private final ShuffleboardValue<Boolean> isEnabledWriter = 
         ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
         .withWidget(BuiltInWidgets.kToggleSwitch)
         .build();
     protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
         ("none", "Current/Pose", this.getSubsystem()).build();
-    private final ShuffleboardValue<Double> forwardVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Current/Velocity", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Double> forwardVelocityWriter = 
+        // ShuffleboardValue.create(0.0, "Current/Velocity", this.getSubsystem()).build();
 
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
@@ -159,12 +159,12 @@ public class SwerveDrive extends SubsystemBase {
         );
 
         drivePoseWriter.set(getPose().toString());
-        headingWriter.set(getHeading());
-        rollWriter.set(getRoll());
-        pitchWriter.set(getPitch());
-        locationWriter.set(getPose().getTranslation().toString());
-        forwardVelocityWriter.write(getForwardVelocity());
-        field.setRobotPose(getPose());
+        // headingWriter.set(getHeading());
+        // rollWriter.set(getRoll());
+        // pitchWriter.set(getPitch());
+        // locationWriter.set(getPose().getTranslation().toString());
+        // forwardVelocityWriter.write(getForwardVelocity());
+        // field.setRobotPose(getPose());
     }
 
     @Override
@@ -181,9 +181,9 @@ public class SwerveDrive extends SubsystemBase {
         };
     }
 
-    public TippingState getTippingState() {
-        return tippingState;
-    }
+    // public TippingState getTippingState() {
+    //     return tippingState;
+    // }
 
     public double getHeading() {//Yaw
         return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
@@ -279,10 +279,10 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public void setTippingState(TippingState tippingState) {
-        this.tippingState = tippingState;
-        tippingStateWriter.set(tippingState.name());
-    }
+    // public void setTippingState(TippingState tippingState) {
+    //     this.tippingState = tippingState;
+    //     tippingStateWriter.set(tippingState.name());
+    // }
 
     public Command setSpeed(Speed speed) {
         return runOnce(() -> {

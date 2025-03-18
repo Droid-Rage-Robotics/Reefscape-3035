@@ -83,9 +83,9 @@ public class TalonEx extends CANMotorEx {
         if (isEnabledWriter.get()) {
             talon.set(power);
         }
-        if (DroidRageConstants.removeWriterWriter.get()) {
-            outputWriter.set(power);
-        }
+        // if (DroidRageConstants.removeWriterWriter.get()) {
+        //     outputWriter.set(power);
+        // }
         
         tempAlertLogic();
     }
@@ -95,9 +95,9 @@ public class TalonEx extends CANMotorEx {
         if(isEnabledWriter.get()){
             talon.setVoltage(outputVolts);
         }
-        if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
-            outputWriter.set(outputVolts);
-        }
+        // if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
+        //     outputWriter.set(outputVolts);
+        // }
         
         tempAlertLogic();
     }

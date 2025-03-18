@@ -157,7 +157,7 @@ public final class DroidRageConstants {
     public static CANBus driveCanBus = new CANBus("drive");//"drive"
     // public static boolean removeWriter = true; //Can be used to turn off certain writers, hopefulyl preventing loop overruns
     public static ShuffleboardValue<Boolean> removeWriterWriter = 
-        ShuffleboardValue.create(true, "RemoveWritersWriter", Robot.class.getSimpleName())
+        ShuffleboardValue.create(false, "RemoveWritersWriter", Robot.class.getSimpleName())
         .withSize(1, 3)
         .build();
 
