@@ -45,9 +45,9 @@ public class AutoAim extends Command {
   @Override
   public void execute(){
     if(vision.gettV()){
-      drive.drive(distanceController.calculate(vision.gettY(), -2),
+      drive.drive(distanceController.calculate(vision.gettY(), -2),//ty=x
           0,
-          turnController.calculate(vision.gettX(), angleGoal));//
+          turnController.calculate(vision.gettX(), angleGoal));//tx = turn
     }
   }
 

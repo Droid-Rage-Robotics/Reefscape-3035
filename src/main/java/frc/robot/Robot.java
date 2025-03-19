@@ -24,7 +24,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false), 
@@ -117,23 +117,10 @@ public class Robot extends TimedRobot {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
-
-        // carriage.getArm().setTargetPosition(Math.toDegrees(carriage.getArm().getEncoderPosition()));
-        // carriage.getPivot().setTargetPosition(Math.toDegrees(carriage.getPivot().getEncoderPosition()));
-
-        robotContainer.configureTeleOpBindings(drive, elevator, carriage);
+        drive.changeAllianceRotation();
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage, vision);
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
-        // robotContainer.testDrive(drive, vision);
-        // robotContainer.testIntake(motor);
-        // robotContainer.testMotor(motorR, motorL);
-        // robotContainer.testMotor(motor);
-        // robotContainer.testClimb(climb);
-        // robotContainer.testElevator(elevator);
-
-        // robotContainer.testClimb(climb);
-
-        // robotContainer.testCANivore(driveMotor, motor);
         // teleopRan = true;
     }
 
@@ -165,7 +152,6 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
         autonomousCommand.cancel();
         }
-        drive.changeAllianceRotation();
     }
 
         

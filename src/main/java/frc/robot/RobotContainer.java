@@ -39,8 +39,9 @@ public class RobotContainer {
 	public void configureTeleOpBindings(
 		SwerveDrive drive,
 		Elevator elevator,
-		Carriage carriage
-		// Climb climb
+		Carriage carriage,
+		// Climb climb,
+		Vision vision
 		) {
 		
 		// Slow Mode and Gyro Reset in the Default Command
@@ -48,13 +49,17 @@ public class RobotContainer {
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 
+		driver.povUp().onTrue(new AutoAim(drive, vision, driver, 7));
 		driver.rightTrigger()
-				.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-				// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
-				.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
+			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
+			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
+			.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
 		driver.leftTrigger()
-				.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
-				.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
+			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
+		driver.x()
+			.onTrue(new TeleopCommands().barge(elevator, carriage));
+		// driver.x().onTrue(new Turn180Degrees(drive, driver));
 
 		// driver.povUp()
 		// 	.onTrue(climb.setTargetPositionCommand(Climb.hold));
@@ -106,18 +111,7 @@ public class RobotContainer {
 		operator.leftBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_LOW))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.ALGAE_LOW));
-		driver.x()
-			.onTrue(new TeleopCommands().barge(elevator, carriage));
-	}
-
-	public void testDrive(SwerveDrive drive, Vision vision){
-		// drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver));
-
-		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
-
-		driver.povUp().onTrue(new AutoAim(drive, vision, driver,7));
-		driver.x().onTrue(new Turn180Degrees(drive,driver));
-
+		
 	}
 
 	public void driveSysID(DriveSysID sysID){
@@ -125,7 +119,6 @@ public class RobotContainer {
 		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
 	}
 
 	public void sysID(SysID sysID){
@@ -133,6 +126,5 @@ public class RobotContainer {
 		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
 	}
 }

@@ -22,11 +22,11 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
 
-    Pose3d visionMeasurement3d;
+    // Pose3d visionMeasurement3d;
 
-    Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
+    // Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
     // AprilTagFieldLayout layout = new AprilTagFieldLayout(null);
-    // public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
     // AprilTagDetector;
     // AprilTagDetection detection= new AprilTagDetection("", 1, 0, 0, null, gettX(), gettA(), null)
@@ -42,20 +42,34 @@ public class Vision extends SubsystemBase {
         (false, "Vision/tV", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<String> pose2dWriter = ShuffleboardValue.create
         ("none", "Vision/Pose2d", Vision.class.getSimpleName()).build();
-    HttpCamera httpCamera = new
-        HttpCamera("Limelight", "http://roborio-3035-FRC.local:5801");
-    // http://roborio-2928-FRC.local:5801 - Works
+    // HttpCamera leftCamera = new
+    //     HttpCamera("LimelightLeft", "http://10.30.35.11:5800");// http://limelight-left.local:5800
+    // HttpCamera rightCamera = new 
+    //     HttpCamera("LimelightRight", "http://10.30.35.12:5801");//http://limelight-right.local:5800
+    // http://10.30.35.11:5800
+    // http://10.30.35.12:5800
+
+
+
+    // http://roborio-3035-FRC.local:5801 - Works
     //Set Up the team number - http://limelight.local:5801/
 
-    LimelightHelpers.LimelightResults llresult;
+    // LimelightHelpers.LimelightResults llresult;
     // Initialize Limelight network tables
     public Vision() {
         // LimelightHelpers.setLEDMode_PipelineControl("");
         // LimelightHelpers.setLEDMode_ForceOff("");
         LimelightHelpers.setPipelineIndex("", 0);
         LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        CameraServer.addCamera(httpCamera);
-        Shuffleboard.getTab("Misc").add(httpCamera).withSize(3, 3);
+        // CameraServer.startAutomaticCapture(new HttpCamera("Left", "http://10.30.35.12:5800"));
+        // CameraServer.startAutomaticCapture(new HttpCamera("right", "http://10.30.35.12:5801"));
+
+        // CameraServer.addCamera(leftCamera);
+
+        // // CameraServer.addCamera(rightCamera);
+
+        Shuffleboard.getTab("Misc").add(new HttpCamera("Left", "http://10.30.35.12:5800")).withSize(3, 3);
+        Shuffleboard.getTab("Misc").add(new HttpCamera("right", "http://10.30.35.12:5801")).withSize(3, 3);
 
         for (int port = 5800; port <= 5809; port++) {
             PortForwarder.add(port, "limelight.local", port);
