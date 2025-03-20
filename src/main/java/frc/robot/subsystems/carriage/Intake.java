@@ -20,7 +20,7 @@ public class Intake extends IntakeTemplate {
         public static final double MIN_SPEED = -300;
     }
     private final ShuffleboardValue<Boolean> isElementInWriter = 
-        ShuffleboardValue.create(false, "IsElement", this.getSubsystem())
+        ShuffleboardValue.create(false, "IsElement", Carriage.class.getSimpleName())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .build();
 
@@ -28,7 +28,7 @@ public class Intake extends IntakeTemplate {
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
-        .withSubsystemName("Intake")
+        .withSubsystemName(Carriage.class.getSimpleName())
         .withIsEnabled(true)
         .withCurrentLimit(30);//60,50
 
@@ -40,7 +40,7 @@ public class Intake extends IntakeTemplate {
         new SimpleMotorFeedforward(.0, .6, 0.3),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
-        Control.FEEDFORWARD, "Intake", 0);
+        Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
     }

@@ -20,13 +20,14 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         double maxPosition,
         double minPosition,
         double offset,
-        Control control,    
+        Control control,
+        String tabName,
         String subsystemName,
         int mainNum,
         EncoderEx encoder
     ){
         super(motors, controller, feedforward, constraints,
-        maxPosition, minPosition, offset, control, 
+        maxPosition, minPosition, offset, control, tabName,
         subsystemName, mainNum);
         this.encoder=encoder;
 

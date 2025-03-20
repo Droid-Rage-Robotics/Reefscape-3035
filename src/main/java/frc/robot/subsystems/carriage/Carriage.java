@@ -22,7 +22,8 @@ import lombok.Getter;
 public class Carriage {
 
     private final ShuffleboardValue<String> positionWriter = 
-        ShuffleboardValue.create("None", "CarriagePosition", "Carriage").build();
+        ShuffleboardValue.create("None", "CarriagePosition", "Carriage")
+        .build();
     
     public enum CarriageValue{
         START(45, 230),

@@ -21,7 +21,7 @@ public class IntakeTemplate extends SubsystemBase{
     private final ShuffleboardValue<Double> speedWriter;
     private final ShuffleboardValue<Double> targetWriter;
     private final ShuffleboardValue<Double> voltageWriter;
-    private final ShuffleboardValue<Double> errorWriter;
+    // private final ShuffleboardValue<Double> errorWriter;
     private final int mainNum;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -36,6 +36,7 @@ public class IntakeTemplate extends SubsystemBase{
         double maxSpeed,
         double minSpeed,
         Control control,
+        String tabName,
         String name,
         int mainNum
     ){
@@ -50,17 +51,17 @@ public class IntakeTemplate extends SubsystemBase{
         profile = new TrapezoidProfile(constraints);
 
         speedWriter = ShuffleboardValue
-            .create(0.0, name+"/Speed", name)
+            .create(0.0, name+"/Speed", tabName)
             .build();
         targetWriter = ShuffleboardValue
-            .create(0.0, name+"/TargetSpeed", name)
+            .create(0.0, name+"/TargetSpeed", tabName)
             .build();
         voltageWriter = ShuffleboardValue
-            .create(0.0, name+"/Voltage", name)
+            .create(0.0, name+"/Voltage", tabName)
             .build();
-        errorWriter = ShuffleboardValue
-            .create(0.0, name + "/Error", name)
-            .build();
+        // errorWriter = ShuffleboardValue
+        //     .create(0.0, name + "/Error", name)
+        //     .build();
     }
 
     @Override
@@ -126,7 +127,7 @@ public class IntakeTemplate extends SubsystemBase{
 
     public double getEncoderPosition() {
         double position = motors[mainNum].getVelocity();
-        errorWriter.write(getTargetPosition()-position);
+        // errorWriter.write(getTargetPosition()-position);
         speedWriter.write(position);
         return position;
     }

@@ -57,7 +57,7 @@ public class Climb extends ArmTemplate {
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.FEEDFORWARD, "Climb", 0);
+        Control.FEEDFORWARD, "ClimbTAB", "Climb", 0);
         motor.setIsEnabled(isEnabled);
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
         setTargetPosition(90);

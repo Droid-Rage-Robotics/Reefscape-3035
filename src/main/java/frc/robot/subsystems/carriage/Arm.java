@@ -23,7 +23,7 @@ public class Arm extends ArmAbsoluteTemplate {
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
-        .withSubsystemName("arm")
+        .withSubsystemName(Carriage.class.getSimpleName())
         .withIsEnabled(true)
         .withCurrentLimit(50);
     
@@ -43,7 +43,7 @@ public class Arm extends ArmAbsoluteTemplate {
         new TrapezoidProfile.Constraints(.1, .1),
         Constants.MAX_POSITION, Constants.MIN_POSITION, 
                 Constants.OFFSET, 
-        Control.FEEDFORWARD, "arm", 0, encoder);
+        Control.FEEDFORWARD, Carriage.class.getSimpleName(),"Arm", 0, encoder);
         motor.setIsEnabled(isEnabled);
     }
 }

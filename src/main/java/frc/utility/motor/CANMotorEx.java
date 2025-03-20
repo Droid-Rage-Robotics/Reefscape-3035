@@ -50,16 +50,15 @@ public abstract class CANMotorEx {
         }
     }
     public class SubstemNameBuilder {
-        public IsEnabledBuilder withSubsystemName(String nameString) {
-            subSystemName = nameString;
+        public IsEnabledBuilder withSubsystemName(String subsystemName) {
+            subSystemName = subsystemName;
             return new IsEnabledBuilder();
         }
     }
     public class IsEnabledBuilder {
         public CurrentLimitBuilder withIsEnabled(boolean isEnabled) {
             isEnabledWriter = ShuffleboardValue
-                .create(isEnabled, motorID + " Is Enabled", subSystemName)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .create(isEnabled, "Motors/"+ motorID + " Is Enabled", subSystemName)
                 .build();
             // outputWriter = ShuffleboardValue
             //     .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)

@@ -37,6 +37,7 @@ public class ArmTemplate extends SubsystemBase {
         double minPosition,
         double offset,
         Control control,
+        String tabName,
         String subsystemName,
         int mainNum
     ){
@@ -52,19 +53,19 @@ public class ArmTemplate extends SubsystemBase {
         profile = new TrapezoidProfile(constraints);
 
         positionDegreeWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/PositionDegree", subsystemName)
+            .create(0.0, subsystemName+"/PositionDegree", tabName)
             .build();
         targetDegreeWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/TargetDegree", subsystemName)
+            .create(0.0, subsystemName+"/TargetDegree", tabName)
             .build();
         positionRadianWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/PositionRadian", subsystemName)
+            .create(0.0, subsystemName+"/PositionRadian", tabName)
             .build();
         targetRadianWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/TargetRadian", subsystemName)
+            .create(0.0, subsystemName+"/TargetRadian", tabName)
             .build();
         voltageWriter = ShuffleboardValue
-                .create(0.0, subsystemName + "/Voltage", subsystemName)
+                .create(0.0, subsystemName + "/Voltage", tabName)
                 .build();
     }
 
