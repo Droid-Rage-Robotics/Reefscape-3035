@@ -1,107 +1,106 @@
 package frc.robot.subsystems.vision;
 
-import java.util.Optional;
-
-import edu.wpi.first.apriltag.AprilTagDetection;
-import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.apriltag.AprilTagPoseEstimator;
-import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DroidRageConstants;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
-
-    // Pose3d visionMeasurement3d;
-
-    // Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
-    // AprilTagFieldLayout layout = new AprilTagFieldLayout(null);
     public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
-    // AprilTagDetector;
-    // AprilTagDetection detection= new AprilTagDetection("", 1, 0, 0, null, gettX(), gettA(), null)
-    // AprilTagPoseEstimator estimator = new AprilTagPoseEstimator(config);
+    protected final ShuffleboardValue<Double> tARWriter = ShuffleboardValue
+        .create(0.0, "R/tA", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> tXRWriter = ShuffleboardValue
+        .create(0.0, "R/tX", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> tYRWriter = ShuffleboardValue
+        .create(0.0, "R/tY", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Boolean> tVRWriter = ShuffleboardValue
+        .create(false, "R/tV", Vision.class.getSimpleName()).build();
 
-    protected final ShuffleboardValue<Double> tAWriter = ShuffleboardValue.create
-        (0.0, "Vision/tA", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> tXWriter = ShuffleboardValue.create
-        (0.0, "Vision/tX", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> tYWriter = ShuffleboardValue.create
-        (0.0, "Vision/tY", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Boolean> tVWriter = ShuffleboardValue.create
-        (false, "Vision/tV", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<String> pose2dWriter = ShuffleboardValue.create
-        ("none", "Vision/Pose2d", Vision.class.getSimpleName()).build();
-    // HttpCamera leftCamera = new
-    //     HttpCamera("LimelightLeft", "http://10.30.35.11:5800");// http://limelight-left.local:5800
-    // HttpCamera rightCamera = new 
-    //     HttpCamera("LimelightRight", "http://10.30.35.12:5801");//http://limelight-right.local:5800
-    // http://10.30.35.11:5800
-    // http://10.30.35.12:5800
+    protected final ShuffleboardValue<Double> tALWriter = ShuffleboardValue
+        .create(0.0, "L/tA", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> tXLWriter = ShuffleboardValue
+        .create(0.0, "L/tX", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> tYLWriter = ShuffleboardValue
+        .create(0.0, "L/tY", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
+        .create(false, "L/tV", Vision.class.getSimpleName()).build();
+    private int targetIds[];
+    // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+
+    // http://10.30.35.11:5800/
+    // http://roborio-2928-FRC.local:5801 - Works
+    // Set Up the team number - http://limelight.local:5801/
 
 
-
-    // http://roborio-3035-FRC.local:5801 - Works
-    //Set Up the team number - http://limelight.local:5801/
-
-    // LimelightHelpers.LimelightResults llresult;
     // Initialize Limelight network tables
     public Vision() {
-        // LimelightHelpers.setLEDMode_PipelineControl("");
-        // LimelightHelpers.setLEDMode_ForceOff("");
-        LimelightHelpers.setPipelineIndex("", 0);
-        LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        // CameraServer.startAutomaticCapture(new HttpCamera("Left", "http://10.30.35.12:5800"));
-        // CameraServer.startAutomaticCapture(new HttpCamera("right", "http://10.30.35.12:5801"));
-
-        // CameraServer.addCamera(leftCamera);
-
-        // // CameraServer.addCamera(rightCamera);
-
-        Shuffleboard.getTab("Misc").add(new HttpCamera("Left", "http://10.30.35.12:5800")).withSize(3, 3);
-        Shuffleboard.getTab("Misc").add(new HttpCamera("right", "http://10.30.35.12:5801")).withSize(3, 3);
-
+        LimelightHelpers.setPipelineIndex   (DroidRageConstants.rightLimelight, 0);
+        LimelightHelpers.setCropWindow      (DroidRageConstants.rightLimelight, -1, 1, -1, 1);
+        // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
+        LimelightHelpers.setCameraPose_RobotSpace(DroidRageConstants.rightLimelight, 
+            0.,    // Forward offset (meters)
+            0.0,    // Side offset (meters)
+            0.,    // Height offset (meters)
+            0.0,    // Roll (degrees)
+            10.0,   // Pitch (degrees)
+            0.0     // Yaw (degrees)
+        );
+        LimelightHelpers.setPipelineIndex   (DroidRageConstants.leftLimelight, 0);
+        LimelightHelpers.setCropWindow      (DroidRageConstants.leftLimelight, -1, 1, -1, 1);
+        // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
+        LimelightHelpers.setCameraPose_RobotSpace(DroidRageConstants.leftLimelight, 
+            0.,    // Forward offset (meters)
+            0.0,    // Side offset (meters)
+            0.,    // Height offset (meters)
+            0.0,    // Roll (degrees)
+            10.0,   // Pitch (degrees)
+            0.0     // Yaw (degrees)
+        );
+        
         for (int port = 5800; port <= 5809; port++) {
             PortForwarder.add(port, "limelight.local", port);
         }
 
+        
+        
+        // CameraServer.addCamera(rightCam);
+        // Shuffleboard.getTab("Misc").add(rightCam).withSize(3, 3);
+        // CameraServer.addCamera(leftCam);
+        // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
+        
+
         // Optional<Alliance> ally = DriverStation.getAlliance();
         // if (ally.isPresent()) {
-        //     if (ally.get() == Alliance.Red) {
-        //         Constants.VisionConstants.SpeakerID = 4;
-        //         Constants.VisionConstants.farSpeakerID = 1;
-        //         Constants.VisionConstants.AmpID = 5;
-        //         Constants.side = "red";
-        //     }
-        //     if (ally.get() == Alliance.Blue) {
-        //         Constants.VisionConstants.SpeakerID = 7;
-        //         Constants.VisionConstants.farSpeakerID = 2;
-        //         Constants.VisionConstants.AmpID = 6;
-        //         Constants.side = "blue";
-        //     }
-        // }
-
-        // visionAlert = new Alert("Limelight is not connected! Vision will be hindered!", Alert.AlertType.WARNING);
+        if (DriverStation.getAlliance().get() == Alliance.Red) {
+            targetIds = new int[] { 15 };
+        } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+            targetIds = new int[] { 1, 2, 3, 4};
+        }
+        // visionAlert = new Alert("Limelight is not connected! Vision will be
+        // hindered!", Alert.AlertType.WARNING);
 
     }
 
     @Override
     public void periodic() {
-        tAWriter.set(LimelightHelpers.getTA(""));
-        tXWriter.set(LimelightHelpers.getTX(""));
-        tYWriter.set(LimelightHelpers.getTY(""));
-        tVWriter.set(LimelightHelpers.getTV(""));
-        pose2dWriter.set(getPose().toString());
+        tARWriter.set(LimelightHelpers.getTA(DroidRageConstants.rightLimelight));
+        tXRWriter.set(LimelightHelpers.getTX(DroidRageConstants.rightLimelight));
+        tYRWriter.set(LimelightHelpers.getTY(DroidRageConstants.rightLimelight));
+        tVRWriter.set(LimelightHelpers.getTV(DroidRageConstants.rightLimelight));
+
+        tALWriter.set(LimelightHelpers.getTA(DroidRageConstants.leftLimelight));
+        tXLWriter.set(LimelightHelpers.getTX(DroidRageConstants.leftLimelight));
+        tYLWriter.set(LimelightHelpers.getTY(DroidRageConstants.leftLimelight));
+        tVLWriter.set(LimelightHelpers.getTV(DroidRageConstants.leftLimelight));
     }
 
     @Override
@@ -109,28 +108,36 @@ public class Vision extends SubsystemBase {
         periodic();
     }
 
-    //tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    public double gettX(){
-        return tXWriter.get();
+    // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+    public double gettX() {
+        return tXRWriter.get();
     }
-    //ta Target Area (0% of image to 100% of image)
-    public double gettA(){
-        return tAWriter.get();
+
+    // ta Target Area (0% of image to 100% of image)
+    public double gettA() {
+        return tARWriter.get();
     }
-    //ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    public double gettY(){
-        return tYWriter.get();
+
+    // ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+    public double gettY() {
+        return tYRWriter.get();
     }
-    //tv Whether the limelight has any valid targets (0 or 1)
-    //isConnected
-    //0 is __ and 1 is __
-    public boolean gettV(){
-        return tVWriter.get();
+
+    // tv Whether the limelight has any valid targets (0 or 1)
+    // isConnected
+    // 0 is __ and 1 is __
+    public boolean gettV() {
+        return tVRWriter.get();
     }
-    
-    public Pose2d getPose(){
-        // return LimelightHelpers.getBotPose2d("");
-        return LimelightHelpers.getBotPoseEstimate_wpiBlue("").pose;
+
+    /** The name will be which piepline to use based on which alignment direction */
+    public boolean isID(String name){
+        for (int element : targetIds) {
+            if (element == LimelightHelpers.getFiducialID(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

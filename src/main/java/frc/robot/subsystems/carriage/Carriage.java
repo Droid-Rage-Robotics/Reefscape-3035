@@ -177,7 +177,7 @@ public class Carriage {
     }
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
-        DroidRageConstants.setElement(position);
+        // DroidRageConstants.setElement(position);
         return Commands.sequence(
             coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
             // DroidRageConstants.setElement(getPosition())

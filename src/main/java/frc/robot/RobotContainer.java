@@ -50,6 +50,7 @@ public class RobotContainer {
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 
 		driver.povUp().onTrue(new AutoAim(drive, vision, driver, 7));
+		driver.povDown().onTrue( new InstantCommand(()->DroidRageConstants.flipAlignment()));
 		driver.rightTrigger()
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
 			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))

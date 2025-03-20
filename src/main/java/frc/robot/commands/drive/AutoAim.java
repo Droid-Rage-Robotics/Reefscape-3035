@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
@@ -13,6 +14,7 @@ public class AutoAim extends Command {
   private Vision vision;
   private CommandXboxController driver;
   private double angleGoal;
+  private String name;
   private ProfiledPIDController turnController, distanceController; // Can also use a normal PID Control
   public AutoAim(SwerveDrive drive, Vision vision, CommandXboxController driver, double angleGoal) {
     this.driver = driver;
@@ -44,10 +46,20 @@ public class AutoAim extends Command {
 
   @Override
   public void execute(){
-    if(vision.gettV()){
-      drive.drive(distanceController.calculate(vision.gettY(), -2),//ty=x
+    switch(DroidRageConstants.alignmentMode){
+      case RIGHT:
+        name = DroidRageConstants.rightLimelight;
+      case LEFT:
+        name = DroidRageConstants.leftLimelight;
+    }
+    
+    if(vision.isID(name)&&vision.gettV()){
+      drive.drive(distanceController.calculate(vision.gettY(), -2), // ty=x
           0,
-          turnController.calculate(vision.gettX(), angleGoal));//tx = turn
+          turnController.calculate(vision.gettX(), angleGoal));// tx = turn
+    } // tA forward/back
+    else{
+      drive.drive(0, 0, 0);
     }
   }
 
@@ -55,11 +67,6 @@ public class AutoAim extends Command {
   @Override
 
   public boolean isFinished() {
-    // Should be Moved to LightCommand
-    //   light.setAllColor(light.red);
-    // if(turnController.atSetpoint()&&distanceController.atSetpoint()){
-    //   light.setAllColor(light.green);
-    // }
-    return turnController.atSetpoint()&&distanceController.atSetpoint() || !driver.povUp().getAsBoolean();
+    return (turnController.atSetpoint() && distanceController.atSetpoint()) || !driver.povUp().getAsBoolean();
   }
 }
