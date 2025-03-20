@@ -32,7 +32,7 @@ public class Vision extends SubsystemBase {
         .create(0.0, "L/tY", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tV", Vision.class.getSimpleName()).build();
-    private int targetIds[];
+    public int targetIds[];
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
 
@@ -78,13 +78,12 @@ public class Vision extends SubsystemBase {
         // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
         
 
-        // Optional<Alliance> ally = DriverStation.getAlliance();
-        // if (ally.isPresent()) {
         if (DriverStation.getAlliance().get() == Alliance.Red) {
-            targetIds = new int[] { 15 };
+            targetIds = new int[] { 17 };
         } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-            targetIds = new int[] { 1, 2, 3, 4};
+            targetIds = new int[] { 15 };
         }
+        
         // visionAlert = new Alert("Limelight is not connected! Vision will be
         // hindered!", Alert.AlertType.WARNING);
 
@@ -109,25 +108,41 @@ public class Vision extends SubsystemBase {
     }
 
     // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    public double gettX() {
-        return tXRWriter.get();
+    public double gettX(String name) {
+        if(name == DroidRageConstants.leftLimelight){
+            return tXLWriter.get();
+        } else {
+            return tXRWriter.get();
+        }
     }
 
     // ta Target Area (0% of image to 100% of image)
-    public double gettA() {
-        return tARWriter.get();
+    public double gettA(String name) {
+        if (name == DroidRageConstants.leftLimelight) {
+            return tALWriter.get();
+        } else {
+            return tARWriter.get();
+        }
     }
 
     // ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    public double gettY() {
-        return tYRWriter.get();
+    public double gettY(String name) {
+        if (name == DroidRageConstants.leftLimelight) {
+            return tYLWriter.get();
+        } else {
+            return tYRWriter.get();
+        }
     }
 
     // tv Whether the limelight has any valid targets (0 or 1)
     // isConnected
     // 0 is __ and 1 is __
-    public boolean gettV() {
-        return tVRWriter.get();
+    public boolean gettV(String name) {
+        if (name == DroidRageConstants.leftLimelight) {
+            return tVLWriter.get();
+        } else {
+            return tVRWriter.get();
+        }
     }
 
     /** The name will be which piepline to use based on which alignment direction */
