@@ -16,30 +16,30 @@ public class AutoAim extends Command {
 	private CommandXboxController driver;
 	// private double angleGoal;
 	private String name;
-	private ProfiledPIDController turnController, distanceController; // Can also use a normal PID Control
+	private ProfiledPIDController turntXController, distancetYController; // Can also use a normal PID Control
 	// private double distanceTarget, turnTarget;
 	
-    protected final ShuffleboardValue<Double> distanceTarget = ShuffleboardValue
-        .create(0.0, "Target/distance", Vision.class.getSimpleName()).build();
+    protected static final ShuffleboardValue<Double> distancetYTarget = ShuffleboardValue
+        .create(0.0, "Target/distancetY", Vision.class.getSimpleName()).build();
 	
-	protected final ShuffleboardValue<Double> turnTarget = ShuffleboardValue
-			.create(0.0, "Target/turn", Vision.class.getSimpleName()).build();
+	protected static final ShuffleboardValue<Double> turntXTarget = ShuffleboardValue
+			.create(0.0, "Target/turtX", Vision.class.getSimpleName()).build();
 	public AutoAim(SwerveDrive drive, Vision vision, CommandXboxController driver) {
 	this.driver = driver;
 	// this.angleGoal = angleGoal;
-	turnController = new ProfiledPIDController(
-		0.09, //.1
+	turntXController = new ProfiledPIDController(	
+		0.0005, //.1
 		0,
 		0,
 		new TrapezoidProfile.Constraints(1.525, 1));
-	turnController.setTolerance(.5);//-27 degrees to 27 degrees
+	turntXController.setTolerance(.5);//-27 degrees to 27 degrees
 
-	distanceController = new ProfiledPIDController(
+	distancetYController = new ProfiledPIDController(
 		0.1, //.034
 		0,
 		0,
 		new TrapezoidProfile.Constraints(1.525, 1));
-	distanceController.setTolerance(.5);
+	distancetYController.setTolerance(.5);
 
 	addRequirements(drive, vision);
 	this.drive = drive;
@@ -57,20 +57,20 @@ public class AutoAim extends Command {
 		switch(DroidRageConstants.alignmentMode){
 			case RIGHT:
 				name = DroidRageConstants.rightLimelight;
-				distanceTarget.set(-6.0);
-				turnTarget.set(-3.0);
+				distancetYTarget.set(9.);
+				turntXTarget.set(2.5);
 				break;
 			case LEFT:
 				name = DroidRageConstants.leftLimelight;
-				distanceTarget.set(-12.0);
-				turnTarget.set(-8.7);
+				distancetYTarget.set(5.);
+				turntXTarget.set(-9.);
 				break;
 		}
 		//-12,-8.7
 		if(vision.isID(name)&& vision.gettV(name)){
-			drive.drive(distanceController.calculate(vision.gettY(name), distanceTarget.get()), // ty=x
+			drive.drive(distancetYController.calculate(vision.gettY(name), distancetYTarget.get()), // ty=x
 				0,
-				turnController.calculate(vision.gettX(name), turnTarget.get()));// tx = turn
+				-turntXController.calculate(vision.gettX(name), turntXTarget.get()));// tx = turn
 		} // tA forward/back
 		else{
 			drive.drive(0, 0, 0);
@@ -80,6 +80,6 @@ public class AutoAim extends Command {
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return (turnController.atSetpoint() && distanceController.atSetpoint()) || !driver.povUp().getAsBoolean();
+		return (turntXController.atSetpoint() && distancetYController.atSetpoint()) || !driver.povUp().getAsBoolean();
 	}
 }

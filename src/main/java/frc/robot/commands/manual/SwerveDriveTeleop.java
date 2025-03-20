@@ -44,8 +44,8 @@ public class SwerveDriveTeleop extends Command {
         // turnPID.setTolerance(1);
 
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
-            .whileFalse(drive.setSpeed(Speed.NORMAL));
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))//SLOW
+            .whileFalse(drive.setSpeed(Speed.SUPER_SLOW));//NORMAL
         // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
         //     .whileFalse(drive.setSpeed(Speed.SLOW));
 

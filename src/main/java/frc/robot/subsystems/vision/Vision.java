@@ -16,22 +16,22 @@ public class Vision extends SubsystemBase {
     public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
     protected final ShuffleboardValue<Double> tARWriter = ShuffleboardValue
-        .create(0.0, "R/tA", Vision.class.getSimpleName()).build();
+        .create(0.0, "R/tAR", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tXRWriter = ShuffleboardValue
-        .create(0.0, "R/tX", Vision.class.getSimpleName()).build();
+        .create(0.0, "R/tXR", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tYRWriter = ShuffleboardValue
-        .create(0.0, "R/tY", Vision.class.getSimpleName()).build();
+        .create(0.0, "R/tYR", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVRWriter = ShuffleboardValue
-        .create(false, "R/tV", Vision.class.getSimpleName()).build();
+        .create(false, "R/tVR", Vision.class.getSimpleName()).build();
 
     protected final ShuffleboardValue<Double> tALWriter = ShuffleboardValue
-        .create(0.0, "L/tA", Vision.class.getSimpleName()).build();
+        .create(0.0, "L/tAL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tXLWriter = ShuffleboardValue
-        .create(0.0, "L/tX", Vision.class.getSimpleName()).build();
+        .create(0.0, "L/tXL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tYLWriter = ShuffleboardValue
-        .create(0.0, "L/tY", Vision.class.getSimpleName()).build();
+        .create(0.0, "L/tYL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
-        .create(false, "L/tV", Vision.class.getSimpleName()).build();
+        .create(false, "L/tVL", Vision.class.getSimpleName()).build();
     public int targetIds[];
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
@@ -81,7 +81,7 @@ public class Vision extends SubsystemBase {
         if (DriverStation.getAlliance().get() == Alliance.Red) {
             targetIds = new int[] { 17 };
         } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-            targetIds = new int[] { 15 };
+            targetIds = new int[] { 22 };
         }
         
         // visionAlert = new Alert("Limelight is not connected! Vision will be
