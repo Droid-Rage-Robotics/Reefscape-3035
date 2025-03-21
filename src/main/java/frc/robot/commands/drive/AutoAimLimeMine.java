@@ -12,22 +12,22 @@ public class AutoAimLimeMine extends Command{
 	// private Light light;
 	private Vision vision;
 	private CommandXboxController driver;
-	private PIDController rotController =new PIDController(.05,0,0);
+	private PIDController rotController =new PIDController(.062,0,0);
 	private PIDController xController = new PIDController(.1, 0, 0);
 
 	public AutoAimLimeMine(SwerveDrive drive, Vision vision, CommandXboxController driver) {
 		this.driver = driver;
 		this.drive = drive;
 		this.vision = vision;
-		rotController.setTolerance(1);
-		xController.setTolerance(1);
+		rotController.setTolerance(.25);
+		xController.setTolerance(.4);
 
 		addRequirements(drive, vision);
 	}
 
 	@Override
 	public void execute() {
-		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional());
+		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional()-0.03);
 	}
   
 	@Override
@@ -36,15 +36,15 @@ public class AutoAimLimeMine extends Command{
 	}
 
 	double limelight_aim_proportional() {
-		double targetingAngularVelocity = rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight),0);
+		double targetingAngularVelocity = rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight),2);
 		// targetingAngularVelocity *=  SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
-		return -targetingAngularVelocity;
+		return targetingAngularVelocity;//-
 	}
 
 	double limelight_range_proportional() {
 		double targetingForwardSpeed = xController.calculate(vision.gettY(DroidRageConstants.leftLimelight), 0);
 		// targetingForwardSpeed *=  SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
-		return -targetingForwardSpeed;
+		return targetingForwardSpeed;
 	}
 
 }
