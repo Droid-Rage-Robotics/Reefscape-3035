@@ -12,15 +12,15 @@ public class AutoAimLimeMine extends Command{
 	// private Light light;
 	private Vision vision;
 	private CommandXboxController driver;
-	private PIDController rotController =new PIDController(.062,0,0);
-	private PIDController xController = new PIDController(.1, 0, 0);
+	private PIDController rotController =new PIDController(.06,0,0);
+	private PIDController xController = new PIDController(.13, 0, 0);
 
 	public AutoAimLimeMine(SwerveDrive drive, Vision vision, CommandXboxController driver) {
 		this.driver = driver;
 		this.drive = drive;
 		this.vision = vision;
-		rotController.setTolerance(.25);
-		xController.setTolerance(.4);
+		rotController.setTolerance(.3);
+		xController.setTolerance(.2);
 
 		addRequirements(drive, vision);
 	}
