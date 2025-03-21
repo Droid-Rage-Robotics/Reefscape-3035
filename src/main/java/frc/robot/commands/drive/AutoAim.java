@@ -24,27 +24,28 @@ public class AutoAim extends Command {
 	
 	protected static final ShuffleboardValue<Double> turntXTarget = ShuffleboardValue
 			.create(0.0, "Target/turtX", Vision.class.getSimpleName()).build();
+	
 	public AutoAim(SwerveDrive drive, Vision vision, CommandXboxController driver) {
-	this.driver = driver;
-	// this.angleGoal = angleGoal;
-	turntXController = new ProfiledPIDController(	
-		0.0005, //.1
-		0,
-		0,
-		new TrapezoidProfile.Constraints(1.525, 1));
-	turntXController.setTolerance(.5);//-27 degrees to 27 degrees
+		this.driver = driver;
+		// this.angleGoal = angleGoal;
+		turntXController = new ProfiledPIDController(	
+			0.0005, //.1
+			0,
+			0,
+			new TrapezoidProfile.Constraints(1.525, 1));
+		turntXController.setTolerance(.5);//-27 degrees to 27 degrees
 
-	distancetYController = new ProfiledPIDController(
-		0.1, //.034
-		0,
-		0,
-		new TrapezoidProfile.Constraints(1.525, 1));
-	distancetYController.setTolerance(.5);
+		distancetYController = new ProfiledPIDController(
+			0.1, //.034
+			0,
+			0,
+			new TrapezoidProfile.Constraints(1.525, 1));
+		distancetYController.setTolerance(.5);
 
-	addRequirements(drive, vision);
-	this.drive = drive;
-	// this.light = light;
-	this.vision = vision;
+		addRequirements(drive, vision);
+		this.drive = drive;
+		// this.light = light;
+		this.vision = vision;
 	}
 
 	@Override

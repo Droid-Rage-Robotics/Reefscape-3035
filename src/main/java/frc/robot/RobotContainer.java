@@ -15,6 +15,7 @@ import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
+import frc.robot.commands.drive.AutoAimLime;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -50,7 +51,8 @@ public class RobotContainer {
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 
 		driver.povUp()
-			.onTrue(new AutoAim(drive, vision, driver));
+			.onTrue(new AutoAimLime(drive, vision, driver));
+			// .onTrue(new AutoAim(drive, vision, driver));
 		driver.rightStick()
 			.onTrue(new InstantCommand(()->DroidRageConstants.flipAlignment()));
 		driver.rightTrigger()
