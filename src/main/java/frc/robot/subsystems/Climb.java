@@ -34,9 +34,7 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor( .02)//.02
-        //.001 or .01
-        //125  and 16:48 //(125/1)*(48/16) //375
+        .withPositionConversionFactor( .024)//(125/1)*(48/16); .02
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
