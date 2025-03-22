@@ -17,6 +17,8 @@ import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoAimLime;
 import frc.robot.commands.drive.AutoAimLimeMine;
+import frc.robot.commands.drive.AutoAimLimeMineCombine;
+import frc.robot.commands.drive.AutoAimLimeMineIMU;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -52,7 +54,9 @@ public class RobotContainer {
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 
 		driver.povUp()
-			.onTrue(new AutoAimLimeMine(drive, vision, driver));
+			.onTrue(new AutoAimLimeMineCombine(drive, vision, driver));
+			// .onTrue(new AutoAimLimeMineIMU(drive, vision, driver));
+			// .onTrue(new AutoAimLimeMine(drive, vision, driver));
 			// .onTrue(new AutoAimLime(drive, vision, driver));
 			// .onTrue(new AutoAim(drive, vision, driver));
 		driver.rightStick()
