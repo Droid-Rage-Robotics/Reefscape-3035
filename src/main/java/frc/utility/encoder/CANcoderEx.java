@@ -6,26 +6,18 @@ import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import frc.robot.subsystems.drive.SwerveDrive;
-import frc.utility.shuffleboard.ShuffleboardValue;
-
 public class CANcoderEx extends EncoderEx {
     private final CANcoder encoder;
     private final CANcoderConfiguration config;
     private final CANcoderConfigurator configurator;
     private double positionConversionFactor, velocityConversionFactor;
-    // private final ShuffleboardValue<String> speedStateWriter;
     public CANcoderEx(CANcoder encoder) {
         this.encoder = encoder;
         this.config = new CANcoderConfiguration();
         this.configurator = encoder.getConfigurator();
-
-        // speedStateWriter = ShuffleboardValue.create("test", "Current/State/Speed", "Swerve").build();
-
     }
 
     public static DirectionBuilder create(int deviceID, CANBus canbus) {
-        
         CANcoderEx encoder = new CANcoderEx(new CANcoder(deviceID, canbus));
         
         encoder.deviceID = deviceID;

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
-import frc.utility.GearRatio;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ComplexWidgetBuilder;

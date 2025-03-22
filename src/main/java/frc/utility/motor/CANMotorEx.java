@@ -3,7 +3,6 @@ package frc.utility.motor;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class CANMotorEx {
@@ -13,7 +12,6 @@ public abstract class CANMotorEx {
     protected double positionConversionFactor;
     protected double velocityConversionFactor;
     protected ShuffleboardValue<Boolean> isEnabledWriter;
-    // protected ShuffleboardValue<Double> outputWriter;
     protected String subSystemName;
     protected Alert tempAlert;
     public int motorID;
@@ -43,13 +41,13 @@ public abstract class CANMotorEx {
     }
     //Note: For some reason, fraction values do not work, calculate the value and put in the decimal point
     public class PositionConversionFactorBuilder {
-        public SubstemNameBuilder withPositionConversionFactor(double positionConversionFactor) {
+        public SubsystemNameBuilder withPositionConversionFactor(double positionConversionFactor) {
             setPositionConversionFactor(positionConversionFactor);
             setVelocityConversionFactor(positionConversionFactor/60);
-            return new SubstemNameBuilder();
+            return new SubsystemNameBuilder();
         }
     }
-    public class SubstemNameBuilder {
+    public class SubsystemNameBuilder {
         public IsEnabledBuilder withSubsystemName(String subsystemName) {
             subSystemName = subsystemName;
             return new IsEnabledBuilder();
