@@ -98,17 +98,15 @@ public class SwerveDrive extends SubsystemBase {
 
     private volatile Speed speed = Speed.NORMAL;
     // private volatile TippingState tippingState = TippingState.ANTI_TIP;
-    ///////
-
     
     // Shuffleboard values
     // private final ShuffleboardValue<String> tippingStateWriter = 
     //     ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", this).build();
-    private final ShuffleboardValue<String> speedStateWriter = 
-        ShuffleboardValue.create(speed.name(), "Current/State/Speed", this).build();
+    // private final ShuffleboardValue<String> speedStateWriter = 
+    //     ShuffleboardValue.create(speed.name(), "Current/State/Speed", this).build();
     
-    // private final ShuffleboardValue<Double> headingWriter = 
-    //     ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
+    private final ShuffleboardValue<Double> headingWriter = 
+        ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> rollWriter = 
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> pitchWriter =   
@@ -159,7 +157,7 @@ public class SwerveDrive extends SubsystemBase {
         );
 
         drivePoseWriter.set(getPose().toString());
-        // headingWriter.set(getHeading());
+        headingWriter.set(getHeading());
         // rollWriter.set(getRoll());
         // pitchWriter.set(getPitch());
         // locationWriter.set(getPose().getTranslation().toString());
@@ -207,13 +205,6 @@ public class SwerveDrive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    public boolean isFieldOriented() {
-        return DriveOptions.IS_FIELD_ORIENTED.get();
-    }
-
-    public boolean isSquaredInputs() {
-        return DriveOptions.IS_SQUARED_INPUTS.get();
-    }
 
     public double getTranslationalSpeed() {
         return speed.getTranslationalSpeed();
@@ -287,7 +278,7 @@ public class SwerveDrive extends SubsystemBase {
     public Command setSpeed(Speed speed) {
         return runOnce(() -> {
             this.speed = speed;
-            speedStateWriter.set(speed.name());
+            // speedStateWriter.set(speed.name());
         });
     }
 

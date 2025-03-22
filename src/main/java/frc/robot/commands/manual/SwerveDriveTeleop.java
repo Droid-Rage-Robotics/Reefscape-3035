@@ -2,8 +2,6 @@ package frc.robot.commands.manual;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -14,6 +12,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule;
 
@@ -80,14 +79,14 @@ public class SwerveDriveTeleop extends Command {
 
 
         // Square inputs
-        if (drive.isSquaredInputs()) {
+        if (DriveOptions.IS_SQUARED_INPUTS.get()) {
             xSpeed = DroidRageConstants.squareInput(xSpeed);
             ySpeed = DroidRageConstants.squareInput(ySpeed);
             turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
         // Apply Field Oriented
-        if (drive.isFieldOriented()) {
+        if (DriveOptions.IS_FIELD_ORIENTED.get()) {
             double modifiedXSpeed = xSpeed;
             double modifiedYSpeed = ySpeed;
 
