@@ -1,21 +1,15 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.DroidRageConstants;
-import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.vision.Vision;
-import frc.utility.template.ElevatorTemplate;
 
 public class TeleopCommands{
     public SequentialCommandGroup teleopOuttakeCommand(Carriage carriage){

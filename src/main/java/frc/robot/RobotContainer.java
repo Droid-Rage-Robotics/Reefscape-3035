@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -10,16 +9,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.IntakeElementInCommand;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
-import frc.robot.commands.Turn180Degrees;
-import frc.robot.commands.drive.AutoAimLime;
-import frc.robot.commands.drive.AutoAimLimeMine;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
@@ -27,7 +20,6 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.motor.TalonEx;
 
 public class RobotContainer {
 	private final CommandXboxController driver, operator;

@@ -1,14 +1,11 @@
 package frc.robot.subsystems.carriage;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
-import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;

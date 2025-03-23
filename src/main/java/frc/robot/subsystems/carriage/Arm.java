@@ -3,7 +3,6 @@ package frc.robot.subsystems.carriage;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
-import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;

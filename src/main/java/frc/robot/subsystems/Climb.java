@@ -5,15 +5,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
-import frc.utility.encoder.SparkAbsoluteEncoderEx;
-import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx;
-import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.utility.template.ArmAbsoluteTemplate;
 import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {

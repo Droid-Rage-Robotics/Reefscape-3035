@@ -2,25 +2,20 @@ package frc.robot.commands.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.DroidRageConstants;
-import frc.robot.commands.ResetPoseVision;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -36,9 +31,9 @@ public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
-        NamedCommands.registerCommand("resetPose",
-            new ResetPoseVision(drive, vision) 
-        );
+        // NamedCommands.registerCommand("resetPose",
+        //     new ResetPoseVision(drive, vision) 
+        // );
         NamedCommands.registerCommand("shoot",
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)

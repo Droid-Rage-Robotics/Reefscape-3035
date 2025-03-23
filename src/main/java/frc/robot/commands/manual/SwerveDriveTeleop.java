@@ -20,8 +20,8 @@ public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
     // private final Supplier<Boolean> turn180Supplier;
-    private boolean turn180;
-    private volatile double xSpeed, ySpeed, turnSpeed, turnSetPoint;
+    // private boolean turn180;
+    private volatile double xSpeed, ySpeed, turnSpeed;//, turnSetPoint;
     private Rotation2d heading;
     // private double turnSetPoint = 0;
     // private static final PIDController antiTipY = 
