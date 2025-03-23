@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "left"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "leave2FScore"
+            "pathName": "leave2EScore"
           }
         },
         {
@@ -29,13 +35,19 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RH2FBack"
+                  "pathName": "RH2EBack"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "right"
                 }
               }
             ]
@@ -74,6 +86,12 @@
                 "data": {
                   "name": "intake"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "left"
+                }
               }
             ]
           }
@@ -107,16 +125,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake"
-                      }
-                    }
-                  ]
+                  "name": "intake"
                 }
               }
             ]
