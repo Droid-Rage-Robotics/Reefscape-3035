@@ -2,18 +2,41 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
-    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
+    public enum Location{
+        RIGHT_R(0,0),
+        LEFT_R(0,0),
+        ALGAE_R(0,0),
+        RIGHT_L(0, 0),
+        LEFT_L(0, 0),
+        ALGAE_L(0, 0)
+        
+        ;
+
+        private double distance,angle;
+        private Location(double distance, double angle){
+            this.distance = distance;
+            this.angle = angle;
+        }
+        
+        public double getDistance() {
+            return distance;
+        }
+
+        public double getAngle() {
+            return angle;
+        }
+    }
+    // public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
     protected final ShuffleboardValue<Double> tARWriter = ShuffleboardValue
         .create(0.0, "R/tAR", Vision.class.getSimpleName()).build();
@@ -33,6 +56,8 @@ public class Vision extends SubsystemBase {
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
     public int targetIds[];
+    public PIDController rotController =new PIDController(.06,0,0);
+	public PIDController xController = new PIDController(.13, 0, 0);
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
 
@@ -83,7 +108,8 @@ public class Vision extends SubsystemBase {
         } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
             targetIds = new int[] { 22 };
         }
-        
+        rotController.setTolerance(.3);
+        xController.setTolerance(.2);
         // visionAlert = new Alert("Limelight is not connected! Vision will be
         // hindered!", Alert.AlertType.WARNING);
 
@@ -108,7 +134,7 @@ public class Vision extends SubsystemBase {
     }
 
     // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    public double gettX(String name) {
+    public double gettX(String name) {  
         if(name == DroidRageConstants.leftLimelight){
             return tXLWriter.get();
         } else {

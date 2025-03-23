@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.DroidRageConstants;
+import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
+import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.vision.Vision;
 import frc.utility.template.ElevatorTemplate;
 
 public class TeleopCommands{
@@ -89,26 +92,6 @@ public class TeleopCommands{
             // )
         );
     }
-
-    // public SequentialCommandGroup outtakeAndGrabHigh(Elevator elevator, Carriage carriage, ElevatorValue value ){
-    //     return new SequentialCommandGroup(
-    //         carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
-    //         new WaitCommand(1.3),
-    //         new ParallelCommandGroup(
-    //             // carriage.setIntakeCommand(CarriageIntakeValue.STOP),
-    //             carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
-    //             carriage.setPositionCommand(CarriageValue.ALGAE_HIGH),
-    //             elevator.setPositionCommand(value)
-    //         ),
-    //         // new WaitCommand(.5),
-    //         new WaitCommand(1.5),
-    //         new ParallelCommandGroup(
-    //             carriage.setIntakeCommand(CarriageIntakeValue.STOP),
-    //             carriage.setPositionCommand(CarriageValue.HOLD),
-    //             elevator.setPositionCommand(ElevatorValue.GROUND)
-    //         )
-    //     );
-    // }
 
     public SequentialCommandGroup goL4(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(

@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.DroidRageConstants;
 import frc.robot.commands.ResetPoseVision;
 import frc.robot.commands.TeleopCommands;
+import frc.robot.commands.drive.AutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
@@ -58,10 +60,17 @@ public class AutoChooser {
             new AutoCommands().autoAlgaePickUp(elevator, carriage, 
                 Elevator.ElevatorValue.ALGAE_HIGH, CarriageValue.ALGAE_HIGH)
         );
+        NamedCommands.registerCommand("right",
+            new InstantCommand(()-> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.RIGHT));
+        NamedCommands.registerCommand("left",
+            new InstantCommand(() -> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.LEFT));
 
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
-                new TeleopCommands().goL4(elevator, carriage),
+                new ParallelCommandGroup(
+                    new TeleopCommands().goL4(elevator, carriage),
+                    new AutoAlign(drive, vision).withTimeout(1.5)
+                ),
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
                 new WaitCommand(1.3),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
