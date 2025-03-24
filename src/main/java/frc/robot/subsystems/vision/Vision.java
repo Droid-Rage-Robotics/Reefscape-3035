@@ -53,6 +53,8 @@ public class Vision extends SubsystemBase {
         .create(0.0, "L/tYL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
+        .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
     public PIDController rotController =new PIDController(.06,0,0);
 	public PIDController xController = new PIDController(.13, 0, 0);
@@ -102,9 +104,9 @@ public class Vision extends SubsystemBase {
         
 
         if (DriverStation.getAlliance().get() == Alliance.Red) {
-            targetIds = new int[] { 17 };
+            targetIds = new int[] {6,7,8,9,10,11};
         } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-            targetIds = new int[] { 22 };
+            targetIds = new int[] {17,18,19,20,21,22};
         }
         rotController.setTolerance(.3);
         xController.setTolerance(.2);
@@ -124,6 +126,7 @@ public class Vision extends SubsystemBase {
         tXLWriter.set(LimelightHelpers.getTX(DroidRageConstants.leftLimelight));
         tYLWriter.set(LimelightHelpers.getTY(DroidRageConstants.leftLimelight));
         tVLWriter.set(LimelightHelpers.getTV(DroidRageConstants.leftLimelight));
+        isID(DroidRageConstants.leftLimelight);
     }
 
     @Override
@@ -173,9 +176,11 @@ public class Vision extends SubsystemBase {
     public boolean isID(String name){
         for (int element : targetIds) {
             if (element == LimelightHelpers.getFiducialID(name)) {
+                isIDWriter.set(true);
                 return true;
             }
         }
+        isIDWriter.set(false);
         return false;
     }
 

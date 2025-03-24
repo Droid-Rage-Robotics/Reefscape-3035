@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -21,7 +22,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false), 
@@ -126,6 +127,11 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         matchTime.set(DriverStation.getMatchTime());
+
+        while(true){
+			// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
+   			driver.getHID().setRumble(RumbleType.kBothRumble, 0);
+		} 
     }
     
     @Override

@@ -7,14 +7,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class OperatorXboxControllerRumble extends Command {
   private Timer rumbleTimer = new Timer();
-  private double rumbleTime;
+  private double rumbleTime, rumble;
   private CommandXboxController controller;
   private RumbleType rumbleType;
 
-  public OperatorXboxControllerRumble(CommandXboxController controller, RumbleType rumbleType, double time) {
+  public OperatorXboxControllerRumble(CommandXboxController controller, RumbleType rumbleType, double time, double rumble) {
     this.controller = controller;
     this.rumbleTime = time;
     this.rumbleType = rumbleType;
+    this.rumble = rumble;
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +25,7 @@ public class OperatorXboxControllerRumble extends Command {
   @Override
   public void execute() {
     rumbleTimer.start();
-    controller.getHID().setRumble(rumbleType, 1);
+    controller.getHID().setRumble(rumbleType, rumble);
   }
 
   @Override

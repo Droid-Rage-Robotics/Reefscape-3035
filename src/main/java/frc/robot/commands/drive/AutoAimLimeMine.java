@@ -36,13 +36,13 @@ public class AutoAimLimeMine extends Command{
 	}
 
 	double limelight_aim_proportional() {
-		double targetingAngularVelocity = rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight),2);
+		double targetingAngularVelocity = rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight),-8);
 		// targetingAngularVelocity *=  SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
 		return targetingAngularVelocity;//-
 	}
 
 	double limelight_range_proportional() {
-		double targetingForwardSpeed = xController.calculate(vision.gettY(DroidRageConstants.leftLimelight), 0);
+		double targetingForwardSpeed = xController.calculate(vision.gettY(DroidRageConstants.leftLimelight), -2);
 		// targetingForwardSpeed *=  SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
 		return targetingForwardSpeed;
 	}

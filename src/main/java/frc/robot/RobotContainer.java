@@ -2,6 +2,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -9,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.LightCommand;
+import frc.robot.commands.OperatorXboxControllerRumble;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.AutoAimLimeMine;
 import frc.robot.commands.drive.TeleopAlign;
@@ -38,11 +42,23 @@ public class RobotContainer {
 		// Climb climb,
 		Vision vision
 		) {
+		// if(vision.isID(DroidRageConstants.leftLimelight)){
+		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
+   		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+		// } 
+		// else
+		// {
+		// 	new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 0);
+
+		// }
 		
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
+		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
+		vision.setDefaultCommand(new LightCommand(driver, vision));
+		new InstantCommand(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0.7));
 
 		driver.povUp()
 			// .onTrue(new AutoAimLimeMineCombine(drive, vision, driver));
