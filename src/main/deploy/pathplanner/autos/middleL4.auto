@@ -25,6 +25,12 @@
                 "data": {
                   "name": "placeL4"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
               }
             ]
           }

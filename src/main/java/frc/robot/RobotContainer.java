@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
 import frc.robot.commands.TeleopCommands;
+import frc.robot.commands.drive.AutoAimLimeMine;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
@@ -46,9 +47,9 @@ public class RobotContainer {
 		driver.povUp()
 			// .onTrue(new AutoAimLimeMineCombine(drive, vision, driver));
 			// .onTrue(new AutoAimLimeMineIMU(drive, vision, driver));
-			// .onTrue(new AutoAimLimeMine(drive, vision, driver));
+			.onTrue(new AutoAimLimeMine(drive, vision, driver));
 			// .onTrue(new AutoAimLime(drive, vision, driver));
-			.onTrue(new TeleopAlign(drive, vision, driver, Vision.Location.RIGHT_L));
+			// .onTrue(new TeleopAlign(drive, vision, driver, Vision.Location.RIGHT_L));
 		driver.rightStick()
 			.onTrue(new InstantCommand(()->DroidRageConstants.flipAlignment()));
 		driver.rightTrigger()

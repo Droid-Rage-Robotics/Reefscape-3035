@@ -15,7 +15,7 @@ public class Vision extends SubsystemBase {
         LEFT_R(0,0),
         ALGAE_R(0,0),
         RIGHT_L(0, 0),
-        LEFT_L(0, 0),
+        LEFT_L(-1.5, -11.5 ),
         ALGAE_L(0, 0)
         
         ;
@@ -177,6 +177,20 @@ public class Vision extends SubsystemBase {
             }
         }
         return false;
+    }
+
+    public double limelight_aim_proportional() {
+        double targetingAngularVelocity = rotController.calculate(gettX(DroidRageConstants.leftLimelight), 2);
+        // targetingAngularVelocity *=
+        // SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
+        return targetingAngularVelocity;// -
+    }
+
+    public double limelight_range_proportional() {
+        double targetingForwardSpeed = xController.calculate(gettY(DroidRageConstants.leftLimelight), 0);
+        // targetingForwardSpeed *=
+        // SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
+        return targetingForwardSpeed;
     }
 
 }

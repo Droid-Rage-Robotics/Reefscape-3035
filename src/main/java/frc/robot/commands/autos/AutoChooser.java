@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.DroidRageConstants;
 import frc.robot.commands.TeleopCommands;
+import frc.robot.commands.drive.AutoAli;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.Elevator;
@@ -63,12 +64,27 @@ public class AutoChooser {
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new TeleopCommands().goL4(elevator, carriage),
-                    new AutoAlign(drive, vision).withTimeout(1.5)
+                    new TeleopCommands().goL4(elevator, carriage)
+                    // new AutoAli(drive, vision).withTimeout(2)
+                    // new AutoAlign(drive, vision).withTimeout(1.5)
+                    // new AutoAimLimeMine(drive, vision,driver)
                 ),
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
                 new WaitCommand(1.3),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
+                    // new AutoAli(drive, vision).withTimeout(2)
+                
+            )
+        );
+        NamedCommands.registerCommand("align", 
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                // new InstantCommand(()->
+                // drive.drive(vision.limelight_range_proportional(), 0, 0))
+                // new WaitCommand(2),
+                // new InstantCommand(()->
+                //                 drive.drive(0, 0, vision.limelight_aim_proportional()))
+                new AutoAli(drive, vision)//.withTimeout(1)
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -156,8 +172,8 @@ public class AutoChooser {
         autoChooser.addOption("middleL1", Autos.middleL1(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
         autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
-        autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
-        autoChooser.setDefaultOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
+        autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
 
         //middleL4Algae
 

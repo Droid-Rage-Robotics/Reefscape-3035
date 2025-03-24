@@ -1,5 +1,6 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -10,6 +11,7 @@ public class AutoAlign extends Command{
 	// private Light light;
 	private Vision vision;
 	private Vision.Location location;
+	private Timer timer = new Timer();
 
 	public AutoAlign(SwerveDrive drive, Vision vision) {
 		this.drive = drive;
@@ -24,17 +26,19 @@ public class AutoAlign extends Command{
 				break;
 		}
 
-		addRequirements(drive, vision);
+		// addRequirements(drive, vision);
 	}
 
 	@Override
 	public void execute() {
+		timer.restart();
 		switch (DroidRageConstants.alignmentMode) {
 			case RIGHT:
-				drive.drive(
-					vision.rotController.calculate(vision.gettX(DroidRageConstants.rightLimelight), location.getDistance()), 
-					0, 
-					vision.rotController.calculate(vision.gettY(DroidRageConstants.rightLimelight), location.getAngle()) - 0.03);
+			
+				// drive.drive(
+				// 	vision.rotController.calculate(vision.gettX(DroidRageConstants.rightLimelight), location.getDistance()), 
+				// 	0, 
+				// 	vision.rotController.calculate(vision.gettY(DroidRageConstants.rightLimelight), location.getAngle()) - 0.03);
 				break;
 			case LEFT:
 				drive.drive(
@@ -47,6 +51,6 @@ public class AutoAlign extends Command{
   
 	@Override
 	public boolean isFinished() {
-		return (vision.rotController.atSetpoint()&&vision.xController.atSetpoint());
+		return (vision.rotController.atSetpoint()||vision.xController.atSetpoint())|| timer.hasElapsed(0);
 	}
 }

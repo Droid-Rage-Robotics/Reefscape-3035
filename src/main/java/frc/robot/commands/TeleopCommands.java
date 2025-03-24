@@ -10,6 +10,8 @@ import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
+import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.vision.Vision;
 
 public class TeleopCommands{
     public SequentialCommandGroup teleopOuttakeCommand(Carriage carriage){
@@ -95,6 +97,12 @@ public class TeleopCommands{
                 elevator.setTargetPositionCommand(ElevatorValue.L4),
                 carriage.getPivot().setTargetPositionCommand(CarriageValue.L4.getPivotAngle())
             )
+        );
+    }
+
+    public SequentialCommandGroup autoAlign(SwerveDrive drive, Vision vision){
+        return new SequentialCommandGroup(
+            
         );
     }
 

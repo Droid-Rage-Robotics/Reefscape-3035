@@ -26,10 +26,15 @@ public class TeleopAlign extends Command{
 	public void execute() {
 		switch (DroidRageConstants.alignmentMode) {
 			case RIGHT:
+			
 				drive.drive(
-					vision.rotController.calculate(vision.gettX(DroidRageConstants.rightLimelight), location.getDistance()), 
+					vision.rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight), location.getDistance()), 
 					0, 
-					vision.rotController.calculate(vision.gettY(DroidRageConstants.rightLimelight), location.getAngle()) - 0.03);
+					vision.rotController.calculate(vision.gettY(DroidRageConstants.leftLimelight), location.getAngle()) - 0.03);
+				// drive.drive(
+				// 	vision.rotController.calculate(vision.gettX(DroidRageConstants.rightLimelight), location.getDistance()), 
+				// 	0, 
+				// 	vision.rotController.calculate(vision.gettY(DroidRageConstants.rightLimelight), location.getAngle()) - 0.03);
 				break;
 			case LEFT:
 				drive.drive(
