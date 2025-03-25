@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
-// Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
     public enum Location{
         RIGHT_R(2.5,13.5),
@@ -52,22 +51,20 @@ public class Vision extends SubsystemBase {
         .create(0.0, "L/tYL-Range", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
-        .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
+    // protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
+    //     .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
     public PIDController rotController =new PIDController(.06,0,0);
 	public PIDController xController = new PIDController(.13, 0, 0);
+    private int bluePipeline = 0, redPipeline =1;
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
 
-    // http://10.30.35.11:5800/
-    // http://roborio-2928-FRC.local:5801 - Works
     // Set Up the team number - http://limelight.local:5801/
 
 
     // Initialize Limelight network tables
     public Vision() {
-        LimelightHelpers.setPipelineIndex   (DroidRageConstants.rightLimelight, 0);
         LimelightHelpers.setCropWindow      (DroidRageConstants.rightLimelight, -1, 1, -1, 1);
         // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
         LimelightHelpers.setCameraPose_RobotSpace(DroidRageConstants.rightLimelight, 
@@ -78,7 +75,6 @@ public class Vision extends SubsystemBase {
             10.0,   // Pitch (degrees)
             0.0     // Yaw (degrees)
         );
-        LimelightHelpers.setPipelineIndex   (DroidRageConstants.leftLimelight, 0);
         LimelightHelpers.setCropWindow      (DroidRageConstants.leftLimelight, -1, 1, -1, 1);
         // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
         LimelightHelpers.setCameraPose_RobotSpace(DroidRageConstants.leftLimelight, 
@@ -102,11 +98,7 @@ public class Vision extends SubsystemBase {
         // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
         
 
-        if (DriverStation.getAlliance().get() == Alliance.Red) {
-            targetIds = new int[] {6,7,8,9,10,11};
-        } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-            targetIds = new int[] {17,18,19,20,21,22};
-        }
+        setUpVision();
         rotController.setTolerance(.3);
         xController.setTolerance(.2);
         // visionAlert = new Alert("Limelight is not connected! Vision will be
@@ -125,7 +117,20 @@ public class Vision extends SubsystemBase {
         tXLWriter.set(LimelightHelpers.getTX(DroidRageConstants.leftLimelight));
         tYLWriter.set(LimelightHelpers.getTY(DroidRageConstants.leftLimelight));
         tVLWriter.set(LimelightHelpers.getTV(DroidRageConstants.leftLimelight));
-        isID(DroidRageConstants.leftLimelight);
+        // isID(DroidRageConstants.leftLimelight);
+    }
+   
+    public void setUpVision(){
+        if (DriverStation.getAlliance().get() == Alliance.Red) {
+            targetIds = new int[] { 6, 7, 8, 9, 10, 11 };
+            LimelightHelpers.setPipelineIndex   (DroidRageConstants.leftLimelight, redPipeline);
+            LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, redPipeline);
+        } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+            targetIds = new int[] { 17, 18, 19, 20, 21, 22 };
+            
+            LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, bluePipeline);
+            LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, bluePipeline);
+        }
     }
 
     @Override
@@ -172,16 +177,16 @@ public class Vision extends SubsystemBase {
     }
 
     /** The name will be which piepline to use based on which alignment direction */
-    public boolean isID(String name){
-        for (int element : targetIds) {
-            if (element == LimelightHelpers.getFiducialID(name)) {
-                isIDWriter.set(true);
-                return true;
-            }
-        }
-        isIDWriter.set(false);
-        return false;
-    }
+    // public boolean isID(String name){
+    //     for (int element : targetIds) {
+    //         if (element == LimelightHelpers.getFiducialID(name)) {
+    //             isIDWriter.set(true);
+    //             return true;
+    //         }
+    //     }
+    //     isIDWriter.set(false);
+    //     return false;
+    // }
 
     public double limelight_aim_proportional() {
         double targetingAngularVelocity = rotController.calculate(gettX(DroidRageConstants.leftLimelight), 2);

@@ -50,9 +50,9 @@ public class RumbleCommand extends Command {
     public void execute() {
         if (getMatchTime() < 30 && getMatchTime() > 28) {
             intakeState = RumbleStates.END_GAME;}
-        else if(vision.isID(DroidRageConstants.leftLimelight)){
-            intakeState = RumbleStates.ALIGN;
-        }
+        // else if(vision.isID(DroidRageConstants.leftLimelight)){
+        //     intakeState = RumbleStates.ALIGN;
+        // }
 
         // driver.getHID().setRumble(RumbleType.kBothRumble, 1);
         new InstantCommand(()->driver.getHID().setRumble(RumbleType.kBothRumble, 1));

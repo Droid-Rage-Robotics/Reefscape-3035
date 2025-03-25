@@ -119,6 +119,8 @@ public class Robot extends TimedRobot {
 		DriverStation.silenceJoystickConnectionWarning(true);
         drive.changeAllianceRotation();
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, vision);
+        vision.setUpVision(); //Hasto be here to set up Limelight Pipelines
+
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
         // teleopRan = true;
