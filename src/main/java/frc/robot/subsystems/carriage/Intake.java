@@ -22,7 +22,7 @@ public class Intake extends IntakeTemplate {
         .withWidget(BuiltInWidgets.kBooleanBox)
         .build();
 
-    private static TalonEx motor = TalonEx.create(19)
+    private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
