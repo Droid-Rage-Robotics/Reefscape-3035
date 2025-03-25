@@ -9,19 +9,14 @@ import frc.robot.subsystems.vision.Vision;
 
 public class AutoAimLimeMine extends Command{
 	private SwerveDrive drive;
-	// private Light light;
 	private Vision vision;
 	private CommandXboxController driver;
-	private PIDController rotController =new PIDController(.06,0,0);
-	private PIDController xController = new PIDController(.13, 0, 0);
 
+	//TELEOP
 	public AutoAimLimeMine(SwerveDrive drive, Vision vision, CommandXboxController driver) {
 		this.driver = driver;
 		this.drive = drive;
 		this.vision = vision;
-		rotController.setTolerance(.3);
-		xController.setTolerance(.2);
-
 		addRequirements(drive, vision);
 	}
 
@@ -42,11 +37,11 @@ public class AutoAimLimeMine extends Command{
 		double targetingAngularVelocity =0;
 		switch(DroidRageConstants.alignmentMode){
 			case LEFT:
-				targetingAngularVelocity = rotController.calculate(
+				targetingAngularVelocity = vision.rotController.calculate(
 					vision.gettX(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getAngle());
 				break;
 			case RIGHT:
-				targetingAngularVelocity = rotController.calculate(
+				targetingAngularVelocity = vision.rotController.calculate(
 					vision.gettX(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R.getAngle());
 				break;
 		}
@@ -57,11 +52,11 @@ public class AutoAimLimeMine extends Command{
 		double targetingForwardSpeed =0;
 		switch(DroidRageConstants.alignmentMode){
 			case LEFT:
-				targetingForwardSpeed = xController.calculate(
+				targetingForwardSpeed = vision.xController.calculate(
 					vision.gettY(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getDistance());
 				break;
 			case RIGHT:
-				targetingForwardSpeed = xController.calculate(
+				targetingForwardSpeed = vision.xController.calculate(
 					vision.gettY(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R.getDistance());
 				break;
 		}
