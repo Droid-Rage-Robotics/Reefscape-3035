@@ -11,12 +11,11 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
     public enum Location{
-        RIGHT_R(0,0),
-        LEFT_R(0,0),
-        ALGAE_R(0,0),
-        RIGHT_L(0, 0),
+        RIGHT_R(2.5,13.5),
+        // ALGAE_R(0,0),
+
         LEFT_L(-1.5, -11.5 ),
-        ALGAE_L(0, 0)
+        // ALGAE_L(0, 0)
         
         ;
 
@@ -39,18 +38,18 @@ public class Vision extends SubsystemBase {
     protected final ShuffleboardValue<Double> tARWriter = ShuffleboardValue
         .create(0.0, "R/tAR", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tXRWriter = ShuffleboardValue
-        .create(0.0, "R/tXR", Vision.class.getSimpleName()).build();
+        .create(0.0, "R/tXR-Rot", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tYRWriter = ShuffleboardValue
-        .create(0.0, "R/tYR", Vision.class.getSimpleName()).build();
+        .create(0.0, "R/tYR-Range", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVRWriter = ShuffleboardValue
         .create(false, "R/tVR", Vision.class.getSimpleName()).build();
 
     protected final ShuffleboardValue<Double> tALWriter = ShuffleboardValue
         .create(0.0, "L/tAL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tXLWriter = ShuffleboardValue
-        .create(0.0, "L/tXL", Vision.class.getSimpleName()).build();
+        .create(0.0, "L/tXL-Rot", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tYLWriter = ShuffleboardValue
-        .create(0.0, "L/tYL", Vision.class.getSimpleName()).build();
+        .create(0.0, "L/tYL-Range", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue

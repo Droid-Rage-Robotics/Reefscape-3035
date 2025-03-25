@@ -67,7 +67,9 @@ public class RobotContainer {
 			// .onTrue(new AutoAimLime(drive, vision, driver));
 			// .onTrue(new TeleopAlign(drive, vision, driver, Vision.Location.RIGHT_L));
 		driver.rightStick()
-			.onTrue(new InstantCommand(()->DroidRageConstants.flipAlignment()));
+			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.RIGHT))));
+		driver.leftStick()
+			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.LEFT))));
 		driver.rightTrigger()
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
 			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))

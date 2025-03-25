@@ -27,6 +27,9 @@ public class AutoAimLimeMine extends Command{
 
 	@Override
 	public void execute() {
+		// if(vision.isID(DroidRageConstants.leftLimelight)|| vision.isID(DroidRageConstants.rightLimelight)){
+		// 	return;
+		// } else
 		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional()-0.03);
 	}
   
@@ -36,13 +39,34 @@ public class AutoAimLimeMine extends Command{
 	}
 
 	double limelight_aim_proportional() {
-		double targetingAngularVelocity = rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight),-8);
-		// targetingAngularVelocity *=  SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
+		double targetingAngularVelocity =0;
+		switch(DroidRageConstants.alignmentMode){
+			case LEFT:
+				targetingAngularVelocity = rotController.calculate(
+					vision.gettX(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getAngle());
+				break;
+			case RIGHT:
+				targetingAngularVelocity = rotController.calculate(
+					vision.gettX(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R.getAngle());
+				break;
+		}
 		return targetingAngularVelocity;//-
 	}
 
 	double limelight_range_proportional() {
-		double targetingForwardSpeed = xController.calculate(vision.gettY(DroidRageConstants.leftLimelight), -2);
+		double targetingForwardSpeed =0;
+		switch(DroidRageConstants.alignmentMode){
+			case LEFT:
+				targetingForwardSpeed = xController.calculate(
+					vision.gettY(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getDistance());
+				break;
+			case RIGHT:
+				targetingForwardSpeed = xController.calculate(
+					vision.gettY(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R.getDistance());
+				break;
+		}
+		
+		// = xController.calculate(vision.gettY(DroidRageConstants.leftLimelight), -2);
 		// targetingForwardSpeed *=  SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
 		return targetingForwardSpeed;
 	}

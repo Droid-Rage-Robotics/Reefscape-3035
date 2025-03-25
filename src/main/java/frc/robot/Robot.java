@@ -22,7 +22,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false), 
@@ -128,10 +128,10 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         matchTime.set(DriverStation.getMatchTime());
 
-        while(true){
-			// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
-   			driver.getHID().setRumble(RumbleType.kBothRumble, 0);
-		} 
+        // while(true){
+		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
+   		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 0);
+		// } 
     }
     
     @Override

@@ -15,12 +15,16 @@ public final class DroidRageConstants {
     public static Alignment alignmentMode = Alignment.LEFT;
     public static void flipAlignment() {
         if(alignmentMode == Alignment.RIGHT) {
-            alignmentWriter.set(Alignment.LEFT.toString());
             alignmentMode = Alignment.LEFT;
+            alignmentWriter.set(alignmentMode.toString());
         } else {
-            alignmentWriter.set(Alignment.RIGHT.toString());
+            alignmentWriter.set(alignmentMode.toString());
             alignmentMode = Alignment.RIGHT;
         }
+    }
+    public static void setAlignment(Alignment alignment){
+        alignmentMode = alignment;
+        alignmentWriter.set(alignmentMode.toString());
     }
     // private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
     //     .create(Element.NONE.toString(), "Element", "Misc").build();
