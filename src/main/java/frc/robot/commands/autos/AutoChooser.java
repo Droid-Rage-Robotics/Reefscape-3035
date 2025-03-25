@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.DroidRageConstants;
 import frc.robot.commands.TeleopCommands;
-import frc.robot.commands.drive.AutoAli;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.Elevator;
@@ -84,7 +83,7 @@ public class AutoChooser {
                 // new WaitCommand(2),
                 // new InstantCommand(()->
                 //                 drive.drive(0, 0, vision.limelight_aim_proportional()))
-                new AutoAli(drive, vision)//.withTimeout(1)
+                new AutoAlign(drive, vision)//.withTimeout(1)
             )
         );
         NamedCommands.registerCommand("placeL3",

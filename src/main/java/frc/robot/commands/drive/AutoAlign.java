@@ -1,56 +1,57 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
-public class AutoAlign extends Command{
+//Autonomous
+public class AutoAlign extends Command {
 	private SwerveDrive drive;
-	// private Light light;
 	private Vision vision;
-	private Vision.Location location;
-	private Timer timer = new Timer();
+	private PIDController rotController = new PIDController(.07, 0, 0);
+	private PIDController xController = new PIDController(.07, 0, 0);
 
 	public AutoAlign(SwerveDrive drive, Vision vision) {
 		this.drive = drive;
 		this.vision = vision;
-
-		switch (DroidRageConstants.alignmentMode) {
-			case RIGHT:
-				location = Vision.Location.RIGHT_R;
-				break;
-			case LEFT:
-				location = Vision.Location.LEFT_L;
-				break;
-		}
+		rotController.setTolerance(.3);
+		xController.setTolerance(.2);
 
 		// addRequirements(drive, vision);
 	}
 
 	@Override
 	public void execute() {
-		timer.restart();
-		switch (DroidRageConstants.alignmentMode) {
-			case RIGHT:
-			
-				// drive.drive(
-				// 	vision.rotController.calculate(vision.gettX(DroidRageConstants.rightLimelight), location.getDistance()), 
-				// 	0, 
-				// 	vision.rotController.calculate(vision.gettY(DroidRageConstants.rightLimelight), location.getAngle()) - 0.03);
-				break;
-			case LEFT:
-				drive.drive(
-					vision.rotController.calculate(vision.gettX(DroidRageConstants.leftLimelight), location.getDistance()), 
-					0, 
-					vision.rotController.calculate(vision.gettY(DroidRageConstants.leftLimelight), location.getAngle()) - 0.03);
-				break;
-		}
+		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional());// - 0.03);
 	}
-  
+
 	@Override
 	public boolean isFinished() {
-		return (vision.rotController.atSetpoint()||vision.xController.atSetpoint())|| timer.hasElapsed(0);
+		// return !driver.povUp().getAsBoolean();
+		return (vision.rotController.atSetpoint() && vision.xController.atSetpoint());// || timer.hasElapsed(3);
+
 	}
+
+	double limelight_range_proportional() {
+		double targetingForwardSpeed = xController.calculate(
+			vision.gettY(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getDistance());
+		// targetingForwardSpeed *=
+		// SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
+		return targetingForwardSpeed;
+	}
+
+	double limelight_aim_proportional() {
+		double targetingAngularVelocity = rotController.calculate(
+			vision.gettX(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L.getAngle());
+		// targetingAngularVelocity *=
+		// SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
+		return targetingAngularVelocity;// -
+	}
+
+	
+
 }
+
+		
