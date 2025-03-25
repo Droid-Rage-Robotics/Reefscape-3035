@@ -1,8 +1,8 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
@@ -10,12 +10,13 @@ import frc.robot.subsystems.vision.Vision;
 public class AutoAlign extends Command {
 	private SwerveDrive drive;
 	private Vision vision;
+	// private Timer timer= new Timer();
 
 	// TELEOP
 	public AutoAlign(SwerveDrive drive, Vision vision) {
 		this.drive = drive;
 		this.vision = vision;
-		addRequirements(drive, vision);
+		addRequirements(vision);
 	}
 
 	@Override
@@ -32,13 +33,14 @@ public class AutoAlign extends Command {
 				}
 				break;
 		}
+		// timer.restart();
 		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional() - 0.03);
 	}
 
 	@Override
 	public boolean isFinished() {
 		// return !driver.povUp().getAsBoolean();
-		return (vision.rotController.atSetpoint() && vision.xController.atSetpoint());// || timer.hasElapsed(3);
+		return (vision.rotController.atSetpoint() && vision.xController.atSetpoint());// || timer.hasElapsed(5);
 	}
 
 	double limelight_aim_proportional() {

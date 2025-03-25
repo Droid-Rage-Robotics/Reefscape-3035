@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetCarriage"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBack"
+                }
+              }
+            ]
           }
         }
       ]

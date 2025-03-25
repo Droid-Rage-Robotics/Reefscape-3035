@@ -39,7 +39,7 @@ public class TeleopAlign extends Command{
   
 	@Override
 	public boolean isFinished() {
-		return !driver.povUp().getAsBoolean();
+		return !driver.leftBumper().getAsBoolean();
 	}
 
 	double limelight_aim_proportional() {

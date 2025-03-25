@@ -10,15 +10,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
-import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Vision extends SubsystemBase {
     public enum Location{
-        RIGHT_R(2.5,13.5),
+        RIGHT_R(.4,.4),
         // ALGAE_R(0,0),
 
-        LEFT_L(-1.5, -11.5 ),
+        LEFT_L(-1.1, -6),// -1.5, -6
         // ALGAE_L(0, 0)
         
         ;
@@ -59,8 +58,8 @@ public class Vision extends SubsystemBase {
     // protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
     //     .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
-    public PIDController rotController =new PIDController(.06,0,0);
-	public PIDController xController = new PIDController(.13, 0, 0);
+    public PIDController rotController =new PIDController(.12,0,0);//.06
+	public PIDController xController = new PIDController(.14, 0, 0);//,13
     private int bluePipeline = 0, redPipeline =1;
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg",HttpCameraKind.kUnknown);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800", HttpCameraKind.kUnknown);

@@ -69,8 +69,8 @@ public class AutoChooser {
                     // new AutoAimLimeMine(drive, vision,driver)
                 ),
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
-                new WaitCommand(1.3),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
+                new WaitCommand(1.),
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 1.4)
                     // new AutoAli(drive, vision).withTimeout(2)
                 
             )
@@ -83,7 +83,7 @@ public class AutoChooser {
                 // new WaitCommand(2),
                 // new InstantCommand(()->
                 //                 drive.drive(0, 0, vision.limelight_aim_proportional()))
-                new AutoAlign(drive, vision)//.withTimeout(1)
+                new AutoAlign(drive, vision).withTimeout(2)
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -121,9 +121,11 @@ public class AutoChooser {
                 new WaitCommand(1.),
                 new ParallelCommandGroup(
                     elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
-                    carriage.setPositionCommand(CarriageValue.BARGE),
-                    carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
-                )
+                    carriage.setPositionCommand(CarriageValue.BARGE)
+                ),
+                // new WaitUntilCommand(elevator.getEncoderPosition()>),
+                new WaitCommand(.5),
+                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
             )
         );
         NamedCommands.registerCommand("intake",

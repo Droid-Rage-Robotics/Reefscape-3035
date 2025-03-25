@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.autos.AutoChooser;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
@@ -23,13 +24,13 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
-        new Arm(false), 
-        new Pivot(false),
-        new Intake(false)
+        new Arm(true), 
+        new Pivot(true),
+        new Intake(true)
     );
-    // private Climb climb = new Climb(false);
+    private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -118,7 +119,7 @@ public class Robot extends TimedRobot {
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
         drive.changeAllianceRotation();
-        robotContainer.configureTeleOpBindings(drive, elevator, carriage, vision);
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         vision.setUpVision(); //Hasto be here to set up Limelight Pipelines
 
         // robotContainer.sysID(driveSysID);

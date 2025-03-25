@@ -25,6 +25,12 @@
                 "data": {
                   "name": "placeL4"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
               }
             ]
           }
@@ -42,16 +48,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "pickHAlgae"
+                  "name": "pickLAlgae"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
           }
         },
         {

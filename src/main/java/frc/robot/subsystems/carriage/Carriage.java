@@ -21,7 +21,7 @@ public class Carriage {
         // HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
-        INTAKE_GROUND(197 ,139),
+        INTAKE_GROUND(191 ,139),
         ALGAE_LOW(113, 214),
         ALGAE_HIGH(112, 203),
         L1(105, 234),
@@ -62,7 +62,7 @@ public class Carriage {
         INTAKE(50),
         OUTTAKE(-130),
         OUTTAKE_L1(-50),
-        SHOOT(-200),
+        SHOOT(-400),
         // HOLD(10),
         HOLD_ALGAE(35),
         HOLD_CORAL(3),

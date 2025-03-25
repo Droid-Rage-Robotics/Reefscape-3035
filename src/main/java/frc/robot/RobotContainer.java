@@ -17,6 +17,7 @@ import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
@@ -38,7 +39,7 @@ public class RobotContainer {
 		SwerveDrive drive,
 		Elevator elevator,
 		Carriage carriage,
-		// Climb climb,
+		Climb climb,
 		Vision vision
 		) {
 		// if(vision.isID(DroidRageConstants.leftLimelight)){
@@ -57,9 +58,9 @@ public class RobotContainer {
 		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
 		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
 		vision.setDefaultCommand(new LightCommand(driver, vision));
-		new InstantCommand(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0.7));
+		// new InstantCommand(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0.7));
 
-		driver.povUp()
+		driver.leftBumper()
 			// .onTrue(new AutoAimLimeMineCombine(drive, vision, driver));
 			// .onTrue(new AutoAimLimeMineIMU(drive, vision, driver));
 			.onTrue(new TeleopAlign(drive, vision, driver));
@@ -80,10 +81,10 @@ public class RobotContainer {
 			.onTrue(new TeleopCommands().barge(elevator, carriage));
 		// driver.x().onTrue(new Turn180Degrees(drive, driver));
 
-		// driver.povUp()
-		// 	.onTrue(climb.setTargetPositionCommand(Climb.hold));
-		// driver.povDown()
-		// 	.onTrue(climb.setTargetPositionCommand(Climb.climb));
+		driver.povUp()
+			.onTrue(climb.setTargetPositionCommand(Climb.hold));
+		driver.povDown()
+			.onTrue(climb.setTargetPositionCommand(Climb.climb));
 		// driver.povRight()
 		// 	.onTrue(climb.setTargetPositionCommand(climb.getTargetPosition()-5));
 

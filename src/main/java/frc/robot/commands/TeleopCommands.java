@@ -73,7 +73,9 @@ public class TeleopCommands{
             carriage.setPositionCommand(CarriageValue.L4),
             new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
             new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
-            elevator.setTargetPositionCommand(ElevatorValue.GROUND)    
+            elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+            new WaitUntilCommand(()->elevator.getEncoderPosition()<1),
+            carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
             // new ConditionalCommand(
             //     new SequentialCommandGroup(
             //         carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
@@ -100,11 +102,11 @@ public class TeleopCommands{
         );
     }
 
-    public SequentialCommandGroup autoAlign(SwerveDrive drive, Vision vision){
-        return new SequentialCommandGroup(
+    // public SequentialCommandGroup autoAlign(SwerveDrive drive, Vision vision){
+    //     return new SequentialCommandGroup(
             
-        );
-    }
+    //     );
+    // }
 
     public TeleopCommands(){
     }
