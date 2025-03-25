@@ -1,11 +1,16 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.cscore.VideoCamera;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Vision extends SubsystemBase {
@@ -57,14 +62,15 @@ public class Vision extends SubsystemBase {
     public PIDController rotController =new PIDController(.06,0,0);
 	public PIDController xController = new PIDController(.13, 0, 0);
     private int bluePipeline = 0, redPipeline =1;
-    // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg",HttpCameraKind.kUnknown);
+    // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800", HttpCameraKind.kUnknown);
 
     // Set Up the team number - http://limelight.local:5801/
 
 
     // Initialize Limelight network tables
     public Vision() {
+        // ComplexWidgetBuilder.create(leftCam, getSubsystem(), getName());
         LimelightHelpers.setCropWindow      (DroidRageConstants.rightLimelight, -1, 1, -1, 1);
         // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
         LimelightHelpers.setCameraPose_RobotSpace(DroidRageConstants.rightLimelight, 
@@ -86,16 +92,21 @@ public class Vision extends SubsystemBase {
             0.0     // Yaw (degrees)
         );
         
+        LimelightHelpers.setStreamMode_Standard(DroidRageConstants.leftLimelight);
+        LimelightHelpers.setStreamMode_Standard(DroidRageConstants.rightLimelight);
+
         for (int port = 5800; port <= 5809; port++) {
             PortForwarder.add(port, "limelight.local", port);
         }
 
+        // LimelightHelpers.setStreamMode_Standard(DroidRageConstants.leftLimelight);
+        // LimelightHelpers.setStreamMode_Standard(DroidRageConstants.rightLimelight);
         
         
         // CameraServer.addCamera(rightCam);
-        // Shuffleboard.getTab("Misc").add(rightCam).withSize(3, 3);
+        // // Shuffleboard.getTab("Misc").add(rightCam).withSize(3, 3);
         // CameraServer.addCamera(leftCam);
-        // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
+        // // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
         
 
         setUpVision();
