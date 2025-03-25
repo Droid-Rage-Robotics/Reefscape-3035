@@ -22,9 +22,18 @@ public class AutoAimLimeMine extends Command{
 
 	@Override
 	public void execute() {
-		// if(vision.isID(DroidRageConstants.leftLimelight)|| vision.isID(DroidRageConstants.rightLimelight)){
-		// 	return;
-		// } else
+		switch (DroidRageConstants.alignmentMode) {
+			case LEFT:
+				if(!vision.gettV(DroidRageConstants.leftLimelight)){
+					return;
+				}
+				break;
+			case RIGHT:
+				if (!vision.gettV(DroidRageConstants.rightLimelight)) {
+					return;
+				}
+				break;
+		}
 		drive.drive(limelight_range_proportional(), 0, limelight_aim_proportional()-0.03);
 	}
   
