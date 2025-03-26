@@ -114,7 +114,10 @@ public class AutoChooser {
             )
         );
         NamedCommands.registerCommand("resetBarge",
-            new TeleopCommands().resetCarriageFromBarge(elevator, carriage)
+            new SequentialCommandGroup(
+                new TeleopCommands().resetCarriageFromBarge(elevator, carriage),
+                carriage.setIntakeCommand(CarriageIntakeValue.STOP)
+            )
         );
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
