@@ -2,6 +2,7 @@ package frc.robot.commands.manual;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -11,6 +12,7 @@ import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
@@ -19,17 +21,12 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
-    // private final Supplier<Boolean> turn180Supplier;
-    // private boolean turn180;
-    private volatile double xSpeed, ySpeed, turnSpeed;//, turnSetPoint;
+    private volatile double xSpeed, ySpeed, turnSpeed;
     private Rotation2d heading;
-    // private double turnSetPoint = 0;
-    // private static final PIDController antiTipY = 
-    //     new PIDController(0.006, 0, 0.0005);
-    // private static final PIDController antiTipX = 
-    //     new PIDController(0.006, 0, 0.0005);
-    // private static final PIDController turnPID = new PIDController(.03, 0, 0);
-
+    private static final PIDController antiTipY = 
+        new PIDController(0.006, 0, 0.0005);
+    private static final PIDController antiTipX = 
+        new PIDController(0.006, 0, 0.0005);
     // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
@@ -38,10 +35,8 @@ public class SwerveDriveTeleop extends Command {
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
-        // this.turn180Supplier = ()->driver.x().getAsBoolean();
-        // antiTipX.setTolerance(2);
-        // turnPID.setTolerance(1);
-
+        antiTipX.setTolerance(2);
+        antiTipY.setTolerance(2);
 
         // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
         //     .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
@@ -49,20 +44,11 @@ public class SwerveDriveTeleop extends Command {
             .whileFalse(drive.setSpeed(Speed.SLOW));
 
         driver.b().onTrue(drive.setYawCommand(0));
-        // driver.povRight().onTrue(drive.setYawCommand(90));
-        // if (driver.x().getAsBoolean()){
-        //     turnSetPoint = drive.getHeading() + 180;
-        //     turn180 = true;
-        // }
 
         if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
             drive.setSpeed(Speed.SLOW);
         }
 
-        // driver.a().debounce(2)
-
-        // this.turn180 = driver.a().getAsBoolean();
-        
         addRequirements(drive);
     }
 
@@ -104,16 +90,16 @@ public class SwerveDriveTeleop extends Command {
        
         
 
-        // // Apply Anti-Tip
-        // double xTilt = drive.getRoll(); //Is this Roll or pitch
-        // double yTilt = drive.getPitch();// Is this Roll or pitch
+        // Apply Anti-Tip
+        double xTilt = drive.getRoll(); //Is this Roll or pitch
+        double yTilt = drive.getPitch();// Is this Roll or pitch
 
-        // if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
-        //     if (Math.abs(xTilt) > 10)
-        //         xSpeed = -antiTipX.calculate(xTilt, 0);
-        //     if (Math.abs(yTilt) >10)
-        //         ySpeed = -antiTipY.calculate(yTilt, 0);
-        // }
+        if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
+            if (Math.abs(xTilt) > 10)
+                xSpeed = -antiTipX.calculate(xTilt, 0);
+            if (Math.abs(yTilt) >10)
+                ySpeed = -antiTipY.calculate(yTilt, 0);
+        }
 
         // Apply deadzone
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;

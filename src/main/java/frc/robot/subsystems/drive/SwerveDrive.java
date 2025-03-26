@@ -86,8 +86,6 @@ public class SwerveDrive extends SubsystemBase {
     private DriveSysID sysId;   
 
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
-        private final Field2d field = new Field2d();
-    // private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
         DRIVE_KINEMATICS, 
@@ -96,13 +94,8 @@ public class SwerveDrive extends SubsystemBase {
     );
 
     private volatile Speed speed = Speed.NORMAL;
-    // private volatile TippingState tippingState = TippingState.ANTI_TIP;
+    private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
     
-    // Shuffleboard values
-    // private final ShuffleboardValue<String> tippingStateWriter = 
-    //     ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", this).build();
-    // private final ShuffleboardValue<String> speedStateWriter = 
-    //     ShuffleboardValue.create(speed.name(), "Current/State/Speed", this).build();
     
     private final ShuffleboardValue<Double> headingWriter = 
         ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
@@ -110,31 +103,21 @@ public class SwerveDrive extends SubsystemBase {
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> pitchWriter =   
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
-    // private final ShuffleboardValue<String> locationWriter = 
-    //     ShuffleboardValue.create("", "Current/Robot Location", this.getSubsystem()).build();
     private final ShuffleboardValue<Boolean> isEnabledWriter = 
         ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
         .withWidget(BuiltInWidgets.kToggleSwitch)
         .build();
     protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
         ("none", "Current/Pose", this.getSubsystem()).build();
-    // private final ShuffleboardValue<Double> forwardVelocityWriter = 
-        // ShuffleboardValue.create(0.0, "Current/Velocity", this.getSubsystem()).build();
 
     public SwerveDrive(Boolean isEnabled) {
-        // field2d.se();
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
 
-        // Pigeon Wires arefacing the front of the robot
-        //90, 180, 270, 0, 360
-        // set mount pose as rolled 90 degrees; Roll=90 counter-clockwise
-        // poseConfigs.MountPosePitch = 0;//Up-Down//0
-        // poseConfigs.MountPoseRoll =0;//Side-Side//90
-        // poseConfigs.MountPoseYaw = 00;//Heading//180;
+        // Pigeon Wires are facing the front of the robot
         pigeon2.getConfigurator().apply(new MountPoseConfigs());   
         isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
@@ -142,9 +125,6 @@ public class SwerveDrive extends SubsystemBase {
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }    
 
-        ComplexWidgetBuilder.create(field, "Field", "Misc")
-            .withWidget(BuiltInWidgets.kField)
-            .withSize(1, 3);
     }
 
     
@@ -157,11 +137,6 @@ public class SwerveDrive extends SubsystemBase {
 
         drivePoseWriter.set(getPose().toString());
         headingWriter.set(getHeading());
-        // rollWriter.set(getRoll());
-        // pitchWriter.set(getPitch());
-        // locationWriter.set(getPose().getTranslation().toString());
-        // forwardVelocityWriter.write(getForwardVelocity());
-        // field.setRobotPose(getPose());
     }
 
     @Override
@@ -178,9 +153,9 @@ public class SwerveDrive extends SubsystemBase {
         };
     }
 
-    // public TippingState getTippingState() {
-    //     return tippingState;
-    // }
+    public TippingState getTippingState() {
+        return tippingState;
+    }
 
     public double getHeading() {//Yaw
         return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
@@ -216,10 +191,6 @@ public class SwerveDrive extends SubsystemBase {
     public double getForwardVelocity() {
         return (frontLeft.getDriveVelocity() + frontRight.getDriveVelocity()) / 2;
     }
-
-    // public double getHeadingOffset() {
-    //     return SwerveConfig.HEADING_OFFSET.value.get();
-    // }
 
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(getRotation2d(), getModulePositions(), pose);
@@ -269,10 +240,10 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    // public void setTippingState(TippingState tippingState) {
-    //     this.tippingState = tippingState;
-    //     tippingStateWriter.set(tippingState.name());
-    // }
+    public void setTippingState(TippingState tippingState) {
+        this.tippingState = tippingState;
+        // tippingStateWriter.set(tippingState.name());
+    }
 
     public Command setSpeed(Speed speed) {
         return runOnce(() -> {
@@ -313,7 +284,7 @@ public class SwerveDrive extends SubsystemBase {
         return runOnce(()->setYawCommand(getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
     }      
 
-    public ChassisSpeeds getSpeeds() {//Is this Roboto Relative
+    public ChassisSpeeds getSpeeds() {//Is this Robot Relative
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
     }
     public SwerveModuleState[] getModuleStates() {
