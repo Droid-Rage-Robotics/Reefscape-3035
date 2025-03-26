@@ -41,52 +41,31 @@ public class RobotContainer {
 		Carriage carriage,
 		Climb climb,
 		Vision vision
-		) {
-		// if(vision.isID(DroidRageConstants.leftLimelight)){
-		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
-   		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 1);
-		// } 
-		// else
-		// {
-		// 	new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 0);
-
-		// }
-		
+		) {		
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
-		// carriage.getCoralIntake().setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator));
-		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
 		vision.setDefaultCommand(new LightCommand(driver, vision));
-		// new InstantCommand(() -> driver.getHID().setRumble(RumbleType.kBothRumble, 0.7));
 
 		driver.leftBumper()
-			// .onTrue(new AutoAimLimeMineCombine(drive, vision, driver));
-			// .onTrue(new AutoAimLimeMineIMU(drive, vision, driver));
 			.onTrue(new TeleopAlign(drive, vision, driver));
-			// .onTrue(new AutoAimLime(drive, vision, driver));
-			// .onTrue(new TeleopAlign(drive, vision, driver, Vision.Location.RIGHT_L));
 		driver.rightStick()
 			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.RIGHT))));
 		driver.leftStick()
 			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.LEFT))));
 		driver.rightTrigger()
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
-			// .onTrue(new CommandsList.TeleopIntakeCommand(carriage))
 			.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
 		driver.leftTrigger()
 			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 		driver.x()
 			.onTrue(new TeleopCommands().barge(elevator, carriage));
-		// driver.x().onTrue(new Turn180Degrees(drive, driver));
 
 		driver.povUp()
 			.onTrue(climb.setTargetPositionCommand(Climb.hold));
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-		// driver.povRight()
-		// 	.onTrue(climb.setTargetPositionCommand(climb.getTargetPosition()-5));
 
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));
@@ -105,7 +84,6 @@ public class RobotContainer {
 				)
 			);
 			
-			// .onTrue(elevator.setTargetPositionCommand(ElevatorValue.L2));
 		operator.a()
 			.onTrue(
 				new SequentialCommandGroup(
