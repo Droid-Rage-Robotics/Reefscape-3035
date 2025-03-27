@@ -14,10 +14,16 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Vision extends SubsystemBase {
     public enum Location{
-        RIGHT_R(.4,.4),
+        RIGHT_R_L4(.4,.4),
+        RIGHT_R_L3(.4,.4),
+        RIGHT_R_L2(.4,.4),
+
         // ALGAE_R(0,0),
 
-        LEFT_L(-1.1, -6),// -1.5, -6
+        LEFT_L_L4(-1.1, -6),
+        LEFT_L_L3(-1.1, -6),
+        LEFT_L_L2(-1.1, -6),
+
         // ALGAE_L(0, 0)
         
         ;
