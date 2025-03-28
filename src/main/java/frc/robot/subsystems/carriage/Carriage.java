@@ -62,7 +62,7 @@ public class Carriage {
         INTAKE(50),
         OUTTAKE(-130),
         OUTTAKE_L1(-50),
-        SHOOT(-400),
+        SHOOT(-700),
         // HOLD(10),
         HOLD_ALGAE(35),
         HOLD_CORAL(3),

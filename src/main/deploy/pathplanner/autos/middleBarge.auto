@@ -63,14 +63,14 @@
                 "data": {
                   "pathName": "middleBarge2"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "placeBarge"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "placeBarge"
           }
         },
         {
@@ -83,6 +83,12 @@
           "type": "named",
           "data": {
             "name": "resetBarge"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middleBarge3"
           }
         }
       ]

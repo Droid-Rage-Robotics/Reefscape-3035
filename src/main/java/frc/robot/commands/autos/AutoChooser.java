@@ -121,19 +121,19 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
-                new WaitCommand(1.),
+                // new WaitCommand(1),
                 new ParallelCommandGroup(
                     elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
                     carriage.setPositionCommand(CarriageValue.BARGE)
                 ),
                 // new WaitUntilCommand(elevator.getEncoderPosition()>),
-                new WaitCommand(.5),
-                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+                new WaitCommand(4),
+                carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
             )
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
-                // new WaitCommand(4),
+                new WaitCommand(1)
                 // new ParallelCommandGroup(
                 //     elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
                 //     carriage.setPositionCommand(CarriageValue.L4)
@@ -186,7 +186,7 @@ public class AutoChooser {
         // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
 
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
-        // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
+        autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
 
     }

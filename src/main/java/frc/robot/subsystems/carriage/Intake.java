@@ -14,8 +14,8 @@ import frc.utility.template.IntakeTemplate;
 
 public class Intake extends IntakeTemplate {
     private static class Constants {
-        public static final double MAX_SPEED = 500;
-        public static final double MIN_SPEED = -500;
+        public static final double MAX_SPEED = 800;
+        public static final double MIN_SPEED = -800;
     }
     private final ShuffleboardValue<Boolean> isElementInWriter = 
         ShuffleboardValue.create(false, "IsElement", Carriage.class.getSimpleName())
