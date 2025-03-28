@@ -26,17 +26,16 @@ public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
-        new Arm(false), 
+        new Arm(false),
         new Pivot(false),
         new Intake(false)
     );
-    private Climb climb = new Climb(false);
+    private Climb climb = new Climb(true);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	
-	private final CommandXboxController operator =
-		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
+	private final CommandXboxController operator =		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();
 
@@ -120,6 +119,7 @@ public class Robot extends TimedRobot {
 		DriverStation.silenceJoystickConnectionWarning(true);
         drive.changeAllianceRotation();
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
+        // robotContainer.resetClimb(climb);
         vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
         // robotContainer.sysID(driveSysID);

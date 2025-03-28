@@ -14,15 +14,15 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Vision extends SubsystemBase {
     public enum Location{
-        RIGHT_R_L4(.4,.4),
-        RIGHT_R_L3(.4,.4),
-        RIGHT_R_L2(.4,.4),
+        RIGHT_R_L4(2.5,-20),
+        RIGHT_R_L3(RIGHT_R_L4),
+        RIGHT_R_L2(RIGHT_R_L4),
 
         // ALGAE_R(0,0),
 
-        LEFT_L_L4(-1.1, -6),
-        LEFT_L_L3(-1.1, -6),
-        LEFT_L_L2(-1.1, -6),
+        LEFT_L_L4(-0.3, 20),
+        LEFT_L_L3(LEFT_L_L4),
+        LEFT_L_L2(LEFT_L_L4),
 
         // ALGAE_L(0, 0)
         
@@ -32,6 +32,10 @@ public class Vision extends SubsystemBase {
         private Location(double distance, double angle){
             this.distance = distance;
             this.angle = angle;
+        }
+        private Location(Location location){
+            this.distance = location.distance;
+            this.angle = location.angle;
         }
         
         public double getDistance() {
@@ -64,8 +68,8 @@ public class Vision extends SubsystemBase {
     // protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
     //     .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
-    public PIDController rotController =new PIDController(.12,0,0);//.06
-	public PIDController xController = new PIDController(.14, 0, 0);//,13
+    public PIDController rotController =new PIDController(.09,0,0);//.12
+	public PIDController xController = new PIDController(.1, 0, 0);//,14
     private int bluePipeline = 0, redPipeline =1;
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg",HttpCameraKind.kUnknown);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800", HttpCameraKind.kUnknown);

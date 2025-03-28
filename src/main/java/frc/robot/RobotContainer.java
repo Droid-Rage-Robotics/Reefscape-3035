@@ -66,7 +66,8 @@ public class RobotContainer {
 			.onTrue(climb.setTargetPositionCommand(Climb.hold));
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-
+		driver.povRight()
+			.onTrue(climb.setTargetPositionCommand(Climb.climbMore));
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));
 		operator.x()
@@ -124,5 +125,10 @@ public class RobotContainer {
 		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+	}
+
+	public void resetClimb(Climb climb){
+		driver.a()
+			.onTrue(new InstantCommand(()->climb.getMotor().setVoltage(1)));
 	}
 }

@@ -16,8 +16,8 @@ public class Carriage {
     
     public enum CarriageValue{
         START(45, 230),
-        INTAKE_HPS(72, 230),
-        INTAKE_HPS_BLOCK(90, 216), //When Blocked by a coral at HPS
+        INTAKE_HPS(68, 230),
+        INTAKE_HPS_BLOCK(90, 211), //When Blocked by a coral at HPS
         // HPS_HOLD(134, 108),
         HOLD(INTAKE_HPS),
 
@@ -26,9 +26,9 @@ public class Carriage {
         ALGAE_HIGH(112, 203),
         L1(105, 234),
         L2(105, 233),
-        L3(105, 232),//121//224.
+        L3(105, 230),//121//224.
 
-        L4(116,241),
+        L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
         
         BARGE(116, 133
         ),

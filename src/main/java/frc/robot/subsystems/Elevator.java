@@ -19,7 +19,7 @@ public class Elevator extends ElevatorTemplate {
     //Gear Ratio: 9:1
     public static class Constants {
         public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 55;   //40
+        public static final double MAX_POSITION = 55.2;   //40
     }
 
     public enum ElevatorValue {
@@ -29,10 +29,10 @@ public class Elevator extends ElevatorTemplate {
         CLIMB(0),
         
         L1(0),//5
-        L2(4),//8
-        L3(18.4),//29
+        L2(11),//8
+        L3(23.4),//29
 
-        L4(53.5),
+        L4(54.5),
   
         ALGAE_LOW(14),
         ALGAE_HIGH(27.9),
