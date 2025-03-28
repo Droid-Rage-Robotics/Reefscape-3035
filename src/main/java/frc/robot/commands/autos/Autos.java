@@ -2,6 +2,7 @@ package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -42,6 +43,7 @@ public final class Autos {
     }
     public static Command middleProcessor(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
+            new WaitCommand(.5),
             PathPlannerFollow.create(drive, "middleProcessor")
                 .setMaxVelocity(6)
                 .setAcceleration(6)

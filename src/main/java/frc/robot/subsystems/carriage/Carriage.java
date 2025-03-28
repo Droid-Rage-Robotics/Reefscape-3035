@@ -30,8 +30,7 @@ public class Carriage {
 
         L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
         
-        BARGE(116, 133
-        ),
+        BARGE(108, 133),
         BARGE_HOLD(130,130),
         PROCESSOR(105, 136),
 
@@ -136,7 +135,8 @@ public class Carriage {
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.5),
+                        new WaitCommand(.5
+                        ),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );
@@ -157,7 +157,7 @@ public class Carriage {
                 default -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.6),
+                        new WaitCommand(.35),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
             },

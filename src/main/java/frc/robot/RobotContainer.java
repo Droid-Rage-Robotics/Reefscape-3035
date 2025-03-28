@@ -15,6 +15,8 @@ import frc.robot.commands.OperatorXboxControllerRumble;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.TeleopAlign;
+import frc.robot.commands.manual.ManualClimb;
+// import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -46,6 +48,7 @@ public class RobotContainer {
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		vision.setDefaultCommand(new LightCommand(driver, vision));
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
 
 		driver.leftBumper()
 			.onTrue(new TeleopAlign(drive, vision, driver));
@@ -67,7 +70,12 @@ public class RobotContainer {
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
 		driver.povRight()
+			// .whileTrue(climb.increaseClimb());
+			// .whileTrue(climb.setTargetPositionCommand(Math.toDegrees(climb.getTargetPosition())+5));
 			.onTrue(climb.setTargetPositionCommand(Climb.climbMore));
+		driver.povLeft()
+			// .onTrue(null)
+			.onTrue(climb.setTargetPositionCommand(Climb.climbMoreMOre));
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));
 		operator.x()

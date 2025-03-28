@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
 import frc.utility.motor.CANMotorEx;
@@ -14,18 +16,20 @@ import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 380;
+        public static final double MAX_POSITION = 400;
         public static final double MIN_POSITION = 80;
         public static final double OFFSET = Math.PI/2;
 
 
     }
     
-    public static double climb = 300;//48
-    public static double hold = 165;
+    public static double hold = 180;
     // public static double reset = 90;
-    public static boolean pidOn = true;
-    public static double climbMore = 325;
+    public static double climb = 340;//48 //300
+    // public static boolean pidOn = true;
+    public static double climbMore = 355;
+    public static double climbMoreMOre = 370;
+
 //3 4:1s+
 //64
 //12
@@ -60,6 +64,10 @@ public class Climb extends ArmTemplate {
         setTargetPosition(90);
 
     }
+
+    // public Command increaseClimb(){
+    //     return setTargetPositionCommand(Math.toDegrees(getTargetPosition())+5);
+    // }
 
     // @Override
     // public void periodic(){

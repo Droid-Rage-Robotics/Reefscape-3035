@@ -15,9 +15,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "middlePD"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "middlePD"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -76,19 +89,26 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 0.2
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "resetBarge"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middleBarge3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetBarge"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge3"
+                }
+              }
+            ]
           }
         }
       ]

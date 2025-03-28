@@ -69,7 +69,7 @@ public class AutoChooser {
                     // new AutoAimLimeMine(drive, vision,driver)
                 ),
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
-                new WaitCommand(1.),
+                new WaitCommand(1.5),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 1.4)
                     // new AutoAli(drive, vision).withTimeout(2)
                 
@@ -77,7 +77,7 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
-                new WaitCommand(2),
+                new WaitCommand(3),
                 // new InstantCommand(()->
                 // drive.drive(vision.limelight_range_proportional(), 0, 0))
                 // new WaitCommand(2),
@@ -142,6 +142,14 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("out",
             carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
+        );
+        NamedCommands.registerCommand("holdAlgae",
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                carriage.setPositionCommand(CarriageValue.INTAKE_GROUND),
+                carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE),
+                elevator.setTargetPositionCommand(6)
+            )
         );
 
         createAutoBuilder(drive);

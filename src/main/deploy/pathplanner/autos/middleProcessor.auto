@@ -15,9 +15,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "middlePD"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "middlePD"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -25,32 +38,52 @@
                 "data": {
                   "name": "placeL4"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "pickHAlgae"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickLAlgae"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "resetCarriage"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middleProc"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeProcessor"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "holdAlgae"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleProc"
+                }
+              }
+            ]
           }
         }
       ]

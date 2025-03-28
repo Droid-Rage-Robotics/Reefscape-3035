@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,7 +24,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
     private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
         new Arm(true),
@@ -35,9 +36,10 @@ public class Robot extends TimedRobot {
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	
-	private final CommandXboxController operator =		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
+	private final CommandXboxController operator =		
+        new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
     // private final CycleTracker cycleTracker = new CycleTracker();
-    // private final Light light = new Light();
+    // private final Light light = new Light();*
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // teleopRan = false;
+        // CameraServer.startAutomaticCapture(); //DO NOT USE
         
     }
     
