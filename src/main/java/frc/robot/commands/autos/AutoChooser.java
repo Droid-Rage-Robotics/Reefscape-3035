@@ -147,7 +147,7 @@ public class AutoChooser {
             new SequentialCommandGroup(
                 new WaitCommand(2),
                 carriage.setPositionCommand(CarriageValue.INTAKE_GROUND),
-                carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE),
+                carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
                 elevator.setTargetPositionCommand(6)
             )
         );

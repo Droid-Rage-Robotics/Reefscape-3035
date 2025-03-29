@@ -20,8 +20,8 @@ public class AutoCommands{
             ),
             new WaitCommand(.37),
             new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 10),
-                carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE)
+                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 10)
+                // carriage.setIntakeCommand(CarriageIntakeValue.IN)
             )
             // new WaitCommand(1)
         );
