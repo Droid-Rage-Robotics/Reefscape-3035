@@ -53,7 +53,7 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(38,0,0), //kp: 5.2,7
+        new PIDController(45,0,0), //kp: 5.2,7
         //31
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
