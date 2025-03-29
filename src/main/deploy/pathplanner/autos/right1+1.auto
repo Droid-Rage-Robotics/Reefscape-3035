@@ -11,21 +11,54 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "leave2EScore"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leave2EScore"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "align"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeL4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -41,28 +74,73 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "left"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "left"
+                  "name": "resetCarriage"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "RH2CScore"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RH2CScore"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "align"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeL4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

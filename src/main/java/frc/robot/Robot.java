@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
         new Pivot(true),
         new Intake(true)
     );
+    
     private Climb climb = new Climb(true);
 
     private final CommandXboxController driver =

@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "leave2EScore"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "placeL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leave2EScore"
           }
         },
         {
