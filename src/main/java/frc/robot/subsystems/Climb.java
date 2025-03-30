@@ -37,6 +37,7 @@ public class Climb extends ArmTemplate {
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor( .008)//(125/1)*(48/16); .02
+        //.013333
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(50);
