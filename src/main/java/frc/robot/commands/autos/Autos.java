@@ -43,7 +43,7 @@ public final class Autos {
     }
     public static Command middleProcessor(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            new WaitCommand(.5),
+            new WaitCommand(4),
             PathPlannerFollow.create(drive, "middleProcessor")
                 .setMaxVelocity(6)
                 .setAcceleration(6)

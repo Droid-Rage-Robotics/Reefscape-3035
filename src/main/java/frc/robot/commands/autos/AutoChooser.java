@@ -179,12 +179,12 @@ public class AutoChooser {
     }
 
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
-        autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
         autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL1", Autos.middleL1(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
         autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
-        autoChooser.setDefaultOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
+        autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
         autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
 
         //middleL4Algae
