@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -59,6 +61,7 @@ public class TeleopCommands{
         return new SequentialCommandGroup(
             elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
             new WaitUntilCommand(()->elevator.getEncoderPosition()<=2),
+            // new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 6),
             carriage.setPositionCommand(value)
             // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
         );
@@ -70,6 +73,14 @@ public class TeleopCommands{
         //     elevator.setTargetPositionCommand(ElevatorValue.GROUND)
         // );
         return new SequentialCommandGroup(
+            // carriage.setPositionCommand(CarriageValue.L4),
+            // new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+            // elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+            // new WaitUntilCommand(()->elevator.getEncoderPosition()<6),
+            // carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
+
+
+
             carriage.setPositionCommand(CarriageValue.L4),
             new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
             new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
@@ -107,6 +118,21 @@ public class TeleopCommands{
             
     //     );
     // }
+
+    public Command reset(Elevator elevator, Carriage carriage){
+        switch(carriage.getPosition()){
+            case BARGE, BARGE_HOLD:
+                return resetCarriageFromBarge(elevator, carriage);
+            case INTAKE_GROUND:
+                return intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS);
+                // return new SequentialCommandGroup(
+                //     carriage.setPositionCommand(CarriageValue.L1),
+                //     carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
+                // );
+            default:
+                return carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
+        }
+    }
 
     public TeleopCommands(){
     }

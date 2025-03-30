@@ -24,15 +24,15 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
         new Arm(true),
         new Pivot(true),
-        new Intake(true)
+        new Intake(false)
     );
     
-    private Climb climb = new Climb(true);
+    private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);

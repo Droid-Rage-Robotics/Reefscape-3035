@@ -26,15 +26,15 @@ public class Carriage {
         ALGAE_HIGH(112, 203),
         L1(105, 234),
         L2(105, 233),
-        L3(105, 230),//121//224.
+        L3(105, 230),
 
         L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
         
         BARGE(108, 133),
         BARGE_HOLD(130,130),
-        PROCESSOR(105, 136),
+        PROCESSOR(INTAKE_GROUND),
 
-        RESET_HIGH(115, 200)
+        // RESET_HIGH(115, 200)
 
         ;
 
@@ -126,7 +126,7 @@ public class Carriage {
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
                     // pivot.setTargetPositionCommand(100),
                     pivot.setTargetPositionCommand(targetPos.getPivotAngle()),
-                    new WaitCommand(.6),
+                    new WaitCommand(.3),
                     arm.setTargetPositionCommand(targetPos.getArmAngle())
                     // new WaitCommand(1
                     // new WaitUntilCommand(()->arm.atSetpoint()),
@@ -135,8 +135,7 @@ public class Carriage {
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.5
-                        ),
+                        new WaitCommand(.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );

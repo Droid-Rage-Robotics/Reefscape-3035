@@ -110,6 +110,7 @@ public class RobotContainer {
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
+			// .onTrue(new TeleopCommands().reset(elevator, carriage));
 			.onTrue(new TeleopCommands().resetCarriageFromBarge(elevator, carriage));
 
 		operator.rightBumper()
