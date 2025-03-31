@@ -15,6 +15,7 @@ import frc.robot.commands.LightCommand;
 import frc.robot.commands.OperatorXboxControllerRumble;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
+import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualClimb;
 // import frc.robot.commands.manual.ManualClimb;
@@ -44,7 +45,9 @@ public class RobotContainer {
 		Carriage carriage,
 		Climb climb,
 		Vision vision
-		) {		
+		) {
+		
+		driver.a().onTrue(new Turn180Degrees(drive, driver)); //ToDo: Test
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));

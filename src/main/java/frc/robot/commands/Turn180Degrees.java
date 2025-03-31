@@ -22,14 +22,15 @@ public class Turn180Degrees extends Command {
 
     @Override
     public void initialize() {
+        
+    }
+    @Override
+    public void execute() {
         if (driver.x().getAsBoolean()) {
 
             // Get the current angle of the robot and set the target to 180 degrees away
             targetAngle = drive.getHeading() + 180;
         }
-    }
-    @Override
-    public void execute() {
         
         // Reset PID controller with the current gyro angle
         controller.setSetpoint(targetAngle);
