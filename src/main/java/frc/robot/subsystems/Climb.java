@@ -25,10 +25,10 @@ public class Climb extends ArmTemplate {
     
     public static double hold = 180;
     // public static double reset = 90;
-    public static double climb = 340;//48 //300
+    public static double climb = 355;//48 //300
     // public static boolean pidOn = true;
-    public static double climbMore = 355;
-    public static double climbMoreMOre = 370;
+    // public static double climbMore = 355;
+    // public static double climbMoreMOre = 370;
 
 //3 4:1s+
 //64

@@ -109,13 +109,15 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("resetCarriage",
             new SequentialCommandGroup(
-                new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS),
+                new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS),
+                // new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
             )
         );
         NamedCommands.registerCommand("resetBarge",
             new SequentialCommandGroup(
-                new TeleopCommands().resetCarriageFromBarge(elevator, carriage),
+                new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS),
+                // new TeleopCommands().resetCarriageFromBarge(elevator, carriage),
                 carriage.setIntakeCommand(CarriageIntakeValue.STOP)
             )
         );

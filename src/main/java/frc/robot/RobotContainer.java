@@ -4,6 +4,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -56,26 +57,21 @@ public class RobotContainer {
 			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.RIGHT))));
 		driver.leftStick()
 			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.LEFT))));
-		driver.rightTrigger()
+		driver.rightTrigger() ///TODO: Test on False
 			.onTrue(carriage.setIntakeCommand(CarriageIntakeValue.INTAKE))
 			.onFalse(new TeleopCommands().teleopHoldCommand(carriage));
 		driver.leftTrigger()
 			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
-		driver.x()
+
+		driver.x() //To Test
 			.onTrue(new TeleopCommands().barge(elevator, carriage));
 
 		driver.povUp()
 			.onTrue(climb.setTargetPositionCommand(Climb.hold));
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-		driver.povRight()
-			// .whileTrue(climb.increaseClimb());
-			// .whileTrue(climb.setTargetPositionCommand(Math.toDegrees(climb.getTargetPosition())+5));
-			.onTrue(climb.setTargetPositionCommand(Climb.climbMore));
-		driver.povLeft()
-			// .onTrue(null)
-			.onTrue(climb.setTargetPositionCommand(Climb.climbMoreMOre));
+		
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));
 		operator.x()
@@ -86,9 +82,9 @@ public class RobotContainer {
 					elevator.setTargetPositionCommand(ElevatorValue.L3)));
 		operator.b()
 			.onTrue(
-				new SequentialCommandGroup(
+				new ParallelCommandGroup(//new SequentialCommandGroup(
 					carriage.setPositionCommand(CarriageValue.L2),
-					new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+					// new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
 					elevator.setTargetPositionCommand(ElevatorValue.L2)
 				)
 			);
@@ -102,16 +98,16 @@ public class RobotContainer {
 				)
 			);
 
-		operator.povRight()// Coral
-			.onTrue(new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS));
+		// operator.povRight()// Coral
+		// 	.onTrue(new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS));
 		operator.povLeft()// Coral
-			.onTrue(new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS_BLOCK));
+			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS_BLOCK));
 		operator.povUp()// ALgae
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
-		operator.povDown()
-			// .onTrue(new TeleopCommands().reset(elevator, carriage));
-			.onTrue(new TeleopCommands().resetCarriageFromBarge(elevator, carriage));
+		operator.povDown() //To Test
+			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS));
+			// .onTrue(new TeleopCommands().resetCarriageFromBarge(elevator, carriage));
 
 		operator.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))
@@ -134,10 +130,5 @@ public class RobotContainer {
 		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-	}
-
-	public void resetClimb(Climb climb){
-		driver.a()
-			.onTrue(new InstantCommand(()->climb.getMotor().setVoltage(1)));
 	}
 }

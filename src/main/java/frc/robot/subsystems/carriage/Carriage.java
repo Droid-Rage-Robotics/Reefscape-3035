@@ -15,11 +15,11 @@ public class Carriage {
         .build();
     
     public enum CarriageValue{
-        START(45, 230),
+        // START(45, 230),
         INTAKE_HPS(68, 230),
         INTAKE_HPS_BLOCK(90, 211), //When Blocked by a coral at HPS
         // HPS_HOLD(134, 108),
-        HOLD(INTAKE_HPS),
+        // HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(191 ,139),
         ALGAE_LOW(113, 214),
@@ -63,7 +63,7 @@ public class Carriage {
         OUTTAKE_L1(-50),
         SHOOT(-700),
         // HOLD(10),
-        HOLD_ALGAE(35),
+        HOLD_ALGAE(INTAKE),
         HOLD_CORAL(3),
         STOP(0);
 
@@ -71,6 +71,10 @@ public class Carriage {
 
         private CarriageIntakeValue(double intakeSpeed){
             this.intakeSpeed = intakeSpeed;
+        }
+        
+        private CarriageIntakeValue(CarriageIntakeValue value) {
+            this.intakeSpeed = value.intakeSpeed;
         }
 
         // public double getIntakeSpeed(){
@@ -110,27 +114,9 @@ public class Carriage {
             
             // isHighReset(),
             switch (targetPos) {
-                case START -> 
-                    new SequentialCommandGroup(
-                        arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(3),
-                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
-                    );
-                case HOLD -> 
-                    new SequentialCommandGroup(
-                        arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(1.5),
-                        pivot.setTargetPositionCommand(targetPos.getPivotAngle())
-                    );
-                    
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
-                    // pivot.setTargetPositionCommand(100),
-                    pivot.setTargetPositionCommand(targetPos.getPivotAngle()),
-                    new WaitCommand(.3),
-                    arm.setTargetPositionCommand(targetPos.getArmAngle())
-                    // new WaitCommand(1
-                    // new WaitUntilCommand(()->arm.atSetpoint()),
-                    
+                    // Will Not Do Anything
+                    // @param new TeleopCommands().resetHP(elevator, carriage, targetPos) instead.
                 );
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
@@ -160,6 +146,12 @@ public class Carriage {
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
             },
+            setPosition(targetPos)
+        );
+    }
+    /** Not something to Command anything other than to make the writers reflect the position */
+    public Command setPosition(CarriageValue targetPos) {
+        return new SequentialCommandGroup(
             new InstantCommand(()-> position = targetPos),
             new InstantCommand(() -> positionWriter.set(position.name()))
         );

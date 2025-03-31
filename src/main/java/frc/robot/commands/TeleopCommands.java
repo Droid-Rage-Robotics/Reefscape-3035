@@ -14,6 +14,7 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import lombok.val;
 
 public class TeleopCommands{
     public SequentialCommandGroup teleopOuttakeCommand(Carriage carriage){
@@ -28,14 +29,23 @@ public class TeleopCommands{
         );
     }
 
-    public SequentialCommandGroup teleopHoldCommand(Carriage carriage) {
-        return new SequentialCommandGroup(
-            carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL)
-            // new ConditionalCommand(
-            //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL),
-            //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE),
-            //         () -> DroidRageConstants.element == DroidRageConstants.Element.CORAL)
-        );
+    public Command teleopHoldCommand(Carriage carriage) {
+        switch(carriage.getPosition()){
+            case ALGAE_HIGH, ALGAE_LOW, BARGE, BARGE_HOLD, INTAKE_GROUND, PROCESSOR:
+                return carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE);
+            case INTAKE_HPS, INTAKE_HPS_BLOCK, L1, L2, L3,L4:
+                return carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL);
+
+            default:
+                return carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL);
+        }
+        // return new SequentialCommandGroup(
+        //     carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL)
+        //     // new ConditionalCommand(
+        //     //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL),
+        //     //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE),
+        //     //         () -> DroidRageConstants.element == DroidRageConstants.Element.CORAL)
+        // );
     }
     
     public SequentialCommandGroup runIntakeFor(Carriage carriage, CarriageIntakeValue value, double waitSec) {
@@ -48,6 +58,14 @@ public class TeleopCommands{
 
     public SequentialCommandGroup barge(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
+            // carriage.setPositionCommand(CarriageValue.BARGE),
+            // new WaitUntilCommand(()->
+            //     Math.abs(carriage.getArm().getTargetPosition()-carriage.getArm().getEncoderPosition())<3),
+            // elevator.setTargetPositionCommand(ElevatorValue.BARGE),
+            // // new WaitUntilCommand(()->elevator.getEncoderPosition()>=47),
+            // // // new WaitCommand(1),
+            // // carriage.setPositionCommand(CarriageValue.BARGE)
+
             carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
             new WaitUntilCommand(()->
                 Math.abs(carriage.getArm().getTargetPosition()-carriage.getArm().getEncoderPosition())<3),
@@ -57,50 +75,50 @@ public class TeleopCommands{
             carriage.setPositionCommand(CarriageValue.BARGE)
         );
     }
-    public SequentialCommandGroup intakeHPS(Elevator elevator, Carriage carriage, CarriageValue value){
-        return new SequentialCommandGroup(
-            elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
-            new WaitUntilCommand(()->elevator.getEncoderPosition()<=2),
-            // new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 6),
-            carriage.setPositionCommand(value)
-            // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
-        );
-    }
+    // public SequentialCommandGroup intakeHPS(Elevator elevator, Carriage carriage, CarriageValue value){
+    //     return new SequentialCommandGroup(
+    //         elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
+    //         new WaitUntilCommand(()->elevator.getEncoderPosition()<=2),
+    //         // new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 6),
+    //         carriage.setPositionCommand(value)
+    //         // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
+    //     );
+    // }
 
-    public SequentialCommandGroup resetCarriageFromBarge(Elevator elevator, Carriage carriage){
-        // return new SequentialCommandGroup(
-        //     carriage.setPositionCommand(CarriageValue.INTAKE_HPS),
-        //     elevator.setTargetPositionCommand(ElevatorValue.GROUND)
-        // );
-        return new SequentialCommandGroup(
-            // carriage.setPositionCommand(CarriageValue.L4),
-            // new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
-            // elevator.setTargetPositionCommand(ElevatorValue.GROUND),
-            // new WaitUntilCommand(()->elevator.getEncoderPosition()<6),
-            // carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
+    // public SequentialCommandGroup resetCarriageFromBarge(Elevator elevator, Carriage carriage, CarriageValue value){
+    //     // return new SequentialCommandGroup(
+    //     //     carriage.setPositionCommand(CarriageValue.INTAKE_HPS),
+    //     //     elevator.setTargetPositionCommand(ElevatorValue.GROUND)
+    //     // );
+    //     return new SequentialCommandGroup(
+    //         // carriage.setPositionCommand(CarriageValue.L4),
+    //         // new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+    //         // elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+    //         // new WaitUntilCommand(()->elevator.getEncoderPosition()<6),
+    //         // carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
 
 
 
-            carriage.setPositionCommand(CarriageValue.L4),
-            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
-            new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
-            elevator.setTargetPositionCommand(ElevatorValue.GROUND),
-            new WaitUntilCommand(()->elevator.getEncoderPosition()<1),
-            carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
-            // new ConditionalCommand(
-            //     new SequentialCommandGroup(
-            //         carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
-            //         new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
-            //         new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
-            //         elevator.setTargetPositionCommand(ElevatorValue.GROUND)                    
-            //     ),
-            //     new SequentialCommandGroup(
-            //         intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS)
-            //     ),
-            //    ()-> carriage.isCarriageValue(CarriageValue.BARGE)
-            // )
-        );
-    }
+    //         carriage.setPositionCommand(CarriageValue.L4),
+    //         new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+    //         new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
+    //         elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+    //         new WaitUntilCommand(()->elevator.getEncoderPosition()<1),
+    //         carriage.setPositionCommand(value) // CarriageValue.INTAKE_HPS/INTAKE_HPS_BLOCK
+    //         // new ConditionalCommand(
+    //         //     new SequentialCommandGroup(
+    //         //         carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
+    //         //         new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+    //         //         new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
+    //         //         elevator.setTargetPositionCommand(ElevatorValue.GROUND)                    
+    //         //     ),
+    //         //     new SequentialCommandGroup(
+    //         //         intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS)
+    //         //     ),
+    //         //    ()-> carriage.isCarriageValue(CarriageValue.BARGE)
+    //         // )
+    //     );
+    // }
 
     public SequentialCommandGroup goL4(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
@@ -119,19 +137,66 @@ public class TeleopCommands{
     //     );
     // }
 
-    public Command reset(Elevator elevator, Carriage carriage){
-        switch(carriage.getPosition()){
-            case BARGE, BARGE_HOLD:
-                return resetCarriageFromBarge(elevator, carriage);
-            case INTAKE_GROUND:
-                return intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS);
-                // return new SequentialCommandGroup(
-                //     carriage.setPositionCommand(CarriageValue.L1),
-                //     carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
-                // );
-            default:
-                return carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
-        }
+    public Command resetHP(Elevator elevator, Carriage carriage, CarriageValue value){
+        return new SequentialCommandGroup(
+                switch (carriage.getPosition()) {
+                    case BARGE, BARGE_HOLD:
+                        yield new SequentialCommandGroup(
+                            // carriage.setPositionCommand(CarriageValue.L4),
+                            // new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+                            // elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+                            // new WaitUntilCommand(()->elevator.getEncoderPosition()<6),
+                            // carriage.setPositionCommand(CarriageValue.INTAKE_HPS)
+
+
+
+                            carriage.setPositionCommand(CarriageValue.L4),
+                            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+                            new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
+                            elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+                            new WaitUntilCommand(()->elevator.getEncoderPosition()<1),
+                            carriage.setPositionCommand(value) // CarriageValue.INTAKE_HPS/INTAKE_HPS_BLOCK
+                            // new ConditionalCommand(
+                            //     new SequentialCommandGroup(
+                            //         carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
+                            //         new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+                            //         new WaitUntilCommand(()->carriage.getPivot().atSetpoint()),
+                            //         elevator.setTargetPositionCommand(ElevatorValue.GROUND)                    
+                            //     ),
+                            //     new SequentialCommandGroup(
+                            //         intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS)
+                            //     ),
+                            //    ()-> carriage.isCarriageValue(CarriageValue.BARGE)
+                            // )
+                        );
+                    case INTAKE_GROUND:
+                        // return intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS);
+                        yield new SequentialCommandGroup(
+                            elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
+                            new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 2),
+                            carriage.setPositionCommand(CarriageValue.L1),
+                            // carriage.setPositionCommand(value)
+                            carriage.getArm().setTargetPositionCommand(value.getArmAngle()),
+                            new WaitCommand(.3),
+                            carriage.getPivot().setTargetPositionCommand(value.getPivotAngle()));
+                    default:
+                        // return carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
+                        // return intakeHPS(elevator, carriage, value);
+                        yield new SequentialCommandGroup(
+                            elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
+                            new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 2),
+                            // new WaitUntilCommand(() -> elevator.getEncoderPosition() <= 6),
+                            // carriage.setPositionCommand(value)
+                            new ParallelCommandGroup(
+                                    carriage.getPivot().setTargetPositionCommand(value.getPivotAngle()),
+                                    carriage.getArm().setTargetPositionCommand(value.getArmAngle()))
+
+                            // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
+                            );
+                },
+                carriage.setPosition(value)
+        );
+        
     }
 
     public TeleopCommands(){
