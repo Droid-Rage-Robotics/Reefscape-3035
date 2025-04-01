@@ -101,8 +101,14 @@ public class RobotContainer {
 		operator.povLeft()// Coral
 			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS_BLOCK));
 		operator.povUp()// ALgae
-			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
-			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
+			.onTrue(
+				new SequentialCommandGroup(
+					carriage.setPositionCommand(CarriageValue.INTAKE_GROUND),
+					elevator.setTargetPositionCommand(ElevatorValue.GROUND)
+				)
+			);
+			// .onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
+			// .onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
 			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS));
 
