@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         //In Here, Try using controller to pick the auto
 
-        if(RobotController.getBatteryVoltage()<11.5){
+        if(RobotController.getBatteryVoltage()<12.5){
             batteryAlert.set(true);
             batteryAlert.setText("Battery Voltage Low");
 

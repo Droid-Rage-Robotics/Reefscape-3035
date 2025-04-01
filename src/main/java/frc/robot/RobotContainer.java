@@ -67,50 +67,43 @@ public class RobotContainer {
 			.onTrue(new TeleopCommands().teleopOuttakeCommand(carriage))
 			.onFalse(carriage.setIntakeCommand(CarriageIntakeValue.STOP));
 
-		driver.x() //To Test
-			.onTrue(new TeleopCommands().barge(elevator, carriage));
+		// driver.x() //To Test
+		// 	.onTrue(new TeleopCommands().barge(elevator, carriage));
 
 		driver.povUp()
 			.onTrue(climb.setTargetPositionCommand(Climb.hold));
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
-		
+
 		operator.y()
-			.onTrue(new TeleopCommands().goL4(elevator, carriage));
+			.onTrue(new TeleopCommands().barge(elevator, carriage));
 		operator.x()
+			.onTrue(new TeleopCommands().goL4(elevator, carriage));
+		operator.b()
 			.onTrue(
 				new SequentialCommandGroup(
 					carriage.setPositionCommand(CarriageValue.L3),
-					new WaitUntilCommand(() -> carriage.getArm().atSetpoint()),
 					elevator.setTargetPositionCommand(ElevatorValue.L3)));
-		operator.b()
+		operator.a()
 			.onTrue(
-				new ParallelCommandGroup(//new SequentialCommandGroup(
+				new ParallelCommandGroup(
 					carriage.setPositionCommand(CarriageValue.L2),
-					// new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
 					elevator.setTargetPositionCommand(ElevatorValue.L2)
 				)
 			);
 			
-		operator.a()
-			.onTrue(
-				new SequentialCommandGroup(
-					carriage.setPositionCommand(CarriageValue.L1),
-					new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
-					elevator.setTargetPositionCommand(ElevatorValue.L1)
-				)
-			);
+		
 
-		// operator.povRight()// Coral
-		// 	.onTrue(new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS));
+		operator.povRight()// ALgae
+			.onTrue(carriage.setPositionCommand(CarriageValue.PROCESSOR))
+			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.PROCESSOR));
 		operator.povLeft()// Coral
 			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS_BLOCK));
 		operator.povUp()// ALgae
 			.onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
 			.onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
-		operator.povDown() //To Test
+		operator.povDown()
 			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS));
-			// .onTrue(new TeleopCommands().resetCarriageFromBarge(elevator, carriage));
 
 		operator.rightBumper()
 			.onTrue(carriage.setPositionCommand(CarriageValue.ALGAE_HIGH))

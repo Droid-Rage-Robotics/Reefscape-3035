@@ -115,6 +115,8 @@ public class Carriage {
             // isHighReset(),
             switch (targetPos) {
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
+                    arm.setTargetPositionCommand(targetPos.getArmAngle()),
+                    pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     // Will Not Do Anything
                     // @param new TeleopCommands().resetHP(elevator, carriage, targetPos) instead.
                 );
@@ -128,15 +130,15 @@ public class Carriage {
                 case L1,L2,L3,L4 -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(1),
+                        new WaitCommand(.3),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );
                 case BARGE ->
                     new SequentialCommandGroup(
-                        pivot.setTargetPositionCommand(123),
+                        // pivot.setTargetPositionCommand(CarriageValue.L4.getPivotAngle()),
+                        // new WaitCommand(3),
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.5),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );            
                 default -> 

@@ -36,7 +36,8 @@ public class Elevator extends ElevatorTemplate {
   
         ALGAE_LOW(14),
         ALGAE_HIGH(27.),
-        BARGE(54.5)
+        BARGE(54.5),
+        PROCESSOR(5)
         ;
 
         @Getter private final double height;
@@ -45,6 +46,8 @@ public class Elevator extends ElevatorTemplate {
             this.height = height;
         }
     }
+
+    public double resetPos = 7;
 
     // GearRatio.Type type = GearRatio.Type.DISTANCE;
     private static TalonEx motorRight = TalonEx.create(15)
@@ -68,7 +71,7 @@ public class Elevator extends ElevatorTemplate {
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
-        new PIDController(0.55, 0, 0), //.6
+        new PIDController(0.9, 0, 0), //.6
         new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1
         new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION,
