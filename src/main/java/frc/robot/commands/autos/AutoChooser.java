@@ -68,15 +68,16 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("outtake", 
             new SequentialCommandGroup(
-                // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
-                new WaitCommand(.5),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 1.4)
+                // // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
+                // new WaitCommand(.6),
+                new AutoAlign(drive, vision).withTimeout(2),
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .05)
             )
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(2)
+                // new AutoAlign(drive, vision).withTimeout(2)
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -164,7 +165,7 @@ public class AutoChooser {
     }
 
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
-        autoChooser.setDefaultOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
+        autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
         autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL1", Autos.middleL1(drive, elevator, carriage, vision));
         autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
@@ -175,7 +176,7 @@ public class AutoChooser {
         //middleL4Algae
 
         autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
-        autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
 
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));

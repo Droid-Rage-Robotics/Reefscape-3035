@@ -35,7 +35,7 @@ public class Pivot extends ArmAbsoluteTemplate {
     public Pivot(boolean isEnabled) {
         super(
         new SparkMaxEx[]{motor}, 
-        new PIDController(4.7, 0, 0), // 2.7 p
+        new PIDController(4.8, 0, 0), // 2.7 p
         new ArmFeedforward(0.04, 0.21, .25, 0.15),
 
         // new ArmFeedforward(0.079284, 0.12603, 372.93,

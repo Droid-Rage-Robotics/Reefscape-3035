@@ -111,8 +111,9 @@ public class TeleopCommands{
                                 elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
                                 new WaitUntilCommand(() -> elevator.getEncoderPosition() <= elevator.resetPos),
                                 new ParallelCommandGroup(
-                                        carriage.getPivot().setTargetPositionCommand(value.getPivotAngle()),
-                                        carriage.getArm().setTargetPositionCommand(value.getArmAngle()))
+                                    carriage.getPivot().setTargetPositionCommand(value.getPivotAngle()),
+                                    carriage.getArm().setTargetPositionCommand(value.getArmAngle())
+                                )
 
                 );
             },

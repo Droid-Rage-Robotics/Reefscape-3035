@@ -127,7 +127,7 @@ public class Carriage {
                 case INTAKE_GROUND -> 
                     new SequentialCommandGroup(
                         arm.setTargetPositionCommand(targetPos.getArmAngle()),
-                        new WaitCommand(.5),
+                        new WaitCommand(.6),
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                         // new InstantCommand(()->incrementOuttakeCount())
                 );

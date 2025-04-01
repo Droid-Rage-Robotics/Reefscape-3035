@@ -25,24 +25,11 @@
                 "data": {
                   "name": "placeL4"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "outtake"
+                  "name": "align"
                 }
               }
             ]
