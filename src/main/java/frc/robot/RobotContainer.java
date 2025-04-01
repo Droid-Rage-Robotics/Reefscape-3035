@@ -2,23 +2,17 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.LightCommand;
-import frc.robot.commands.OperatorXboxControllerRumble;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualClimb;
-// import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
@@ -51,7 +45,7 @@ public class RobotContainer {
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
-		vision.setDefaultCommand(new LightCommand(driver, vision));
+		// vision.setDefaultCommand(new LightCommand(driver, vision));
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
 
 		driver.leftBumper()

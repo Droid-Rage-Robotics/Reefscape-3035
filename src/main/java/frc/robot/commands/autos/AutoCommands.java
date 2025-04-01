@@ -21,21 +21,11 @@ public class AutoCommands{
             new WaitCommand(.7),
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(elevatorValue.getHeight() + 7.7)
-                // carriage.setIntakeCommand(CarriageIntakeValue.IN)
             )
-            // new WaitCommand(1)
         );
     }
 
-    public SequentialCommandGroup teleopHoldCommand(Carriage carriage) {
-        return new SequentialCommandGroup(
-            // carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL)
-            // // new ConditionalCommand(
-            // //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL),
-            // //         carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE),
-            // //         () -> DroidRageConstants.element == DroidRageConstants.Element.CORAL)
-        );
-    }
+    
 
     public AutoCommands(){
     }
