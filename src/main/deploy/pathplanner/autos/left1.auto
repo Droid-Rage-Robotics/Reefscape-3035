@@ -11,15 +11,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "leave2IScore"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leave2IScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              }
+            ]
           }
         },
         {

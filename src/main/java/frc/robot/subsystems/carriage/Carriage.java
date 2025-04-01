@@ -2,9 +2,13 @@ package frc.robot.subsystems.carriage;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.DroidRageConstants;
+import frc.robot.commands.SuppliedCommand;
+import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
@@ -160,10 +164,12 @@ public class Carriage {
     }
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
-        // DroidRageConstants.setElement(position);
         return Commands.sequence(
-            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed())
-            // DroidRageConstants.setElement(getPosition())
+            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()),
+            new ConditionalCommand(
+                DroidRageConstants.setElement(getPosition()), 
+                new SequentialCommandGroup(), 
+                ()->intakeValue==CarriageIntakeValue.INTAKE)
         );
     }
 

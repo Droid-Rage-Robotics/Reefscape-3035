@@ -62,27 +62,20 @@ public class AutoChooser {
 
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    new TeleopCommands().goL4(elevator, carriage)
-                    // new AutoAli(drive, vision).withTimeout(2)
-                    // new AutoAlign(drive, vision).withTimeout(1.5)
-                    // new AutoAimLimeMine(drive, vision,driver)
-                ),
+                new TeleopCommands().goL4(elevator, carriage)
+                
+            )
+        );
+        NamedCommands.registerCommand("outtake", 
+            new SequentialCommandGroup(
                 new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
                 new WaitCommand(1.5),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 1.4)
-                    // new AutoAli(drive, vision).withTimeout(2)
-                
             )
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
-                new WaitCommand(3),
-                // new InstantCommand(()->
-                // drive.drive(vision.limelight_range_proportional(), 0, 0))
-                // new WaitCommand(2),
-                // new InstantCommand(()->
-                //                 drive.drive(0, 0, vision.limelight_aim_proportional()))
+                // new WaitCommand(2.),
                 new AutoAlign(drive, vision).withTimeout(2)
             )
         );
@@ -110,7 +103,6 @@ public class AutoChooser {
         NamedCommands.registerCommand("resetCarriage",
             new SequentialCommandGroup(
                 new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS),
-                // new TeleopCommands().intakeHPS(elevator, carriage, CarriageValue.INTAKE_HPS),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
             )
         );
@@ -135,7 +127,7 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
-                new WaitCommand(1)
+                new WaitCommand(2)
                 // new ParallelCommandGroup(
                 //     elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
                 //     carriage.setPositionCommand(CarriageValue.L4)
@@ -193,7 +185,7 @@ public class AutoChooser {
 
         // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
-        // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
+        autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
 
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));

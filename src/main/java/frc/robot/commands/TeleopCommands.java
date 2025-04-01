@@ -14,16 +14,26 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 
 public class TeleopCommands{
-    public SequentialCommandGroup teleopOuttakeCommand(Carriage carriage){
-        return new SequentialCommandGroup(
-            new ConditionalCommand(
-                carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1),
-                    new ConditionalCommand(
-                            carriage.setIntakeCommand(CarriageIntakeValue.SHOOT),
-                            carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
-                            () -> carriage.isCarriageValue(CarriageValue.BARGE)),
-                () -> carriage.isCarriageValue(CarriageValue.L1))
-        );
+    public Command teleopOuttakeCommand(Carriage carriage){
+        return SuppliedCommand.create(() -> Commands.sequence(
+                switch (carriage.getPosition()) {
+                    case L1:
+                        yield carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1);
+                    case BARGE:
+                        yield carriage.setIntakeCommand(CarriageIntakeValue.SHOOT);
+
+                    default:
+                        yield carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE);
+                }));
+        // return new SequentialCommandGroup(
+        //     new ConditionalCommand(
+        //         carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1),
+        //             new ConditionalCommand(
+        //                     carriage.setIntakeCommand(CarriageIntakeValue.SHOOT),
+        //                     carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE),
+        //                     () -> carriage.isCarriageValue(CarriageValue.BARGE)),
+        //         () -> carriage.isCarriageValue(CarriageValue.L1))
+        // );
     }
 
     public Command teleopHoldCommand(Carriage carriage) {
