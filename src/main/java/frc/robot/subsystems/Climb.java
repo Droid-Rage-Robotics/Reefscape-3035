@@ -23,9 +23,9 @@ public class Climb extends ArmTemplate {
 
     }
     
-    public static double hold = 180;
+    public static double hold = 150;//180
     // public static double reset = 90;
-    public static double climb = 355;//48 //300
+    public static double climb = 219;//355
     // public static boolean pidOn = true;
     // public static double climbMore = 355;
     // public static double climbMoreMOre = 370;
@@ -36,7 +36,7 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(16)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor( .008)//(125/1)*(48/16); .02
+        .withPositionConversionFactor( .008)//(125/1)*(48/16); .02 //.008
         //.013333
         .withSubsystemName("Climb")
         .withIsEnabled(true)
@@ -54,7 +54,7 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(45,0,0), //kp: 5.2,7
+        new PIDController(60,0,0), //kp: 45
         //31
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
