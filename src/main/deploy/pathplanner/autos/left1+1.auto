@@ -30,6 +30,25 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "resetCarriage"
@@ -48,12 +67,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "right"
                 }
               }
@@ -61,21 +74,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LH2JScore"
+            "name": "intake"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LH2JScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
           }
         },
         {
@@ -87,8 +107,20 @@
                 "data": {
                   "name": "align"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "resetCarriage"
           }
         }
       ]

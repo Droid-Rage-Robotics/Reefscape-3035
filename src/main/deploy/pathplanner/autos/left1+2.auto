@@ -11,15 +11,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "leave2IScore"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leave2IScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,12 +67,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "right"
                 }
               }
@@ -54,15 +74,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LH2JScore"
+            "name": "intake"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LH2JScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -84,34 +136,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "left"
+                  "name": "right"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "LH2KScore"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "placeL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "name": "intake"
           }
         },
         {
@@ -121,13 +155,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LH2KBack"
+                  "pathName": "LH2JScore"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "placeL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
                 }
               }
             ]

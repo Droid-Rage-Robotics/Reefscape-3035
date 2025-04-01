@@ -68,8 +68,8 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("outtake", 
             new SequentialCommandGroup(
-                new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
-                new WaitCommand(1.5),
+                // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
+                new WaitCommand(.5),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 1.4)
             )
         );
@@ -81,23 +81,23 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("placeL3",
             new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L3),
-                new WaitCommand(.6),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
+                carriage.setPositionCommand(CarriageValue.L3)
+                // new WaitCommand(.6),
+                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
             )
         );
         NamedCommands.registerCommand("placeL2",
             new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L2),
-                new WaitCommand(.6),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
+                carriage.setPositionCommand(CarriageValue.L2)
+                // new WaitCommand(.6),
+                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
             )
         );
         NamedCommands.registerCommand("placeL1",
             new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L1),
-                new WaitCommand(.6),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
+                carriage.setPositionCommand(CarriageValue.L1)
+                // new WaitCommand(.6),
+                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
             )
         );
         NamedCommands.registerCommand("resetCarriage",
@@ -115,23 +115,14 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
-                // new WaitCommand(1),
-                new ParallelCommandGroup(
-                    elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE),
-                    carriage.setPositionCommand(CarriageValue.BARGE)
-                ),
-                // new WaitUntilCommand(elevator.getEncoderPosition()>),
-                new WaitCommand(4),
+                new TeleopCommands().barge(elevator, carriage),
+                new WaitCommand(1),
                 carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
             )
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
-                new WaitCommand(2)
-                // new ParallelCommandGroup(
-                //     elevator.setTargetPositionCommand(Elevator.ElevatorValue.L4),
-                //     carriage.setPositionCommand(CarriageValue.L4)
-                // )
+                new WaitCommand(1.)
             )   
         );
         NamedCommands.registerCommand("out",
@@ -183,8 +174,8 @@ public class AutoChooser {
 
         //middleL4Algae
 
-        // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
-        // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
+        autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
+        autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
 
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
