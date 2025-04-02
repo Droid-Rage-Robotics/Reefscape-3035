@@ -38,11 +38,24 @@
                 "data": {
                   "name": "placeL4"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
                 }
               }
             ]
@@ -90,6 +103,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
           }
         }
       ]

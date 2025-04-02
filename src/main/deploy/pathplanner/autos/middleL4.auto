@@ -38,30 +38,24 @@
                 "data": {
                   "name": "placeL4"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "resetCarriage"
+                  "name": "align"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "middleBack"
+                  "name": "outtake"
                 }
               }
             ]

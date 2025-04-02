@@ -70,14 +70,14 @@ public class AutoChooser {
             new SequentialCommandGroup(
                 // // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
                 // new WaitCommand(.6),
-                new AutoAlign(drive, vision).withTimeout(2),
+                // new AutoAlign(drive, vision).withTimeout(2),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .05)
             )
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                // new AutoAlign(drive, vision).withTimeout(2)
+                new AutoAlign(drive, vision).withTimeout(2)
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -132,9 +132,9 @@ public class AutoChooser {
         NamedCommands.registerCommand("holdAlgae",
             new SequentialCommandGroup(
                 new WaitCommand(2),
-                carriage.setPositionCommand(CarriageValue.INTAKE_GROUND),
+                carriage.setPositionCommand(CarriageValue.PROCESSOR),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
-                elevator.setTargetPositionCommand(6)
+                elevator.setTargetPositionCommand(Elevator.ElevatorValue.PROCESSOR)
             )
         );
 
