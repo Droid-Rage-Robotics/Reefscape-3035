@@ -25,20 +25,27 @@
                 "data": {
                   "name": "placeL4"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,6 +62,12 @@
                 "type": "named",
                 "data": {
                   "name": "right"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetCarriage"
                 }
               }
             ]

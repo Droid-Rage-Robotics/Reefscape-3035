@@ -11,21 +11,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leave2EScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "leave2EScore"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,34 +61,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "right"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "left"
+                  "name": "resetCarriage"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "RH2CScore"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "placeL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "name": "intake"
           }
         },
         {
@@ -78,40 +86,48 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RH2CBack"
+                  "pathName": "RH2DScore"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "right"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeL4"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "RH2DScore"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "placeL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -127,10 +143,73 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetCarriage"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RH2CScore"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeL4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "resetCarriage"
           }
         }
       ]

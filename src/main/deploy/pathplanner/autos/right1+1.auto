@@ -21,41 +21,28 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "align"
-                      }
-                    }
-                  ]
+                  "name": "placeL4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "placeL4"
-                      }
-                    }
-                  ]
+                  "name": "outtake"
                 }
               }
             ]
@@ -74,7 +61,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "left"
+                  "name": "right"
                 }
               },
               {
@@ -87,9 +74,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "intake"
           }
         },
         {
@@ -99,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RH2CScore"
+                  "pathName": "RH2DScore"
                 }
               },
               {
@@ -109,26 +96,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "align"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
+                        "waitTime": 0.8
                       }
                     },
                     {
@@ -144,9 +112,47 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RH2DBack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetCarriage"
+                }
+              }
+            ]
           }
         }
       ]

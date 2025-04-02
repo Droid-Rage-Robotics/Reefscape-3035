@@ -11,21 +11,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "placeL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leave2EScore"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "placeL4"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "leave2EScore"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "outtake"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,16 +61,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "right"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "left"
+                  "name": "resetCarriage"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
           }
         }
       ]
