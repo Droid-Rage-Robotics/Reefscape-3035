@@ -10,15 +10,46 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Vision extends SubsystemBase {
     public enum Location{
-        RIGHT_R_L4(2.5,-20),
-        RIGHT_R_L3(RIGHT_R_L4),
-        RIGHT_R_L2(RIGHT_R_L4),
+        //Limelight
+        //Which Pole
+        //Pole Type
+        //ID
+        RIGHT_R_L4_17(2.14, -19.94), //Default -blue done
+        RIGHT_R_L4_18(2.1, -19.8),//done
+        RIGHT_R_L4_19(1.87,-20.24),//done
+        RIGHT_R_L4_20(1.2, -19.35),//done
+        RIGHT_R_L4_21(1.71,-18.83),//done
+        RIGHT_R_L4_22(2.01,-19.9),//done
+
+        RIGHT_R_L4_6(2.16, -20.57),//red//done
+        RIGHT_R_L4_7(1.84,-19.13),//done
+        RIGHT_R_L4_8(1.64,-22.18),//done
+        RIGHT_R_L4_9(2.28, -19.06),//done
+        RIGHT_R_L4_10(1.6, -16.61), //done
+        RIGHT_R_L4_11(1.88, -18.38),//done
+
+
+        // RIGHT_R_L3(RIGHT_R_L4),
+        // RIGHT_R_L2(RIGHT_R_L4),
 
         // ALGAE_R(0,0),
 
-        LEFT_L_L4(-0.3, 20),
-        LEFT_L_L3(LEFT_L_L4),
-        LEFT_L_L2(LEFT_L_L4),
+        LEFT_L_L4_17(-0.19, 19.41), //Default -blue //done
+        LEFT_L_L4_18(.05, 18.89),//done iffy
+        LEFT_L_L4_19(-0.29,22.12),//dne
+        LEFT_L_L4_20(-0.14,20.87),//DOne 
+        LEFT_L_L4_21(-0.25, 18.9),//done
+        LEFT_L_L4_22(-0.1,18.5),//done
+
+        LEFT_L_L4_6(-0.38, 19.68), //red - done
+        LEFT_L_L4_7(-0.06, 19.38),//done
+        LEFT_L_L4_8(-0.24,17.81),//done
+        LEFT_L_L4_9(-0.06, 17.67),// done
+        LEFT_L_L4_10(-0.3, 19.7),//done
+        LEFT_L_L4_11(-0.06, 20.36), //done
+
+        // LEFT_L_L3(LEFT_L_L4),
+        // LEFT_L_L2(LEFT_L_L4),
 
         // ALGAE_L(0, 0)
         
@@ -61,8 +92,8 @@ public class Vision extends SubsystemBase {
         .create(0.0, "L/tYL-Range", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Boolean> isIDWriter = ShuffleboardValue
-    //     .create(false, "isIDWriter", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> IDWriter = ShuffleboardValue
+        .create(0., "IDWRITER", Vision.class.getSimpleName()).build();
     public int targetIds[];
     public PIDController rotController =new PIDController(.09,0,0);//.12
 	public PIDController xController = new PIDController(.1, 0, 0);//,14
@@ -133,6 +164,7 @@ public class Vision extends SubsystemBase {
         tXLWriter.set(LimelightHelpers.getTX(DroidRageConstants.leftLimelight));
         tYLWriter.set(LimelightHelpers.getTY(DroidRageConstants.leftLimelight));
         tVLWriter.set(LimelightHelpers.getTV(DroidRageConstants.leftLimelight));
+        getID(DroidRageConstants.leftLimelight);
         // isID(DroidRageConstants.leftLimelight);
     }
    
@@ -204,18 +236,23 @@ public class Vision extends SubsystemBase {
     //     return false;
     // }
 
-    public double limelight_aim_proportional() {
-        double targetingAngularVelocity = rotController.calculate(gettX(DroidRageConstants.leftLimelight), 2);
-        // targetingAngularVelocity *=
-        // SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
-        return targetingAngularVelocity;// -
+    public int getID(String name){
+        IDWriter.set(LimelightHelpers.getFiducialID(name));
+        return (int) LimelightHelpers.getFiducialID(name);
     }
 
-    public double limelight_range_proportional() {
-        double targetingForwardSpeed = xController.calculate(gettY(DroidRageConstants.leftLimelight), 0);
-        // targetingForwardSpeed *=
-        // SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
-        return targetingForwardSpeed;
-    }
+    // public double limelight_aim_proportional() {
+    //     double targetingAngularVelocity = rotController.calculate(gettX(DroidRageConstants.leftLimelight), 2);
+    //     // targetingAngularVelocity *=
+    //     // SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue();
+    //     return targetingAngularVelocity;// -
+    // }
+
+    // public double limelight_range_proportional() {
+    //     double targetingForwardSpeed = xController.calculate(gettY(DroidRageConstants.leftLimelight), 0);
+    //     // targetingForwardSpeed *=
+    //     // SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue();
+    //     return targetingForwardSpeed;
+    // }
 
 }
