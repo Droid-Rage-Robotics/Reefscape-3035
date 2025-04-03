@@ -37,7 +37,7 @@ public class Elevator extends ElevatorTemplate {
         ALGAE_LOW(14),
         ALGAE_HIGH(27.),
         BARGE(54.5),
-        PROCESSOR(5)
+        PROCESSOR(13)
         ;
 
         @Getter private final double height;
