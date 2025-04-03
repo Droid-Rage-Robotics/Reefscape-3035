@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
 import frc.utility.motor.CANMotorEx;

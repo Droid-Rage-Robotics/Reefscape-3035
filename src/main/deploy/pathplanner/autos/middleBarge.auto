@@ -100,25 +100,19 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "resetBarge"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "middleBarge3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetBarge"
                 }
               }
             ]
