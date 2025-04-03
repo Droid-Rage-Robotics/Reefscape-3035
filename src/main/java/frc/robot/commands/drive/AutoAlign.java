@@ -46,11 +46,11 @@ public class AutoAlign extends Command {
 		switch (DroidRageConstants.alignmentMode) {
 			case LEFT:
 				targetingAngularVelocity = vision.rotController.calculate(
-						vision.gettX(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L_L4.getAngle());
+						vision.gettX(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L_L4_17.getAngle());
 				break;
 			case RIGHT:
 				targetingAngularVelocity = vision.rotController.calculate(
-						vision.gettX(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R_L4.getAngle());
+						vision.gettX(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R_L4_17.getAngle());
 				break;
 		}
 		return targetingAngularVelocity;// -
@@ -61,11 +61,11 @@ public class AutoAlign extends Command {
 		switch (DroidRageConstants.alignmentMode) {
 			case LEFT:
 				targetingForwardSpeed = vision.xController.calculate(
-						vision.gettY(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L_L4.getDistance());
+						vision.gettY(DroidRageConstants.leftLimelight), Vision.Location.LEFT_L_L4_17.getDistance());
 				break;
 			case RIGHT:
 				targetingForwardSpeed = vision.xController.calculate(
-						vision.gettY(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R_L4.getDistance());
+						vision.gettY(DroidRageConstants.rightLimelight), Vision.Location.RIGHT_R_L4_17.getDistance());
 				break;
 		}
 
