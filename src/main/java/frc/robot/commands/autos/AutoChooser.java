@@ -76,7 +76,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(2)
+                new AutoAlign(drive, vision).withTimeout(2.5)
             )
         );
         NamedCommands.registerCommand("placeL3",

@@ -70,6 +70,19 @@
                 "data": {
                   "pathName": "middleBarge1"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge1.5"
+                }
               },
               {
                 "type": "named",
