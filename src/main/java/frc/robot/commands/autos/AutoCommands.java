@@ -21,7 +21,7 @@ public class AutoCommands{
             new WaitCommand(1.2),
             new ParallelCommandGroup(
                 // elevator.setTargetPositionCommand(elevatorValue.getHeight() + 7.7)
-                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 2.4)
+                elevator.setTargetPositionCommand(elevatorValue.getHeight() + 2)
 
             )
         );

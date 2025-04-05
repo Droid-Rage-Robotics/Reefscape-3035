@@ -5,6 +5,31 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LH2IBack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "right"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetCarriage"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "intake"

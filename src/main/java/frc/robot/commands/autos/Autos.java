@@ -63,8 +63,12 @@ public final class Autos {
         );
     }
     public static Command middleBarge(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
-        return new SequentialCommandGroup(
+        return new SequentialCommandGroup(//middleBargePart2
             PathPlannerFollow.create(drive, "middleBarge")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build(),
+            PathPlannerFollow.create(drive, "middleBargePart2")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()

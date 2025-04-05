@@ -77,7 +77,9 @@ public class AutoChooser {
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(2.8)
+                new AutoAlign(drive, vision).withTimeout(1.6)
+                //2.8 for left AUtos
+                //Middle for playoffs
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -117,7 +119,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
                 new TeleopCommands().barge(elevator, carriage),
-                new WaitCommand(1.2),
+                new WaitCommand(1.9),
                 carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
             )
         );
