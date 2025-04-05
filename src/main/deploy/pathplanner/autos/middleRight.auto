@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "left"
+            "name": "right"
           }
         },
         {
@@ -27,7 +27,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "middlePD"
+                        "pathName": "middleR"
                       }
                     }
                   ]
@@ -59,62 +59,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middleBarge1"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "middleBarge1.5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "pickLAlgae"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "holdAlgae"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "middleProc"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "outtake"
           }
         }
       ]

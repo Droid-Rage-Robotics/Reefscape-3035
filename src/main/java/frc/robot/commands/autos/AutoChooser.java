@@ -55,9 +55,10 @@ public class AutoChooser {
                 Elevator.ElevatorValue.ALGAE_HIGH, CarriageValue.ALGAE_HIGH)
         );
         NamedCommands.registerCommand("right",
-            new InstantCommand(()-> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.RIGHT));
+            new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.RIGHT)));
         NamedCommands.registerCommand("left",
-            new InstantCommand(() -> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.LEFT));
+        new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.LEFT)));
+            // new InstantCommand(() -> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.LEFT));
 
         NamedCommands.registerCommand("placeL4",
             new SequentialCommandGroup(
@@ -76,7 +77,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(2.5)
+                new AutoAlign(drive, vision).withTimeout(2.8)
             )
         );
         NamedCommands.registerCommand("placeL3",
@@ -116,13 +117,19 @@ public class AutoChooser {
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
                 new TeleopCommands().barge(elevator, carriage),
-                new WaitCommand(1),
+                new WaitCommand(1.2),
                 carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
             )
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
                 new WaitCommand(1.)
+            )   
+        );
+        NamedCommands.registerCommand("test",
+            new SequentialCommandGroup(
+                carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
+                
             )   
         );
         NamedCommands.registerCommand("out",
@@ -171,13 +178,18 @@ public class AutoChooser {
         autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
         autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
         autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
+        autoChooser.addOption("middleRight", Autos.middleRight(drive, elevator, carriage, vision));
+        autoChooser.addOption("middleTest", Autos.middleTest(drive, elevator, carriage, vision));
+
 
         //middleL4Algae
 
         autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.setDefaultOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
 
+        
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));

@@ -15,22 +15,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "middlePD"
-                      }
-                    }
-                  ]
+                  "pathName": "leave2IScore"
                 }
               },
               {
@@ -62,65 +49,34 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "middleBarge1"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleBarge1.5"
+                  "pathName": "LH2IBack"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "pickLAlgae"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "holdAlgae"
+                  "name": "right"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "middleProc"
+                  "name": "resetCarriage"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "outtake"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "middle",
+  "folder": "left",
   "choreoAuto": false
 }
