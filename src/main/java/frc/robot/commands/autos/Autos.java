@@ -9,14 +9,14 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
 public final class Autos {
-    public static Command testVision(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
-        return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "onePlusFour")
-                .setMaxVelocity(6)
-                .setAcceleration(6)
-                .build()
-        );
-    }
+    // public static Command testVision(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
+    //     return new SequentialCommandGroup(
+    //         PathPlannerFollow.create(drive, "onePlusFour")
+    //             .setMaxVelocity(6)
+    //             .setAcceleration(6)
+    //             .build()
+    //     );
+    // }
     public static Command leftOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1+2")
@@ -152,4 +152,8 @@ public final class Autos {
 
     // }
     private Autos () {}
+    public static Command testVision(SwerveDrive drive, Vision vision) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testVision'");
+    }
 }
