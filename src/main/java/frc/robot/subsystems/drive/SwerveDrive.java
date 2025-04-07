@@ -169,8 +169,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
-        //THe negative is supposed to help work for teleop; Should FIX
-
     }
 
     public Pose2d getPose() {
@@ -294,15 +292,15 @@ public class SwerveDrive extends SubsystemBase {
         return states;
     }
 
-    public TalonEx getFRTurnCanSparkMax(){
-        return frontLeft.getTurnMotor();
-    }
+    // public TalonEx getFRTurnCanSparkMax(){
+    //     return frontLeft.getTurnMotor();
+    // }
 
     public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
         //No WORK
         switch (DriverStation.getAlliance().get()) {
             case Red:
-                setYaw(getHeading() + 180);
+                setYaw(Math.IEEEremainder(getHeading(), 360));
                 break;
             case Blue:
                 setYaw(getHeading());

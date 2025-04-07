@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,14 +25,14 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(true);
+    private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
-        new Arm(true),
-        new Pivot(true),
-        new Intake(true)
+        new Arm(false),
+        new Pivot(false),
+        new Intake(false)
     );
     
-    private Climb climb = new Climb(true);
+    private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -52,17 +54,24 @@ public class Robot extends TimedRobot {
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();   
     private Command autonomousCommand;
+    private Field2d field = new Field2d();
   
     @Override
     public void robotInit() {
+        // ComplexWidgetBuilder.create(field, "Field", "Misc");
+    
+        SmartDashboard.putData(field);
+        vision.setUpVision(); // Has to be here to set up Limelight Pipelines
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
+        
         
     }
     
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        field.setRobotPose(drive.getPose());
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
@@ -119,7 +128,7 @@ public class Robot extends TimedRobot {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
-        drive.changeAllianceRotation();
+        // drive.changeAllianceRotation();
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
         vision.setUpVision(); //Has to be here to set up Limelight Pipelines
