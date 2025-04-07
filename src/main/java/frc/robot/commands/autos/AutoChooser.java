@@ -152,7 +152,7 @@ public class AutoChooser {
             .withSize(1, 3);
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
-        autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
+        // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
