@@ -246,7 +246,41 @@ public class Vision extends SubsystemBase {
         }
     }
 
-    public Location getLeftLocation(String name) {
+    public Location getLeftLocation(String name) {//Teleop
+        return getLeftLocation(name, getID(name));
+        // switch (getID(name)) {
+        //     case 17:
+        //         return getLeftLocation(name, 17);
+        //     case 18:
+        //         return getLeftLocation(name, 18);
+        //     case 19:
+        //         return getLeftLocation(name, 19);
+        //     case 20:
+        //         return getLeftLocation(name, 20);
+        //     case 21:
+        //         return getLeftLocation(name, 21);
+        //     case 22:
+        //         return getLeftLocation(name, 22);
+
+        //     case 6:
+        //         return getLeftLocation(name, 6);
+        //     case 7:
+        //         return getLeftLocation(name, 7);
+        //     case 8:
+        //         return getLeftLocation(name, 8);
+        //     case 9:
+        //         return getLeftLocation(name, 9);
+        //     case 10:
+        //         return getLeftLocation(name, 10);
+        //     case 11:
+        //         return getLeftLocation(name, 11);
+
+        //     default:
+        //         return getLeftLocation(name, 17);
+
+        // }
+    }
+    public Location getLeftLocation(String name, int look) { //Auto/Teleop
         switch (getID(name)) {
             case 17:
                 return Vision.Location.LEFT_L_L4_17;
@@ -281,6 +315,42 @@ public class Vision extends SubsystemBase {
     }
 
     public Location getRightLocation(String name) {
+        return getRightLocation(name, getID(name));
+
+        // switch (getID(name)) {
+        //     case 17:
+        //         return getRightLocation(name, 17);
+        //     case 18:
+        //         return getRightLocation(name, 18);
+        //     case 19:
+        //         return getRightLocation(name, 19);
+        //     case 20:
+        //         return getRightLocation(name, 20);
+        //     case 21:
+        //         return getRightLocation(name, 21);
+        //     case 22:
+        //         return getRightLocation(name, 22);
+
+        //     case 6:
+        //         return getRightLocation(name, 6);
+        //     case 7:
+        //         return getRightLocation(name,7);
+        //     case 8:
+        //         return getRightLocation(name, 8);
+        //     case 9:
+        //         return getRightLocation(name, 9);
+        //     case 10:
+        //         return getRightLocation(name, 10);
+        //     case 11:
+        //         return getRightLocation(name, 11);
+
+        //     default:
+        //         return getRightLocation(name, 17);
+
+        // }
+    }
+
+    public Location getRightLocation(String name, int look) {
         switch (getID(name)) {
             case 17:
                 return Vision.Location.RIGHT_R_L4_17;
@@ -307,6 +377,7 @@ public class Vision extends SubsystemBase {
                 return Vision.Location.RIGHT_R_L4_10;
             case 11:
                 return Vision.Location.RIGHT_R_L4_11;
+
             default:
                 return Vision.Location.RIGHT_R_L4_17;
         }
@@ -328,6 +399,23 @@ public class Vision extends SubsystemBase {
         }
         return targetingAngularVelocity;
     }
+    
+    public double aimAuto(int look) {
+        double targetingAngularVelocity = 0;
+        switch (DroidRageConstants.alignmentMode) {
+            case LEFT:
+                targetingAngularVelocity = rotController.calculate(
+                        gettX(DroidRageConstants.leftLimelight),
+                        getLeftLocation(DroidRageConstants.leftLimelight, look).getAngle());
+                break;
+            case RIGHT:
+                targetingAngularVelocity = rotController.calculate(
+                        gettX(DroidRageConstants.rightLimelight),
+                        getRightLocation(DroidRageConstants.rightLimelight, look).getAngle());
+                break;
+        }
+        return targetingAngularVelocity;
+    }
 
     public double range() {
         double targetingForwardSpeed = 0;
@@ -341,6 +429,23 @@ public class Vision extends SubsystemBase {
                 targetingForwardSpeed = xController.calculate(
                     gettY(DroidRageConstants.rightLimelight),
                     getRightLocation(DroidRageConstants.rightLimelight).getDistance());
+                break;
+        }
+        return targetingForwardSpeed;
+    }
+    
+    public double rangeAuto(int look) {
+        double targetingForwardSpeed = 0;
+        switch (DroidRageConstants.alignmentMode) {
+            case LEFT:
+                targetingForwardSpeed = xController.calculate(
+                        gettY(DroidRageConstants.leftLimelight),
+                        getLeftLocation(DroidRageConstants.leftLimelight, look).getDistance());
+                break;
+            case RIGHT:
+                targetingForwardSpeed = xController.calculate(
+                        gettY(DroidRageConstants.rightLimelight),
+                        getRightLocation(DroidRageConstants.rightLimelight,look).getDistance());
                 break;
         }
         return targetingForwardSpeed;

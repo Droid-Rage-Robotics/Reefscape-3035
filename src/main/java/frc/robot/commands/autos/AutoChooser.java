@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.DroidRageConstants;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.AutoAlign;
+import frc.robot.commands.drive.SpecificAutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
@@ -79,6 +80,10 @@ public class AutoChooser {
                 new AutoAlign(drive, vision).withTimeout(2)
             )
         );
+        NamedCommands.registerCommand("alignSpecific",
+                new SequentialCommandGroup(
+                        // new WaitCommand(2.),
+                        new SpecificAutoAlign(drive, vision,7).withTimeout(2)));
         NamedCommands.registerCommand("placeL3",
             new SequentialCommandGroup(
                 carriage.setPositionCommand(CarriageValue.L3)
