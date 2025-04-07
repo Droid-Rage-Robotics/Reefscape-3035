@@ -36,7 +36,7 @@
 //         this.driver = driver;
 //         this.operator = operator;
 //         this.vision = vision;
-//         addRequirements(carriage.getCoralIntake(), vision);
+//         addRequirements( vision);
 //         intakeTime = 0;
 //     }
 
@@ -54,8 +54,11 @@
 //         //     intakeState = RumbleStates.ALIGN;
 //         // }
 
-//         // driver.getHID().setRumble(RumbleType.kBothRumble, 1);
-//         new InstantCommand(()->driver.getHID().setRumble(RumbleType.kBothRumble, 1));
+//         while(driver.b().getAsBoolean()){
+//             driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+
+//         }
+//         // new InstantCommand(()->driver.getHID().setRumble(RumbleType.kBothRumble, 1));
 //         // } else if ((carriage.isElementIn() && 
 //         //     driver.getRightTriggerAxis() > 0.5 && //IsIntaking
 //         //     intakeTimer.get() > intakeTime)) {
@@ -101,7 +104,7 @@
 
 //     @Override
 //     public boolean isFinished() {
-//         return true;
+//         return false;
 //     }
 
 //     public double getMatchTime() {// TODO:test

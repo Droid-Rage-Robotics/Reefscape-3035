@@ -28,7 +28,7 @@ public class Intake extends IntakeTemplate {
         .withPositionConversionFactor(1)
         .withSubsystemName(Carriage.class.getSimpleName())
         .withIsEnabled(true)
-        .withCurrentLimit(50);//60,50
+        .withCurrentLimit(80,80);//60,50
 
     public Intake(boolean isEnabled) {
         super(

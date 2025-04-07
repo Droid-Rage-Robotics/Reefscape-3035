@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+// import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.TeleopAlign;
@@ -46,6 +47,7 @@ public class RobotContainer {
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		// vision.setDefaultCommand(new LightCommand(driver, vision));
+		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
 
 		driver.leftBumper()

@@ -9,14 +9,14 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
 public final class Autos {
-    public static Command testVision(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
-        return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "onePlusFour")
-                .setMaxVelocity(6)
-                .setAcceleration(6)
-                .build()
-        );
-    }
+    // public static Command testVision(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
+    //     return new SequentialCommandGroup(
+    //         PathPlannerFollow.create(drive, "onePlusFour")
+    //             .setMaxVelocity(6)
+    //             .setAcceleration(6)
+    //             .build()
+    //     );
+    // }
     public static Command leftOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1+2")
@@ -33,6 +33,18 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command leftOnePlusOneSeperate(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "left1+1Part1")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build(),
+            PathPlannerFollow.create(drive, "left1+1Part2")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
     public static Command leftOne(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1")
@@ -43,7 +55,7 @@ public final class Autos {
     }
     public static Command middleProcessor(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            new WaitCommand(4),
+            // new WaitCommand(4),
             PathPlannerFollow.create(drive, "middleProcessor")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
@@ -51,8 +63,32 @@ public final class Autos {
         );
     }
     public static Command middleBarge(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
-        return new SequentialCommandGroup(
+        return new SequentialCommandGroup(//middleBargePart2
             PathPlannerFollow.create(drive, "middleBarge")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build(),
+            PathPlannerFollow.create(drive, "middleBargePart2")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
+    public static Command middleRight(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "middleRight")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
+    public static Command middleTest(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "middleTest1")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build(),
+            PathPlannerFollow.create(drive, "middleTest2")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()
@@ -116,4 +152,8 @@ public final class Autos {
 
     // }
     private Autos () {}
+    public static Command testVision(SwerveDrive drive, Vision vision) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testVision'");
+    }
 }

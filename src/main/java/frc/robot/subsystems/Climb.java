@@ -21,9 +21,9 @@ public class Climb extends ArmTemplate {
 
     }
     
-    public static double hold = 150;//180
+    public static double hold = 195;//180
     // public static double reset = 90;
-    public static double climb = 219;//355
+    public static double climb = 340;//355
     // public static boolean pidOn = true;
     // public static double climbMore = 355;
     // public static double climbMoreMOre = 370;
@@ -31,8 +31,8 @@ public class Climb extends ArmTemplate {
 //3 4:1s+
 //64
 //12
-    private static TalonEx motor = TalonEx.create(16)
-        .withDirection(Direction.Reversed)
+    private static TalonEx motor = TalonEx.create(34)
+        .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor( .008)//(125/1)*(48/16); .02 //.008
         //.013333

@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
         new Intake(true)
     );
     
-    private Climb climb = new Climb(false);
+    private Climb climb = new Climb(true);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);

@@ -34,10 +34,10 @@ public class Elevator extends ElevatorTemplate {
 
         L4(54.5),
   
-        ALGAE_LOW(14),
-        ALGAE_HIGH(27.),
+        ALGAE_LOW(18),
+        ALGAE_HIGH(34.5),
         BARGE(54.5),
-        PROCESSOR(5)
+        PROCESSOR(13)
         ;
 
         @Getter private final double height;

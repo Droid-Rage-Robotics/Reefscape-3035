@@ -41,11 +41,11 @@ public class Vision extends SubsystemBase {
         LEFT_L_L4_21(-0.25, 18.9),//done
         LEFT_L_L4_22(-0.1,18.5),//done
 
-        LEFT_L_L4_6(-0.38, 19.68), //red - done
+        LEFT_L_L4_6(-0.38, 19.7), //red - done
         LEFT_L_L4_7(-0.06, 19.38),//done
         LEFT_L_L4_8(-0.24,17.81),//done
         LEFT_L_L4_9(-0.06, 17.67),// done
-        LEFT_L_L4_10(-0.3, 19.7),//done
+        LEFT_L_L4_10(-0.3, 19.4),//done
         LEFT_L_L4_11(-0.06, 20.36), //done
 
         // LEFT_L_L3(LEFT_L_L4),
@@ -97,8 +97,8 @@ public class Vision extends SubsystemBase {
     protected final ShuffleboardValue<Double> iDLWriter = ShuffleboardValue
         .create(0., "L/iDWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
-    public PIDController rotController =new PIDController(.11,0,0);//.09
-	public PIDController xController = new PIDController(.12, 0, 0);//.1
+    public PIDController rotController =new PIDController(.1,0,0);//.09
+	public PIDController xController = new PIDController(.11, 0, 0);//.1
     private int bluePipeline = 0, redPipeline =1;
     // HttpCamera rightCam = new HttpCamera("limelight-right", "http://10.30.35.12:5800/stream.mjpg",HttpCameraKind.kUnknown);
     // HttpCamera leftCam = new HttpCamera("limelight-left", "http://10.30.35.11:5800", HttpCameraKind.kUnknown);

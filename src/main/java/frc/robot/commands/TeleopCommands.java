@@ -40,6 +40,8 @@ public class TeleopCommands{
             switch(carriage.getPosition()){
                 case ALGAE_HIGH, ALGAE_LOW, BARGE, BARGE_HOLD, INTAKE_GROUND, PROCESSOR:
                     yield carriage.setIntakeCommand(CarriageIntakeValue.HOLD_ALGAE);
+                    // yield carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL);
+                    
                 case INTAKE_HPS, INTAKE_HPS_BLOCK, L1, L2, L3,L4:
                     yield carriage.setIntakeCommand(CarriageIntakeValue.HOLD_CORAL);
 
@@ -60,6 +62,8 @@ public class TeleopCommands{
 
     public SequentialCommandGroup barge(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
+            // carriage.getPivot().setTargetPositionCommand(CarriageValue.BARGE_HOLD.getPivotAngle()+5),
+            // new WaitCommand(.2),
             carriage.setPositionCommand(CarriageValue.BARGE_HOLD),
             new WaitUntilCommand(()->
                 Math.abs(carriage.getArm().getTargetPosition()-carriage.getArm().getEncoderPosition())<3),
