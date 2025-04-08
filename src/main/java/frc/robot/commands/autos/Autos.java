@@ -17,6 +17,13 @@ public final class Autos {
     //             .build()
     //     );
     // }
+    public static Command testAutoSpecific(SwerveDrive drive, Vision vision){
+        return new SequentialCommandGroup(
+                PathPlannerFollow.create(drive, "testAuto")
+                    .setMaxVelocity(6)
+                    .setAcceleration(6)
+                    .build());
+    }
     public static Command leftOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1+2")

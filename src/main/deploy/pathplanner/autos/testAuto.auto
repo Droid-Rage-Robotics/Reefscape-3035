@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "left"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ForwardTest"
@@ -13,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align"
+            "name": "alignSpecific"
           }
         }
       ]

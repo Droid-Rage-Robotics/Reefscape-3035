@@ -86,7 +86,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("alignSpecific",
                 new SequentialCommandGroup(
                         // new WaitCommand(2.),
-                        new SpecificAutoAlign(drive, vision,7).withTimeout(2)));
+                        new SpecificAutoAlign(drive, vision,22).withTimeout(2)));
         NamedCommands.registerCommand("placeL3",
             new SequentialCommandGroup(
                 carriage.setPositionCommand(CarriageValue.L3)
@@ -158,6 +158,8 @@ public class AutoChooser {
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
+        autoChooser.addOption("testAlignSpecific", Autos.testAutoSpecific(drive, vision));
+
         addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
