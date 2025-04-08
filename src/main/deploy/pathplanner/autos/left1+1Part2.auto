@@ -114,7 +114,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "left",
   "choreoAuto": false
 }

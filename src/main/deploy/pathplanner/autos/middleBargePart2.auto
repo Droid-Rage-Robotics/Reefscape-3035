@@ -77,7 +77,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "middle",
   "choreoAuto": false
 }

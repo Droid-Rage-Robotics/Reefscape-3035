@@ -12,12 +12,12 @@ public class AutoAlign extends Command {
 	// private Timer timer= new Timer();
 	
     private final ShuffleboardValue<Double> aim = 
-        ShuffleboardValue.create(0.0, "Aim", this.getSubsystem()).build();
+        ShuffleboardValue.create(0.0, "Aim", Vision.class.getSimpleName()).build();
 		
 		private final ShuffleboardValue<Double> range = 
-        ShuffleboardValue.create(0.0, "Range", this.getSubsystem()).build();
+        ShuffleboardValue.create(0.0, "Range", Vision.class.getSimpleName()).build();
 
-	// TELEOP
+	// Auto
 	public AutoAlign(SwerveDrive drive, Vision vision) {
 		this.drive = drive;
 		this.vision = vision;

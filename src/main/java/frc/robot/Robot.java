@@ -29,10 +29,10 @@ public class Robot extends TimedRobot {
     private final Carriage carriage = new Carriage(
         new Arm(true),
         new Pivot(true),
-        new Intake(true)
+        new Intake(true) 
     );
     
-    private Climb climb = new Climb(true);
+    private Climb climb = new Climb(false);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);

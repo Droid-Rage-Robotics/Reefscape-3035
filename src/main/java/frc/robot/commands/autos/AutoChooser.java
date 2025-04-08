@@ -71,13 +71,14 @@ public class AutoChooser {
                 // // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
                 // new WaitCommand(.6),
                 // new AutoAlign(drive, vision).withTimeout(2),
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .05)
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .066)
             )
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(1.6)
+                new AutoAlign(drive, vision).withTimeout(2)
+                //1.6 for MIddleAutos
                 //2.8 for left AUtos
                 //Middle for playoffs
             )
