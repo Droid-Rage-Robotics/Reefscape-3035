@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -96,6 +97,8 @@ public class Vision extends SubsystemBase {
         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> iDLWriter = ShuffleboardValue
         .create(0., "L/iDWriter", Vision.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> poseWriter = ShuffleboardValue
+        .create(0., "PoseWriter", Vision.class.getSimpleName()).build();   
     public int targetIds[];
     public PIDController rotController =new PIDController(.1,0,0);//.09
 	public PIDController xController = new PIDController(.11, 0, 0);//.1
@@ -244,6 +247,24 @@ public class Vision extends SubsystemBase {
         } else {
             return iDRWriter.get().intValue();
         }
+    }
+    
+    public Pose2d getPose(String name){
+        switch (DroidRageConstants.alignmentMode) {
+            case RIGHT:
+                return LimelightHelpers.getBotPose2d(DroidRageConstants.rightLimelight);
+            case LEFT:
+                return LimelightHelpers.getBotPose2d(DroidRageConstants.leftLimelight);
+            default:
+                return LimelightHelpers.getBotPose2d(DroidRageConstants.leftLimelight);
+
+        }
+        // return LimelightHelpers.getBotPose2d(name);
+        // if (name == DroidRageConstants.leftLimelight) {
+        //     return LimelightHelpers.getBotPose2d(name);
+        // } else {
+        //     return LimelightHelpers.getBotPose2d(name);
+        // }
     }
 
     public Location getLeftLocation(String name) {
