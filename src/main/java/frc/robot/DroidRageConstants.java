@@ -15,19 +15,12 @@ public final class DroidRageConstants {
     public enum Alignment {
         RIGHT,
         LEFT,
+        MIDDLE
     }
     private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
-        .create(Alignment.LEFT.toString(), "Alignment", Vision.class.getSimpleName()).build();
-    public static Alignment alignmentMode = Alignment.LEFT;
-    public static void flipAlignment() {
-        if(alignmentMode == Alignment.RIGHT) {
-            alignmentMode = Alignment.LEFT;
-            alignmentWriter.set(alignmentMode.toString());
-        } else {
-            alignmentWriter.set(alignmentMode.toString());
-            alignmentMode = Alignment.RIGHT;
-        }
-    }
+        .create(Alignment.MIDDLE.toString(), "Alignment", Vision.class.getSimpleName()).build();
+    public static Alignment alignmentMode = Alignment.MIDDLE;
+    
     public static void setAlignment(Alignment alignment){
         alignmentMode = alignment;
         alignmentWriter.set(alignmentMode.toString());

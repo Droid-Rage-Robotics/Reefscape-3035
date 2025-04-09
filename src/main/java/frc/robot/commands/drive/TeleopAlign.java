@@ -36,6 +36,12 @@ public class TeleopAlign extends Command{
 					return;
 				}
 				break;
+			case MIDDLE:
+				if (!vision.gettV(DroidRageConstants.rightLimelight) &&
+						(!vision.gettV(DroidRageConstants.leftLimelight))) {
+					return;
+				}
+				break;
 		}
 		drive.drive(vision.range(), 0, vision.aim());//-0.03);
 	}

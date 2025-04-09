@@ -37,6 +37,12 @@ public class AutoAlign extends Command {
 					return;
 				}
 				break;
+			case MIDDLE:
+				if (!vision.gettV(DroidRageConstants.rightLimelight)&&
+					(!vision.gettV(DroidRageConstants.leftLimelight))) {
+					return;
+				}
+				break;
 		}
 		// timer.restart();
 		aim.set((vision.aim()));
