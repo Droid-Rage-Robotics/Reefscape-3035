@@ -24,8 +24,8 @@ public class Carriage {
         // HOLD(INTAKE_HPS),
 
         INTAKE_GROUND(191 ,139),
-        ALGAE_LOW(113, 220),
-        ALGAE_HIGH(112, 220),
+        ALGAE_LOW(180, 140),// 113, 220
+        ALGAE_HIGH(ALGAE_LOW),//112, 220
         L1(105, 234),
         L2(105, 233),
         L3(105, 230),
