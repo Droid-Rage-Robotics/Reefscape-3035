@@ -43,7 +43,7 @@ public class TeleopAlign extends Command{
 				}
 				break;
 		}
-		drive.drive(vision.range(), 0, vision.aim());//-0.03);
+		drive.drive(vision.range(), 0, vision.aim());
 	}
   
 	@Override

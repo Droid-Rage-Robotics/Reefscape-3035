@@ -17,10 +17,11 @@ public final class DroidRageConstants {
         LEFT,
         MIDDLE
     }
-    private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
-        .create(Alignment.MIDDLE.toString(), "Alignment", Vision.class.getSimpleName()).build();
-    public static Alignment alignmentMode = Alignment.MIDDLE;
     
+    public static Alignment alignmentMode = Alignment.LEFT;
+    private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
+        .create(alignmentMode.toString(), "Alignment", Vision.class.getSimpleName()).build();
+
     public static void setAlignment(Alignment alignment){
         alignmentMode = alignment;
         alignmentWriter.set(alignmentMode.toString());

@@ -38,16 +38,14 @@ public class AutoAlign extends Command {
 				}
 				break;
 			case MIDDLE:
-				if (!vision.gettV(DroidRageConstants.rightLimelight)&&
-					(!vision.gettV(DroidRageConstants.leftLimelight))) {
+				if (!vision.gettV(DroidRageConstants.rightLimelight) &&
+						(!vision.gettV(DroidRageConstants.leftLimelight))) {
 					return;
 				}
 				break;
 		}
-		// timer.restart();
 		aim.set((vision.aim()));
 		range.set(vision.range());
-		// drive.drive(aim.get(), 0, range.get());/// - 0.03);
 		drive.drive(vision.range(), 0, vision.aim());
 	}
 
@@ -56,16 +54,5 @@ public class AutoAlign extends Command {
 		// return !driver.povUp().getAsBoolean();
 		return (vision.rotController.atSetpoint() && vision.xController.atSetpoint());// || timer.hasElapsed(5);
 	}
-
-	// public double isMaxAim(double num){
-	// 	if(num>1.5){
-	// 		return 1.5;
-	// 	}else if(num<-1.5){
-	// 		return -1.5;
-	// 	} else return num;
-	// 	// if(Math.abs(num)>1.5){
-			
-	// 	// } else return num;
-	// }
 
 }

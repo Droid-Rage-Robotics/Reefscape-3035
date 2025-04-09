@@ -54,8 +54,8 @@ public class Vision extends SubsystemBase {
 
         // ALGAE_L(0, 0)
 
-        RIGHT_A(3.42, -11),
-        LEFT_A(1.6, 13.5),
+        RIGHT_A(1,-3),
+        LEFT_A(-.5,4.5),
 
         ;
 
@@ -158,8 +158,8 @@ public class Vision extends SubsystemBase {
         // // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
 
         // setUpVision();
-        rotController.setTolerance(.3);
-        xController.setTolerance(.2);
+        rotController.setTolerance(.5);
+        xController.setTolerance(.4);
         // visionAlert = new Alert("Limelight is not connected! Vision will be
         // hindered!", Alert.AlertType.WARNING);
 
