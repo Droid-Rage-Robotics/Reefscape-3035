@@ -58,6 +58,8 @@ public class AutoChooser {
             new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.RIGHT)));
         NamedCommands.registerCommand("left",
         new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.LEFT)));
+        NamedCommands.registerCommand("middle",
+                new InstantCommand(() -> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.MIDDLE)));
             // new InstantCommand(() -> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.LEFT));
 
         NamedCommands.registerCommand("placeL4",
@@ -77,7 +79,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(2)
+                new AutoAlign(drive, vision).withTimeout(1.5)
                 //1.6 for MIddleAutos
                 //2.8 for left AUtos
                 //Middle for playoffs
@@ -154,6 +156,7 @@ public class AutoChooser {
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
+        autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
         addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);

@@ -158,8 +158,8 @@ public class Vision extends SubsystemBase {
         // // Shuffleboard.getTab("Misc").add(leftCam).withSize(3, 3);
 
         // setUpVision();
-        rotController.setTolerance(.5);
-        xController.setTolerance(.4);
+        rotController.setTolerance(.7);//.5
+        xController.setTolerance(.7);//.4
         // visionAlert = new Alert("Limelight is not connected! Vision will be
         // hindered!", Alert.AlertType.WARNING);
 

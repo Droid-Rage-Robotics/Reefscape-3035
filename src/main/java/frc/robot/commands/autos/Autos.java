@@ -142,6 +142,14 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command testM(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "testM")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
     // public static Command partLeft(SwerveDrive drive, Vision vision) {//Top Red/Bottom Blue
     //     return new SequentialCommandGroup(
     //         PathPlannerFollow.create(drive, "pLeft")
