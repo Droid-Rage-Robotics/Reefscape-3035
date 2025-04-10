@@ -78,7 +78,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.5
                       }
                     },
                     {
@@ -109,20 +109,7 @@
         {
           "type": "sequential",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "pickLAlgae"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
@@ -134,6 +121,25 @@
                 "data": {
                   "pathName": "middleBarge2"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeBarge"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -141,7 +147,7 @@
         {
           "type": "named",
           "data": {
-            "name": "placeBarge"
+            "name": "shoot"
           }
         },
         {
@@ -171,6 +177,69 @@
                       }
                     }
                   ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": []
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeBarge"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "resetBarge"
                 }
               }
             ]

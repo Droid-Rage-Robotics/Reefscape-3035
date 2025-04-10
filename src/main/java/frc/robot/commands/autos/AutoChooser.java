@@ -35,7 +35,10 @@ public class AutoChooser {
         // );
         NamedCommands.registerCommand("shoot",
             new ParallelCommandGroup(
-                elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
+                // elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
+                // carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.SHOOT, .066)
+
             )
         );
         NamedCommands.registerCommand("placeProcessor",
@@ -79,8 +82,8 @@ public class AutoChooser {
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
                 // new WaitCommand(2.),
-                new AutoAlign(drive, vision).withTimeout(1.5)
-                //1.6 for MIddleAutos
+                new AutoAlign(drive, vision).withTimeout(1.)
+                //1.5 for MIddleAutos
                 //2.8 for left AUtos
                 //Middle for playoffs
             )
@@ -121,9 +124,9 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("placeBarge",
             new SequentialCommandGroup(
-                new TeleopCommands().barge(elevator, carriage),
-                new WaitCommand(1.9),
-                carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
+                new TeleopCommands().barge(elevator, carriage)
+                // new WaitCommand(.2),//1.9
+                // carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
             )
         );
         NamedCommands.registerCommand("intake",

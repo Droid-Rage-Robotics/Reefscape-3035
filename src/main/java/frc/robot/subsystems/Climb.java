@@ -23,7 +23,7 @@ public class Climb extends ArmTemplate {
     
     public static double hold = 195;//180
     // public static double reset = 90;
-    public static double climb = 340;//355
+    public static double climb = 350;//355
     // public static boolean pidOn = true;
     // public static double climbMore = 355;
     // public static double climbMoreMOre = 370;
@@ -38,7 +38,7 @@ public class Climb extends ArmTemplate {
         //.013333
         .withSubsystemName("Climb")
         .withIsEnabled(true)
-        .withCurrentLimit(50);
+        .withCurrentLimit(120,120);
         // .0605
     // 0.002666666
 
@@ -52,7 +52,7 @@ public class Climb extends ArmTemplate {
     public Climb(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(60,0,0), //kp: 45
+        new PIDController(150,0,0), //kp: 45
         //31
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
