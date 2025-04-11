@@ -21,7 +21,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.4
                       }
                     },
                     {
@@ -70,6 +70,25 @@
                 "data": {
                   "pathName": "middleBarge1"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pickLAlgae"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -83,14 +102,14 @@
                 "data": {
                   "pathName": "middleBarge1.5"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "pickLAlgae"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": []
           }
         },
         {
@@ -102,6 +121,25 @@
                 "data": {
                   "pathName": "middleBarge2"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeBarge"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -109,7 +147,7 @@
         {
           "type": "named",
           "data": {
-            "name": "placeBarge"
+            "name": "shoot"
           }
         },
         {
@@ -120,6 +158,82 @@
                 "type": "path",
                 "data": {
                   "pathName": "middleBarge3"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pickHAlgae"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": []
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeBarge"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middleBarge5"
                 }
               },
               {

@@ -33,13 +33,11 @@ public class AutoChooser {
         // NamedCommands.registerCommand("resetPose",
         //     new ResetPoseVision(drive, vision) 
         // );
+        NamedCommands.registerCommand("outtakeProcessor",
+            new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE_PROCESSOR, .066)
+            );
         NamedCommands.registerCommand("shoot",
-            new ParallelCommandGroup(
-                // elevator.setTargetPositionCommand(Elevator.ElevatorValue.BARGE)
-                // carriage.setIntakeCommand(CarriageIntakeValue.SHOOT)
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.SHOOT, .066)
-
-            )
+            new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.SHOOT, .066)
         );
         NamedCommands.registerCommand("placeProcessor",
             new ParallelCommandGroup(
@@ -58,57 +56,46 @@ public class AutoChooser {
                 Elevator.ElevatorValue.ALGAE_HIGH, CarriageValue.ALGAE_HIGH)
         );
         NamedCommands.registerCommand("right",
-            new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.RIGHT)));
+            new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.RIGHT))
+        );
         NamedCommands.registerCommand("left",
-        new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.LEFT)));
+            new InstantCommand(()-> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.LEFT))
+        );
         NamedCommands.registerCommand("middle",
-                new InstantCommand(() -> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.MIDDLE)));
-            // new InstantCommand(() -> DroidRageConstants.alignmentMode = DroidRageConstants.Alignment.LEFT));
+            new InstantCommand(() -> DroidRageConstants.setAlignment(DroidRageConstants.Alignment.MIDDLE))
+        );
 
         NamedCommands.registerCommand("placeL4",
-            new SequentialCommandGroup(
-                new TeleopCommands().goL4(elevator, carriage)
-                
-            )
+            new TeleopCommands().goL4(elevator, carriage)
         );
         NamedCommands.registerCommand("outtake", 
             new SequentialCommandGroup(
-                // // new WaitUntilCommand(()->elevator.getEncoderPosition()>50),
-                // new WaitCommand(.6),
-                // new AutoAlign(drive, vision).withTimeout(2),
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .066)
             )
         );
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
-                // new WaitCommand(2.),
                 new AutoAlign(drive, vision).withTimeout(1.)
                 //1.5 for MIddleAutos
                 //2.8 for left AUtos
                 //Middle for playoffs
             )
         );
-        NamedCommands.registerCommand("placeL3",
-            new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L3)
-                // new WaitCommand(.6),
-                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
-            )
-        );
-        NamedCommands.registerCommand("placeL2",
-            new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L2)
-                // new WaitCommand(.6),
-                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
-            )
-        );
-        NamedCommands.registerCommand("placeL1",
-            new SequentialCommandGroup(
-                carriage.setPositionCommand(CarriageValue.L1)
-                // new WaitCommand(.6),
-                // new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, 0.7)
-            )
-        );
+        // NamedCommands.registerCommand("placeL3",
+        //     new SequentialCommandGroup(
+        //         carriage.setPositionCommand(CarriageValue.L3)
+        //     )
+        // );
+        // NamedCommands.registerCommand("placeL2",
+        //     new SequentialCommandGroup(
+        //         carriage.setPositionCommand(CarriageValue.L2)
+        //     )
+        // );
+        // NamedCommands.registerCommand("placeL1",
+        //     new SequentialCommandGroup(
+        //         carriage.setPositionCommand(CarriageValue.L1)
+        //     )
+        // );
         NamedCommands.registerCommand("resetCarriage",
             new SequentialCommandGroup(
                 new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS),
@@ -159,7 +146,7 @@ public class AutoChooser {
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
-        autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
+        // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
         addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
@@ -182,13 +169,11 @@ public class AutoChooser {
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
         autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleL1", Autos.middleL1(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
-        autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
-        autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
+        // autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
+        // autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
+        // autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
         autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
         autoChooser.addOption("middleRight", Autos.middleRight(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleTest", Autos.middleTest(drive, elevator, carriage, vision));
 
 
         //middleL4Algae
