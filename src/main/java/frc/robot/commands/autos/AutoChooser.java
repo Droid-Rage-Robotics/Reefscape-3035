@@ -132,7 +132,7 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("holdAlgae",
             new SequentialCommandGroup(
-                new WaitCommand(2),
+                // new WaitCommand(2),
                 carriage.setPositionCommand(CarriageValue.PROCESSOR),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
                 elevator.setTargetPositionCommand(Elevator.ElevatorValue.PROCESSOR)

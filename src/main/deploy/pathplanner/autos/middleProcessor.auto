@@ -21,7 +21,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.4
                       }
                     },
                     {
@@ -62,34 +62,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "middleBarge1"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleBarge1.5"
+                  "pathName": "middle1"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "pickLAlgae"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pickLAlgae"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.0
+            "pathName": "middle1.5"
           }
         },
         {
@@ -97,15 +104,72 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "holdAlgae"
+                  "pathName": "middleProc2"
                 }
               },
               {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "holdAlgae"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middleProc3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "middleProc"
+                  "pathName": "middleProc4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "holdAlgae"
+                      }
+                    }
+                  ]
                 }
               }
             ]

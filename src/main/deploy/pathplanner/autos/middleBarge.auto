@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleBarge1"
+                  "pathName": "middle1"
                 }
               },
               {
@@ -100,16 +100,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleBarge1.5"
+                  "pathName": "middle1.5"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": []
           }
         },
         {
