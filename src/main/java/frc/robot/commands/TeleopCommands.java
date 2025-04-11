@@ -20,7 +20,8 @@ public class TeleopCommands{
                         yield carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_L1);
                     case BARGE:
                         yield carriage.setIntakeCommand(CarriageIntakeValue.SHOOT);
-
+                    case PROCESSOR:
+                        yield carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE_PROCESSOR);
                     default:
                         yield carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE);
                 }));

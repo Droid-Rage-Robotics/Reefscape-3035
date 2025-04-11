@@ -62,6 +62,7 @@ public class Carriage {
     public enum CarriageIntakeValue {
         INTAKE(50),
         OUTTAKE(-130),
+        OUTTAKE_PROCESSOR(-25),
         OUTTAKE_L1(-50),
         SHOOT(-700),
         // HOLD(10),
