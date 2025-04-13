@@ -25,7 +25,7 @@ Notes:
 
 Auto Setup
 - Align wheels straight or in direction of robot travel
-- 
+
 
 
 Wiring
@@ -38,7 +38,10 @@ Wiring
 - Pigeon has a 5A mini fuse
 - Limelight is powered by a 10A mini fuse
 - mini power module powered my a 12V 20A fuse
-- ethernet switch is powered by a 10A mini fuse
-- Radio power module is powered by a 10A mini fuse
+- ethernet switch is powered by a 10A mini fuse - DO NOT USE
+- Radio power module is powered by a 10A mini fuse - DO NOT USE
 - RoboRio has a 10A mini fuse
 - CANivore has a 10A mini fuse
+
+Setting Up Telemetry
+- Add FMS Info: In the left hand pane, select the Network Tables Tab. Scroll down to block of data titled FMSinfo, and drag
