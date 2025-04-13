@@ -173,6 +173,10 @@ public class SwerveDrive extends SubsystemBase {
 
     }
 
+    // public void setPose(Pose2d pose){
+    //     odometry.resetPose(pose);
+    // }
+
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }

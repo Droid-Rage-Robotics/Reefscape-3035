@@ -25,4 +25,7 @@ X+ → Pointing to the right (if you were to embody the camera)
 Y+ → Pointing downward
 Z+ → Pointing out of the camera
 
+Use tX, tY to align to Limelight with the Drive
+Use Interpolator with tX/tY for shooter changes
+Use 3D Mapping for Pose Estimation
 Sonic Code: https://github.com/FRC-Sonic-Squirrels/2022-Robot-Code/blob/1e6545f15ac98b344048974a50ca9d79ac2ba357/src/main/java/frc/robot/subsystems/LimelightSubsystem.java#L141 - 

@@ -23,16 +23,16 @@ import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
-    private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(true);
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
-        new Arm(true),
-        new Pivot(true),
-        new Intake(true) 
+        new Arm(false),
+        new Pivot(false),
+        new Intake(false) 
     );
     
     private Climb climb = new Climb(false);
+    private final Vision vision = new Vision(drive);
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         field.setRobotPose(drive.getPose());
-        SmartDashboard.putData(field);
+        SmartDashboard.putData("DrivePose",field);
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }

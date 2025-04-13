@@ -71,8 +71,8 @@ public class RobotContainer {
 		driver.povDown()
 			.onTrue(climb.setTargetPositionCommand(Climb.climb));
 
-		// operator.y()
-		// 	.onTrue(new TeleopCommands().barge(elevator, carriage));
+		// driver.povRight()
+		// 	.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.BARGE_HOLD));
 		operator.y()
 			.onTrue(new TeleopCommands().goL4(elevator, carriage));
 		operator.x()
@@ -109,8 +109,6 @@ public class RobotContainer {
 					elevator.setTargetPositionCommand(ElevatorValue.GROUND)
 				)
 			);
-			// .onTrue(carriage.setPositionCommand(CarriageValue.INTAKE_GROUND))
-			// .onTrue(elevator.setTargetPositionCommand(ElevatorValue.GROUND));
 		operator.povDown()
 			.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS));
 

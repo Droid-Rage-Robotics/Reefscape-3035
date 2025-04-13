@@ -44,6 +44,11 @@ public class AutoAlign extends Command {
 				}
 				break;
 		}
+
+		// if (!vision.gettV(DroidRageConstants.rightLimelight) &&
+		// 		(!vision.gettV(DroidRageConstants.leftLimelight))) {
+		// 	return;
+		// }
 		aim.set((vision.aim()));
 		range.set(vision.range());
 		drive.drive(vision.range(), 0, vision.aim());
