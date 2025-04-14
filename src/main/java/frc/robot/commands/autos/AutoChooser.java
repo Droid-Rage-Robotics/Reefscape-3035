@@ -147,7 +147,7 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
-        addTuningAuto(drive);
+        // addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
     }
@@ -179,9 +179,11 @@ public class AutoChooser {
         //middleL4Algae
 
         autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
+        autoChooser.addOption("left1+2Close", Autos.leftOnePlusTwoClose(drive, elevator, carriage, vision));
+
         autoChooser.setDefaultOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
-        autoChooser.setDefaultOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
+        // autoChooser.setDefaultOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
 
         
         // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));

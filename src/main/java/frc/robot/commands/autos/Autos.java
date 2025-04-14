@@ -25,6 +25,14 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command leftOnePlusTwoClose(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "left1+2Close")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                .build()
+        );
+    }
     public static Command leftOnePlusOne(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1+1")
@@ -33,18 +41,18 @@ public final class Autos {
                 .build()
         );
     }
-    public static Command leftOnePlusOneSeperate(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
-        return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "left1+1Part1")
-                .setMaxVelocity(6)
-                .setAcceleration(6)
-                .build(),
-            PathPlannerFollow.create(drive, "left1+1Part2")
-                .setMaxVelocity(6)
-                .setAcceleration(6)
-                .build()
-        );
-    }
+    // public static Command leftOnePlusOneSeperate(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+    //     return new SequentialCommandGroup(
+    //         PathPlannerFollow.create(drive, "left1+1Part1")
+    //             .setMaxVelocity(6)
+    //             .setAcceleration(6)
+    //             .build(),
+    //         PathPlannerFollow.create(drive, "left1+1Part2")
+    //             .setMaxVelocity(6)
+    //             .setAcceleration(6)
+    //             .build()
+    //     );
+    // }
     public static Command leftOne(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "left1")
