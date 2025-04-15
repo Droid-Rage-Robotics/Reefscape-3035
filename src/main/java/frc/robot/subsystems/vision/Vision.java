@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
 
         LEFT_L_L4_17(-0.19, 19.41), // Default -blue //done
         LEFT_L_L4_18(.05, 18.89), // done iffy
-        LEFT_L_L4_19(-3, 22.3), // dne - -0.29, 22.12
+        LEFT_L_L4_19(1,22.25), // dne - -0.29, 22.12
         LEFT_L_L4_20(-0.14, 20.87), // DOne
         LEFT_L_L4_21(-0.25, 18.9), // done
         LEFT_L_L4_22(-0.1, 18.5), // done

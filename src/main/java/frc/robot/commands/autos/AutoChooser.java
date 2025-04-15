@@ -70,17 +70,37 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("outtake", 
             new SequentialCommandGroup(
-                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .066)
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .07)//.066
             )
         );
+        NamedCommands.registerCommand("finalOuttake",
+                new SequentialCommandGroup(
+                    carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
+                ));
         NamedCommands.registerCommand("align", 
             new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(1.)
+                new AutoAlign(drive, vision).withTimeout(1.7)//1
                 //1.5 for MIddleAutos
                 //2.8 for left AUtos
                 //Middle for playoffs
             )
         );
+        NamedCommands.registerCommand("align1",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(1.)
+        ));
+         NamedCommands.registerCommand("align1.5",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(1.5)
+        ));
+        NamedCommands.registerCommand("align2",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(2)
+        ));
+        NamedCommands.registerCommand("align3",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(3)
+        ));
         // NamedCommands.registerCommand("placeL3",
         //     new SequentialCommandGroup(
         //         carriage.setPositionCommand(CarriageValue.L3)
@@ -99,6 +119,7 @@ public class AutoChooser {
         NamedCommands.registerCommand("resetCarriage",
             new SequentialCommandGroup(
                 new TeleopCommands().resetHP(elevator, carriage, CarriageValue.INTAKE_HPS),
+                new WaitCommand(.5),
                 carriage.setIntakeCommand(CarriageIntakeValue.INTAKE)
             )
         );
@@ -118,7 +139,8 @@ public class AutoChooser {
         );
         NamedCommands.registerCommand("intake",
             new SequentialCommandGroup(
-                new WaitCommand(1.)
+                // carriage.setIntakeCommand(CarriageIntakeValue.INTAKE),
+                new WaitCommand(.3)//1
             )   
         );
         NamedCommands.registerCommand("test",

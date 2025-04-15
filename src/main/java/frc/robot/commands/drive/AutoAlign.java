@@ -11,10 +11,10 @@ public class AutoAlign extends Command {
 	private Vision vision;
 	// private Timer timer= new Timer();
 	
-    private final ShuffleboardValue<Double> aim = 
+    private static final ShuffleboardValue<Double> aim = 
         ShuffleboardValue.create(0.0, "Aim", Vision.class.getSimpleName()).build();
 		
-		private final ShuffleboardValue<Double> range = 
+		private static final ShuffleboardValue<Double> range = 
         ShuffleboardValue.create(0.0, "Range", Vision.class.getSimpleName()).build();
 
 	// Auto
