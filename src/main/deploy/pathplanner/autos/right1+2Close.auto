@@ -96,7 +96,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.8
+                        "waitTime": 0.4
                       }
                     },
                     {
@@ -118,7 +118,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "align"
+                  "name": "align1.5"
                 }
               },
               {
@@ -143,7 +143,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "left"
+                  "name": "right"
                 }
               },
               {
@@ -153,6 +153,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
           }
         },
         {
@@ -172,7 +178,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.4
                       }
                     },
                     {
@@ -194,22 +200,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "align"
+                  "name": "align1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "outtake"
+                  "name": "finalOuttake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "resetCarriage"
           }
         }
       ]

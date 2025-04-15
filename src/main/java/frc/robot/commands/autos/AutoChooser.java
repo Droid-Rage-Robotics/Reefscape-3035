@@ -209,7 +209,7 @@ public class AutoChooser {
         // autoChooser.setDefaultOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
 
         
-        // autoChooser.addOption("right1+2", Autos.rightOnePlusTwo(drive, elevator, carriage, vision));
+        autoChooser.addOption("right1+2Close", Autos.rightOnePlusTwoClose(drive, elevator, carriage, vision));
         autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
         autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
 

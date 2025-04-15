@@ -91,9 +91,9 @@ public final class Autos {
         );
     }
     
-    public static Command rightOnePlusTwo(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
+    public static Command rightOnePlusTwoClose(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "right1+2")
+            PathPlannerFollow.create(drive, "right1+2Close")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
                 .build()
