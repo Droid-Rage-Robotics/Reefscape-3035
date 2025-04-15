@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "leave2IScore"
+                  "pathName": "leave2IScoreL"
                 }
               },
               {
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LH2IBack"
+                  "pathName": "LH2IBackL"
                 }
               },
               {

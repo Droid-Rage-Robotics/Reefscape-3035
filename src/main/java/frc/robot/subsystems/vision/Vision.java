@@ -24,8 +24,8 @@ public class Vision extends SubsystemBase {
         // ID
         RIGHT_R_L4_17(2.14, -19.94), // Default -blue done
         RIGHT_R_L4_18(2.1, -19.8), // done
-        RIGHT_R_L4_19(1.87, -20.24), // done
-        RIGHT_R_L4_20(1.2, -19.35), // done
+        RIGHT_R_L4_19(3, -19.56), // done -1.87, -20.24
+        RIGHT_R_L4_20(3,-19.6), // done -1.2, -19.35
         RIGHT_R_L4_21(1.71, -18.83), // done
         RIGHT_R_L4_22(2.01, -19.9), // done
 
@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
 
         LEFT_L_L4_17(-0.19, 19.41), // Default -blue //done
         LEFT_L_L4_18(.05, 18.89), // done iffy
-        LEFT_L_L4_19(-0.29, 22.12), // dne
+        LEFT_L_L4_19(-3, 22.3), // dne - -0.29, 22.12
         LEFT_L_L4_20(-0.14, 20.87), // DOne
         LEFT_L_L4_21(-0.25, 18.9), // done
         LEFT_L_L4_22(-0.1, 18.5), // done
@@ -179,18 +179,18 @@ public class Vision extends SubsystemBase {
         iDLWriter.set(LimelightHelpers.getFiducialID(DroidRageConstants.leftLimelight));
 
         if(SwerveDriveConstants.DriveOptions.IS_POSE_UPDATED.get()){
-            LimelightHelpers.PoseEstimate leftEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.leftLimelight);
-            LimelightHelpers.PoseEstimate rightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.rightLimelight);
+            // LimelightHelpers.PoseEstimate leftEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.leftLimelight);
+            // LimelightHelpers.PoseEstimate rightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.rightLimelight);
             
-            if (leftEstimate.pose.getX() != 0 && leftEstimate.pose.getY() != 0) {
-                poseTest.setRobotPose(leftEstimate.pose);
-                poseWriter.set(leftEstimate.pose.toString());
-                drive.resetOdometry(leftEstimate.pose);
-            } else if (rightEstimate.pose.getX() != 0 && rightEstimate.pose.getY() != 0) {
-                poseTest.setRobotPose(rightEstimate.pose);
-                poseWriter.set(rightEstimate.pose.toString());
-                drive.resetOdometry(rightEstimate.pose);
-            }
+            // if (leftEstimate.pose.getX() != 0 && leftEstimate.pose.getY() != 0) {
+            //     poseTest.setRobotPose(leftEstimate.pose);
+            //     poseWriter.set(leftEstimate.pose.toString());
+            //     drive.resetOdometry(leftEstimate.pose);
+            // } else if (rightEstimate.pose.getX() != 0 && rightEstimate.pose.getY() != 0) {
+            //     poseTest.setRobotPose(rightEstimate.pose);
+            //     poseWriter.set(rightEstimate.pose.toString());
+            //     drive.resetOdometry(rightEstimate.pose);
+            // }
         }
          
     }
