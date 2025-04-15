@@ -289,13 +289,13 @@ public class Vision extends SubsystemBase {
         // }
     }
 
-    public Location getLeftLocation(String name) {
+    public Location getLeftLocation(String name, int look) {
         if(DroidRageConstants.alignmentMode==Alignment.MIDDLE){
             return Vision.Location.LEFT_A;
         } else if(DroidRageConstants.alignmentMode == Alignment.RIGHT){
             return Vision.Location.LEFT_L_RIGHT;
         }
-        switch (getID(name)) {
+        switch (look) {
             case 17:
                 return Vision.Location.LEFT_L_L4_17;
             case 18:
@@ -328,13 +328,13 @@ public class Vision extends SubsystemBase {
 
     }
 
-    public Location getRightLocation(String name) {
+    public Location getRightLocation(String name, int look) {
         if (DroidRageConstants.alignmentMode == Alignment.MIDDLE) {
             return Vision.Location.RIGHT_A;
         } else if (DroidRageConstants.alignmentMode == Alignment.LEFT) {
             return Vision.Location.RIGHT_R_LEFT;
         }
-        switch (getID(name)) {
+        switch (look) {
             case 17:
                 return Vision.Location.RIGHT_R_L4_17;
             case 18:
@@ -421,4 +421,44 @@ public class Vision extends SubsystemBase {
         return targetingForwardSpeed;
     }
 
+    // public double aimAuto(int look) {
+    //     double targetingAngularVelocity = 0;
+    //     switch (DroidRageConstants.alignmentMode) {
+    //         case LEFT:
+    //             targetingAngularVelocity = rotController.calculate(
+    //                     gettX(DroidRageConstants.leftLimelight),
+    //                     getLeftLocation(DroidRageConstants.leftLimelight, look).getAngle());
+    //             break;
+    //         case RIGHT:
+    //             targetingAngularVelocity = rotController.calculate(
+    //                     gettX(DroidRageConstants.rightLimelight),
+    //                     getRightLocation(DroidRageConstants.rightLimelight, look).getAngle());
+    //             break;
+    //     }
+    //     return targetingAngularVelocity;
+    // }
+
+    // public double rangeAuto(int look) {
+    //     double targetingForwardSpeed = 0;
+    //     switch (DroidRageConstants.alignmentMode) {
+    //         case LEFT:
+    //             targetingForwardSpeed = xController.calculate(
+    //                     gettY(DroidRageConstants.leftLimelight),
+    //                     getLeftLocation(DroidRageConstants.leftLimelight, look).getDistance());
+    //             break;
+    //         case RIGHT:
+    //             targetingForwardSpeed = xController.calculate(
+    //                     gettY(DroidRageConstants.rightLimelight),
+    //                     getRightLocation(DroidRageConstants.rightLimelight, look).getDistance());
+    //             break;
+    //     }
+    //     return targetingForwardSpeed;
+    // }
+
+    public Location getRightLocation(String name) {
+        return getRightLocation(name, getID(name));
+    }
+    public Location getLeftLocation(String name) {//Teleop
+        return getLeftLocation(name, getID(name));
+    }
 }
