@@ -19,13 +19,13 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Vision extends SubsystemBase {
     public enum Location {
         // Limelight
-        // Which Pole
+        // Which Pdfsdfdfole
         // Pole Type
         // ID
         RIGHT_R_L4_17(2.14, -19.94), // Default -blue done
         RIGHT_R_L4_18(2.1, -19.8), // done
-        RIGHT_R_L4_19(3, -19.56), // done -1.87, -20.24
-        RIGHT_R_L4_20(3,-19.6), // done -1.2, -19.35
+        RIGHT_R_L4_19(1.87, -20.24), // done 1.87, -20.24
+        RIGHT_R_L4_20(1.2, -19.35), // done 1.2, -19.35
         RIGHT_R_L4_21(1.71, -18.83), // done
         RIGHT_R_L4_22(2.01, -19.9), // done
 
@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
 
         LEFT_L_L4_17(-0.19, 19.41), // Default -blue //done
         LEFT_L_L4_18(.05, 18.89), // done iffy
-        LEFT_L_L4_19(1,22.25), // dne - -0.29, 22.12
+        LEFT_L_L4_19(-0.29, 22.12), // dne  -0.29, 22.12
         LEFT_L_L4_20(-0.14, 20.87), // DOne
         LEFT_L_L4_21(-0.25, 18.9), // done
         LEFT_L_L4_22(-0.1, 18.5), // done
