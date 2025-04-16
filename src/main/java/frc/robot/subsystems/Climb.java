@@ -14,16 +14,16 @@ import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {
     public static class Constants {
-        public static final double MAX_POSITION = 400;
+        public static final double MAX_POSITION = 350;
         public static final double MIN_POSITION = 80;
         public static final double OFFSET = Math.PI/2;
 
 
     }
     
-    public static double hold = 195;//180
+    public static double hold = 150;//180
     // public static double reset = 90;
-    public static double climb = 350;//355
+    public static double climb = 235;//355
     // public static boolean pidOn = true;
     // public static double climbMore = 355;
     // public static double climbMoreMOre = 370;
@@ -35,7 +35,7 @@ public class Climb extends ArmTemplate {
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor( .008)//(125/1)*(48/16); .02 //.008
-        //.013333
+        //.0166
         .withSubsystemName("Climb")
         .withIsEnabled(true)
         .withCurrentLimit(120,120);
