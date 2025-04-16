@@ -73,6 +73,11 @@ public class AutoChooser {
                 new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE, .07)//.066
             )
         );
+        NamedCommands.registerCommand("outtakeA", 
+            new SequentialCommandGroup(
+                new TeleopCommands().runIntakeFor(carriage, CarriageIntakeValue.OUTTAKE_PROCESSOR, .9)//.066
+            )
+        );
         NamedCommands.registerCommand("finalOuttake",
                 new SequentialCommandGroup(
                     carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)

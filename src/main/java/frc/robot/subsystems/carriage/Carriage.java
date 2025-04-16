@@ -34,7 +34,7 @@ public class Carriage {
         
         BARGE(108, 133),
         BARGE_HOLD(130,130),
-        PROCESSOR(INTAKE_GROUND),
+        PROCESSOR(ALGAE_LOW),
 
         // RESET_HIGH(115, 200)
 
