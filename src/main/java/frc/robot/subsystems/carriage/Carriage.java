@@ -32,7 +32,7 @@ public class Carriage {
 
         L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
         
-        BARGE(108, 133),
+        BARGE(108, 127),
         BARGE_HOLD(130,130),
         PROCESSOR(ALGAE_LOW),
 
