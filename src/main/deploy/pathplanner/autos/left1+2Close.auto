@@ -21,9 +21,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "placeL4"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.7
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "placeL4"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -102,7 +115,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.8
                       }
                     },
                     {
@@ -184,7 +197,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.8
                       }
                     },
                     {
