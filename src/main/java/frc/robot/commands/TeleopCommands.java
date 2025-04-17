@@ -79,7 +79,7 @@ public class TeleopCommands{
     public SequentialCommandGroup goL4(Elevator elevator, Carriage carriage){
         return new SequentialCommandGroup(
             carriage.getArm().setTargetPositionCommand(CarriageValue.L4.getArmAngle()),
-            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),
+            // new WaitUntilCommand(()->carriage.getArm().atSetpoint()).withTimeout(.25),
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(ElevatorValue.L4),
                 carriage.getPivot().setTargetPositionCommand(CarriageValue.L4.getPivotAngle())
