@@ -69,6 +69,12 @@
                 "data": {
                   "name": "resetCarriage"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setLP"
+                }
               }
             ]
           }
@@ -210,6 +216,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "revert"
           }
         }
       ]
