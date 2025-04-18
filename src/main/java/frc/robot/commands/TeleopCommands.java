@@ -93,8 +93,8 @@ public class TeleopCommands{
             new ParallelCommandGroup(
                 elevator.setTargetPositionCommand(ElevatorValue.L4),
                 carriage.getPivot().setTargetPositionCommand(CarriageValue.L4.getPivotAngle())
-            ),
-            new WaitUntilCommand(()->elevator.getEncoderPosition()>ElevatorValue.L4.getHeight()-1.5)
+            )
+            // new WaitUntilCommand(()->elevator.getEncoderPosition()>ElevatorValue.L4.getHeight()-1.5)
         );
     }
 
