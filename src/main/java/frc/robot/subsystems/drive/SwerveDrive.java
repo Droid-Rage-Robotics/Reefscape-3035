@@ -303,14 +303,15 @@ public class SwerveDrive extends SubsystemBase {
 
     public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
         //No WORK
-        switch (DriverStation.getAlliance().get()) {
-            case Red:
-                setYaw(getHeading() + 180);
-                break;
-            case Blue:
-                setYaw(getHeading());
-                break;
-        }
+        setYaw(getHeading() +90);
+        // switch (DriverStation.getAlliance().get()) {
+        //     case Red:
+        //         setYaw(getHeading() + 180);
+        //         break;
+        //     case Blue:
+        //         setYaw(getHeading());
+        //         break;
+        // }
     }
 
     public void enableSysID() {
