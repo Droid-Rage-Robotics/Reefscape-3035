@@ -118,7 +118,8 @@ public class Vision extends SubsystemBase {
     public int targetIds[];
     public PIDController rotController = new PIDController(.095, 0, 0);// .1
     public PIDController xController = new PIDController(.11, 0, 0);// .1
-    private int bluePipeline = 0, redPipeline = 1, leftPipeline =2, leftFrontPipeline=3;
+    private int bluePipeline = 0, redPipeline = 1, leftPipeline =2, leftFrontPipeline=3,
+    rightPipeline =4, rightFrontPipeline=5;
     boolean doRejectUpdate = false;
     // private SwerveDrive drive;
     private Field2d poseTest = new Field2d();
@@ -217,24 +218,24 @@ public class Vision extends SubsystemBase {
         LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftPipeline);
         LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
     }
-    // public void setUpLeftFrontVision(){
-    //     targetIds = new int[] {6,19 };
-
-    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftPipeline);
-    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
-    // }
     public void setUpLeftFrontVision(){
         targetIds = new int[] {20,11};
 
         LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftFrontPipeline);
         LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftFrontPipeline);
     }
+    public void setUpRightVision(){
+        targetIds = new int[] {8,17};
 
-    // public void setLeftPipeline(int num){
-        
-    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, le);
-    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
-    // }
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, rightPipeline);
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, rightPipeline);
+    }
+    public void setUpRightFrontVision(){
+        targetIds = new int[] {9,22};
+
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, rightFrontPipeline);
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, rightFrontPipeline);
+    }
 
     @Override
     public void simulationPeriodic() {

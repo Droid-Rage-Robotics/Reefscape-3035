@@ -115,6 +115,14 @@ public class AutoChooser {
         // new InstantCommand()
             new InstantCommand(()->vision.setUpLeftFrontVision())
         );
+        NamedCommands.registerCommand("setRP", 
+        // new InstantCommand()
+            new InstantCommand(()->vision.setUpLeftVision())
+        );
+        NamedCommands.registerCommand("setRFP", 
+        // new InstantCommand()
+            new InstantCommand(()->vision.setUpLeftFrontVision())
+        );
         NamedCommands.registerCommand("revert", 
         // new InstantCommand()
 
