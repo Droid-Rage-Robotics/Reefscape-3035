@@ -21,9 +21,9 @@ public class Climb extends ArmTemplate {
 
     }
     
-    public static double hold = 150;//180
+    public static double hold = 142;//180
     // public static double reset = 90;
-    public static double climb = 220;//355
+    public static double climb = 200;//355
    //Champs CLimb Values:251(q3), 
 
     // public static boolean pidOn = true;
