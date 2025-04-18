@@ -86,6 +86,17 @@ public class TeleopCommands{
             )
         );
     }
+    public SequentialCommandGroup autoGoL4(Elevator elevator, Carriage carriage){
+        return new SequentialCommandGroup(
+            carriage.getArm().setTargetPositionCommand(CarriageValue.L4.getArmAngle()),
+            new WaitUntilCommand(()->carriage.getArm().atSetpoint()),//.withTimeout(.25),
+            new ParallelCommandGroup(
+                elevator.setTargetPositionCommand(ElevatorValue.L4),
+                carriage.getPivot().setTargetPositionCommand(CarriageValue.L4.getPivotAngle())
+            ),
+            new WaitUntilCommand(()->elevator.getEncoderPosition()>ElevatorValue.L4.getHeight()-1.5)
+        );
+    }
 
 
     public Command resetHP(Elevator elevator, Carriage carriage, CarriageValue value){

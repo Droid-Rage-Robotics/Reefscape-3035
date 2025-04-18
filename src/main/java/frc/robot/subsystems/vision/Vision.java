@@ -116,16 +116,19 @@ public class Vision extends SubsystemBase {
     protected final ShuffleboardValue<String> poseWriter = ShuffleboardValue
             .create("0,0,0", "PoseWriter", Vision.class.getSimpleName()).build();
     public int targetIds[];
-    public PIDController rotController = new PIDController(.1, 0, 0);// .09
+    public PIDController rotController = new PIDController(.095, 0, 0);// .1
     public PIDController xController = new PIDController(.11, 0, 0);// .1
-    private int bluePipeline = 0, redPipeline = 1;
+    private int bluePipeline = 0, redPipeline = 1, leftPipeline =2, leftFrontPipeline=3;
     boolean doRejectUpdate = false;
-    private SwerveDrive drive;
+    // private SwerveDrive drive;
     private Field2d poseTest = new Field2d();
+    
+    public final ShuffleboardValue<Boolean> isAlignWriter = ShuffleboardValue
+            .create(false, "IsAlign", Vision.class.getSimpleName()).build();
     // Set Up the team number - http://limelight.local:5801/
 
     // Initialize Limelight network tables
-    public Vision(SwerveDrive drive) {
+    public Vision() {
         LimelightHelpers.setCropWindow(DroidRageConstants.rightLimelight, -1, 1, -1, 1);
         // Change the camera pose relative to robot center (x forward, y left, z up,
         // degrees)
@@ -160,7 +163,7 @@ public class Vision extends SubsystemBase {
         rotController.setTolerance(.7);//.5
         xController.setTolerance(.7);//.4
 
-        this.drive = drive;
+        // this.drive = drive;
         SmartDashboard.putData("VisionPose", poseTest);
     }
 
@@ -207,6 +210,31 @@ public class Vision extends SubsystemBase {
             LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, bluePipeline);
         }
     }
+
+    public void setUpLeftVision(){
+        targetIds = new int[] {6,19 };
+
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftPipeline);
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
+    }
+    // public void setUpLeftFrontVision(){
+    //     targetIds = new int[] {6,19 };
+
+    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftPipeline);
+    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
+    // }
+    public void setUpLeftFrontVision(){
+        targetIds = new int[] {20,11};
+
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, leftFrontPipeline);
+        LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftFrontPipeline);
+    }
+
+    // public void setLeftPipeline(int num){
+        
+    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.leftLimelight, le);
+    //     LimelightHelpers.setPipelineIndex(DroidRageConstants.rightLimelight, leftPipeline);
+    // }
 
     @Override
     public void simulationPeriodic() {

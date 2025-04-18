@@ -66,7 +66,8 @@ public class AutoChooser {
         );
 
         NamedCommands.registerCommand("placeL4",
-            new TeleopCommands().goL4(elevator, carriage)
+            // new TeleopCommands().goL4(elevator, carriage)
+            new TeleopCommands().autoGoL4(elevator, carriage)
         );
         NamedCommands.registerCommand("outtake", 
             new SequentialCommandGroup(
@@ -106,6 +107,19 @@ public class AutoChooser {
             new SequentialCommandGroup(
                 new AutoAlign(drive, vision).withTimeout(3)
         ));
+        NamedCommands.registerCommand("setLP", 
+        // new InstantCommand()
+            new InstantCommand(()->vision.setUpLeftVision())
+        );
+        NamedCommands.registerCommand("setLFP", 
+        // new InstantCommand()
+            new InstantCommand(()->vision.setUpLeftFrontVision())
+        );
+        NamedCommands.registerCommand("revert", 
+        // new InstantCommand()
+
+            new InstantCommand(()->vision.setUpVision())
+        );
         // NamedCommands.registerCommand("placeL3",
         //     new SequentialCommandGroup(
         //         carriage.setPositionCommand(CarriageValue.L3)

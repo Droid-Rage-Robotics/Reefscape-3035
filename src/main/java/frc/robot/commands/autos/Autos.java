@@ -75,11 +75,11 @@ public final class Autos {
             PathPlannerFollow.create(drive, "middleBarge")
                 .setMaxVelocity(6)
                 .setAcceleration(6)
-                .build(),
-            PathPlannerFollow.create(drive, "middleBargePart2")
-                .setMaxVelocity(6)
-                .setAcceleration(6)
                 .build()
+            // PathPlannerFollow.create(drive, "middleBargePart2")
+            //     .setMaxVelocity(6)
+            //     .setAcceleration(6)
+            //     .build()
         );
     }
     public static Command middleRight(SwerveDrive drive, Elevator elevator, Carriage carriage,Vision vision) {//Top Red/Bottom Blue

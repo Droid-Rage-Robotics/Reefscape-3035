@@ -27,7 +27,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.7
+                        "waitTime": 0.59
                       }
                     },
                     {
@@ -37,6 +37,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setLFP"
                 }
               }
             ]
@@ -82,6 +88,19 @@
                 "data": {
                   "name": "resetCarriage"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
               },
               {
                 "type": "named",
@@ -90,12 +109,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
           }
         },
         {
@@ -115,7 +128,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.8
+                        "waitTime": 1.0
                       }
                     },
                     {

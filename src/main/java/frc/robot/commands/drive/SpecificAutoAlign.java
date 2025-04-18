@@ -15,7 +15,7 @@
 //     // private Timer timer= new Timer();
 
 //     // TELEOP
-//     public SpecificAutoAlign(SwerveDrive drive, Vision vision, int look) {
+//     public SpecificAutoAlign(SwerveDrive drive, Vision vision, int look, int lookTwo) { // Pairs Since both blue/red autos
 //         this.drive = drive;
 //         this.vision = vision;
 //         this.look = look;
@@ -49,7 +49,7 @@
 //                 break;
 //         }
 //         // timer.restart();
-//         drive.drive(vision.rangeAuto(look), 0, vision.aimAuto(look) - 0.03);
+//         // drive.drive(vision.rangeAuto(look), 0, vision.aimAuto(look) - 0.03);
 //     }
 
 //     @Override

@@ -52,11 +52,16 @@ public class AutoAlign extends Command {
 		aim.set((vision.aim()));
 		range.set(vision.range());
 		drive.drive(vision.range(), 0, vision.aim());
+		vision.isAlignWriter.set(true);
 	}
 
 	@Override
 	public boolean isFinished() {
 		// return !driver.povUp().getAsBoolean();
+		// if(vision.rotController.atSetpoint() && vision.xController.atSetpoint()){
+		// 	vision.isAlignWriter.set(false);
+		// 	return true;
+		// }
 		return (vision.rotController.atSetpoint() && vision.xController.atSetpoint());// || timer.hasElapsed(5);
 	}
 
