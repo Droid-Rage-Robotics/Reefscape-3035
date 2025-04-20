@@ -218,27 +218,27 @@ public class AutoChooser {
 
     public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
+        autoChooser.setDefaultOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
         // autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
         // autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
         // autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
-        autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
+        // autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
         autoChooser.addOption("middleRight", Autos.middleRight(drive, elevator, carriage, vision));
 
 
         //middleL4Algae
 
-        autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
         autoChooser.addOption("left1+2Close", Autos.leftOnePlusTwoClose(drive, elevator, carriage, vision));
 
-        autoChooser.setDefaultOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
-        autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
-        // autoChooser.setDefaultOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
+        // autoChooser.addOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
 
         
         autoChooser.addOption("right1+2Close", Autos.rightOnePlusTwoClose(drive, elevator, carriage, vision));
-        autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
-        autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
+        // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
+        // autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
 
     }
 
