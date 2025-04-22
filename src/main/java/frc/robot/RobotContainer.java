@@ -19,6 +19,7 @@ import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
@@ -148,5 +149,9 @@ public class RobotContainer {
 		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+	}
+
+	public void testNewDrive(CommandSwerveDrivetrain drive) {
+		drive.setDefaultCommand(new frc.robot.commands.manual.better.SwerveDriveTeleop(drive, driver));
 	}
 }

@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.autos.AutoChooser;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
@@ -24,6 +26,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final CommandSwerveDrivetrain drive = TunerConstants.createDrivetrain();
     // private final Elevator elevator = new Elevator(false);
     // private final Carriage carriage = new Carriage(
     //     new Arm(false),
@@ -46,7 +49,7 @@ public class Robot extends TimedRobot {
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
     private Field2d field = new Field2d();
 
-    // private RobotContainer robotContainer = new RobotContainer(driver, operator);
+    private RobotContainer robotContainer = new RobotContainer(driver, operator);
     // private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
@@ -120,7 +123,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        
+        robotContainer.testNewDrive(drive);
         // if (autonomousCommand != null) {
         //     autonomousCommand.cancel();
         // }

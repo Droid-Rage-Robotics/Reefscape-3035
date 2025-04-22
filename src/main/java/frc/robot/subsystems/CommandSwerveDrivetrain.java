@@ -24,12 +24,17 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveDrive.TippingState;
+import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private volatile Speed speed = Speed.NORMAL;
+    private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -237,6 +242,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+    
+
+
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -284,5 +292,33 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public TippingState getTippingState() {
+        return tippingState;
+    }
+
+    public Command setSpeed(Speed speed) {
+        return runOnce(() -> {
+            this.speed = speed;
+            // speedStateWriter.set(speed.name());
+        });
+    }
+
+    public double getTranslationalSpeed() {
+        return speed.getTranslationalSpeed();
+    }
+
+    public double getAngularSpeed() {
+        return speed.getAngularSpeed();
+    }
+
+    public double getHeading() {//Yaw
+        return Math.IEEEremainder(getPigeon2().getYaw().getValueAsDouble(), 360);
+    }
+    
+    public Rotation2d getRotation2d() {
+        return Rotation2d.fromDegrees(getHeading());
+        //THe negative is supposed to help work for teleop; Should FIX
     }
 }

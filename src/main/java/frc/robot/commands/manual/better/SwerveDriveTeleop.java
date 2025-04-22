@@ -1,34 +1,26 @@
 package frc.robot.commands.manual.better;
 
 import java.util.function.Supplier;
-
-import static edu.wpi.first.units.Units.*;
-
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
-import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import lombok.Setter;
 import frc.robot.subsystems.drive.SwerveModule;
 
 public class SwerveDriveTeleop extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final Supplier<Double> x, y, turn;
-    private Speed speed;
+
     private volatile double xSpeed, ySpeed, turnSpeed;
     private Rotation2d heading;
     private static final PIDController antiTipY = 
@@ -36,13 +28,15 @@ public class SwerveDriveTeleop extends Command {
     private static final PIDController antiTipX = 
         new PIDController(0.006, 0, 0.0005);
 
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
     // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
-    public SwerveDriveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController driver, Elevator elevator) {
+    private final SwerveRequest.ApplyRobotSpeeds driveRequest = new SwerveRequest.ApplyRobotSpeeds();
+    
+
+    public SwerveDriveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController driver
+    // , Elevator elevator
+    ) {
         this.drivetrain = drivetrain;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
@@ -50,20 +44,17 @@ public class SwerveDriveTeleop extends Command {
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
-        //     .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
+        driver.rightBumper().whileTrue(drivetrain.setSpeed(Speed.SLOW))//SLOW
+            .whileFalse(drivetrain.setSpeed(Speed.NORMAL));//NORMAL
         // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
             // .whileFalse(drive.setSpeed(Speed.SLOW));
         
-        driver.rightBumper().whileTrue(new InstantCommand(() -> speed = Speed.SLOW))
-            .whileFalse(new InstantCommand(() -> speed = Speed.NORMAL));
-        
         // driver.b().onTrue(drive.setYawCommand(0));
 
-        if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
-            // drive.setSpeed(Speed.SLOW);
-            speed = Speed.SLOW;
-        }
+        // if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
+        //     // drive.setSpeed(Speed.SLOW);
+        //     speed = Speed.SLOW;
+        // }
 
         addRequirements(drivetrain);
     }
@@ -87,36 +78,39 @@ public class SwerveDriveTeleop extends Command {
             turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
-        // // Apply Field Oriented
-        // if (DriveOptions.IS_FIELD_ORIENTED.get()) {
-        //     double modifiedXSpeed = xSpeed;
-        //     double modifiedYSpeed = ySpeed;
+        // Apply Field Oriented
+        if (DriveOptions.IS_FIELD_ORIENTED.get()) {
+            double modifiedXSpeed = xSpeed;
+            double modifiedYSpeed = ySpeed;
 
             
-        //     heading = drive.getRotation2d();
-
-        //     modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
-        //     modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
+            heading = drivetrain.getRotation2d();
             
 
-        //     xSpeed = modifiedXSpeed;
-        //     ySpeed = modifiedYSpeed;
-        
+            modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
+            modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
+            
+
+            xSpeed = modifiedXSpeed;
+            ySpeed = modifiedYSpeed;
+        }
 
         
        
         
 
-        // // Apply Anti-Tip
+        // Apply Anti-Tip
         // double xTilt = drive.getRoll(); //Is this Roll or pitch
         // double yTilt = drive.getPitch();// Is this Roll or pitch
+        double xTilt = drivetrain.getPigeon2().getRoll().getValueAsDouble();
+        double yTilt = drivetrain.getPigeon2().getPitch().getValueAsDouble();
 
-        // if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
-        //     if (Math.abs(xTilt) > 10)
-        //         xSpeed = -antiTipX.calculate(xTilt, 0);
-        //     if (Math.abs(yTilt) >10)
-        //         ySpeed = -antiTipY.calculate(yTilt, 0);
-        // }
+        if(drivetrain.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
+            if (Math.abs(xTilt) > 10)
+                xSpeed = -antiTipX.calculate(xTilt, 0);
+            if (Math.abs(yTilt) >10)
+                ySpeed = -antiTipY.calculate(yTilt, 0);
+        }
 
         // Apply deadzone
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;
@@ -124,29 +118,25 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
         // Smooth driving and apply speed
-        // xSpeed = 
-        //     xSpeed *
-        //     SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-        //     drive.getTranslationalSpeed();
-        // ySpeed = 
-        //     ySpeed *
-        //     SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-        //     drive.getTranslationalSpeed();
-        // turnSpeed = 
-        //     turnSpeed *
-        //     SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
-        //     drive.getAngularSpeed();
+        xSpeed = 
+            xSpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            drivetrain.getTranslationalSpeed();
+        ySpeed = 
+            ySpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            drivetrain.getTranslationalSpeed();
+        turnSpeed = 
+            turnSpeed *
+            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
+            drivetrain.getAngularSpeed();
 
-        // ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
         // SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         // drive.setModuleStates(states);
 
-        drivetrain.applyRequest(() ->
-                drivetrain.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            );
+        drivetrain.setControl(driveRequest.withSpeeds(chassisSpeeds));
     }
 
     @Override
