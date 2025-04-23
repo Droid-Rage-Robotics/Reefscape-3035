@@ -2,12 +2,12 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class AutoAlign extends Command {
-	private SwerveDrive drive;
+	private OldSwerveDrive drive;
 	private Vision vision;
 	// private Timer timer= new Timer();
 	
@@ -18,7 +18,7 @@ public class AutoAlign extends Command {
         ShuffleboardValue.create(0.0, "Range", Vision.class.getSimpleName()).build();
 
 	// Auto
-	public AutoAlign(SwerveDrive drive, Vision vision) {
+	public AutoAlign(OldSwerveDrive drive, Vision vision) {
 		this.drive = drive;
 		this.vision = vision;
 		addRequirements(vision);

@@ -3,15 +3,15 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 public class Turn180Degrees extends Command {
-    private final SwerveDrive drive;
+    private final OldSwerveDrive drive;
     private final PIDController controller;
     private double targetAngle;
     private CommandXboxController driver;
 
-    public Turn180Degrees(SwerveDrive drive, CommandXboxController driver) {
+    public Turn180Degrees(OldSwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
         this.controller = new PIDController(0.03, 0, 0);  // Tune these PID constants as needed
         // controller.setTolerance(1);

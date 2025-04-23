@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -29,9 +29,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
-import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements

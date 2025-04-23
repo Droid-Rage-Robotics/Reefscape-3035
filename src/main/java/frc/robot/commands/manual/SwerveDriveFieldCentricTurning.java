@@ -14,14 +14,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.old.OldSwerveDrive;
 // import frc.robot.subsystems.drive.SwerveDriveConstants;
 // import frc.robot.subsystems.drive.SwerveModule;
 // @Deprecated
 public class SwerveDriveFieldCentricTurning extends Command {
-    private final SwerveDrive drive;
+    private final OldSwerveDrive drive;
     private final Supplier<Double> leftX,leftY, rightX, rightY;
     private boolean FIELD_CENTRIC_DRIVING;
     private boolean FIELD_CENTRIC_TURNING;
@@ -222,7 +220,7 @@ public class SwerveDriveFieldCentricTurning extends Command {
 
 
 
-        public SwerveDriveFieldCentricTurning(SwerveDrive drive, CommandXboxController driver) {
+        public SwerveDriveFieldCentricTurning(OldSwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
         this.driver = driver;
         // this.leftY = driver;
@@ -330,7 +328,7 @@ public class SwerveDriveFieldCentricTurning extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(x, y, turn);
 
-        SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] states = OldSwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         drive.setModuleStates(states);
             // drive.set
 

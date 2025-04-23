@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drive.old;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants;
 import frc.robot.SysID.DriveSysID;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
-import frc.robot.subsystems.drive.SwerveModule.POD;
+import frc.robot.subsystems.drive.old.SwerveModule.Constants;
+import frc.robot.subsystems.drive.old.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
@@ -30,7 +32,7 @@ import lombok.Getter;
 
 //Set Voltage instead of set Power
 //Set them to 90 to 100%
-public class SwerveDrive extends SubsystemBase {
+public class OldSwerveDrive extends SubsystemBase {
     public enum TippingState {
         NO_TIP_CORRECTION,
         ANTI_TIP,
@@ -108,7 +110,7 @@ public class SwerveDrive extends SubsystemBase {
     protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
         ("none", "Current/Pose", this.getSubsystem()).build();
 
-    public SwerveDrive(Boolean isEnabled) {
+    public OldSwerveDrive(Boolean isEnabled) {
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -203,7 +205,7 @@ public class SwerveDrive extends SubsystemBase {
         drive(chassisSpeeds);
     }
     public void drive(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] states = OldSwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(states);
     }
 
@@ -221,7 +223,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setFeedforwardModuleStates(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] states = OldSwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setFeedforwardModuleStates(states);
     }
     public void setFeedforwardModuleStates(SwerveModuleState[] states) {

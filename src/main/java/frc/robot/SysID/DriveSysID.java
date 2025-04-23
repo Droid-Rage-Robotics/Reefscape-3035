@@ -6,8 +6,8 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.drive.old.OldSwerveDrive;
+import frc.robot.subsystems.drive.old.SwerveModule;
 
 public class DriveSysID {
 
@@ -26,7 +26,7 @@ public class DriveSysID {
    * @param swerveModules the array of swerve modules to use
    * @param drive the swerve drive subsystem
    */
-  public DriveSysID(SwerveModule[] swerveModules, SwerveDrive drive) {
+  public DriveSysID(SwerveModule[] swerveModules, OldSwerveDrive drive) {
     routine = new SysIdRoutine(
         new SysIdRoutine.Config(),
         new SysIdRoutine.Mechanism(

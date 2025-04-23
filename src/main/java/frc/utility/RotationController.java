@@ -2,7 +2,7 @@ package frc.utility;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 /**
  * Uses a profiled PID Controller to quickly turn the robot to a specified angle. Once the robot is
@@ -10,7 +10,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
  * angle.
  */
 public class RotationController {
-    SwerveDrive drive;
+    OldSwerveDrive drive;
     PIDController controller;
     PIDController holdController;
     Constraints constraints;
@@ -21,7 +21,7 @@ public class RotationController {
     double feedbackSetpoint;
     double tolerance = (Math.PI / 720);
 
-    public RotationController(SwerveDrive drive) {
+    public RotationController(OldSwerveDrive drive) {
         this.drive = drive;
         // config = swerve.config;
         // constraints = new Constraints(config.maxAngularVelocity, config.maxAngularAcceleration);

@@ -1,53 +1,62 @@
 package frc.robot.commands.manual;
 
 import java.util.function.Supplier;
-
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
-import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDrive.TippingState;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.drive.old.SwerveModule;
+import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 public class SwerveDriveTeleop extends Command {
-    private final SwerveDrive drive;
+    private final CommandSwerveDrivetrain drivetrain;
     private final Supplier<Double> x, y, turn;
+
     private volatile double xSpeed, ySpeed, turnSpeed;
     private Rotation2d heading;
     private static final PIDController antiTipY = 
         new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = 
         new PIDController(0.006, 0, 0.0005);
+
     // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
-    public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
-        this.drive = drive;
+    private final SwerveRequest.ApplyRobotSpeeds driveRequest = new SwerveRequest.ApplyRobotSpeeds();
+    
+
+    public SwerveDriveTeleop(
+        CommandSwerveDrivetrain drive, 
+        CommandXboxController driver
+    // , Elevator elevator
+    ) {
+        this.drivetrain = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
-            .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-            // .whileFalse(drive.setSpeed(Speed.SLOW));
-
+        // driver.rightBumper().whileTrue(drivetrain.setSpeed(Speed.SLOW))//SLOW
+        //     .whileFalse(drivetrain.setSpeed(Speed.NORMAL));//NORMAL
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+            .whileFalse(drive.setSpeed(Speed.SLOW));
+        
         driver.b().onTrue(drive.setYawCommand(0));
 
-        if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
-            drive.setSpeed(Speed.SLOW);
-        }
+        // if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
+        //     // drive.setSpeed(Speed.SLOW);
+        //     speed = Speed.SLOW;
+        // }
 
         addRequirements(drive);
     }
@@ -77,7 +86,8 @@ public class SwerveDriveTeleop extends Command {
             double modifiedYSpeed = ySpeed;
 
             
-            heading = drive.getRotation2d();
+            heading = drivetrain.getRotation2d();
+            
 
             modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
             modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
@@ -92,10 +102,12 @@ public class SwerveDriveTeleop extends Command {
         
 
         // Apply Anti-Tip
-        double xTilt = drive.getRoll(); //Is this Roll or pitch
-        double yTilt = drive.getPitch();// Is this Roll or pitch
+        // double xTilt = drive.getRoll(); //Is this Roll or pitch
+        // double yTilt = drive.getPitch();// Is this Roll or pitch
+        double xTilt = drivetrain.getPigeon2().getRoll().getValueAsDouble();
+        double yTilt = drivetrain.getPigeon2().getPitch().getValueAsDouble();
 
-        if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
+        if(drivetrain.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
             if (Math.abs(xTilt) > 10)
                 xSpeed = -antiTipX.calculate(xTilt, 0);
             if (Math.abs(yTilt) >10)
@@ -111,25 +123,27 @@ public class SwerveDriveTeleop extends Command {
         xSpeed = 
             xSpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-            drive.getTranslationalSpeed();
+            drivetrain.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-            drive.getTranslationalSpeed();
+            drivetrain.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
             SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
-            drive.getAngularSpeed();
+            drivetrain.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
-        SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        drive.setModuleStates(states);
+        // SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        // drive.setModuleStates(states);
+
+        drivetrain.setControl(driveRequest.withSpeeds(chassisSpeeds));
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.stop();
+        // drive.stop();
     }
 
     @Override
