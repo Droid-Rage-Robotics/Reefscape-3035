@@ -2,6 +2,7 @@ package frc.utility;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 /**
@@ -10,7 +11,7 @@ import frc.robot.subsystems.drive.old.OldSwerveDrive;
  * angle.
  */
 public class RotationController {
-    OldSwerveDrive drive;
+    SwerveDrive drive;
     PIDController controller;
     PIDController holdController;
     Constraints constraints;
@@ -21,7 +22,7 @@ public class RotationController {
     double feedbackSetpoint;
     double tolerance = (Math.PI / 720);
 
-    public RotationController(OldSwerveDrive drive) {
+    public RotationController(SwerveDrive drive) {
         this.drive = drive;
         // config = swerve.config;
         // constraints = new Constraints(config.maxAngularVelocity, config.maxAngularAcceleration);
