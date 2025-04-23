@@ -36,7 +36,7 @@ import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
-public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
     
@@ -138,7 +138,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
      * @param modules               Constants for each specific module
      */
-    public CommandSwerveDrivetrain(
+    public SwerveDrive(
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
@@ -163,7 +163,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      *                                CAN FD, and 100 Hz on CAN 2.0.
      * @param modules                 Constants for each specific module
      */
-    public CommandSwerveDrivetrain(
+    public SwerveDrive(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         SwerveModuleConstants<?, ?, ?>... modules
@@ -195,7 +195,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      *                                  and radians
      * @param modules                   Constants for each specific module
      */
-    public CommandSwerveDrivetrain(
+    public SwerveDrive(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         Matrix<N3, N1> odometryStandardDeviation,
@@ -368,8 +368,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return speed.getAngularSpeed();
     }
 
-    
-
     public double getHeading() {//Yaw
         return Math.IEEEremainder(getPigeon2().getYaw().getValueAsDouble(), 360);
     }
@@ -386,6 +384,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     public void setYaw(double degrees){
         getPigeon2().setYaw(degrees, 5);
-    }
+    } 
     
+    public Pose2d getPose() {
+        return getState().Pose;
+    }
 }

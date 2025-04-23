@@ -1,17 +1,22 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 public class Turn180Degrees extends Command {
-    private final OldSwerveDrive drive;
+    private final SwerveDrive drive;
+    private final SwerveRequest.RobotCentric driveRequest = new SwerveRequest.RobotCentric();
+    private final CommandXboxController driver;
     private final PIDController controller;
     private double targetAngle;
-    private CommandXboxController driver;
+    
 
-    public Turn180Degrees(OldSwerveDrive drive, CommandXboxController driver) {
+    public Turn180Degrees(SwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
         this.controller = new PIDController(0.03, 0, 0);  // Tune these PID constants as needed
         // controller.setTolerance(1);
@@ -37,7 +42,9 @@ public class Turn180Degrees extends Command {
         // Use the PID controller to get the turn speed
         double turnSpeed = controller.calculate(drive.getHeading());
         // Apply turn speed to the drivetrain
-        drive.drive(0,0, turnSpeed);  // Assuming you only want to turn, so forward speed is 0
+        // drive.drive(0,0, turnSpeed);  // Assuming you only want to turn, so forward speed is 0
+        drive.setControl(driveRequest.withVelocityX(0).withVelocityY(0).withRotationalRate(turnSpeed));
+
     }
 
     @Override
@@ -49,6 +56,6 @@ public class Turn180Degrees extends Command {
     @Override
     public void end(boolean interrupted) {
         // Stop the drivetrain when the command finishes
-        drive.stop();
+        // drive.stop();
     }
 }

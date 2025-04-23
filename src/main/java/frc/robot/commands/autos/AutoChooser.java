@@ -21,7 +21,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.vision.Vision;
@@ -30,7 +30,7 @@ import frc.utility.shuffleboard.ComplexWidgetBuilder;
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-    public AutoChooser(CommandSwerveDrivetrain drive, Elevator elevator, Carriage carriage, Vision vision){
+    public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
         // NamedCommands.registerCommand("resetPose",
         //     new ResetPoseVision(drive, vision) 
         // );
@@ -84,30 +84,30 @@ public class AutoChooser {
                 new SequentialCommandGroup(
                     carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
                 ));
-        // NamedCommands.registerCommand("align", 
-        //     new SequentialCommandGroup(
-        //         new AutoAlign(drive, vision).withTimeout(1.7)//1
-        //         //1.5 for MIddleAutos
-        //         //2.8 for left AUtos
-        //         //Middle for playoffs
-        //     )
-        // );
-        // NamedCommands.registerCommand("align1",
-        //     new SequentialCommandGroup(
-        //         new AutoAlign(drive, vision).withTimeout(1.)
-        // ));
-        //  NamedCommands.registerCommand("align1.5",
-        //     new SequentialCommandGroup(
-        //         new AutoAlign(drive, vision).withTimeout(1.5)
-        // ));
-        // NamedCommands.registerCommand("align2",
-        //     new SequentialCommandGroup(
-        //         new AutoAlign(drive, vision).withTimeout(2)
-        // ));
-        // NamedCommands.registerCommand("align3",
-        //     new SequentialCommandGroup(
-        //         new AutoAlign(drive, vision).withTimeout(3)
-        // ));
+        NamedCommands.registerCommand("align", 
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(1.7)//1
+                //1.5 for MIddleAutos
+                //2.8 for left AUtos
+                //Middle for playoffs
+            )
+        );
+        NamedCommands.registerCommand("align1",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(1.)
+        ));
+         NamedCommands.registerCommand("align1.5",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(1.5)
+        ));
+        NamedCommands.registerCommand("align2",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(2)
+        ));
+        NamedCommands.registerCommand("align3",
+            new SequentialCommandGroup(
+                new AutoAlign(drive, vision).withTimeout(3)
+        ));
         NamedCommands.registerCommand("setLP", 
         // new InstantCommand()
             new InstantCommand(()->vision.setUpLeftVision())
@@ -207,7 +207,7 @@ public class AutoChooser {
         return autoChooser.getSelected();
     }
 
-    public static void addTuningAuto(CommandSwerveDrivetrain drive){
+    public static void addTuningAuto(SwerveDrive drive){
         autoChooser.addOption("BackTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));

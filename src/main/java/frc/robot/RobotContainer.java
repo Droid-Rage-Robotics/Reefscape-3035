@@ -17,14 +17,15 @@ import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
-import frc.robot.commands.manual.old.SwerveDriveTeleop;
+import frc.robot.commands.manual.SwerveDriveTeleop;
+import frc.robot.commands.manual.old.OldSwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
@@ -38,7 +39,7 @@ public class RobotContainer {
 	}
 
 	public void configureTeleOpBindings(
-		OldSwerveDrive drive,
+		SwerveDrive drive,
 		Elevator elevator,
 		Carriage carriage,
 		Climb climb,
@@ -144,7 +145,7 @@ public class RobotContainer {
 	// 	driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	// }
 
-	public void driveSysID(CommandSwerveDrivetrain drive){
+	public void driveSysID(SwerveDrive drive){
 		driver.povUp().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
 		driver.povDown().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
@@ -158,7 +159,7 @@ public class RobotContainer {
 		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	}
 
-	public void testNewDrive(CommandSwerveDrivetrain drive) {
-		drive.setDefaultCommand(new frc.robot.commands.manual.SwerveDriveTeleop(drive, driver));
+	public void testNewDrive(SwerveDrive drive, Elevator elevator) {
+		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 	}
 }

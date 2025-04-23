@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
@@ -18,7 +18,7 @@ import frc.robot.subsystems.drive.old.SwerveModule;
 import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 public class SwerveDriveTeleop extends Command {
-    private final CommandSwerveDrivetrain drivetrain;
+    private final SwerveDrive drivetrain;
     private final Supplier<Double> x, y, turn;
 
     private volatile double xSpeed, ySpeed, turnSpeed;
@@ -35,9 +35,9 @@ public class SwerveDriveTeleop extends Command {
     
 
     public SwerveDriveTeleop(
-        CommandSwerveDrivetrain drive, 
-        CommandXboxController driver
-    // , Elevator elevator
+        SwerveDrive drive, 
+        CommandXboxController driver, 
+        Elevator elevator
     ) {
         this.drivetrain = drive;
         this.x = driver::getLeftX;
@@ -53,10 +53,9 @@ public class SwerveDriveTeleop extends Command {
         
         driver.b().onTrue(drive.setYawCommand(0));
 
-        // if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
-        //     // drive.setSpeed(Speed.SLOW);
-        //     speed = Speed.SLOW;
-        // }
+        if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
+            drive.setSpeed(Speed.SLOW);
+        }
 
         addRequirements(drive);
     }

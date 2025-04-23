@@ -19,14 +19,16 @@ import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.Telemetry;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
-    private final CommandSwerveDrivetrain drive = TunerConstants.createDrivetrain();
+    private final SwerveDrive drive = TunerConstants.createDrivetrain();
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false),
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
     private Field2d field = new Field2d();
+    private Telemetry telemetry = new Telemetry(SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue());
 
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
     private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
@@ -64,13 +67,12 @@ public class Robot extends TimedRobot {
         // vision.setUpVision();
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
-        
     }
     
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        // field.setRobotPose(drive.getPose());
+        field.setRobotPose(drive.getPose());
         SmartDashboard.putData("DrivePose",field);
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);

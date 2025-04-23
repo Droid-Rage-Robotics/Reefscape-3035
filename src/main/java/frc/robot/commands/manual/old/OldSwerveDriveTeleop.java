@@ -18,7 +18,7 @@ import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.drive.old.SwerveModule;
 import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
-public class SwerveDriveTeleop extends Command {
+public class OldSwerveDriveTeleop extends Command {
     private final OldSwerveDrive drive;
     private final Supplier<Double> x, y, turn;
     private volatile double xSpeed, ySpeed, turnSpeed;
@@ -30,7 +30,7 @@ public class SwerveDriveTeleop extends Command {
     // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
-    public SwerveDriveTeleop(OldSwerveDrive drive, CommandXboxController driver, Elevator elevator) {
+    public OldSwerveDriveTeleop(OldSwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
