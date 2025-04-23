@@ -137,11 +137,18 @@ public class RobotContainer {
         //     .withTimeout(0.5));
 	}
 
-	public void driveSysID(DriveSysID sysID){
-		driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
-		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+	// public void driveSysID(DriveSysID sysID){
+	// 	driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+	// 	driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+	// 	driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
+	// 	driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+	// }
+
+	public void driveSysID(CommandSwerveDrivetrain drive){
+		driver.povUp().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+		driver.povDown().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+		driver.povLeft().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+		driver.povRight().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	}
 
 	public void sysID(SysID sysID){

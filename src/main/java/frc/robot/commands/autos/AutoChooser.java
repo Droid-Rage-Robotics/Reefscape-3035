@@ -18,6 +18,7 @@ import frc.robot.DroidRageConstants;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
@@ -29,7 +30,7 @@ import frc.utility.shuffleboard.ComplexWidgetBuilder;
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-    public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
+    public AutoChooser(CommandSwerveDrivetrain drive, Elevator elevator, Carriage carriage, Vision vision){
         // NamedCommands.registerCommand("resetPose",
         //     new ResetPoseVision(drive, vision) 
         // );
@@ -83,30 +84,30 @@ public class AutoChooser {
                 new SequentialCommandGroup(
                     carriage.setIntakeCommand(CarriageIntakeValue.OUTTAKE)
                 ));
-        NamedCommands.registerCommand("align", 
-            new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(1.7)//1
-                //1.5 for MIddleAutos
-                //2.8 for left AUtos
-                //Middle for playoffs
-            )
-        );
-        NamedCommands.registerCommand("align1",
-            new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(1.)
-        ));
-         NamedCommands.registerCommand("align1.5",
-            new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(1.5)
-        ));
-        NamedCommands.registerCommand("align2",
-            new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(2)
-        ));
-        NamedCommands.registerCommand("align3",
-            new SequentialCommandGroup(
-                new AutoAlign(drive, vision).withTimeout(3)
-        ));
+        // NamedCommands.registerCommand("align", 
+        //     new SequentialCommandGroup(
+        //         new AutoAlign(drive, vision).withTimeout(1.7)//1
+        //         //1.5 for MIddleAutos
+        //         //2.8 for left AUtos
+        //         //Middle for playoffs
+        //     )
+        // );
+        // NamedCommands.registerCommand("align1",
+        //     new SequentialCommandGroup(
+        //         new AutoAlign(drive, vision).withTimeout(1.)
+        // ));
+        //  NamedCommands.registerCommand("align1.5",
+        //     new SequentialCommandGroup(
+        //         new AutoAlign(drive, vision).withTimeout(1.5)
+        // ));
+        // NamedCommands.registerCommand("align2",
+        //     new SequentialCommandGroup(
+        //         new AutoAlign(drive, vision).withTimeout(2)
+        // ));
+        // NamedCommands.registerCommand("align3",
+        //     new SequentialCommandGroup(
+        //         new AutoAlign(drive, vision).withTimeout(3)
+        // ));
         NamedCommands.registerCommand("setLP", 
         // new InstantCommand()
             new InstantCommand(()->vision.setUpLeftVision())
@@ -188,7 +189,7 @@ public class AutoChooser {
             )
         );
 
-        createAutoBuilder(drive);
+        // createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withWidget(BuiltInWidgets.kComboBoxChooser)
             .withSize(1, 3);
@@ -197,7 +198,7 @@ public class AutoChooser {
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
         // addTuningAuto(drive);
-        addAutos(drive, elevator, carriage, vision);
+        // addAutos(drive, elevator, carriage, vision);
         // autoChooser = AutoBuilder.buildAutoChooser();
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
     }
@@ -206,7 +207,7 @@ public class AutoChooser {
         return autoChooser.getSelected();
     }
 
-    public static void addTuningAuto(SwerveDrive drive){
+    public static void addTuningAuto(CommandSwerveDrivetrain drive){
         autoChooser.addOption("BackTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
@@ -216,71 +217,71 @@ public class AutoChooser {
         // // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 
-    public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
-        autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
-        autoChooser.setDefaultOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
-        // autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
-        // autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
-        // autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
-        // autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
-        autoChooser.addOption("middleRight", Autos.middleRight(drive, elevator, carriage, vision));
+    // public static void addAutos(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
+    //     autoChooser.addOption("middleProcessor", Autos.middleProcessor(drive, elevator, carriage, vision));
+    //     autoChooser.setDefaultOption("middleBarge", Autos.middleBarge(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("middleL2", Autos.middle(drive, elevator, carriage, vision, "L2"));
+    //     // autoChooser.addOption("middleL3", Autos.middle(drive, elevator, carriage, vision, "L3"));
+    //     // autoChooser.addOption("middleL4", Autos.middle(drive, elevator, carriage, vision, "L4"));
+    //     // autoChooser.addOption("middleL4Algae", Autos.middleL4Algae(drive, elevator, carriage, vision));
+    //     autoChooser.addOption("middleRight", Autos.middleRight(drive, elevator, carriage, vision));
 
 
-        //middleL4Algae
+    //     //middleL4Algae
 
-        // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
-        autoChooser.addOption("left1+2Close", Autos.leftOnePlusTwoClose(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("left1+2", Autos.leftOnePlusTwo(drive, elevator, carriage, vision));
+    //     autoChooser.addOption("left1+2Close", Autos.leftOnePlusTwoClose(drive, elevator, carriage, vision));
 
-        // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
-        // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
-        // autoChooser.addOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("left1+1", Autos.leftOnePlusOne(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("left1", Autos.leftOne(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("left1+1Seperate", Autos.leftOnePlusOneSeperate(drive, elevator, carriage, vision));
 
         
-        autoChooser.addOption("right1+2Close", Autos.rightOnePlusTwoClose(drive, elevator, carriage, vision));
-        // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
-        // autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
+    //     autoChooser.addOption("right1+2Close", Autos.rightOnePlusTwoClose(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("right1+1", Autos.rightOnePlusOne(drive, elevator, carriage, vision));
+    //     // autoChooser.addOption("right1", Autos.rightOne(drive, elevator, carriage, vision));
 
-    }
+    // }
 
-    public static void createAutoBuilder(SwerveDrive drive){
-        try {
-            // RobotConfig config = new RobotConfig(Units.lbsToKilograms(120), 1, 
-            //     null, 
-            //     Units.inchesToMeters(29));
-            RobotConfig config = RobotConfig.fromGUISettings();
+    // public static void createAutoBuilder(SwerveDrive drive){
+    //     try {
+    //         // RobotConfig config = new RobotConfig(Units.lbsToKilograms(120), 1, 
+    //         //     null, 
+    //         //     Units.inchesToMeters(29));
+    //         RobotConfig config = RobotConfig.fromGUISettings();
 
-            // Configure AutoBuilder
-            AutoBuilder.configure(
-                drive::getPose,
-                drive::resetOdometry,
-                drive::getSpeeds,
-                drive::setFeedforwardModuleStates,
-                new PPHolonomicDriveController(
-                        new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),  // Translation PID constants
-                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),  // Rotation PID constants
-                config,
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    //         // Configure AutoBuilder
+    //         AutoBuilder.configure(
+    //             drive::getPose,
+    //             drive::resetOdometry,
+    //             drive::getSpeeds,
+    //             drive::setFeedforwardModuleStates,
+    //             new PPHolonomicDriveController(
+    //                     new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
+    //                 SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
+    //                 SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),  // Translation PID constants
+    //             new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
+    //                 SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
+    //                 SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),  // Rotation PID constants
+    //             config,
+    //             () -> {
+    //                 // Boolean supplier that controls when the path will be mirrored for the red
+    //                 // alliance
+    //                 // This will flip the path being followed to the red side of the field.
+    //                 // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                drive // Reference to this subsystem to set requirements
-            );
-        } catch (Exception e) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
-        }
-    }
+    //                 var alliance = DriverStation.getAlliance();
+    //                 if (alliance.isPresent()) {
+    //                     return alliance.get() == DriverStation.Alliance.Red;
+    //                 }
+    //                 return false;
+    //             },
+    //             drive // Reference to this subsystem to set requirements
+    //         );
+    //     } catch (Exception e) {
+    //         DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    //     }
+    // }
 
     // public Command autoAlgaePickCommand(){
     //     return new SequentialCommandGroup(

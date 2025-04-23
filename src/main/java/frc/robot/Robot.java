@@ -27,15 +27,15 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final CommandSwerveDrivetrain drive = TunerConstants.createDrivetrain();
-    // private final Elevator elevator = new Elevator(false);
-    // private final Carriage carriage = new Carriage(
-    //     new Arm(false),
-    //     new Pivot(false),
-    //     new Intake(false) 
-    // );
+    private final Elevator elevator = new Elevator(false);
+    private final Carriage carriage = new Carriage(
+        new Arm(false),
+        new Pivot(false),
+        new Intake(false) 
+    );
     
-    // private Climb climb = new Climb(false);
-    // private final Vision vision = new Vision();
+    private Climb climb = new Climb(false);
+    private final Vision vision = new Vision();
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     private Field2d field = new Field2d();
 
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
-    // private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
+    private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
         // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {

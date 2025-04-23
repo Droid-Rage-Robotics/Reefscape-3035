@@ -34,29 +34,31 @@ public class SwerveDriveTeleop extends Command {
     private final SwerveRequest.ApplyRobotSpeeds driveRequest = new SwerveRequest.ApplyRobotSpeeds();
     
 
-    public SwerveDriveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController driver
+    public SwerveDriveTeleop(
+        CommandSwerveDrivetrain drive, 
+        CommandXboxController driver
     // , Elevator elevator
     ) {
-        this.drivetrain = drivetrain;
+        this.drivetrain = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drivetrain.setSpeed(Speed.SLOW))//SLOW
-            .whileFalse(drivetrain.setSpeed(Speed.NORMAL));//NORMAL
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-            // .whileFalse(drive.setSpeed(Speed.SLOW));
+        // driver.rightBumper().whileTrue(drivetrain.setSpeed(Speed.SLOW))//SLOW
+        //     .whileFalse(drivetrain.setSpeed(Speed.NORMAL));//NORMAL
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+            .whileFalse(drive.setSpeed(Speed.SLOW));
         
-        // driver.b().onTrue(drive.setYawCommand(0));
+        driver.b().onTrue(drive.setYawCommand(0));
 
         // if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
         //     // drive.setSpeed(Speed.SLOW);
         //     speed = Speed.SLOW;
         // }
 
-        addRequirements(drivetrain);
+        addRequirements(drive);
     }
 
     @Override

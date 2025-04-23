@@ -9,10 +9,15 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -46,10 +52,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
+    /** Swerve request to apply during robot-centric path following */
+    private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    
+
+    // private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
+    //     getKinematics(), 
+    //     new Rotation2d(0), 
+    //     getModulePositions()
+    // );
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -131,6 +147,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        configureAutoBuilder();
     }
 
     /**
@@ -155,6 +173,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        configureAutoBuilder();
     }
 
     /**
@@ -186,6 +206,42 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
         if (Utils.isSimulation()) {
             startSimThread();
+        }
+
+        configureAutoBuilder();
+    }
+
+    private void configureAutoBuilder() {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                () -> getState().Pose,   // Supplier of current robot pose
+                this::resetPose,         // Consumer for seeding pose against auto
+                () -> getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> setControl(
+                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(
+                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
+                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
+                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),
+                    // PID constants for rotation
+                    new PIDConstants(
+                        SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
+                        SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
+                        SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
 
@@ -313,6 +369,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return speed.getAngularSpeed();
     }
 
+    
+
     public double getHeading() {//Yaw
         return Math.IEEEremainder(getPigeon2().getYaw().getValueAsDouble(), 360);
     }
@@ -321,4 +379,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return Rotation2d.fromDegrees(getHeading());
         //THe negative is supposed to help work for teleop; Should FIX
     }
+
+    public Command setYawCommand(double degrees) {
+        return runOnce(
+            () -> setYaw(degrees)
+        );
+    }
+    public void setYaw(double degrees){
+        getPigeon2().setYaw(degrees, 5);
+    }
+    
 }
