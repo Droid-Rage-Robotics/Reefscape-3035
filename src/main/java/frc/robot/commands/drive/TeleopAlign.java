@@ -1,9 +1,11 @@
 package frc.robot.commands.drive;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 //with bumper
 //L4-14 inches
@@ -11,12 +13,13 @@ import frc.robot.subsystems.vision.Vision;
 //L2- 11.523
 
 public class TeleopAlign extends Command{
-	private OldSwerveDrive drive;
-	private Vision vision;
-	private CommandXboxController driver;
+	private final SwerveDrive drive;
+	private final SwerveRequest.RobotCentric driveRequest = new SwerveRequest.RobotCentric();
+	private final Vision vision;
+	private final CommandXboxController driver;
 
 	//TELEOP
-	public TeleopAlign(OldSwerveDrive drive, Vision vision, CommandXboxController driver) {
+	public TeleopAlign(SwerveDrive drive, Vision vision, CommandXboxController driver) {
 		this.driver = driver;
 		this.drive = drive;
 		this.vision = vision;
@@ -43,7 +46,8 @@ public class TeleopAlign extends Command{
 				}
 				break;
 		}
-		drive.drive(vision.range(), 0, vision.aim());
+		// drive.drive(vision.range(), 0, vision.aim());
+		drive.setControl(driveRequest.withVelocityX(vision.range()).withVelocityY(0).withRotationalRate(vision.aim()));
 	}
   
 	@Override

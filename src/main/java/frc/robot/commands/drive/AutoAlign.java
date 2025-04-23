@@ -1,14 +1,17 @@
 package frc.robot.commands.drive;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class AutoAlign extends Command {
-	private OldSwerveDrive drive;
-	private Vision vision;
+	private final SwerveDrive drive;
+	private final SwerveRequest.RobotCentric driveRequest = new SwerveRequest.RobotCentric();
+	private final Vision vision;
 	// private Timer timer= new Timer();
 	
     private static final ShuffleboardValue<Double> aim = 
@@ -18,7 +21,7 @@ public class AutoAlign extends Command {
         ShuffleboardValue.create(0.0, "Range", Vision.class.getSimpleName()).build();
 
 	// Auto
-	public AutoAlign(OldSwerveDrive drive, Vision vision) {
+	public AutoAlign(SwerveDrive drive, Vision vision) {
 		this.drive = drive;
 		this.vision = vision;
 		addRequirements(vision);
@@ -51,7 +54,9 @@ public class AutoAlign extends Command {
 		// }
 		aim.set((vision.aim()));
 		range.set(vision.range());
-		drive.drive(vision.range(), 0, vision.aim());
+		// drive.drive(vision.range(), 0, vision.aim());
+		drive.setControl(driveRequest.withVelocityX(vision.range()).withVelocityY(0).withRotationalRate(vision.aim()));
+		
 		vision.isAlignWriter.set(true);
 	}
 
