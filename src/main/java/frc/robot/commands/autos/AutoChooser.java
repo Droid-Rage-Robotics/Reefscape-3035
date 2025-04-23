@@ -197,7 +197,7 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
-        // addTuningAuto(drive);
+        addTuningAuto(drive);
         // addAutos(drive, elevator, carriage, vision);
         // autoChooser = AutoBuilder.buildAutoChooser();
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
