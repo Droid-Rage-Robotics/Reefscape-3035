@@ -22,12 +22,11 @@ import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.Telemetry;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
+import frc.robot.subsystems.drive.SwerveDrive.Routine;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
-    // private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final SwerveDrive drive = TunerConstants.createDrivetrain(false);
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
@@ -36,7 +35,7 @@ public class Robot extends TimedRobot {
         new Intake(false) 
     );
     
-    private Climb climb = new Climb(false);
+    private final Climb climb = new Climb(false);
     private final Vision vision = new Vision();
 
     private final CommandXboxController driver =
@@ -52,8 +51,8 @@ public class Robot extends TimedRobot {
     private Field2d field = new Field2d();
     private Telemetry telemetry = new Telemetry(SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue());
 
-    private RobotContainer robotContainer = new RobotContainer(driver, operator);
-    private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
+    private final RobotContainer robotContainer = new RobotContainer(driver, operator);
+    private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -135,7 +134,7 @@ public class Robot extends TimedRobot {
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
-        // robotContainer.driveSysID(drive);
+        // robotContainer.driveSysID(drive, Routine.STEER);
         // robotContainer.sysID(sysID);
         // teleopRan = true;
     }

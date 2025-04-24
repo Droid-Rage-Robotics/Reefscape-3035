@@ -37,6 +37,12 @@ import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
+    public enum Routine {
+        TRANSLATION,
+        STEER,
+        ROTATION
+    }
+    
     private final boolean isEnabled;
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
@@ -264,6 +270,14 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
+    public void setSysIdRoutine(Routine routine) {
+        switch(routine) {
+            case TRANSLATION -> m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+            case STEER -> m_sysIdRoutineToApply = m_sysIdRoutineSteer;
+            case ROTATION -> m_sysIdRoutineToApply = m_sysIdRoutineRotation;
+        }
+    }
+    
     /**
      * Runs the SysId Quasistatic test in the given direction for the routine
      * specified by {@link #m_sysIdRoutineToApply}.

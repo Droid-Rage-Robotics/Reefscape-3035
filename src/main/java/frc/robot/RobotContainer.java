@@ -26,6 +26,7 @@ import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.drive.SwerveDrive.Routine;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
@@ -145,7 +146,7 @@ public class RobotContainer {
 	// 	driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	// }
 
-	public void driveSysID(SwerveDrive drive){
+	public void driveSysID(SwerveDrive drive, Routine routine){
 		driver.povUp().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
 		driver.povDown().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		driver.povLeft().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
