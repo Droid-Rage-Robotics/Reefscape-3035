@@ -18,7 +18,7 @@ import frc.robot.subsystems.drive.old.SwerveModule;
 import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 public class SwerveDriveTeleop extends Command {
-    private final SwerveDrive drivetrain;
+    private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
 
     private volatile double xSpeed, ySpeed, turnSpeed;
@@ -39,7 +39,7 @@ public class SwerveDriveTeleop extends Command {
         CommandXboxController driver, 
         Elevator elevator
     ) {
-        this.drivetrain = drive;
+        this.drive = drive;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
@@ -85,7 +85,7 @@ public class SwerveDriveTeleop extends Command {
             double modifiedYSpeed = ySpeed;
 
             
-            heading = drivetrain.getRotation2d();
+            heading = drive.getRotation2d();
             
 
             modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
@@ -103,10 +103,10 @@ public class SwerveDriveTeleop extends Command {
         // Apply Anti-Tip
         // double xTilt = drive.getRoll(); //Is this Roll or pitch
         // double yTilt = drive.getPitch();// Is this Roll or pitch
-        double xTilt = drivetrain.getPigeon2().getRoll().getValueAsDouble();
-        double yTilt = drivetrain.getPigeon2().getPitch().getValueAsDouble();
+        double xTilt = drive.getPigeon2().getRoll().getValueAsDouble();
+        double yTilt = drive.getPigeon2().getPitch().getValueAsDouble();
 
-        if(drivetrain.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
+        if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
             if (Math.abs(xTilt) > 10)
                 xSpeed = -antiTipX.calculate(xTilt, 0);
             if (Math.abs(yTilt) >10)
@@ -122,27 +122,27 @@ public class SwerveDriveTeleop extends Command {
         xSpeed = 
             xSpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-            drivetrain.getTranslationalSpeed();
+            drive.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-            drivetrain.getTranslationalSpeed();
+            drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
             SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
-            drivetrain.getAngularSpeed();
+            drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
         // SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         // drive.setModuleStates(states);
 
-        drivetrain.setControl(driveRequest.withSpeeds(chassisSpeeds));
+        drive.setControl(driveRequest.withSpeeds(chassisSpeeds));
     }
 
     @Override
     public void end(boolean interrupted) {
-        // drive.stop();
+        drive.stop();
     }
 
     @Override

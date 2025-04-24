@@ -6,7 +6,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 public class Turn180Degrees extends Command {
     private final SwerveDrive drive;
@@ -18,11 +17,11 @@ public class Turn180Degrees extends Command {
 
     public Turn180Degrees(SwerveDrive drive, CommandXboxController driver) {
         this.drive = drive;
+        this.driver = driver;
         this.controller = new PIDController(0.03, 0, 0);  // Tune these PID constants as needed
         // controller.setTolerance(1);
-        this.driver = driver;
+        
         addRequirements(drive);
-
     }
 
     @Override
@@ -43,7 +42,7 @@ public class Turn180Degrees extends Command {
         double turnSpeed = controller.calculate(drive.getHeading());
         // Apply turn speed to the drivetrain
         // drive.drive(0,0, turnSpeed);  // Assuming you only want to turn, so forward speed is 0
-        drive.setControl(driveRequest.withVelocityX(0).withVelocityY(0).withRotationalRate(turnSpeed));
+        drive.setControl(driveRequest.withRotationalRate(turnSpeed));
 
     }
 
@@ -56,6 +55,6 @@ public class Turn180Degrees extends Command {
     @Override
     public void end(boolean interrupted) {
         // Stop the drivetrain when the command finishes
-        // drive.stop();
+        drive.stop();
     }
 }

@@ -55,7 +55,7 @@ public class AutoAlign extends Command {
 		aim.set((vision.aim()));
 		range.set(vision.range());
 		// drive.drive(vision.range(), 0, vision.aim());
-		drive.setControl(driveRequest.withVelocityX(vision.range()).withVelocityY(0).withRotationalRate(vision.aim()));
+		drive.setControl(driveRequest.withVelocityX(vision.range()).withRotationalRate(vision.aim()));
 		
 		vision.isAlignWriter.set(true);
 	}
