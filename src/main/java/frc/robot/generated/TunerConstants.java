@@ -194,9 +194,9 @@ public class TunerConstants {
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
      */
-    public static SwerveDrive createDrivetrain() {
+    public static SwerveDrive createDrivetrain(boolean isEnabled) {
         return new SwerveDrive(
-            DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
+            isEnabled, DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
         );
     }
 

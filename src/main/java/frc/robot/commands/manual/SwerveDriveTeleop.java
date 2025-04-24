@@ -137,7 +137,7 @@ public class SwerveDriveTeleop extends Command {
         // SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         // drive.setModuleStates(states);
 
-        drive.setControl(driveRequest.withSpeeds(chassisSpeeds));
+        drive.drive(driveRequest.withSpeeds(chassisSpeeds));
     }
 
     @Override

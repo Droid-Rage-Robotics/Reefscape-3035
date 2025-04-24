@@ -37,6 +37,7 @@ import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
+    private final boolean isEnabled;
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
     
@@ -141,10 +142,12 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
      * @param modules               Constants for each specific module
      */
     public SwerveDrive(
+        boolean isEnabled,
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, modules);
+        this.isEnabled = isEnabled;
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -166,11 +169,13 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
      * @param modules                 Constants for each specific module
      */
     public SwerveDrive(
+        boolean isEnabled,
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
+        this.isEnabled = isEnabled;
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -198,6 +203,7 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
      * @param modules                   Constants for each specific module
      */
     public SwerveDrive(
+        boolean isEnabled,
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         Matrix<N3, N1> odometryStandardDeviation,
@@ -205,9 +211,11 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+        this.isEnabled = isEnabled;
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        
 
         configureAutoBuilder();
     }
@@ -394,5 +402,13 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
 
     public void stop() {
         setControl(stopRequest);
+    }
+
+    public void drive(SwerveRequest request) {
+        if(!isEnabled) {
+            setControl(stopRequest);
+        } else {
+            setControl(request);
+        }
     }
 }

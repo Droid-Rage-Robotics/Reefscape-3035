@@ -42,7 +42,7 @@ public class Turn180Degrees extends Command {
         double turnSpeed = controller.calculate(drive.getHeading());
         // Apply turn speed to the drivetrain
         // drive.drive(0,0, turnSpeed);  // Assuming you only want to turn, so forward speed is 0
-        drive.setControl(driveRequest.withRotationalRate(turnSpeed));
+        drive.drive(driveRequest.withRotationalRate(turnSpeed));
 
     }
 

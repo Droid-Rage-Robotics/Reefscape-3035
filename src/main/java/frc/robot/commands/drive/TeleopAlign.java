@@ -47,7 +47,7 @@ public class TeleopAlign extends Command{
 				break;
 		}
 		// drive.drive(vision.range(), 0, vision.aim());
-		drive.setControl(driveRequest.withVelocityX(vision.range()).withRotationalRate(vision.aim()));
+		drive.drive(driveRequest.withVelocityX(vision.range()).withRotationalRate(vision.aim()));
 	}
   
 	@Override
