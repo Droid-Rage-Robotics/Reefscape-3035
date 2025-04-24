@@ -1,15 +1,12 @@
 package frc.robot.commands.autos;
 
 import java.util.HashMap;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 public class PathPlannerFollow {
-    // private final SwerveDrive drive;
     private final SwerveDrive drive;
     private final String autoName;
     private double maxVelocity = 0.3;

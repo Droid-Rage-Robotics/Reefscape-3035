@@ -3,7 +3,6 @@ package frc.utility;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 /**
  * Uses a profiled PID Controller to quickly turn the robot to a specified angle. Once the robot is

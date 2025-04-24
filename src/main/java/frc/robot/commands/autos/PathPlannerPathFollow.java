@@ -2,17 +2,13 @@ package frc.robot.commands.autos;
 
 import java.io.IOException;
 import java.util.HashMap;
-
 import org.json.simple.parser.ParseException;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.old.OldSwerveDrive;
 
 public class PathPlannerPathFollow {
     private final SwerveDrive drive;
