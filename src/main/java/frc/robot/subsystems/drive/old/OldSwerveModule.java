@@ -24,7 +24,7 @@ import frc.utility.motor.TalonEx;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
-public class SwerveModule {
+public class OldSwerveModule {
     public enum POD{
         FL,
         BL,
@@ -69,20 +69,20 @@ public class SwerveModule {
     private ShuffleboardValue<Double> turnPositionWriter;
     private ShuffleboardValue<Double> drivePositionWriter;
     private String subsystemName;
-    private SwerveModule.POD podName;
+    private OldSwerveModule.POD podName;
 
     // MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs();
 
-    public SwerveModule(){
+    public OldSwerveModule(){
         
     }
 
-    public static SwerveModule.SubsystemNameBuilder create() {
-        SwerveModule module = new SwerveModule();
+    public static OldSwerveModule.SubsystemNameBuilder create() {
+        OldSwerveModule module = new OldSwerveModule();
         return module.new SubsystemNameBuilder();
     }
     public class SubsystemNameBuilder {
-        public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
+        public DriveIDBuilder withSubsystemName(SubsystemBase base, OldSwerveModule.POD pod) {
             podName = pod;
             subsystemName = base.getClass().getSimpleName();
             turnPositionWriter = ShuffleboardValue.create(0.0, 
@@ -123,7 +123,7 @@ public class SwerveModule {
     }
     public class EncoderBuilder{
         @SuppressWarnings("unchecked")
-        public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad,
+        public <T extends OldSwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad,
             EncoderDirection absoluteEncoderReversed){
                 turnEncoder = new CANcoder(absoluteEncoderId, DroidRageConstants.driveCanBus);
                 // config.MagnetSensor.SensorDirection = switch (absoluteEncoderReversed) {
@@ -156,7 +156,7 @@ public class SwerveModule {
                     SwerveDriveConfig.DRIVE_KV.getValue());
 
             resetDriveEncoder();
-             return (T) SwerveModule.this;
+             return (T) OldSwerveModule.this;
         }
     }
 

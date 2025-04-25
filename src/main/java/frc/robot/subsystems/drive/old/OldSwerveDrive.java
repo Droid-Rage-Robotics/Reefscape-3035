@@ -22,8 +22,8 @@ import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
-import frc.robot.subsystems.drive.old.SwerveModule.Constants;
-import frc.robot.subsystems.drive.old.SwerveModule.POD;
+import frc.robot.subsystems.drive.old.OldSwerveModule.Constants;
+import frc.robot.subsystems.drive.old.OldSwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
@@ -52,14 +52,14 @@ public class OldSwerveDrive extends SubsystemBase {
                     -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right --
     );
     
-    private final SwerveModule frontRight = SwerveModule.create()
+    private final OldSwerveModule frontRight = OldSwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
         .withTurnMotor(1, Direction.Forward, true)
         .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
         EncoderDirection.Forward);
         
-    private final SwerveModule backRight = SwerveModule.create()
+    private final OldSwerveModule backRight = OldSwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Forward, true)
@@ -67,21 +67,21 @@ public class OldSwerveDrive extends SubsystemBase {
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
         EncoderDirection.Forward);
 
-    private final SwerveModule backLeft = SwerveModule.create()
+    private final OldSwerveModule backLeft = OldSwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(7, Direction.Forward, true)
         .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
         EncoderDirection.Forward);
     
-    private final SwerveModule frontLeft = SwerveModule.create()
+    private final OldSwerveModule frontLeft = OldSwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
         .withTurnMotor(10, Direction.Forward, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
         EncoderDirection.Forward);
     
-    @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
+    @Getter private final OldSwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
     private DriveSysID sysId;   
 
@@ -111,7 +111,7 @@ public class OldSwerveDrive extends SubsystemBase {
         ("none", "Current/Pose", this.getSubsystem()).build();
 
     public OldSwerveDrive(Boolean isEnabled) {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (OldSwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
@@ -213,7 +213,7 @@ public class OldSwerveDrive extends SubsystemBase {
         // if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         // swerveModules[1].setState(states[1]);
@@ -230,7 +230,7 @@ public class OldSwerveDrive extends SubsystemBase {
         if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         for (int i = 0; i < 4; i++) {
@@ -239,7 +239,7 @@ public class OldSwerveDrive extends SubsystemBase {
     }
 
     public void stop() {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (OldSwerveModule swerveModule: swerveModules) {
             swerveModule.stop();
         }
     }
@@ -258,7 +258,7 @@ public class OldSwerveDrive extends SubsystemBase {
 
     public Command resetEncoders() {
         return runOnce(() -> {
-            for (SwerveModule swerveModule: swerveModules) {
+            for (OldSwerveModule swerveModule: swerveModules) {
                 swerveModule.resetDriveEncoder();
                 // pigeon2.setYaw(getAngularSpeed())
             }

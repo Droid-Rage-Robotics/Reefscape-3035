@@ -15,7 +15,7 @@ import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.old.OldSwerveDrive;
-import frc.robot.subsystems.drive.old.SwerveModule;
+import frc.robot.subsystems.drive.old.OldSwerveModule;
 import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 public class OldSwerveDriveTeleop extends Command {
@@ -110,11 +110,11 @@ public class OldSwerveDriveTeleop extends Command {
         // Smooth driving and apply speed
         xSpeed = 
             xSpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
             drive.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
