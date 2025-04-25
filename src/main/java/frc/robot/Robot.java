@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +22,6 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.Telemetry;
 import frc.robot.subsystems.drive.SwerveDrive.Routine;
 import frc.robot.subsystems.vision.Vision;
@@ -28,6 +29,7 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = SwerveConfig.createDrivetrain(true);
+    private final Telemetry logger = new Telemetry(SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond));
     private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
         new Arm(true),
@@ -46,10 +48,8 @@ public class Robot extends TimedRobot {
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();*
 
-    // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
     private Field2d field = new Field2d();
-    private Telemetry telemetry = new Telemetry(SwerveDriveConstants.SwerveDriveConfig.MAX_SPEED_METERS_PER_SECOND.getValue());
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
     private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
+        drive.registerTelemetry(logger::telemeterize);
         // vision.setUpVision();
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
@@ -124,13 +125,13 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        robotContainer.testNewDrive(drive, elevator);
+        // robotContainer.testNewDrive(drive, elevator);
         // if (autonomousCommand != null) {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
         // drive.changeAllianceRotation();
-        // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
@@ -173,6 +174,4 @@ public class Robot extends TimedRobot {
         autonomousCommand.cancel();
         }
     }
-
-        
 }

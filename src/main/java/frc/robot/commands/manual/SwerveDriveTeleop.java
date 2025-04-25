@@ -1,5 +1,7 @@
 package frc.robot.commands.manual;
 
+import static edu.wpi.first.units.Units.*;
+
 import java.util.function.Supplier;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,12 +12,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
+import frc.robot.subsystems.drive.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.old.OldSwerveModule;
-import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
@@ -121,15 +122,15 @@ public class SwerveDriveTeleop extends Command {
         // Smooth driving and apply speed
         xSpeed = 
             xSpeed *
-            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) * 
             drive.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
-            OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) *
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
-            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
+            SwerveConfig.Constants.PHYSICAL_MAX_ANGULAR_SPEED.in(RadiansPerSecond) * 
             drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);

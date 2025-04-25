@@ -3,6 +3,7 @@ package frc.utility.motor;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -154,6 +155,22 @@ public class TalonEx extends CANMotorEx {
         if(getTemp() > tempToCheck) {}
         
         // return talon.getDeviceTemp().getValueAsDouble();
+    }
+
+    public static CurrentLimitsConfigs withCurrentLimits(double supply, double stator) {
+        CurrentLimitsConfigs limits = new CurrentLimitsConfigs()
+            .withSupplyCurrentLimit(supply)
+            .withSupplyCurrentLimitEnable(true)
+            .withStatorCurrentLimit(stator)
+            .withStatorCurrentLimitEnable(true);
+        return limits;
+    }
+
+    public static CurrentLimitsConfigs withCurrentLimits(double supply) {
+        CurrentLimitsConfigs limits = new CurrentLimitsConfigs()
+            .withSupplyCurrentLimit(supply)
+            .withSupplyCurrentLimitEnable(true);
+        return limits;
     }
 
     

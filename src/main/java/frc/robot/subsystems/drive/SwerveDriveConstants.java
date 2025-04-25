@@ -1,7 +1,8 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.drive.old.OldSwerveModule;
 
 public class SwerveDriveConstants {
     public enum SwerveDriveConfig {
@@ -12,7 +13,7 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_UNITS_PER_SECOND(10),
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
 
-        MAX_SPEED_METERS_PER_SECOND(OldSwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
+        MAX_SPEED_METERS_PER_SECOND(SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) / 4),
         MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() / 10),
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),

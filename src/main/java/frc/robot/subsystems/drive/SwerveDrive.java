@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.SwerveConfig.TunerSwerveDrivetrain;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.old.OldSwerveDrive.TippingState;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -40,6 +39,13 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
         TRANSLATION,
         STEER,
         ROTATION
+        ;
+    }
+
+    public enum TippingState {
+        NO_TIP_CORRECTION,
+        ANTI_TIP,
+        ;
     }
     
     private final boolean isEnabled;
