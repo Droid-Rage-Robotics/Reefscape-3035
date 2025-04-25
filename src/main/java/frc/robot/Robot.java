@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.autos.AutoChooser;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Arm;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
+import frc.robot.subsystems.drive.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.Telemetry;
@@ -27,12 +27,12 @@ import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = TunerConstants.createDrivetrain(false);
-    private final Elevator elevator = new Elevator(false);
+    private final SwerveDrive drive = SwerveConfig.createDrivetrain(true);
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
-        new Arm(false),
-        new Pivot(false),
-        new Intake(false) 
+        new Arm(true),
+        new Pivot(true),
+        new Intake(true) 
     );
     
     private final Climb climb = new Climb(false);
@@ -124,13 +124,13 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        // robotContainer.testNewDrive(drive);
+        robotContainer.testNewDrive(drive, elevator);
         // if (autonomousCommand != null) {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
         // drive.changeAllianceRotation();
-        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
+        // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
