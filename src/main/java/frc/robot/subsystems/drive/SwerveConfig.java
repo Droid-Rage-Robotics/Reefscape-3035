@@ -18,8 +18,13 @@ import frc.utility.motor.TalonEx;
 public class SwerveConfig {
     public static class Constants {
         private static final Distance WHEEL_RADIUS = Inches.of(2);
+        
+        public static final Distance TRACK_WIDTH = Inches.of(28.5);
+        public static final Distance WHEEL_BASE = Inches.of(28.5);
         public static final LinearVelocity PHYSICAL_MAX_SPEED = MetersPerSecond.of(4.47);
+        public static final LinearVelocity MAX_SPEED = MetersPerSecond.of(PHYSICAL_MAX_SPEED.in(MetersPerSecond)/4);
         public static final AngularVelocity PHYSICAL_MAX_ANGULAR_SPEED = RadiansPerSecond.of(2 * (2 * Math.PI));
+        public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(PHYSICAL_MAX_ANGULAR_SPEED.in(RadiansPerSecond)/10);
         
         private static final double DRIVE_MOTOR_GEAR_RATIO = 6.746031746031747; // 1/6.75, (50.0 / 16.0) * (16.0 / 28.0) * (45.0 / 15.0)=5.35714285714
         private static final double TURN_MOTOR_GEAR_RATIO = 21.428571428571427; // 1/ 21.42

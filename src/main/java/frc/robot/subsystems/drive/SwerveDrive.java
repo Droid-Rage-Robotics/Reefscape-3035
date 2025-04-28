@@ -272,7 +272,11 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        return run(() -> this.setControl(requestSupplier.get()));
+        if(!isEnabled) {
+            return run(() -> this.setControl(stopRequest));
+        } else {
+            return run(() -> this.setControl(requestSupplier.get()));
+        }
     }
 
     public void setSysIdRoutine(Routine routine) {
@@ -325,9 +329,6 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
             });
         }
     }
-
-    
-
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -413,10 +414,6 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     }
     public void setYaw(double degrees){
         getPigeon2().setYaw(degrees, 5);
-    } 
-    
-    public Pose2d getPose() {
-        return getState().Pose;
     }
 
     public void stop() {
