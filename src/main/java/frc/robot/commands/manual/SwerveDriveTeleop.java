@@ -47,10 +47,10 @@ public class SwerveDriveTeleop extends Command {
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
-            .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-        //     .whileFalse(drive.setSpeed(Speed.SLOW));
+        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
+        //     .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+            .whileFalse(drive.setSpeed(Speed.SLOW));
         
         driver.b().onTrue(drive.setYawCommand(0));
 
@@ -71,7 +71,6 @@ public class SwerveDriveTeleop extends Command {
         xSpeed = -y.get(); //Forward
         ySpeed = -x.get(); //Strafe
         turnSpeed = -turn.get(); //Turn
-
 
         // Square inputs
         if (DriveOptions.IS_SQUARED_INPUTS.get()) {
