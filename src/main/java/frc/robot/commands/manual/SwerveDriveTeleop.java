@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.function.Supplier;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -33,6 +35,13 @@ public class SwerveDriveTeleop extends Command {
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
     private final SwerveRequest.ApplyRobotSpeeds driveRequest = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyFieldSpeeds request = new SwerveRequest.ApplyFieldSpeeds()
+        .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
+    // private final SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric()
+    //     .withDeadband(SwerveConfig.Constants.MAX_SPEED.in(MetersPerSecond) * 0.1)
+    //     .withRotationalDeadband(SwerveConfig.Constants.MAX_ANGULAR_SPEED.in(RadiansPerSecond) * 0.1)
+    //     .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
+    
     
 
     public SwerveDriveTeleop(
@@ -138,6 +147,7 @@ public class SwerveDriveTeleop extends Command {
         // drive.setModuleStates(states);
 
         drive.drive(driveRequest.withSpeeds(chassisSpeeds));
+        // drive.drive(request.withSpeeds(chassisSpeeds));
     }
 
     @Override
