@@ -25,7 +25,7 @@ public class SwerveDriveTeleop extends Command {
     private final Supplier<Double> x, y, turn;
 
     private volatile double xSpeed, ySpeed, turnSpeed;
-    private Rotation2d heading;
+    // private Rotation2d heading;
     private static final PIDController antiTipY = 
         new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = 
@@ -34,8 +34,8 @@ public class SwerveDriveTeleop extends Command {
     // private SlewRateLimiter xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
     // private SlewRateLimiter yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
 
-    private final SwerveRequest.ApplyRobotSpeeds driveRequest = new SwerveRequest.ApplyRobotSpeeds();
-    private final SwerveRequest.ApplyFieldSpeeds request = new SwerveRequest.ApplyFieldSpeeds()
+    private final SwerveRequest.ApplyRobotSpeeds robotCentric = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyFieldSpeeds fieldCentric = new SwerveRequest.ApplyFieldSpeeds()
         .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
     // private final SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric()
     //     .withDeadband(SwerveConfig.Constants.MAX_SPEED.in(MetersPerSecond) * 0.1)
@@ -46,7 +46,7 @@ public class SwerveDriveTeleop extends Command {
 
     public SwerveDriveTeleop(
         SwerveDrive drive, 
-        CommandXboxController driver, 
+        CommandXboxController driver,
         Elevator elevator
     ) {
         this.drive = drive;
@@ -81,39 +81,37 @@ public class SwerveDriveTeleop extends Command {
         ySpeed = -x.get(); //Strafe
         turnSpeed = -turn.get(); //Turn
 
-        // Square inputs
+        /*
+         * Squared Inputs Logic
+         */
         if (DriveOptions.IS_SQUARED_INPUTS.get()) {
             xSpeed = DroidRageConstants.squareInput(xSpeed);
             ySpeed = DroidRageConstants.squareInput(ySpeed);
             turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
-        // Apply Field Oriented
-        if (DriveOptions.IS_FIELD_ORIENTED.get()) {
-            double modifiedXSpeed = xSpeed;
-            double modifiedYSpeed = ySpeed;
+        // // Apply Field Oriented
+        // if (DriveOptions.IS_FIELD_ORIENTED.get()) {
+        //     double modifiedXSpeed = xSpeed;
+        //     double modifiedYSpeed = ySpeed;
 
             
-            heading = drive.getRotation2d();
+        //     heading = drive.getRotation2d();
             
 
-            modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
-            modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
+        //     modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
+        //     modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
             
 
-            xSpeed = modifiedXSpeed;
-            ySpeed = modifiedYSpeed;
-        }
+        //     xSpeed = modifiedXSpeed;
+        //     ySpeed = modifiedYSpeed;
+        // }
 
-        
-       
-        
-
-        // Apply Anti-Tip
-        // double xTilt = drive.getRoll(); //Is this Roll or pitch
-        // double yTilt = drive.getPitch();// Is this Roll or pitch
-        double xTilt = drive.getPigeon2().getRoll().getValueAsDouble();
-        double yTilt = drive.getPigeon2().getPitch().getValueAsDouble();
+        /*
+         * Anti-Tip Logic
+         */
+        double xTilt = drive.getPigeon2().getRoll().getValueAsDouble(); //Is this Roll or pitch
+        double yTilt = drive.getPigeon2().getPitch().getValueAsDouble(); //Is this Roll or pitch
 
         if(drive.getTippingState()==TippingState.ANTI_TIP) {//Need to take into account on the direction of the tip
             if (Math.abs(xTilt) > 10)
@@ -122,12 +120,16 @@ public class SwerveDriveTeleop extends Command {
                 ySpeed = -antiTipY.calculate(yTilt, 0);
         }
 
-        // Apply deadzone
+        /*
+         * Deadzone Logic
+         */
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
-        // Smooth driving and apply speed
+        /*
+         * Drive Logic
+         */
         xSpeed = 
             xSpeed *
             SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) * 
@@ -143,11 +145,11 @@ public class SwerveDriveTeleop extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
-        // SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        // drive.setModuleStates(states);
-
-        drive.drive(driveRequest.withSpeeds(chassisSpeeds));
-        // drive.drive(request.withSpeeds(chassisSpeeds));
+        if (DriveOptions.IS_FIELD_ORIENTED.get()) {
+            drive.drive(fieldCentric.withSpeeds(chassisSpeeds));
+        } else {
+            drive.drive(robotCentric.withSpeeds(chassisSpeeds));
+        }
     }
 
     @Override
