@@ -2,7 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.Elastic;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
@@ -49,16 +52,26 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
     private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
+    private static final Elastic.Notification notification = new Elastic.Notification();
+
     // public boolean teleopRan;
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();   
+        // SmartDashboard
+    private PowerDistribution powerDistribution = new PowerDistribution();
     private Command autonomousCommand;
   
     @Override
     public void robotInit() {
+        // // Starts recording to data log
+        // DataLogManager.start();
+        // // Record both DS control and joystick data
+        // DriverStation.startDataLog(DataLogManager.getLog());
+
         vision.setUpVision();
+        SmartDashboard.putData("Distribution", powerDistribution);
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
         
@@ -88,7 +101,11 @@ public class Robot extends TimedRobot {
         if(RobotController.getBatteryVoltage()<12.5){
             batteryAlert.set(true);
             batteryAlert.setText("Battery Voltage Low");
-
+            // Elastic.sendNotification(notification
+            //     .withLevel(Elastic.Notification.NotificationLevel.ERROR)
+            //     .withTitle("Battery")
+            //     .withDescription("Battery Low!")
+            //     .withDisplaySeconds(10.0));
             // light.setAllColor(light.batteryBlue);
         } 
         else{

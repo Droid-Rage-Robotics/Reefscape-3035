@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -95,8 +96,8 @@ public class SwerveDrive extends SubsystemBase {
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
     
     
-    private final ShuffleboardValue<Double> headingWriter = 
-        ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Double> headingWriter = 
+    //     ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> rollWriter = 
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> pitchWriter =   
@@ -109,6 +110,7 @@ public class SwerveDrive extends SubsystemBase {
         ("none", "Current/Pose", this.getSubsystem()).build();
 
     public SwerveDrive(Boolean isEnabled) {
+        SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -134,7 +136,7 @@ public class SwerveDrive extends SubsystemBase {
         );
 
         drivePoseWriter.set(getPose().toString());
-        headingWriter.set(getHeading());
+        // headingWriter.set(getHeading());
     }
 
     @Override

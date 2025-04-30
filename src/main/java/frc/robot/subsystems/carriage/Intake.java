@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
+import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.shuffleboard.ShuffleboardValue;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
@@ -21,6 +22,13 @@ public class Intake extends IntakeTemplate {
         ShuffleboardValue.create(false, "IsElement", Carriage.class.getSimpleName())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .build();
+    // private final ComplexWidgetBuilder builder = ComplexWidgetBuilder
+    //     .create("f", "test", Carriage.class.getSimpleName())
+    //     .withWidget(BuiltInWidgets.kTextView)
+    //     .withSize(2, 1)
+    //     .withPosition(0, 0)
+    //     .withIsEnabled(true)
+    //     .withDefaultValue("Intake");
 
     private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
@@ -41,6 +49,8 @@ public class Intake extends IntakeTemplate {
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
+
+        // ComplexWidgetBuilder.
     }
 
     // public Command setPowerCommand(double power){
