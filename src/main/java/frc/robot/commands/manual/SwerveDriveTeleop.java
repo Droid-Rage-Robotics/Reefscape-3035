@@ -36,7 +36,7 @@ public class SwerveDriveTeleop extends Command {
 
     private final SwerveRequest.ApplyRobotSpeeds robotCentric = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.ApplyFieldSpeeds fieldCentric = new SwerveRequest.ApplyFieldSpeeds()
-        .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance);
+        .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective);
     // private final SwerveRequest.FieldCentric request = new SwerveRequest.FieldCentric()
     //     .withDeadband(SwerveConfig.Constants.MAX_SPEED.in(MetersPerSecond) * 0.1)
     //     .withRotationalDeadband(SwerveConfig.Constants.MAX_ANGULAR_SPEED.in(RadiansPerSecond) * 0.1)
@@ -61,7 +61,8 @@ public class SwerveDriveTeleop extends Command {
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
             .whileFalse(drive.setSpeed(Speed.SLOW));
         
-        driver.b().onTrue(drive.setYawCommand(0));
+        driver.b().onTrue(drive.runOnce(() -> drive.seedFieldCentric()));
+        
 
         if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
             drive.setSpeed(Speed.SLOW);
@@ -90,23 +91,6 @@ public class SwerveDriveTeleop extends Command {
             turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
-        // // Apply Field Oriented
-        // if (DriveOptions.IS_FIELD_ORIENTED.get()) {
-        //     double modifiedXSpeed = xSpeed;
-        //     double modifiedYSpeed = ySpeed;
-
-            
-        //     heading = drive.getRotation2d();
-            
-
-        //     modifiedXSpeed = xSpeed * heading.getCos() + ySpeed * heading.getSin();
-        //     modifiedYSpeed = -xSpeed * heading.getSin() + ySpeed * heading.getCos();
-            
-
-        //     xSpeed = modifiedXSpeed;
-        //     ySpeed = modifiedYSpeed;
-        // }
-
         /*
          * Anti-Tip Logic
          */
@@ -128,7 +112,7 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
         /*
-         * Drive Logic
+         * Speed Logic
          */
         xSpeed = 
             xSpeed *
@@ -145,6 +129,9 @@ public class SwerveDriveTeleop extends Command {
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
+        /*
+         * Drive Logic
+         */
         if (DriveOptions.IS_FIELD_ORIENTED.get()) {
             drive.drive(fieldCentric.withSpeeds(chassisSpeeds));
         } else {

@@ -6,8 +6,11 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -26,9 +29,13 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.SwerveConfig.TunerSwerveDrivetrain;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
+import frc.robot.subsystems.drive.SwerveModuleEx.POD;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -50,7 +57,7 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     
     private final boolean isEnabled;
     private volatile Speed speed = Speed.NORMAL;
-    private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
+    @Getter @Setter private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
     
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -63,7 +70,7 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
-    private final SwerveRequest.RobotCentric stopRequest = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.Velocity);
+    private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
     
     /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
@@ -72,13 +79,13 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-    
 
-    // private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
-    //     getKinematics(), 
-    //     new Rotation2d(0), 
-    //     getModulePositions()
-    // );
+    private final SwerveModuleEx frontLeft = new SwerveModuleEx(getModule(0), POD.FL);
+    private final SwerveModuleEx frontRight = new SwerveModuleEx(getModule(1), POD.FR);
+    private final SwerveModuleEx backLeft = new SwerveModuleEx(getModule(2), POD.BL);
+    private final SwerveModuleEx backRight = new SwerveModuleEx(getModule(3), POD.BR);
+
+    private final SwerveModuleEx[] modules = {frontLeft, frontRight, backLeft, backRight};
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -273,7 +280,11 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         if(!isEnabled) {
-            return run(() -> this.setControl(stopRequest));
+            return run(() -> {
+                for (SwerveModuleEx module: modules) {
+                    module.stop();
+                }
+            });
         } else {
             return run(() -> this.setControl(requestSupplier.get()));
         }
@@ -328,6 +339,15 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        for (SwerveModuleEx module: modules) {
+            module.periodic();
+        }
+
+        RobotModeTriggers.disabled().whileTrue(
+            applyRequest(() -> idle).ignoringDisable(true)
+        );
+
     }
 
     private void startSimThread() {
@@ -379,10 +399,6 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-    public TippingState getTippingState() {
-        return tippingState;
-    }
-
     public Command setSpeed(Speed speed) {
         return runOnce(() -> {
             this.speed = speed;
@@ -407,24 +423,20 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
         //THe negative is supposed to help work for teleop; Should FIX
     }
 
-    public Command setYawCommand(double degrees) {
-        return runOnce(
-            () -> setYaw(degrees)
-        );
-    }
-    public void setYaw(double degrees){
-        getPigeon2().setYaw(degrees, 5);
-    }
-
     public void stop() {
-        setControl(stopRequest);
+        for (SwerveModuleEx module: modules) {
+            module.stop();
+        }
     }
 
     public void drive(SwerveRequest request) {
         if(!isEnabled) {
-            setControl(stopRequest);
+            for (SwerveModuleEx module: modules) {
+                module.stop();
+            }
         } else {
             setControl(request);
         }
     }
+
 }

@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         drive.registerTelemetry(logger::telemeterize);
-        vision.setUpVision();
+        // vision.setUpVision();
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
     }
