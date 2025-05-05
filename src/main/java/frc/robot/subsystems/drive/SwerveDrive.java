@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -102,6 +103,7 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
             this
         )
     );
+
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
@@ -319,6 +321,7 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+    
 
     @Override
     public void periodic() {
@@ -340,9 +343,33 @@ public class SwerveDrive extends TunerSwerveDrivetrain implements Subsystem {
             });
         }
 
-        for (SwerveModuleEx module: modules) {
-            module.periodic();
-        }
+        SmartDashboard.putData("Swerve",
+        builder -> {
+          builder.setSmartDashboardType("SwerveDrive");
+
+          builder.addDoubleProperty(
+              "Front Left Angle", () -> frontLeft.getSteerPosition().in(Radians), null);
+          builder.addDoubleProperty(
+              "Front Left Velocity", () -> frontLeft.getVelocity().in(MetersPerSecond), null);
+
+          builder.addDoubleProperty(
+              "Front Right Angle", () -> frontRight.getSteerPosition().in(Radians), null);
+          builder.addDoubleProperty(
+              "Front Right Velocity", () ->frontRight.getVelocity().in(MetersPerSecond), null);
+
+          builder.addDoubleProperty(
+              "Back Left Angle", () -> backLeft.getSteerPosition().in(Radians), null);
+          builder.addDoubleProperty(
+              "Back Left Velocity", () -> backLeft.getVelocity().in(MetersPerSecond), null);
+
+          builder.addDoubleProperty(
+              "Back Right Angle", () -> backRight.getSteerPosition().in(Radians), null);
+          builder.addDoubleProperty(
+              "Back Right Velocity", () -> backRight.getVelocity().in(MetersPerSecond), null);
+
+          builder.addDoubleProperty(
+              "Robot Angle", () -> getHeading(), null);
+        });
 
         RobotModeTriggers.disabled().whileTrue(
             applyRequest(() -> idle).ignoringDisable(true)

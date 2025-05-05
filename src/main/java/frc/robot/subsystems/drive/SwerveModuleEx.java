@@ -23,8 +23,6 @@ public class SwerveModuleEx {
     private final TalonFX steerMotor;
     private final CANcoder turnEncoder;
     private final POD podName;
-    private final ShuffleboardValue<Double> steerPositionWriter;
-    private final ShuffleboardValue<Double> drivePositionWriter;
 
     public SwerveModuleEx(SwerveModule<TalonFX, TalonFX, CANcoder> swerveModule, POD pod) {
         this.module = swerveModule;
@@ -32,29 +30,18 @@ public class SwerveModuleEx {
         this.steerMotor = swerveModule.getSteerMotor();
         this.turnEncoder = swerveModule.getEncoder();
         this.podName = pod;
-        steerPositionWriter = ShuffleboardValue.create(0.0, 
-            "Module/Turn Position (Radians)" + podName.toString(), 
-            "SwerveDrive").build();
-        drivePositionWriter = ShuffleboardValue.create(0.0, 
-            "Module/Drive Position (Radians)" + podName.toString(), 
-            "SwerveDrive").build();
-    }
-
-    public void periodic() {
-        drivePositionWriter.write(getDrivePosition().in(Radians));
-        steerPositionWriter.write(getSteerPosition().in(Radians));
     }
 
     public Angle getDrivePosition() {
-        return driveMotor.getPosition().getValue();
+        return driveMotor.getPosition(true).getValue();
     }
     
     public Angle getSteerPosition() {
-        return turnEncoder.getAbsolutePosition().getValue();
+        return turnEncoder.getAbsolutePosition(true).getValue();
     }
 
-    public AngularVelocity getDriveVelocity(){
-        return driveMotor.getVelocity().getValue();
+    public LinearVelocity getVelocity(){
+        return LinearVelocity.ofRelativeUnits(module.getCurrentState().speedMetersPerSecond, MetersPerSecond);
     }
 
     public SwerveModulePosition getPosition() {
