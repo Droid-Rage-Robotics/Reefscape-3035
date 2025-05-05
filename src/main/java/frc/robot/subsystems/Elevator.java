@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -32,7 +34,7 @@ public class Elevator extends ElevatorTemplate {
         L2(7.2),//8
         L3(22),//29
 
-        L4(54.5),
+        L4(54.7),//54.5
   
         ALGAE_LOW(24.1),// 18
         ALGAE_HIGH(40),//34.5
@@ -48,6 +50,7 @@ public class Elevator extends ElevatorTemplate {
     }
 
     public double resetPos = 7;
+
 
     // GearRatio.Type type = GearRatio.Type.DISTANCE;
     private static TalonEx motorRight = TalonEx.create(15)

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.DroidRageConstants.Alignment;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.utility.shuffleboard.ShuffleboardValue;
 
@@ -21,10 +22,10 @@ public class Vision extends SubsystemBase {
         // Which Pdfsdfdfole
         // Pole Type
         // ID
-        RIGHT_R_L4_17(2.14, -19.94), // Default -blue done
-        RIGHT_R_L4_18(2.1, -19.8), // done
-        RIGHT_R_L4_19(1.87, -20.24), // done 1.87, -20.24
-        RIGHT_R_L4_20(1.2, -19.35), // done 1.2, -19.35
+        RIGHT_R_L4_17(1.03, -20.86), // Default -blue done
+        RIGHT_R_L4_18(0.81, -20.24), // done
+        RIGHT_R_L4_19(0.56, -21.75), // done 1.87, -20.24
+        RIGHT_R_L4_20(1.17, -18.75), // done 1.2, -19.35
         RIGHT_R_L4_21(1.71, -18.83), // done
         RIGHT_R_L4_22(2.01, -19.9), // done
 
@@ -42,11 +43,11 @@ public class Vision extends SubsystemBase {
 
         // ALGAE_R(0,0),
 
-        LEFT_L_L4_17(-0.19, 19.41), // Default -blue //done
-        LEFT_L_L4_18(.05, 18.89), // done iffy
-        LEFT_L_L4_19(-0.29, 22.12), // dne  -0.29, 22.12
-        LEFT_L_L4_20(-0.14, 20.87), // DOne
-        LEFT_L_L4_21(-0.25, 18.9), // done
+        LEFT_L_L4_17(-1.15, 21.55), // Default -blue //done
+        LEFT_L_L4_18(-1.40, 20.60), // done iffy
+        LEFT_L_L4_19(-0.94, 21.05), // dne  -0.29, 22.12
+        LEFT_L_L4_20(-1.24, 20.28), // DOne
+        LEFT_L_L4_21(-1.08,21.76), // done
         LEFT_L_L4_22(-0.1, 18.5), // done
 
         LEFT_L_L4_6(-0.38, 19.7), // red - done - BAD BAD
