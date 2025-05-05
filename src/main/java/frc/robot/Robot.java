@@ -30,11 +30,11 @@ import frc.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = SwerveConfig.createDrivetrain(true);
     private final Telemetry logger = new Telemetry(SwerveConfig.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond));
-    private final Elevator elevator = new Elevator(true);
+    private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
-        new Arm(true),
-        new Pivot(true),
-        new Intake(true) 
+        new Arm(false),
+        new Pivot(false),
+        new Intake(false) 
     );
     
     private final Climb climb = new Climb(false);
