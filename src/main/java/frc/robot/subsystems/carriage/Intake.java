@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -49,6 +50,7 @@ public class Intake extends IntakeTemplate {
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0);
         motor.setIsEnabled(isEnabled);
         //Change
+        SmartDashboard.putData("iintakemotor", motor.getMotor());
 
         // ComplexWidgetBuilder.
     }

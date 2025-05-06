@@ -156,5 +156,8 @@ public class TalonEx extends CANMotorEx {
         // return talon.getDeviceTemp().getValueAsDouble();
     }
 
+    public TalonFX getMotor(){
+        return talon;
+    }
     
 }

@@ -7,6 +7,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ComplexWidgetBuilder {
     private final ComplexWidget complexWidget;
@@ -14,6 +15,7 @@ public class ComplexWidgetBuilder {
     private ComplexWidgetBuilder(Sendable toAdd, String title, String tab) {
         this.complexWidget = Shuffleboard.getTab(tab)
             .add(title, toAdd);
+            SmartDashboard.putData(title, toAdd);
     }
 
     public static ComplexWidgetBuilder create(Sendable toAdd, String title, String tab) {
