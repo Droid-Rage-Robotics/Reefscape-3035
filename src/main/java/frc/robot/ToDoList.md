@@ -12,3 +12,5 @@ Make the arm go out before elevator go up or pull out and bring in
 Roborio needs a cover
 Skipping Elevator Chain - Maybe reset the eleevtor if ever is under 0
 'if algae and current, move elevator up
+
+Using a Button Map: new JoystickButton(joystick, 4).onTrue(autonomousCommand);
