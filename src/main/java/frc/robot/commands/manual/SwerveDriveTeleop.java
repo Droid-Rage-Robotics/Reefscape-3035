@@ -1,6 +1,7 @@
 package frc.robot.commands.manual;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import java.util.function.Supplier;
 
@@ -15,7 +16,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDrive.TippingState;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule;
@@ -120,7 +121,7 @@ public class SwerveDriveTeleop extends Command {
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
-            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
+            SwerveConfig.PHYSICAL_MAX_ANGULAR_SPEED.in(RadiansPerSecond) * 
             drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);

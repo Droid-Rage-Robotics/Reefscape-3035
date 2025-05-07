@@ -22,7 +22,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.shuffleboard.ComplexWidgetBuilder;
 
@@ -255,13 +255,7 @@ public class AutoChooser {
                 drive::resetOdometry,
                 drive::getSpeeds,
                 drive::setFeedforwardModuleStates,
-                new PPHolonomicDriveController(
-                        new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),  // Translation PID constants
-                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
-                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),  // Rotation PID constants
+                new PPHolonomicDriveController(SwerveConfig.TRANSLATIONAL_PID, SwerveConfig.THETA_PID),
                 config,
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red

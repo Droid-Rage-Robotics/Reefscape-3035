@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;

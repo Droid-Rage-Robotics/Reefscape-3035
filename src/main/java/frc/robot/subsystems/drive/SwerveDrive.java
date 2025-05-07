@@ -3,6 +3,8 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import java.util.List;
 
@@ -31,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
@@ -142,6 +143,7 @@ public class SwerveDrive extends SubsystemBase {
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }   
 
+        
         
 
     }
@@ -325,8 +327,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public TrapezoidProfile.Constraints getThetaConstraints() {
         return new TrapezoidProfile.Constraints(
-            SwerveDriveConfig.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue(),
-            SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue());
+            SwerveConfig.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
+            SwerveConfig.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond));
     }
 
     public Command driveAutoReset(){
