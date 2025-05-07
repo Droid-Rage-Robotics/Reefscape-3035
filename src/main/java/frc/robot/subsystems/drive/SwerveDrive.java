@@ -1,7 +1,16 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+
+import java.util.List;
+
 import com.ctre.phoenix6.configs.MountPoseConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +32,7 @@ import frc.robot.DroidRageConstants;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
+import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
@@ -37,48 +48,47 @@ public class SwerveDrive extends SubsystemBase {
         ANTI_TIP,
         ;
     }
+
     // Translation2d(x,y) == Translation2d(front, left)
     //front +; back -
     //left
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Left ++
-            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Right +-
-            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
-            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
-                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right --
+            new Translation2d(SwerveConfig.WHEEL_BASE.in(Meters) / 2,
+                    SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Front Left ++
+            new Translation2d(SwerveConfig.WHEEL_BASE.in(Meters) / 2,
+                    -SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Front Right +-
+            new Translation2d(-SwerveConfig.WHEEL_BASE.in(Meters) / 2,
+                    SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Back Left -+
+            new Translation2d(-SwerveConfig.WHEEL_BASE.in(Meters) / 2,
+                    -SwerveConfig.TRACK_WIDTH.in(Meters) / 2) // Back Right --
     );
+
+    SwerveDriveState state = new SwerveDriveState();
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
         .withTurnMotor(1, Direction.Forward, true)
-        .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Forward);
+        .withEncoder(2, SwerveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Forward, true)
         // .withTurnMotor(4, Direction.Reversed, true)
-        .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
-        EncoderDirection.Forward);
+        .withEncoder(5, SwerveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(7, Direction.Forward, true)
-        .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Forward);
+        .withEncoder(8, SwerveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
         .withTurnMotor(10, Direction.Forward, true)
-        .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
-        EncoderDirection.Forward);
+        .withEncoder(11, SwerveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET);
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
@@ -94,6 +104,12 @@ public class SwerveDrive extends SubsystemBase {
 
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
+
+    public final SwerveModule getModule(int i) {
+        return swerveModules[i];
+    }
+
+    
     
     
     // private final ShuffleboardValue<Double> headingWriter = 
@@ -111,6 +127,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive(Boolean isEnabled) {
         SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
+        SmartDashboard.putData("Swerve Drive", this);
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -123,8 +140,36 @@ public class SwerveDrive extends SubsystemBase {
         for(int num = 0; num<4; num++){
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
-        }    
+        }   
 
+        
+
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("SwerveDrive");
+
+        builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+        builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Robot Angle", () -> pigeon2.getYaw().getValue().in(Radians), null);
+
+        // builder.setSmartDashboardType("Generic");
+
+        // builder.addDoubleProperty("FL Radians", () -> frontLeft.getDriveVelocity(), null);
+        // builder.addDoubleProperty("FR Radians", () -> frontRight.getDriveVelocity(), null);
+        // builder.addDoubleProperty("BL Radians", () -> backLeft.getDriveVelocity(), null);
+        // builder.addDoubleProperty("BR Radians", () -> backRight.getDriveVelocity(), null);
     }
 
     
@@ -213,7 +258,7 @@ public class SwerveDrive extends SubsystemBase {
         // if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond)
         );
 
         // swerveModules[1].setState(states[1]);
@@ -230,7 +275,7 @@ public class SwerveDrive extends SubsystemBase {
         if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond)
         );
 
         for (int i = 0; i < 4; i++) {

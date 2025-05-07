@@ -1,5 +1,11 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -13,9 +19,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
+import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
@@ -33,11 +43,11 @@ public class SwerveModule {
     }
 
     public static class Constants {
-        public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
+        public static final Distance WHEEL_DIAMETER = Inches.of(4);
         public static final double DRIVE_MOTOR_GEAR_RATIO = 1/6.75;//(50.0 / 16.0) * (16.0 / 28.0) * (45.0 / 15.0)=5.35714285714
         public static final double TURN_MOTOR_GEAR_RATIO = 1/ 21.42;
 
-        public static final double DRIVE_ENCODER_ROT_2_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
+        public static final double DRIVE_ENCODER_ROT_2_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER.in(Meters);
         public static final double DRIVE_ENCODER_RPM_2_METER_PER_SEC = DRIVE_ENCODER_ROT_2_METER / 60;
         public static final double READINGS_PER_REVOLUTION = 1;//4096
 
@@ -49,7 +59,7 @@ public class SwerveModule {
         //If strafing, the robot drifts to he front/back, then increase
                 //.115
 
-        public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
+        public static final LinearVelocity PHYSICAL_MAX_SPEED = MetersPerSecond.of(4.47);
 
         public static final double DRIVE_SUPPLY_CURRENT_LIMIT = 35;//50, 40
         public static final double DRIVE_STATOR_CURRENT_LIMIT = 75;   //90, 80
@@ -123,23 +133,12 @@ public class SwerveModule {
     }
     public class EncoderBuilder{
         @SuppressWarnings("unchecked")
-        public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad,
-            EncoderDirection absoluteEncoderReversed){
-                turnEncoder = new CANcoder(absoluteEncoderId, DroidRageConstants.driveCanBus);
-                // config.MagnetSensor.SensorDirection = switch (absoluteEncoderReversed) {
-                //     case Forward -> SensorDirectionValue.Clockwise_Positive;
-                //     case Reversed -> SensorDirectionValue.CounterClockwise_Positive;
-                // };
-                config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-                // switch (EncoderRange.ZERO_TO_ONE) {
-                //     case PLUS_MINUS_HALF:
-                //         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-                //     case ZERO_TO_ONE:
-                //         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-                // }
-                config.MagnetSensor.MagnetOffset = (absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD);
-                config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = .5;
-                turnEncoder.getConfigurator().apply(config);
+        public <T extends SwerveModule> T withEncoder(int absoluteEncoderId, Angle offset){
+            turnEncoder = new CANcoder(absoluteEncoderId, DroidRageConstants.driveCanBus);
+            config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+            config.MagnetSensor.MagnetOffset = (offset.in(Rotations));
+            config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = .5;
+            turnEncoder.getConfigurator().apply(config);
                 
             // turnEncoder = CANcoderEx.create(absoluteEncoderId, DroidRageConstants.driveCanBus)
             //     .withDirection(absoluteEncoderReversed)
@@ -149,11 +148,10 @@ public class SwerveModule {
             //     .withRange(EncoderRange.ZERO_TO_ONE);
                 
 
-            turningPidController = new PIDController(SwerveDriveConfig.TURN_KP.getValue(), 0.0, 0.0);
+            turningPidController = SwerveConfig.TURN_PID;
             turningPidController.enableContinuousInput(-Math.PI, Math.PI);// Was -Math.PI, Math.PI but changed to 0 and 2PI
 // 0, 2 * Math.PI
-            feedforward = new SimpleMotorFeedforward(SwerveDriveConfig.DRIVE_KS.getValue(),
-                    SwerveDriveConfig.DRIVE_KV.getValue());
+            feedforward = SwerveConfig.DRIVE_FF;
 
             resetDriveEncoder();
              return (T) SwerveModule.this;
@@ -166,8 +164,8 @@ public class SwerveModule {
     }
     
     public double getTurningPosition() {
-        turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
-        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
+        turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValue().in(Radians));
+        return (turnEncoder.getAbsolutePosition().getValue().in(Radians));
     }
 
     public double getDriveVelocity(){
@@ -196,7 +194,7 @@ public class SwerveModule {
         }
         desiredState.optimize(getState().angle);
         desiredState.optimize(getState().angle);
-        driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+        driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond));
         turnMotor.setPower((turningPidController.calculate(getTurningPosition(), desiredState.angle.getRadians()))*1);
         // SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", desiredState.toString());
         // SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", desiredState.toString());

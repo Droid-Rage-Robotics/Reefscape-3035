@@ -1,5 +1,7 @@
 package frc.robot.commands.manual;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -38,10 +40,10 @@ public class SwerveDriveTeleop extends Command {
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
-            .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-            // .whileFalse(drive.setSpeed(Speed.SLOW));
+        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
+        //     .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+            .whileFalse(drive.setSpeed(Speed.SLOW));
 
         driver.b().onTrue(drive.setYawCommand(0));
 
@@ -110,11 +112,11 @@ public class SwerveDriveTeleop extends Command {
         // Smooth driving and apply speed
         xSpeed = 
             xSpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) * 
             drive.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) *
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *

@@ -6,6 +6,8 @@ import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.units.measure.Angle;
+
 public class CANcoderEx extends EncoderEx {
     private final CANcoder encoder;
     private final CANcoderConfiguration config;
@@ -51,8 +53,12 @@ public class CANcoderEx extends EncoderEx {
         configurator.apply(config);
     }
 
-    public double getAbsolutePosition() {
-        return encoder.getAbsolutePosition().getValueAsDouble();
+    // public double getAbsolutePosition() {
+    //     return encoder.getAbsolutePosition().getValueAsDouble();
+    // }
+
+    public Angle getAbsolutePosition() {
+        return encoder.getAbsolutePosition().getValue();
     }
     
     @Override
