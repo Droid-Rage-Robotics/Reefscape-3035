@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
-    private Field2d field = new Field2d();
+    // private Field2d field = new Field2d();
 
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
     private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
@@ -84,8 +84,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        field.setRobotPose(drive.getPose());
-        SmartDashboard.putData("DrivePose",field);
+        // field.setRobotPose(drive.getPose());
+        // SmartDashboard.putData("DrivePose",field);
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
