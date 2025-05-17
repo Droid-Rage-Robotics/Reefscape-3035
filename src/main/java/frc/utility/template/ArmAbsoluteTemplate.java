@@ -36,12 +36,12 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         encoder.periodic();
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get()));
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get())
                 +feedforward.calculate(getEncoderPosition(),.7)); 
                 // + feedforward.calculate(getTargetPosition(), .5)); 
                 //ks * Math.signum(velocity) + kg * Math.cos(pos) + kv * velocity + ka * acceleration; ^^
@@ -58,7 +58,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     @Override
     protected void setVoltage(double voltage) {
         // if (!encoder.isConnectedWriter.get()) return;
-        voltageWriter.set(voltage);
+        // voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -68,8 +68,9 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     public double getEncoderPosition() {
         double radian = (encoder.getRadian() + offset) % (Math.PI*2);
         // double radian = encoder.getPosition();
-        positionRadianWriter.write(radian);
-        positionDegreeWriter.write(Math.toDegrees(radian));
+        positionRadian = () -> radian;
+        // positionRadianWriter.write(radian);
+        // positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
     }
     

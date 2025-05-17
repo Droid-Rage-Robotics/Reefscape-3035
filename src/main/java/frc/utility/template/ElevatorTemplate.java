@@ -3,12 +3,13 @@ package frc.utility.template;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 //Works
 public class ElevatorTemplate extends SubsystemBase {
@@ -18,9 +19,6 @@ public class ElevatorTemplate extends SubsystemBase {
     private final Control control;
     private final double maxPosition;
     private final double minPosition;
-    private final ShuffleboardValue<Double> positionWriter;
-    private final ShuffleboardValue<Double> targetWriter;
-    private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -58,16 +56,15 @@ public class ElevatorTemplate extends SubsystemBase {
 
         profile = new TrapezoidProfile(constraints);
 
-        positionWriter = ShuffleboardValue
-            .create(0.0, name+"/Position", name)
-            .build();
-        targetWriter = ShuffleboardValue
-            .create(0.0, name+"/Target", name)
-            .build();
-        voltageWriter = ShuffleboardValue
-            .create(0.0, name+"/Voltage", name)
-            .build();
+        SmartDashboard.putData(name, this);
         // controller.setTolerance(.3);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Target Position", controller::getSetpoint, null);
+        builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
+        builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
 
     @Override
@@ -106,7 +103,6 @@ public class ElevatorTemplate extends SubsystemBase {
      */
     public void setTargetPosition(double target) {
         if(target>maxPosition||target<minPosition) return;
-        targetWriter.set(target);
         controller.setSetpoint(target);
     }
     
@@ -115,7 +111,6 @@ public class ElevatorTemplate extends SubsystemBase {
     }
     
     protected void setVoltage(double voltage) {
-        voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -129,9 +124,7 @@ public class ElevatorTemplate extends SubsystemBase {
     }
 
     public double getEncoderPosition() {
-        double position = motors[mainNum].getPosition();
-        positionWriter.write(position);
-        return position;
+        return motors[mainNum].getPosition();
     }
 
     public CANMotorEx getMotor() {

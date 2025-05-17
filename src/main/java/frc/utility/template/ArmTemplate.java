@@ -1,8 +1,11 @@
 package frc.utility.template;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,11 +21,8 @@ public class ArmTemplate extends SubsystemBase {
     protected final double maxPosition;
     protected final double minPosition;
     protected final double offset;
-    protected final ShuffleboardValue<Double> positionRadianWriter;
-    protected final ShuffleboardValue<Double> positionDegreeWriter;
-    protected final ShuffleboardValue<Double> targetRadianWriter;
-    protected final ShuffleboardValue<Double> targetDegreeWriter;
-    protected final ShuffleboardValue<Double> voltageWriter;
+    protected Supplier<Double> positionRadian;
+    protected final Supplier<Double> targetRadian;
     protected final int mainNum;
     protected final TrapezoidProfile profile;
     protected TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -52,21 +52,17 @@ public class ArmTemplate extends SubsystemBase {
 
         profile = new TrapezoidProfile(constraints);
 
-        positionDegreeWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/PositionDegree", tabName)
-            .build();
-        targetDegreeWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/TargetDegree", tabName)
-            .build();
-        positionRadianWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/PositionRadian", tabName)
-            .build();
-        targetRadianWriter = ShuffleboardValue
-            .create(0.0, subsystemName+"/TargetRadian", tabName)
-            .build();
-        voltageWriter = ShuffleboardValue
-                .create(0.0, subsystemName + "/Voltage", tabName)
-                .build();
+        positionRadian = () -> motors[mainNum].getPosition()+offset;
+        targetRadian = controller::getSetpoint;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Current Position (Degrees)", () -> Math.toDegrees(positionRadian.get()), null);
+        builder.addDoubleProperty("Current Position (Radians)", positionRadian::get, null);
+        builder.addDoubleProperty("Target Position (Degrees)", () -> Math.toDegrees(targetRadian.get()), null);
+        builder.addDoubleProperty("Target Position (Radians)", targetRadian::get, null);
+        builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
 
     @Override
@@ -75,17 +71,17 @@ public class ArmTemplate extends SubsystemBase {
         // targetRadianWriter.set(controller.getSetpoint());
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get()));
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get())
                 +feedforward.calculate(1,1)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             case TRAPEZOID_PROFILE:
-                goal = new TrapezoidProfile.State(targetRadianWriter.get(),01);
+                goal = new TrapezoidProfile.State(targetRadian.get(),01);
                 current = profile.calculate(0.02, current, goal);
 
                 setVoltage(controller.calculate(getEncoderPosition(), current.position)
@@ -110,8 +106,6 @@ public class ArmTemplate extends SubsystemBase {
         if(degree>maxPosition||degree<minPosition) {
             degree = Math.toDegrees(degree); //Pretty sure this needs to be like this
         };
-        targetDegreeWriter.set(degree);
-        targetRadianWriter.set(Math.toRadians(degree));
         controller.setSetpoint(Math.toRadians(degree));
     }
 
@@ -119,7 +113,6 @@ public class ArmTemplate extends SubsystemBase {
         return controller.getSetpoint();
     }
     protected void setVoltage(double voltage) {
-        voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -135,8 +128,6 @@ public class ArmTemplate extends SubsystemBase {
     public double getEncoderPosition() {
         double radian = motors[mainNum].getPosition()+offset;
         // + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION
-        positionRadianWriter.write(radian);
-        positionDegreeWriter.write(Math.toDegrees(radian));
         return radian;
     }
 

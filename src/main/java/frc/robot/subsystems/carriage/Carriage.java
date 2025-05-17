@@ -181,7 +181,7 @@ public class Carriage {
     }
     
     public boolean isElementIn(){
-        return coralIntake.isElementIn();
+        return coralIntake.isElementIn.get();
     }
 
     // public SequentialCommandGroup isHighReset(){

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -12,8 +14,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -102,15 +107,28 @@ public class SwerveDrive extends SubsystemBase {
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> pitchWriter =   
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
-    private final ShuffleboardValue<Boolean> isEnabledWriter = 
-        ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
-        .withWidget(BuiltInWidgets.kToggleSwitch)
-        .build();
-    protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
-        ("none", "Current/Pose", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Boolean> isEnabledWriter = 
+    //     ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
+    //     .withWidget(BuiltInWidgets.kToggleSwitch)
+    //     .build();
+    // protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
+    //     ("none", "Current/Pose", this.getSubsystem()).build();
 
-    public SwerveDrive(Boolean isEnabled) {
+    private final Field2d field = new Field2d();
+
+    private final boolean isEnabled;
+
+    public SwerveDrive(boolean isEnabled) {
+        SmartDashboard.putData("Swerve Drive", this);
         SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
+        SmartDashboard.putData("Drive Pose", field);
+        SmartDashboard.putData("Drive Enabled", isEnabledWriter);
+        this.isEnabled = isEnabled;
+
+        if (!isEnabled) { // possible solution for practice only writers
+            SmartDashboard.putData("Swerve Drive", encoderDebug);
+        }
+        
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -119,13 +137,52 @@ public class SwerveDrive extends SubsystemBase {
 
         // Pigeon Wires are facing the front of the robot
         pigeon2.getConfigurator().apply(new MountPoseConfigs());   
-        isEnabledWriter.set(isEnabled);
+        // isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }    
 
     }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("SwerveDrive");
+
+        builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+        builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
+
+        builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
+    }
+
+    public final Sendable isEnabledWriter = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Boolean Box");
+
+            builder.addBooleanProperty("isEnabled", () -> isEnabled, null);
+        }
+    };
+
+    public final Sendable encoderDebug = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+        }
+    };
+        
 
     
     @Override
@@ -135,7 +192,9 @@ public class SwerveDrive extends SubsystemBase {
             getModulePositions()
         );
 
-        drivePoseWriter.set(getPose().toString());
+        field.setRobotPose(getPose());
+
+        // drivePoseWriter.set(getPose().toString());
         // headingWriter.set(getHeading());
     }
 
@@ -227,7 +286,7 @@ public class SwerveDrive extends SubsystemBase {
         setFeedforwardModuleStates(states);
     }
     public void setFeedforwardModuleStates(SwerveModuleState[] states) {
-        if (!isEnabledWriter.get()) return;
+        if (!isEnabled) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
