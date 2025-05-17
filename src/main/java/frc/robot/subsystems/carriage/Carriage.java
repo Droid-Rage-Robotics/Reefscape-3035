@@ -180,9 +180,9 @@ public class Carriage {
         return position == value;
     }
     
-    public boolean isElementIn(){
-        return coralIntake.isElementIn.get();
-    }
+    // public boolean isElementIn(){
+    //     return coralIntake.isElementIn.get();
+    // }
 
     // public SequentialCommandGroup isHighReset(){
     //     return new SequentialCommandGroup(

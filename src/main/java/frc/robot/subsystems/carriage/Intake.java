@@ -36,7 +36,7 @@ public class Intake extends IntakeTemplate {
     //     .withIsEnabled(true)
     //     .withDefaultValue("Intake");
 
-    Supplier<Boolean> isElementIn = () -> getTargetPosition() - getEncoderPosition() > 40;
+    // private final Supplier<Boolean> isElementIn = () -> (getTargetPosition() - getEncoderPosition() > 40);
 
     private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
@@ -66,7 +66,7 @@ public class Intake extends IntakeTemplate {
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Boolean Box");
         
-        builder.addBooleanProperty("Is Element In", isElementIn::get, null);
+        // builder.addBooleanProperty("Is Element In", isElementIn::get, null);
     }
 
     // public Command setPowerCommand(double power){
