@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
         // // Record both DS control and joystick data
         // DriverStation.startDataLog(DataLogManager.getLog());
 
-        vision.setUpVision();
+        // vision.setUpVision();
         SmartDashboard.putData("Distribution", powerDistribution);
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
