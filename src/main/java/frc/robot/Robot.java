@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
         drive.changeAllianceRotation();
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
-        vision.setUpVision(); //Has to be here to set up Limelight Pipelines
+        // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
