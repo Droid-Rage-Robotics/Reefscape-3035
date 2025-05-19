@@ -3,12 +3,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
-import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ElevatorTemplate;
@@ -80,7 +83,8 @@ public class Elevator extends ElevatorTemplate {
         for (TalonEx motor: motors) {
             motor.setIsEnabled(isEnabled);
         }
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+        SmartDashboard.putData(this.getName() + "/Reset Encoder",runOnce(this::resetEncoder));
+        // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
 
         // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
