@@ -1,8 +1,12 @@
 package frc.utility.encoder;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class EncoderEx {
     public enum EncoderRange {
@@ -18,9 +22,12 @@ public abstract class EncoderEx {
     protected EncoderDirection direction;
     protected double positionConversionFactor;
     protected double velocityConversionFactor;
-    public ShuffleboardValue<Double> degreeWriter;
-    public ShuffleboardValue<Double> radianWriter;
-    public ShuffleboardValue<Double> rawWriter;
+    // public ShuffleboardValue<Double> degreeWriter;
+    // public ShuffleboardValue<Double> radianWriter;
+    // public ShuffleboardValue<Double> rawWriter;
+    private final Supplier<Double> rawPos = this::getPosition;
+    private final Supplier<Double> radian = this::getRadian;
+    private final Supplier<Double> degree = this::getDegree;
     // public ShuffleboardValue<Boolean> isConnectedWriter;
     public String subsystemName;
     public int deviceID;
@@ -56,18 +63,19 @@ public abstract class EncoderEx {
         @SuppressWarnings("unchecked")
         public <T extends EncoderEx> T withSubsystemBase(String encoderName, String subsystemBase) {
             subsystemName = subsystemBase;
-            rawWriter = ShuffleboardValue
-                    .create(0.0, subsystemName + "/" + encoderName + "/Pos/Raw", subsystemName)
-                    .withSize(1, 2)
-                    .build();
-            degreeWriter = ShuffleboardValue
-                    .create(0.0, subsystemName + "/" + encoderName + "/Pos/Degree", subsystemName)
-                    .withSize(1, 2)
-                    .build();
-            radianWriter = ShuffleboardValue
-                    .create(0.0, subsystemName + "/" + encoderName + "/Pos/Radian", subsystemName)
-                    .withSize(1, 2)
-                    .build();
+            // rawWriter = ShuffleboardValue
+            //         .create(0.0, subsystemName + "/" + encoderName + "/Pos/Raw", subsystemName)
+            //         .withSize(1, 2)
+            //         .build();
+            // degreeWriter = ShuffleboardValue
+            //         .create(0.0, subsystemName + "/" + encoderName + "/Pos/Degree", subsystemName)
+            //         .withSize(1, 2)
+            //         .build();
+            // radianWriter = ShuffleboardValue
+            //         .create(0.0, subsystemName + "/" + encoderName + "/Pos/Radian", subsystemName)
+            //         .withSize(1, 2)
+            //         .build();
+            SmartDashboard.putData(writers);
             return (T) EncoderEx.this;
         }
     }
@@ -83,11 +91,21 @@ public abstract class EncoderEx {
         setRange(range);
         return (CANcoderEx) this;
     }
+
+    private final Sendable writers = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addDoubleProperty("Raw Position", rawPos::get, null);
+            builder.addDoubleProperty("Radians", radian::get, null);
+            builder.addDoubleProperty("Degrees", degree::get, null);
+
+        };
+    };
     
     public void periodic() {
-        rawWriter.set(getPosition());
-        degreeWriter.set(getDegree());
-        radianWriter.set(getRadian());
+        // rawWriter.set(getPosition());
+        // degreeWriter.set(getDegree());
+        // radianWriter.set(getRadian());
     }
     public abstract double getVelocity();
     public abstract double getPosition();

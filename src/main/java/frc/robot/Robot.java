@@ -26,7 +26,6 @@ import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.Elastic;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
@@ -59,10 +58,10 @@ public class Robot extends TimedRobot {
     private static final Elastic.Notification notification = new Elastic.Notification();
 
     // public boolean teleopRan;
-    private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
-		(0.0, "Match Time", "Misc")
-		.withWidget(BuiltInWidgets.kTextView)
-		.build();   
+    // private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
+	// 	(0.0, "Match Time", "Misc")
+	// 	.withWidget(BuiltInWidgets.kTextView)
+	// 	.build();   
         // SmartDashboard
     private PowerDistribution powerDistribution = new PowerDistribution();
     private Command autonomousCommand;
@@ -76,6 +75,7 @@ public class Robot extends TimedRobot {
 
         // vision.setUpVision();
         SmartDashboard.putData("Distribution", powerDistribution);
+        SmartDashboard.putData("Robot Misc", DroidRageConstants.robotMisc);
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
         
@@ -158,7 +158,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        matchTime.set(DriverStation.getMatchTime());
+        // matchTime.set(DriverStation.getMatchTime());
 
         // while(true){
 		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);

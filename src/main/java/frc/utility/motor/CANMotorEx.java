@@ -1,9 +1,10 @@
 package frc.utility.motor;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class CANMotorEx {
     // protected int deviceID; // specific and should not be in the abstract class
@@ -11,7 +12,8 @@ public abstract class CANMotorEx {
     protected ZeroPowerMode idleMode;
     protected double positionConversionFactor;
     protected double velocityConversionFactor;
-    protected ShuffleboardValue<Boolean> isEnabledWriter;
+    // protected ShuffleboardValue<Boolean> isEnabledWriter;
+    protected Supplier<Boolean> isEnabledWriter;
     protected String subSystemName;
     protected Alert tempAlert;
     public int motorID;
@@ -55,9 +57,10 @@ public abstract class CANMotorEx {
     }
     public class IsEnabledBuilder {
         public CurrentLimitBuilder withIsEnabled(boolean isEnabled) {
-            isEnabledWriter = ShuffleboardValue
-                .create(isEnabled, "Motors/"+ motorID + " Is Enabled", subSystemName)
-                .build();
+            // isEnabledWriter = ShuffleboardValue
+            //     .create(isEnabled, "Motors/"+ motorID + " Is Enabled", subSystemName)
+            //     .build();
+            isEnabledWriter = () -> isEnabled;
             // outputWriter = ShuffleboardValue
             //     .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)
             //     .build();
@@ -102,7 +105,7 @@ public abstract class CANMotorEx {
     protected abstract void setSupplyCurrentLimit(double currentLimit);
     protected abstract void setStatorCurrentLimit(double currentLimit);
     public void setIsEnabled(boolean isEnabled){
-        this.isEnabledWriter.set(isEnabled);
+        this.isEnabledWriter = () -> isEnabled;
     };
 
     protected void tempAlertLogic() {

@@ -3,12 +3,11 @@ package frc.utility.template;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.utility.motor.CANMotorEx;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 //Works
 public class SetPower {
     private final CANMotorEx[] motors;
-    private final ShuffleboardValue<Double> powerWriter;
+    // private final ShuffleboardValue<Double> powerWriter;
     private final int mainNum;
 
     public SetPower(
@@ -18,9 +17,9 @@ public class SetPower {
     ){
         this.motors=motors;
         this.mainNum=mainNum;
-        powerWriter = ShuffleboardValue
-            .create(0.0, name+"/Power", name)
-            .build();
+        // powerWriter = ShuffleboardValue
+        //     .create(0.0, name+"/Power", name)
+        //     .build();
     }
 
     public Command setTargetPowerCommand(double power){
@@ -31,7 +30,7 @@ public class SetPower {
      * Use this for initialization
      */
     public void setTargetPower(double power) {
-        powerWriter.set(power);
+        // powerWriter.set(power);
         for (CANMotorEx motor: motors) {
             motor.setPower(power);
         }

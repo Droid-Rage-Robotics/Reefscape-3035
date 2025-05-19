@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
@@ -21,7 +20,6 @@ import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.motor.TalonEx;
-import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
 public class SwerveModule {
@@ -66,8 +64,8 @@ public class SwerveModule {
     private PIDController turningPidController;
     private SimpleMotorFeedforward feedforward;
 
-    private ShuffleboardValue<Double> turnPositionWriter;
-    private ShuffleboardValue<Double> drivePositionWriter;
+    // private ShuffleboardValue<Double> turnPositionWriter;
+    // private ShuffleboardValue<Double> drivePositionWriter;
     private String subsystemName;
     private SwerveModule.POD podName;
 
@@ -85,13 +83,13 @@ public class SwerveModule {
         public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
             podName = pod;
             subsystemName = base.getClass().getSimpleName();
-            turnPositionWriter = ShuffleboardValue.create(0.0, 
-                "Module/Turn Position (Radians)" + podName.toString(), 
-                subsystemName).build();
-            drivePositionWriter = ShuffleboardValue.create(0.0, 
-                "Module/Drive Position (Radians)" + podName.toString(), 
-                subsystemName).build();
-                return new DriveIDBuilder();
+            // turnPositionWriter = ShuffleboardValue.create(0.0, 
+            //     "Module/Turn Position (Radians)" + podName.toString(), 
+            //     subsystemName).build();
+            // drivePositionWriter = ShuffleboardValue.create(0.0, 
+            //     "Module/Drive Position (Radians)" + podName.toString(), 
+            //     subsystemName).build();
+            return new DriveIDBuilder();
         }
         // public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
         //     return withSubsystemName(base.getClass().getSimpleName(), pod);
@@ -161,12 +159,12 @@ public class SwerveModule {
     }
 
     public double getDrivePos() {
-        drivePositionWriter.write(driveMotor.getPosition());
+        // drivePositionWriter.write(driveMotor.getPosition());
         return driveMotor.getPosition();
     }
     
     public double getTurningPosition() {
-        turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
+        // turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
         return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
     }
 

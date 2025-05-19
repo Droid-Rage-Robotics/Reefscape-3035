@@ -1,7 +1,11 @@
 package frc.robot;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import com.ctre.phoenix6.CANBus;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -9,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.shuffleboard.ShuffleboardValue;
+
 
 public final class DroidRageConstants {
     public enum Alignment {
@@ -19,8 +23,9 @@ public final class DroidRageConstants {
     }
     
     public static Alignment alignmentMode = Alignment.LEFT;
-    private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
-        .create(alignmentMode.toString(), "Alignment", Vision.class.getSimpleName()).build();
+    // private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
+    //     .create(alignmentMode.toString(), "Alignment", Vision.class.getSimpleName()).build();
+    private static final AtomicReference<String> alignmentWriter = new AtomicReference<>(alignmentMode.toString());
 
     public static void setAlignment(Alignment alignment){
         alignmentMode = alignment;
@@ -28,14 +33,24 @@ public final class DroidRageConstants {
     }
 
     
-    private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
-        .create(Element.NONE.toString(), "Element", "Misc").build();
+    // private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
+    //     .create(Element.NONE.toString(), "Element", "Misc").build();
+    private static final AtomicReference<String> elementWriter = new AtomicReference<>(Element.NONE.toString());
     //All possible elements
         public enum Element{
         ALGAE,
         CORAL,
         NONE
     }
+
+    public static final Sendable robotMisc = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addStringProperty("Vision Alignment", alignmentWriter::get, null);
+            builder.addStringProperty("Element", elementWriter::get, null);
+        };
+    };
+
     public static Element element = Element.ALGAE;
     public static Command setElement(CarriageValue position){
         return SuppliedCommand.create(
@@ -104,5 +119,11 @@ public final class DroidRageConstants {
         PID,
         FEEDFORWARD,
         TRAPEZOID_PROFILE
+    }
+
+    
+    public interface MutableSupplier<T> {
+        T get();
+        void set(T value);
     }
 }
