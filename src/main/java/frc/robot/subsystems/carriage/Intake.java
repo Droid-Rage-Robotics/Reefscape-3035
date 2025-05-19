@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,16 +59,20 @@ public class Intake extends IntakeTemplate {
         motor.setIsEnabled(isEnabled);
         //Change
         SmartDashboard.putData("iintakemotor", motor.getMotor());
-        SmartDashboard.putData("Intake", this);
+        SmartDashboard.putData("Is Element In", isElementIn);
         // isElementIn = this::(getTargetPosition() - getEncoderPosition() > 40);
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("Boolean Box");
-        
-        // builder.addBooleanProperty("Is Element In", isElementIn::get, null);
-    }
+    
+
+    private final Sendable isElementIn =  new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Boolean Box");
+            
+            builder.addBooleanProperty("Is Element In", () -> (getTargetPosition() - getEncoderPosition() > 40), null);
+        }
+    };
 
     // public Command setPowerCommand(double power){
     //     return new InstantCommand(()->motor.setPower(power));
