@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -116,14 +115,15 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive(boolean isEnabled) {
         SmartDashboard.putData("Swerve Drive", this);
-        SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
+        SmartDashboard.putData("Swerve", driveWidget);
         SmartDashboard.putData("Drive Pose", field);
-        SmartDashboard.putData("Drive Enabled", isEnabledWriter);
+        
+
         this.isEnabled = isEnabled;
 
-        if (!isEnabled) { // possible solution for practice only writers
-            SmartDashboard.putData("Swerve Drive", encoderDebug);
-        }
+        // if (!isEnabled) { // possible solution for practice only writers
+        //     SmartDashboard.putData("Swerve Drive", encoderDebug);
+        // }
         
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
@@ -143,39 +143,32 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("SwerveDrive");
-
+        builder.addBooleanProperty("isEnabled", () -> isEnabled, null);
+        builder.addDoubleProperty("Heading", this::getHeading, null);
         builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
-        builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getDriveVelocity(), null);
-
         builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
-        builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getDriveVelocity(), null);
-
         builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getDriveVelocity(), null);
-
         builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
-
-        builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
     }
 
-    public final Sendable isEnabledWriter = new Sendable() {
+    public final Sendable driveWidget = new Sendable() {
         @Override
         public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("Boolean Box");
+            builder.setSmartDashboardType("SwerveDrive");
 
-            builder.addBooleanProperty("isEnabled", () -> isEnabled, null);
-        }
-    };
-
-    public final Sendable encoderDebug = new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
             builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Front Left Velocity", () -> frontLeft.getDriveVelocity(), null);
+
             builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Front Right Velocity", () -> frontRight.getDriveVelocity(), null);
+
             builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Left Velocity", () -> backLeft.getDriveVelocity(), null);
+
             builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
+
+            builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
         }
     };
         
