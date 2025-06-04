@@ -3,11 +3,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
-import frc.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ArmTemplate;
@@ -61,7 +61,8 @@ public class Climb extends ArmTemplate {
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.FEEDFORWARD, "Climb", "Climb", 0);
         motor.setIsEnabled(isEnabled);
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
+        SmartDashboard.putData(this.getName() + "/Reset Encoder",runOnce(this::resetEncoder));
+        // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
         setTargetPosition(90);
 
     }

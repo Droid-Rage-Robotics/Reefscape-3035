@@ -1,8 +1,5 @@
 package frc.robot.commands.manual;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,7 +13,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDrive.TippingState;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModule;
@@ -41,10 +38,10 @@ public class SwerveDriveTeleop extends Command {
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
-        //     .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-            .whileFalse(drive.setSpeed(Speed.SLOW));
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))//SLOW
+            .whileFalse(drive.setSpeed(Speed.NORMAL));//NORMAL
+        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+            // .whileFalse(drive.setSpeed(Speed.SLOW));
 
         driver.b().onTrue(drive.setYawCommand(0));
 
@@ -113,15 +110,15 @@ public class SwerveDriveTeleop extends Command {
         // Smooth driving and apply speed
         xSpeed = 
             xSpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) * 
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
             drive.getTranslationalSpeed();
         ySpeed = 
             ySpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond) *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
             drive.getTranslationalSpeed();
         turnSpeed = 
             turnSpeed *
-            SwerveConfig.PHYSICAL_MAX_ANGULAR_SPEED.in(RadiansPerSecond) * 
+            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
             drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);

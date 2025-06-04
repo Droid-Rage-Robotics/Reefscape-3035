@@ -1,5 +1,10 @@
 package frc.robot.subsystems.carriage;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -7,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.DroidRageConstants;
-import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
 public class Carriage {
-
-    private final ShuffleboardValue<String> positionWriter = 
-        ShuffleboardValue.create("None", "CarriagePosition", "Carriage")
-        .build();
+    // private final ShuffleboardValue<String> positionWriter = 
+    //     ShuffleboardValue.create("None", "CarriagePosition", "Carriage")
+    //     .build();
+    private final AtomicReference<String> positionWriter = new AtomicReference<>("None");
     
     public enum CarriageValue{
         // START(45, 230),
@@ -102,8 +106,16 @@ public class Carriage {
         intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
         position = CarriageValue.INTAKE_HPS;
         positionWriter.set(position.name());
+        SmartDashboard.putData("Carriage", writer);
         // this.coralLimitSwitch = new DigitalInput(0);
     }
+
+    private final Sendable writer = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addStringProperty("Position", positionWriter::get, null);
+        };
+    };
 
     
     public CarriageValue getPosition() {
@@ -180,9 +192,9 @@ public class Carriage {
         return position == value;
     }
     
-    public boolean isElementIn(){
-        return coralIntake.isElementIn();
-    }
+    // public boolean isElementIn(){
+    //     return coralIntake.isElementIn.get();
+    // }
 
     // public SequentialCommandGroup isHighReset(){
     //     return new SequentialCommandGroup(

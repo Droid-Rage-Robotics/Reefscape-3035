@@ -7,8 +7,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -22,9 +22,9 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.carriage.Carriage;
 import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.vision.Vision;
-import frc.utility.shuffleboard.ComplexWidgetBuilder;
+// import frc.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -189,9 +189,9 @@ public class AutoChooser {
         );
 
         createAutoBuilder(drive);
-        ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
-            .withWidget(BuiltInWidgets.kComboBoxChooser)
-            .withSize(1, 3);
+        // ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
+        //     .withWidget(BuiltInWidgets.kComboBoxChooser)
+        //     .withSize(1, 3);
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
@@ -200,6 +200,8 @@ public class AutoChooser {
         addAutos(drive, elevator, carriage, vision);
         // autoChooser = AutoBuilder.buildAutoChooser();
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
     
     public  Command getAutonomousCommand() {
@@ -255,7 +257,13 @@ public class AutoChooser {
                 drive::resetOdometry,
                 drive::getSpeeds,
                 drive::setFeedforwardModuleStates,
-                new PPHolonomicDriveController(SwerveConfig.TRANSLATIONAL_PID, SwerveConfig.THETA_PID),
+                new PPHolonomicDriveController(
+                        new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue()),  // Translation PID constants
+                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue())),  // Rotation PID constants
                 config,
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red

@@ -3,13 +3,14 @@ package frc.utility.template;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeTemplate extends SubsystemBase{
     private final CANMotorEx[] motors;
@@ -18,9 +19,6 @@ public class IntakeTemplate extends SubsystemBase{
     private final Control control;
     private final double maxSpeed;
     private final double minSpeed;
-    private final ShuffleboardValue<Double> speedWriter;
-    private final ShuffleboardValue<Double> targetWriter;
-    private final ShuffleboardValue<Double> voltageWriter;
     // private final ShuffleboardValue<Double> errorWriter;
     private final int mainNum;
     private final TrapezoidProfile profile;
@@ -49,19 +47,15 @@ public class IntakeTemplate extends SubsystemBase{
         this.mainNum=mainNum;
 
         profile = new TrapezoidProfile(constraints);
+        
+        SmartDashboard.putData(name, this);
+    }
 
-        speedWriter = ShuffleboardValue
-            .create(0.0, name+"/Speed", tabName)
-            .build();
-        targetWriter = ShuffleboardValue
-            .create(0.0, name+"/TargetSpeed", tabName)
-            .build();
-        voltageWriter = ShuffleboardValue
-            .create(0.0, name+"/Voltage", tabName)
-            .build();
-        // errorWriter = ShuffleboardValue
-        //     .create(0.0, name + "/Error", name)
-        //     .build();
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Target Speed", controller::getSetpoint, null);
+        builder.addDoubleProperty("Current Speed", motors[mainNum]::getVelocity, null);
+        builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
 
     @Override
@@ -105,7 +99,6 @@ public class IntakeTemplate extends SubsystemBase{
     public void setTargetPosition(double target) {
         if(target>maxSpeed||target<minSpeed) return;
         controller.setSetpoint(target);
-        targetWriter.set(target);
     }
 
     public double getTargetPosition(){
@@ -113,10 +106,11 @@ public class IntakeTemplate extends SubsystemBase{
     }
 
     protected void setVoltage(double voltage) {
-        voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
+            
         }
+        
     }
     
     public void resetEncoder() {
@@ -128,7 +122,6 @@ public class IntakeTemplate extends SubsystemBase{
     public double getEncoderPosition() {
         double position = motors[mainNum].getVelocity();
         // errorWriter.write(getTargetPosition()-position);
-        speedWriter.write(position);
         return position;
     }
 

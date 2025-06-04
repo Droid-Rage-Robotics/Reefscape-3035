@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Light extends SubsystemBase {
     //You can only make one addressable led
@@ -13,9 +12,9 @@ public class Light extends SubsystemBase {
     private final AddressableLEDBuffer bufferOne;
     // private final AddressableLED ledTwo;
     // private final AddressableLEDBuffer bufferTwo;
-    private final ShuffleboardValue<String> lightWriter = ShuffleboardValue.create
-        ("Color", "Light Color", Light.class.getSimpleName())
-        .build();
+    // private final ShuffleboardValue<String> lightWriter = ShuffleboardValue.create
+    //     ("Color", "Light Color", Light.class.getSimpleName())
+    //     .build();
     
     private int LED_COUNT_ONE = 13;   //Number of LEDS on Strip (Can have multiple strips)
     // private int LED_COUNT_TWO = 39;   //Number of LEDS on Strip (Can have multiple strips)
@@ -98,7 +97,7 @@ public class Light extends SubsystemBase {
   }
 
     public void setAllColor(Color color) {
-      lightWriter.set(color.toString());
+      // lightWriter.set(color.toString());
 
       for (int i = 0; i < bufferOne.getLength(); i++) {
         bufferOne.setLED(i, color);

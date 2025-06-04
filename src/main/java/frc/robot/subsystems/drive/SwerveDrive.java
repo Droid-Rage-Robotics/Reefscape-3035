@@ -1,18 +1,7 @@
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
-
-import java.util.List;
-
 import com.ctre.phoenix6.configs.MountPoseConfigs;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,9 +12,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,12 +23,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveConfig;
+import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
-import frc.utility.shuffleboard.ShuffleboardValue;
 import lombok.Getter;
 
 //Set Voltage instead of set Power
@@ -49,47 +38,48 @@ public class SwerveDrive extends SubsystemBase {
         ANTI_TIP,
         ;
     }
-
     // Translation2d(x,y) == Translation2d(front, left)
     //front +; back -
     //left
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-            new Translation2d(SwerveConfig.WHEEL_BASE.in(Meters) / 2,
-                    SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Front Left ++
-            new Translation2d(SwerveConfig.WHEEL_BASE.in(Meters) / 2,
-                    -SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Front Right +-
-            new Translation2d(-SwerveConfig.WHEEL_BASE.in(Meters) / 2,
-                    SwerveConfig.TRACK_WIDTH.in(Meters) / 2), // Back Left -+
-            new Translation2d(-SwerveConfig.WHEEL_BASE.in(Meters) / 2,
-                    -SwerveConfig.TRACK_WIDTH.in(Meters) / 2) // Back Right --
+            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Left ++
+            new Translation2d(SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Front Right +-
+            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    SwerveDriveConfig.TRACK_WIDTH.getValue() / 2), // Back Left -+
+            new Translation2d(-SwerveDriveConfig.WHEEL_BASE.getValue() / 2,
+                    -SwerveDriveConfig.TRACK_WIDTH.getValue() / 2) // Back Right --
     );
-
-    SwerveDriveState state = new SwerveDriveState();
     
     private final SwerveModule frontRight = SwerveModule.create()
         .withSubsystemName(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
         .withTurnMotor(1, Direction.Forward, true)
-        .withEncoder(2, SwerveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET);
+        .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Forward);
         
     private final SwerveModule backRight = SwerveModule.create()
         .withSubsystemName(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Forward, true)
         // .withTurnMotor(4, Direction.Reversed, true)
-        .withEncoder(5, SwerveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET);
+        .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
+        EncoderDirection.Forward);
 
     private final SwerveModule backLeft = SwerveModule.create()
         .withSubsystemName(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(7, Direction.Forward, true)
-        .withEncoder(8, SwerveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET);
+        .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Forward);
     
     private final SwerveModule frontLeft = SwerveModule.create()
         .withSubsystemName(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
         .withTurnMotor(10, Direction.Forward, true)
-        .withEncoder(11, SwerveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET);
+        .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
+        EncoderDirection.Forward);
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
@@ -105,12 +95,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
-
-    public final SwerveModule getModule(int i) {
-        return swerveModules[i];
-    }
-
-    
     
     
     // private final ShuffleboardValue<Double> headingWriter = 
@@ -119,16 +103,28 @@ public class SwerveDrive extends SubsystemBase {
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
     // private final ShuffleboardValue<Double> pitchWriter =   
     //     ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
-    private final ShuffleboardValue<Boolean> isEnabledWriter = 
-        ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
-        .withWidget(BuiltInWidgets.kToggleSwitch)
-        .build();
-    protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
-        ("none", "Current/Pose", this.getSubsystem()).build();
+    // private final ShuffleboardValue<Boolean> isEnabledWriter = 
+    //     ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
+    //     .withWidget(BuiltInWidgets.kToggleSwitch)
+    //     .build();
+    // protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
+    //     ("none", "Current/Pose", this.getSubsystem()).build();
 
-    public SwerveDrive(Boolean isEnabled) {
-        SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
+    private final Field2d field = new Field2d();
+
+    private final boolean isEnabled;
+
+    public SwerveDrive(boolean isEnabled) {
         SmartDashboard.putData("Swerve Drive", this);
+        SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
+        SmartDashboard.putData("Drive Pose", field);
+        SmartDashboard.putData("Drive Enabled", isEnabledWriter);
+        this.isEnabled = isEnabled;
+
+        if (!isEnabled) { // possible solution for practice only writers
+            SmartDashboard.putData("Swerve Drive", encoderDebug);
+        }
+        
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -137,14 +133,11 @@ public class SwerveDrive extends SubsystemBase {
 
         // Pigeon Wires are facing the front of the robot
         pigeon2.getConfigurator().apply(new MountPoseConfigs());   
-        isEnabledWriter.set(isEnabled);
+        // isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
-        }   
-
-        
-        
+        }    
 
     }
 
@@ -164,15 +157,28 @@ public class SwerveDrive extends SubsystemBase {
         builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
         builder.addDoubleProperty("Back Right Velocity", () -> backRight.getDriveVelocity(), null);
 
-        builder.addDoubleProperty("Robot Angle", () -> pigeon2.getYaw().getValue().in(Radians), null);
-
-        // builder.setSmartDashboardType("Generic");
-
-        // builder.addDoubleProperty("FL Radians", () -> frontLeft.getDriveVelocity(), null);
-        // builder.addDoubleProperty("FR Radians", () -> frontRight.getDriveVelocity(), null);
-        // builder.addDoubleProperty("BL Radians", () -> backLeft.getDriveVelocity(), null);
-        // builder.addDoubleProperty("BR Radians", () -> backRight.getDriveVelocity(), null);
+        builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
     }
+
+    public final Sendable isEnabledWriter = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Boolean Box");
+
+            builder.addBooleanProperty("isEnabled", () -> isEnabled, null);
+        }
+    };
+
+    public final Sendable encoderDebug = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+        }
+    };
+        
 
     
     @Override
@@ -182,7 +188,9 @@ public class SwerveDrive extends SubsystemBase {
             getModulePositions()
         );
 
-        drivePoseWriter.set(getPose().toString());
+        field.setRobotPose(getPose());
+
+        // drivePoseWriter.set(getPose().toString());
         // headingWriter.set(getHeading());
     }
 
@@ -260,7 +268,7 @@ public class SwerveDrive extends SubsystemBase {
         // if (!isEnabledWriter.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond)
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         // swerveModules[1].setState(states[1]);
@@ -274,10 +282,10 @@ public class SwerveDrive extends SubsystemBase {
         setFeedforwardModuleStates(states);
     }
     public void setFeedforwardModuleStates(SwerveModuleState[] states) {
-        if (!isEnabledWriter.get()) return;
+        if (!isEnabled) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED.in(MetersPerSecond)
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         for (int i = 0; i < 4; i++) {
@@ -327,8 +335,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public TrapezoidProfile.Constraints getThetaConstraints() {
         return new TrapezoidProfile.Constraints(
-            SwerveConfig.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
-            SwerveConfig.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond));
+            SwerveDriveConfig.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue(),
+            SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.getValue());
     }
 
     public Command driveAutoReset(){

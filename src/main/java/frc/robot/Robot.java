@@ -26,18 +26,17 @@ import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.Elastic;
-import frc.utility.shuffleboard.ShuffleboardValue;
 
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
-        new Arm(false),
-        new Pivot(false),
-        new Intake(false) 
+        new Arm(true),
+        new Pivot(true),
+        new Intake(true) 
     );
     
-    private Climb climb = new Climb(false);
+    private Climb climb = new Climb(true);
     private final Vision vision = new Vision();
 
     private final CommandXboxController driver =
@@ -51,7 +50,7 @@ public class Robot extends TimedRobot {
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
-    private Field2d field = new Field2d();
+    // private Field2d field = new Field2d();
 
     private RobotContainer robotContainer = new RobotContainer(driver, operator);
     private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
@@ -59,10 +58,10 @@ public class Robot extends TimedRobot {
     private static final Elastic.Notification notification = new Elastic.Notification();
 
     // public boolean teleopRan;
-    private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
-		(0.0, "Match Time", "Misc")
-		.withWidget(BuiltInWidgets.kTextView)
-		.build();   
+    // private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
+	// 	(0.0, "Match Time", "Misc")
+	// 	.withWidget(BuiltInWidgets.kTextView)
+	// 	.build();   
         // SmartDashboard
     private PowerDistribution powerDistribution = new PowerDistribution();
     private Command autonomousCommand;
@@ -74,8 +73,9 @@ public class Robot extends TimedRobot {
         // // Record both DS control and joystick data
         // DriverStation.startDataLog(DataLogManager.getLog());
 
-        vision.setUpVision();
+        // vision.setUpVision();
         SmartDashboard.putData("Distribution", powerDistribution);
+        SmartDashboard.putData("Robot Misc", DroidRageConstants.robotMisc);
         // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
         
@@ -84,8 +84,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        field.setRobotPose(drive.getPose());
-        SmartDashboard.putData("DrivePose",field);
+        // field.setRobotPose(drive.getPose());
+        // SmartDashboard.putData("DrivePose",field);
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
         drive.changeAllianceRotation();
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
-        vision.setUpVision(); //Has to be here to set up Limelight Pipelines
+        // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
@@ -158,7 +158,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        matchTime.set(DriverStation.getMatchTime());
+        // matchTime.set(DriverStation.getMatchTime());
 
         // while(true){
 		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
