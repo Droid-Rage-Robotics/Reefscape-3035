@@ -3,6 +3,10 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,6 +30,7 @@ import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
+import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
@@ -92,6 +98,9 @@ public class SwerveDrive extends SubsystemBase {
         new Rotation2d(0), 
         getModulePositions()
     );
+
+    private final SwerveDrivePoseEstimator m_poseEstimator =
+        new SwerveDrivePoseEstimator(DRIVE_KINEMATICS, getRotation2d(), getModulePositions(), getPose());
 
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
@@ -199,6 +208,29 @@ public class SwerveDrive extends SubsystemBase {
         periodic();
     }
 
+    public void setUpMegaTag() {
+        LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        boolean doRejectUpdate = false;
+
+        // if our angular velocity is greater than 360 degrees per second, ignore vision updates
+        if(Math.abs(getRate()) > 360)
+        {
+            doRejectUpdate = true;
+        }
+        if(mt2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_poseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
+    }
+
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
             frontLeft.getPosition(),
@@ -222,6 +254,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public double getRoll() {
         return Math.IEEEremainder(pigeon2.getRoll().getValueAsDouble(), 360);
+    }
+
+    public double getRate() {
+        return pigeon2.getAngularVelocityZWorld().getValueAsDouble();
     }
 
     public Rotation2d getRotation2d() {
