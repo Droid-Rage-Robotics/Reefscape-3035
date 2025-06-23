@@ -1,7 +1,9 @@
  package frc.robot.commands;
  import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
  import edu.wpi.first.wpilibj2.command.Command;
- import edu.wpi.first.wpilibj2.command.button.CommandXboxController;;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;;
 public class RumbleCommand extends Command {
     public enum RumbleStates {
         INTAKE,
@@ -9,14 +11,24 @@ public class RumbleCommand extends Command {
         NOTHING,
         END_GAME,
         ELEVATOR,
-        ALIGN
-    }
-
+        ALIGN    }
+        XboxController xboxController = new XboxController(0);
     private final CommandXboxController driver;
+   
 
     public RumbleCommand(CommandXboxController driverController) {
         this.driver = driverController;
+        if(driverController.b().whileTrue(null) != null)  {
+          new InstantCommand ();
+          driver.setRumble(RumbleType.kLeftRumble, 1.0);
+          driver.setRumble(RumbleType.kRightRumble, 1.0);
+        } else {
+             driver.setRumble(RumbleType.kLeftRumble, 0.0);
+             driver.setRumble(RumbleType.kRightRumble, 0.0);
+        }
     }
+  }
+  
 
    // @Override
     //public void execute() {
@@ -26,14 +38,8 @@ public class RumbleCommand extends Command {
         //    driver.getHID().setRumble(RumbleType.kBothRumble, 0);
       //  }
     //  }
-    if(driver.b() )  {
-      driver.setRumble(RumbleType.kLeftRumble, 1.0);
-      driver.setRumble(RumbleType.kRightRumble, 1.0);
-    } else {
-         driver.setRumble(RumbleType.kLeftRumble, 0.0);
-         driver.setRumble(RumbleType.kRightRumble, 0.0);
-    }
-  }
+
+
 
  //public class RumbleCommand extends Command {
    //  public enum RumbleStates {
