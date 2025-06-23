@@ -28,15 +28,15 @@ import frc.robot.subsystems.vision.Vision;
 import frc.utility.Elastic;
 
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(true);
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
+    private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
-        new Arm(true),
-        new Pivot(true),
-        new Intake(true) 
+        new Arm(false),
+        new Pivot(false),
+        new Intake(false) 
     );
     
-    private Climb climb = new Climb(true);
+    private Climb climb = new Climb(false);
     private final Vision vision = new Vision();
 
     private final CommandXboxController driver =

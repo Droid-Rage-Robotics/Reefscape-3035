@@ -99,8 +99,12 @@ public class SwerveDrive extends SubsystemBase {
         getModulePositions()
     );
 
-    private final SwerveDrivePoseEstimator m_poseEstimator =
-        new SwerveDrivePoseEstimator(DRIVE_KINEMATICS, getRotation2d(), getModulePositions(), getPose());
+    private final SwerveDrivePoseEstimator visionOdometry = new SwerveDrivePoseEstimator(
+        DRIVE_KINEMATICS, 
+        getRotation2d(), 
+        getModulePositions(), 
+        getPose()
+        );
 
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
@@ -120,6 +124,7 @@ public class SwerveDrive extends SubsystemBase {
     //     ("none", "Current/Pose", this.getSubsystem()).build();
 
     private final Field2d field = new Field2d();
+    private final Field2d visionField = new Field2d();
 
     private final boolean isEnabled;
 
@@ -127,6 +132,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putData("Swerve Drive", this);
         SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
         SmartDashboard.putData("Drive Pose", field);
+        SmartDashboard.putData("Vision Pose", visionField);
         SmartDashboard.putData("Drive Enabled", isEnabledWriter);
         this.isEnabled = isEnabled;
 
@@ -198,7 +204,12 @@ public class SwerveDrive extends SubsystemBase {
         );
 
         field.setRobotPose(getPose());
+        visionOdometry.update(getRotation2d(), getModulePositions());
 
+        visionField.setRobotPose(getVisionPose());
+
+
+        
         // drivePoseWriter.set(getPose().toString());
         // headingWriter.set(getHeading());
     }
@@ -209,7 +220,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setUpMegaTag() {
-        LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation("limelight", visionOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         boolean doRejectUpdate = false;
 
@@ -224,8 +235,8 @@ public class SwerveDrive extends SubsystemBase {
         }
         if(!doRejectUpdate)
         {
-            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            m_poseEstimator.addVisionMeasurement(
+            visionOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            visionOdometry.addVisionMeasurement(
                 mt2.pose,
                 mt2.timestampSeconds);
         }
@@ -272,6 +283,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+
+    public Pose2d getVisionPose() {
+        return visionOdometry.getEstimatedPosition();
     }
 
 
