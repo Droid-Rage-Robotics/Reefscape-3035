@@ -1,26 +1,62 @@
-// package frc.robot.commands;
+ package frc.robot.commands;
+ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
+ import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;;
+public class RumbleCommand extends Command {
+    public enum RumbleStates {
+        INTAKE,
+        ELEMENT_IN,
+        NOTHING,
+        END_GAME,
+        ELEVATOR,
+        ALIGN    }
+        XboxController xboxController = new XboxController(0);
+    private final CommandXboxController driver;
+   
 
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-// import edu.wpi.first.wpilibj.Timer;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import frc.robot.DroidRageConstants;
-// import frc.robot.subsystems.Elevator;
-// import frc.robot.subsystems.carriage.Carriage;
-// import frc.robot.subsystems.vision.Vision;
+    public RumbleCommand(CommandXboxController driverController) {
+        this.driver = driverController;
+        if(driverController.b().whileTrue(null) != null)  {
+          new InstantCommand ();
+          driver.setRumble(RumbleType.kLeftRumble, 1.0);
+          driver.setRumble(RumbleType.kRightRumble, 1.0);
+        } else {
+             driver.setRumble(RumbleType.kLeftRumble, 0.0);
+             driver.setRumble(RumbleType.kRightRumble, 0.0);
+        }
+    }
+  }
+  
 
-// public class RumbleCommand extends Command {
-//     public enum RumbleStates {
-//         INTAKE,
-//         ElEMENT_IN,
-//         NOTHING,
-//         END_GAME,
-//         ELEVATOR,
-//         ALIGN
-//     }
+   // @Override
+    //public void execute() {
+        //if (driver.b().getAsBoolean()) {
+         //   driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+        //}  else {
+        //    driver.getHID().setRumble(RumbleType.kBothRumble, 0);
+      //  }
+    //  }
 
+
+
+ //public class RumbleCommand extends Command {
+   //  public enum RumbleStates {
+      //  INTAKE,
+     //    ElEMENT_IN,
+     //    NOTHING,
+     //   END_GAME,
+     //    ELEVATOR,
+    //     ALIGN
+  //   }
+//}
+ //  { 
+   // while(driver.b().getAsBoolean()){
+   //     CommandXboxController driver;
+  //                  driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+//}
+  // }
 //     private RumbleStates intakeState = RumbleStates.NOTHING;
 //     private Timer intakeTimer = new Timer();
 //     private Timer elementInTimer = new Timer();
@@ -54,8 +90,10 @@
 //         //     intakeState = RumbleStates.ALIGN;
 //         // }
 
-//         while(driver.b().getAsBoolean()){
-//             driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+
+        
+    
+
 
 //         }
 //         // new InstantCommand(()->driver.getHID().setRumble(RumbleType.kBothRumble, 1));
@@ -97,17 +135,17 @@
 //         // }
 //     }
 
-//     @Override
-//     public void end(boolean interrupted) {
-//         intakeState = RumbleStates.NOTHING;
+  //  @Override
+    //public void end(boolean interrupted) {
+ //        intakeState = RumbleStates.NOTHING;
 //     }
 
-//     @Override
-//     public boolean isFinished() {
-//         return false;
-//     }
+ //    @Override
+  //  public boolean isFinished() {
+ //        return false;
+  //  }
 
 //     public double getMatchTime() {// TODO:test
 //         return DriverStation.getMatchTime();
-//     }
-// }
+
+ 
