@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
 import frc.robot.SysID.SysID;
+import frc.robot.commands.RumbleCommand;
 // import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
@@ -45,6 +46,11 @@ public class RobotContainer {
 		) {
 		
 		driver.a().onTrue(new Turn180Degrees(drive, driver)); //ToDo: Test
+
+		RumbleCommand rum = new RumbleCommand(driver);
+
+		driver.b().whileTrue(rum);
+
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
