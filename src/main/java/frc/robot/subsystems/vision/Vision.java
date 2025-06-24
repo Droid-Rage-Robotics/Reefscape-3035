@@ -3,11 +3,15 @@ package frc.robot.subsystems.vision;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -172,6 +176,9 @@ public class Vision extends SubsystemBase {
 
         // this.drive = drive;
         SmartDashboard.putData("VisionPose", poseTest);
+        SmartDashboard.putData("Left Limelight", leftLimelight);
+        SmartDashboard.putData("Right Limelight", rightLimelight);
+        
     }
 
     @Override
@@ -193,6 +200,28 @@ public class Vision extends SubsystemBase {
     protected final Supplier<Double> tYL = () -> LimelightHelpers.getTY(DroidRageConstants.leftLimelight);
     protected final Supplier<Boolean> tVL = () -> LimelightHelpers.getTV(DroidRageConstants.leftLimelight);
     protected final Supplier<Double> iDL = () -> LimelightHelpers.getFiducialID(DroidRageConstants.leftLimelight);
+
+    public Sendable rightLimelight = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addDoubleProperty("tA", tAR::get, null);
+            builder.addDoubleProperty("tX", tXR::get, null);
+            builder.addDoubleProperty("tY", tYR::get, null);
+            builder.addBooleanProperty("tV", tVR::get, null);
+            builder.addDoubleProperty("ID", iDR::get, null);  
+        }
+    };
+
+    public Sendable leftLimelight = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.addDoubleProperty("tA", tAL::get, null);
+            builder.addDoubleProperty("tX", tXL::get, null);
+            builder.addDoubleProperty("tY", tYL::get, null);
+            builder.addBooleanProperty("tV", tVL::get, null);
+            builder.addDoubleProperty("ID", iDL::get, null);
+        }
+    };
 
     @Override
     public void periodic() {

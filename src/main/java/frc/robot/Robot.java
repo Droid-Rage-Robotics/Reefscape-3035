@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -163,8 +164,11 @@ public class Robot extends TimedRobot {
         // while(true){
 		// 	// new OperatorXboxControllerRumble(driver, RumbleType.kBothRumble, 2, 1);
    		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 0);
+        
 		// } 
+    
     }
+    
     
     @Override
     public void testInit() {
