@@ -29,3 +29,13 @@ Use tX, tY to align to Limelight with the Drive
 Use Interpolator with tX/tY for shooter changes
 Use 3D Mapping for Pose Estimation
 Sonic Code: https://github.com/FRC-Sonic-Squirrels/2022-Robot-Code/blob/1e6545f15ac98b344048974a50ca9d79ac2ba357/src/main/java/frc/robot/subsystems/LimelightSubsystem.java#L141 - 
+
+## MegaTag Field-Space Localization Setup Values
+# Left
+* Forward 0.2267388258
+* Right -0.30880893
+* Up -0.2228530468
+# Right
+* Forward -0.2267388258
+* Right -0.30880893
+* Up -0.2228530468
