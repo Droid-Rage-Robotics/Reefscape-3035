@@ -3,6 +3,7 @@ package frc.utility.template;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.EncoderEx;
 import frc.utility.motor.CANMotorEx;
@@ -25,6 +26,28 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         EncoderEx encoder
     ){
         super(motors, controller, feedforward, constraints,
+        maxPosition, minPosition, offset, control, tabName,
+        subsystemName, mainNum);
+        this.encoder=encoder;
+
+    }
+
+    public ArmAbsoluteTemplate(
+        SparkMaxEx[] motors,
+        PIDController controller,
+        ArmFeedforward feedforward,
+        DigitalInput limitSwitch,
+        TrapezoidProfile.Constraints constraints,
+        double maxPosition,
+        double minPosition,
+        double offset,
+        Control control,
+        String tabName,
+        String subsystemName,
+        int mainNum,
+        EncoderEx encoder
+    ){
+        super(motors, controller, feedforward, limitSwitch, constraints,
         maxPosition, minPosition, offset, control, tabName,
         subsystemName, mainNum);
         this.encoder=encoder;

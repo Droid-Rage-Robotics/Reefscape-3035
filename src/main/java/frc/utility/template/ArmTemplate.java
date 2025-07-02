@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,6 +18,7 @@ public class ArmTemplate extends SubsystemBase {
     protected final CANMotorEx[] motors;
     protected final PIDController controller;
     protected final ArmFeedforward feedforward;
+    protected DigitalInput limitSwitch;
     protected final Control control;
     protected final double maxPosition;
     protected final double minPosition;
@@ -44,6 +46,38 @@ public class ArmTemplate extends SubsystemBase {
         this.motors=motors;
         this.controller=controller;
         this.feedforward=feedforward;
+        this.control=control;
+        this.maxPosition=maxPosition;
+        this.minPosition=minPosition;
+        this.offset=offset;
+        this.mainNum=mainNum;
+
+        profile = new TrapezoidProfile(constraints);
+
+        positionRadian = () -> motors[mainNum].getPosition()+offset;
+        targetRadian = controller::getSetpoint;
+
+        SmartDashboard.putData(subsystemName, this);
+    }
+
+    public ArmTemplate(
+        CANMotorEx[] motors,
+        PIDController controller,
+        ArmFeedforward feedforward,
+        DigitalInput limitSwitch,
+        TrapezoidProfile.Constraints constraints,
+        double maxPosition,
+        double minPosition,
+        double offset,
+        Control control,
+        String tabName,
+        String subsystemName,
+        int mainNum
+    ){
+        this.motors=motors;
+        this.controller=controller;
+        this.feedforward=feedforward;
+        this.limitSwitch=limitSwitch;
         this.control=control;
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;

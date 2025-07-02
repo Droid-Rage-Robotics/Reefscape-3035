@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -16,6 +17,7 @@ public class ElevatorTemplate extends SubsystemBase {
     private final CANMotorEx[] motors;
     private final PIDController controller;
     private final ElevatorFeedforward feedforward;
+    private DigitalInput limitSwitch;
     private final Control control;
     private final double maxPosition;
     private final double minPosition;
@@ -23,6 +25,7 @@ public class ElevatorTemplate extends SubsystemBase {
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
     private final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+    // REV TOUCH SENSOR
 
     /**
      * @param motors - The Motors to Control
@@ -49,6 +52,45 @@ public class ElevatorTemplate extends SubsystemBase {
         this.motors=motors;
         this.controller=controller;
         this.feedforward=feedforward;
+        this.control=control;
+        this.maxPosition=maxPosition;
+        this.minPosition=minPosition;
+        this.mainNum=mainNum;
+
+        profile = new TrapezoidProfile(constraints);
+
+        SmartDashboard.putData(name, this);
+        // controller.setTolerance(.3);
+    }
+
+    /**
+     * @param motors - The Motors to Control
+     * @param controller - PID Controller
+     * @param feedforward - Feedforward
+     * @param limitSwitch - Limit Switch
+     * @param constraints
+     * @param maxPosition 
+     * @param minPosition
+     * @param control - PID or FEEDFORWARD
+     * @param name - Name of Subsystem
+     * @param mainNum - Motor to use for Encoder
+     */
+    public ElevatorTemplate(
+        CANMotorEx[] motors,
+        PIDController controller,
+        ElevatorFeedforward feedforward,
+        DigitalInput limitSwitch,
+        TrapezoidProfile.Constraints constraints,
+        double maxPosition,
+        double minPosition,
+        Control control,
+        String name,
+        int mainNum
+    ){
+        this.motors=motors;
+        this.controller=controller;
+        this.feedforward=feedforward;
+        this.limitSwitch=limitSwitch;
         this.control=control;
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
