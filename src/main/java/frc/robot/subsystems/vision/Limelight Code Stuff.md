@@ -32,10 +32,16 @@ Sonic Code: https://github.com/FRC-Sonic-Squirrels/2022-Robot-Code/blob/1e6545f1
 
 ## MegaTag Field-Space Localization Setup Values
 # Left
-* Forward 0.2267388258
-* Right -0.30880893
-* Up -0.2228530468
+* Forward 0.2267388258 m
+* Right -0.30880893 m
+* Up -0.2228530468 m
+* Yaw 45 deg
+* Pitch 20 deg
+* Roll 0 deg
 # Right
-* Forward -0.2267388258
-* Right -0.30880893
-* Up -0.2228530468
+* Forward -0.2267388258 m
+* Right -0.30880893 m
+* Up -0.2228530468 m
+* Yaw 45 deg
+* Pitch 20 deg
+* Roll 0 deg
