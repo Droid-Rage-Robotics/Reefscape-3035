@@ -149,8 +149,4 @@ public final class Autos {
 
     // }
     private Autos () {}
-    // public static Command testVision(SwerveDrive drive, Vision vision) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'testVision'");
-    // }
 }
