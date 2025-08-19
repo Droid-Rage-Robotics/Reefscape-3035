@@ -53,8 +53,8 @@ public class RobotContainer {
 		driver.b().whileTrue(rum);
 
 		// Slow Mode and Gyro Reset in the Default Command
-		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
-		// drive.setDefaultCommand(new Turning(drive, driver, elevator));
+		// drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
+		drive.setDefaultCommand(new Turning(drive, driver, elevator));
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		// vision.setDefaultCommand(new LightCommand(driver, vision));
 		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));

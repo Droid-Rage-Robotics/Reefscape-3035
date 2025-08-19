@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
@@ -41,15 +42,15 @@ public class Turning extends Command {
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))// SLOW
-                .whileFalse(drive.setSpeed(Speed.NORMAL));// NORMAL
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))// SLOW
+                .whileFalse(drive.setSpeed(Speed.SUPER_SLOW));// NORMAL
         // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
         // .whileFalse(drive.setSpeed(Speed.SLOW));
 
         driver.b().onTrue(drive.setYawCommand(0));
 
         if (elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()) {
-            drive.setSpeed(Speed.SLOW);
+            drive.setSpeed(Speed.SUPER_SLOW);
         }
 
         addRequirements(drive);
@@ -75,9 +76,14 @@ public class Turning extends Command {
 
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        double goalTurn = Math.toDegrees(Math.atan2(turnY.get(), turnX.get()));
+        double goalTurn = Math.toDegrees(Math.atan2(turnY.get(), -turnX.get()));
+       
+        
+        SmartDashboard.putNumber("Turning/num",goalTurn);
         turnSpeed = turnController.calculate(drive.getHeading(), goalTurn);
 
+        
+        
 
         // Apply Field Oriented
         if (DriveOptions.IS_FIELD_ORIENTED.get()) {
@@ -127,6 +133,9 @@ public class Turning extends Command {
 
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         drive.setModuleStates(states);
+
+        periodic();
+        
     }
 
     @Override
@@ -138,4 +147,18 @@ public class Turning extends Command {
     public boolean isFinished() {
         return false;
     }
+
+    public void periodic() {
+        // while(true) {
+        //     System.out.println(Math.atan2(turnY.get(), -turnX.get()));
+        //     try {
+        //         Thread.sleep(100);
+        //     } catch (InterruptedException e) {
+        //         Thread.currentThread().interrupt();
+        //         break;
+        //     }
+            
+        // }
+    }
+    
 }
