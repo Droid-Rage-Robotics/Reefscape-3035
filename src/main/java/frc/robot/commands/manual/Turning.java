@@ -22,7 +22,7 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class Turning extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turnX, turnY;
-    private volatile double xSpeed, ySpeed, turnSpeed;
+    private volatile double xSpeed, ySpeed, turnSpeed, goalTurn;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
@@ -76,10 +76,10 @@ public class Turning extends Command {
 
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        double goalTurn = Math.toDegrees(Math.atan2(turnY.get(), -turnX.get()));
-       
+        goalTurn = Math.toDegrees(Math.atan2(turnY.get(), -turnX.get()));
         
-        SmartDashboard.putNumber("Turning/num",goalTurn);
+        SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
+
         turnSpeed = turnController.calculate(drive.getHeading(), goalTurn);
 
         
@@ -133,9 +133,6 @@ public class Turning extends Command {
 
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         drive.setModuleStates(states);
-
-        periodic();
-        
     }
 
     @Override
@@ -147,18 +144,4 @@ public class Turning extends Command {
     public boolean isFinished() {
         return false;
     }
-
-    public void periodic() {
-        // while(true) {
-        //     System.out.println(Math.atan2(turnY.get(), -turnX.get()));
-        //     try {
-        //         Thread.sleep(100);
-        //     } catch (InterruptedException e) {
-        //         Thread.currentThread().interrupt();
-        //         break;
-        //     }
-            
-        // }
-    }
-    
 }
