@@ -4,8 +4,6 @@ import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,11 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -111,20 +104,6 @@ public class SwerveDrive extends SubsystemBase {
 
     private volatile Speed speed = Speed.SUPER_SLOW;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
-    
-    
-    // private final ShuffleboardValue<Double> headingWriter = 
-    //     ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", this.getSubsystem()).build();
-    // private final ShuffleboardValue<Double> rollWriter = 
-    //     ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", this.getSubsystem()).build();
-    // private final ShuffleboardValue<Double> pitchWriter =   
-    //     ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", this.getSubsystem()).build();
-    // private final ShuffleboardValue<Boolean> isEnabledWriter = 
-    //     ShuffleboardValue.create(true, "Is Drive Enabled", this.getSubsystem())
-    //     .withWidget(BuiltInWidgets.kToggleSwitch)
-    //     .build();
-    // protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
-    //     ("none", "Current/Pose", this.getSubsystem()).build();
 
     private final Field2d field = new Field2d();
     private final Field2d visionField = new Field2d();
@@ -132,12 +111,12 @@ public class SwerveDrive extends SubsystemBase {
     private final boolean isEnabled;
 
     public SwerveDrive(boolean isEnabled) {
+        this.isEnabled = isEnabled;
         SmartDashboard.putData("Swerve Drive", this);
         SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
         SmartDashboard.putData("Drive Pose", field);
         SmartDashboard.putData("Vision Pose", visionField);
-        SmartDashboard.putData("Drive Enabled", isEnabledWriter);
-        this.isEnabled = isEnabled;
+        SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);        
 
         if (!isEnabled) { // possible solution for practice only writers
             SmartDashboard.putData("Swerve Drive", encoderDebug);
@@ -178,27 +157,19 @@ public class SwerveDrive extends SubsystemBase {
         builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
     }
 
-    public final Sendable isEnabledWriter = new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("Boolean Box");
-
-            builder.addBooleanProperty("isEnabled", () -> isEnabled, null);
-        }
-    };
-
     public final Sendable encoderDebug = new Sendable() {
         @Override
         public void initSendable(SendableBuilder builder) {
-            builder.addDoubleProperty("Front Left Angle", () -> frontLeft.getTurningPosition(), null);
-            builder.addDoubleProperty("Front Right Angle", () -> frontRight.getTurningPosition(), null);
-            builder.addDoubleProperty("Back Left Angle", () -> backLeft.getTurningPosition(), null);
-            builder.addDoubleProperty("Back Right Angle", () -> backRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Drive/Angle "+frontLeft.getPodName(), () -> frontLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Drive/Angle "+frontRight.getPodName(), () -> frontRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Drive/Angle "+backLeft.getPodName(), () -> backLeft.getTurningPosition(), null);
+            builder.addDoubleProperty("Drive/Angle "+backRight.getPodName(), () -> backRight.getTurningPosition(), null);
+            builder.addDoubleProperty("Drive/Heading", () -> getHeading(), null);
+            builder.addDoubleProperty("Drive/Roll", () -> getRoll(), null);
+            builder.addDoubleProperty("Drive/Pitch", () -> getPitch(), null);
         }
     };
-        
-
-    
+     
     @Override
     public void periodic() {
         odometry.update(
@@ -208,13 +179,7 @@ public class SwerveDrive extends SubsystemBase {
 
         field.setRobotPose(getPose());
         visionOdometry.update(getRotation2d(), getModulePositions());
-
         visionField.setRobotPose(getVisionPose());
-
-
-        
-        // drivePoseWriter.set(getPose().toString());
-        // headingWriter.set(getHeading());
     }
 
     @Override
@@ -223,7 +188,14 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setUpMegaTag() {
-        LimelightHelpers.SetRobotOrientation("limelight", visionOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation(
+            "limelight",
+            visionOdometry.getEstimatedPosition().getRotation().getDegrees(),
+            0,
+            0,
+            0,
+            0,
+            0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         boolean doRejectUpdate = false;
 
@@ -258,7 +230,11 @@ public class SwerveDrive extends SubsystemBase {
         return tippingState;
     }
 
-    public double getHeading() {//Yaw
+    /**
+     * Yaw AKA Heading in degrees
+     * @return the yaw axis rotation of the bot as a double
+     */
+    public double getHeading() {
         return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
     }
 

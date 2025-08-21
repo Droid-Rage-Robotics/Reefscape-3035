@@ -162,6 +162,10 @@ public class SwerveModule {
         // drivePositionWriter.write(driveMotor.getPosition());
         return driveMotor.getPosition();
     }
+
+    public String getPodName() {
+        return podName.toString();
+    }
     
     public double getTurningPosition() {
         // turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);

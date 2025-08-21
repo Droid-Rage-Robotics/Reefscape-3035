@@ -29,7 +29,7 @@ public class SwerveDriveConstants {
         // Turn PID for Swerve Pod
         TURN_KP(.5),//1
 
-        // Drive SVA
+        // Drive Feedforward
         DRIVE_KS(0.13), // this value is multiplied by veloicty in meteres per second
         DRIVE_KV(2.7), //this value is the voltage that iwll be constantly applied
         // DRIVE_KA = 0.12,
@@ -64,7 +64,6 @@ public class SwerveDriveConstants {
         IS_SQUARED_INPUTS(true),
         IS_POSE_UPDATED(true)
         ;
-        // private final ShuffleboardValue<Boolean> shuffleboardValue;
         private final boolean value;
         private DriveOptions(boolean value) {
             this.value = value;
@@ -72,8 +71,6 @@ public class SwerveDriveConstants {
         public boolean get(){
             return value;
         }
-        // @Override 
-        // public ShuffleboardValue<Boolean> getNum() { return shuffleboardValue; }
     }
 
     public enum Speed {

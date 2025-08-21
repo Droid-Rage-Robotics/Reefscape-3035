@@ -4,19 +4,14 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -45,7 +40,7 @@ public class Robot extends TimedRobot {
 	
 	private final CommandXboxController operator =		
         new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-    private final Joystick joystick = new Joystick(3);
+
     // private final CycleTracker cycleTracker = new CycleTracker();
     // private final Light light = new Light();*
 
@@ -53,17 +48,12 @@ public class Robot extends TimedRobot {
     // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
     // private Field2d field = new Field2d();
 
-    private RobotContainer robotContainer = new RobotContainer(driver, operator);
-    private AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
+    private final RobotContainer robotContainer = new RobotContainer(driver, operator);
+    private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     private static final Elastic.Notification notification = new Elastic.Notification();
 
     // public boolean teleopRan;
-    // private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
-	// 	(0.0, "Match Time", "Misc")
-	// 	.withWidget(BuiltInWidgets.kTextView)
-	// 	.build();   
-        // SmartDashboard
     private PowerDistribution powerDistribution = new PowerDistribution();
     private Command autonomousCommand;
   
@@ -73,7 +63,7 @@ public class Robot extends TimedRobot {
         // DataLogManager.start();
         // // Record both DS control and joystick data
         // DriverStation.startDataLog(DataLogManager.getLog());
-
+        
         // vision.setUpVision();
         SmartDashboard.putData("Distribution", powerDistribution);
         SmartDashboard.putData("Robot Misc", DroidRageConstants.robotMisc);
@@ -103,7 +93,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         //In Here, Try using controller to pick the auto
-
         if(RobotController.getBatteryVoltage()<12.5){
             batteryAlert.set(true);
             batteryAlert.setText("Battery Voltage Low");
@@ -195,6 +184,4 @@ public class Robot extends TimedRobot {
         autonomousCommand.cancel();
         }
     }
-
-        
 }
