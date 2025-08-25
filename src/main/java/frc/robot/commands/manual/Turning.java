@@ -6,6 +6,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -53,6 +55,8 @@ public class Turning extends Command {
             drive.setSpeed(Speed.SUPER_SLOW);
         }
 
+        SmartDashboard.putData("Drive/Turn Goal",turnGoal);
+
         addRequirements(drive);
     }
 
@@ -76,9 +80,10 @@ public class Turning extends Command {
 
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        goalTurn = Math.toDegrees(Math.atan2(turnY.get(), -turnX.get()));
+        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
+        goalTurn = Math.IEEEremainder(goalTurn,360);
         
-        SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
+        // SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
 
         turnSpeed = turnController.calculate(drive.getHeading(), goalTurn);
 
@@ -144,4 +149,12 @@ public class Turning extends Command {
     public boolean isFinished() {
         return false;
     }
+
+    public final Sendable turnGoal = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Gyro");
+            builder.addDoubleProperty("Value", () -> goalTurn, null);
+        }
+    };
 }
