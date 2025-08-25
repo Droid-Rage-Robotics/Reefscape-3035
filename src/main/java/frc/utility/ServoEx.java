@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import com.revrobotics.servohub.ServoChannel;
 import com.revrobotics.servohub.ServoHub;
 import com.revrobotics.servohub.ServoChannel.ChannelId;
-
 import edu.wpi.first.units.measure.Angle;
 
 public class ServoEx {
@@ -45,8 +44,9 @@ public class ServoEx {
 
     /**
      * Used to set the maximum degree of rotation supported by the servo for use in pulse width calculations. 
-     * Do not call this method when using a servo with a center zero point, as it will throw an UnsupportedOperationException.
+     * Do not call this method when using a servo with a center zero point.
      * @param value maximum degree of rotation
+     * @throws UnsupportedOpperationExeption Cannot use this method with a center zero point!
      */
     public ServoEx withDegRange(double value) {
         if(centerZeroPoint){
