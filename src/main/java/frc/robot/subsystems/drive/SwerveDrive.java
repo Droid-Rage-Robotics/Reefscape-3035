@@ -102,7 +102,7 @@ public class SwerveDrive extends SubsystemBase {
         getPose()
         );
 
-    private volatile Speed speed = Speed.SUPER_SLOW;
+    private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
     private final Field2d field = new Field2d();
