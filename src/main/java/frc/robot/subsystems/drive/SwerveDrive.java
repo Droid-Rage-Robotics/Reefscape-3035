@@ -27,6 +27,8 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
 import frc.robot.subsystems.vision.LimelightHelpers;
+import frc.utility.DashboardUtils;
+import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.TalonEx;
@@ -34,7 +36,7 @@ import lombok.Getter;
 
 //Set Voltage instead of set Power
 //Set them to 90 to 100%
-public class SwerveDrive extends SubsystemBase {
+public class SwerveDrive extends SubsystemBase implements Dashboard {
     public enum TippingState {
         NO_TIP_CORRECTION,
         ANTI_TIP,
@@ -112,11 +114,8 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive(boolean isEnabled) {
         this.isEnabled = isEnabled;
-        SmartDashboard.putData("Swerve Drive", this);
-        SmartDashboard.putData("TestGyro", pigeon2); // Looks Great
-        SmartDashboard.putData("Drive Pose", field);
-        SmartDashboard.putData("Vision Pose", visionField);
-        SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);        
+        DashboardUtils.register(this);
+            
 
         if (!isEnabled) { // possible solution for practice only writers
             SmartDashboard.putData("Swerve Drive", encoderDebug);
@@ -136,6 +135,15 @@ public class SwerveDrive extends SubsystemBase {
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }    
 
+    }
+
+    @Override
+    public void elasticInit() {
+        SmartDashboard.putData("Drive/Swerve Drive", this);
+        SmartDashboard.putData("Drive/Gyro", pigeon2);
+        SmartDashboard.putData("Drive/Drive Pose", field);
+        SmartDashboard.putData("Drive/Vision Pose", visionField);
+        SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);    
     }
 
     @Override
