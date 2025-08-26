@@ -21,6 +21,7 @@ import frc.robot.subsystems.carriage.Intake;
 import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
+import frc.utility.DashboardUtils;
 import frc.utility.Elastic;
 
 public class Robot extends TimedRobot {
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
     private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
-    private static final Elastic.Notification notification = new Elastic.Notification();
+    // private static final Elastic.Notification notification = new Elastic.Notification();
 
     // public boolean teleopRan;
     private PowerDistribution powerDistribution = new PowerDistribution();
@@ -59,6 +60,7 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
+        DashboardUtils.initAll();
         // // Starts recording to data log
         // DataLogManager.start();
         // // Record both DS control and joystick data

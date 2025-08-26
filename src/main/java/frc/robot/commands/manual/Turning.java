@@ -80,8 +80,9 @@ public class Turning extends Command {
 
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
-        goalTurn = Math.IEEEremainder(goalTurn,360);
+        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), -turnX.get()));
+        
+        goalTurn = (Math.IEEEremainder(goalTurn,360)-90);
         
         // SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
 
