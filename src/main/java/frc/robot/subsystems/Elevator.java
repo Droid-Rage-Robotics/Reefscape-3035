@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.commands.DisabledCommand;
+import frc.utility.DashboardUtils;
+import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.motor.CANMotorEx.Direction;
@@ -17,7 +19,7 @@ import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ElevatorTemplate;
 import lombok.Getter;
 
-public class Elevator extends ElevatorTemplate {
+public class Elevator extends ElevatorTemplate{
     // 2
     //Gear Ratio: 9:1
     public static class Constants {
@@ -83,10 +85,6 @@ public class Elevator extends ElevatorTemplate {
         for (TalonEx motor: motors) {
             motor.setIsEnabled(isEnabled);
         }
-        SmartDashboard.putData(this.getName() + "/Reset Encoder",runOnce(this::resetEncoder));
-        // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
-
-        // ComplexWidgetBuilder.create(resetEncoder(), "Auto Chooser", "Misc")
     }
 
     @Override
@@ -101,5 +99,5 @@ public class Elevator extends ElevatorTemplate {
     public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
-    }
+    }    
 }

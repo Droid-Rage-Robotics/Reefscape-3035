@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
+import frc.utility.DashboardUtils;
+import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 
 //Works
-public class ElevatorTemplate extends SubsystemBase {
+public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final CANMotorEx[] motors;
     private final PIDController controller;
     private final ElevatorFeedforward feedforward;
@@ -59,7 +61,8 @@ public class ElevatorTemplate extends SubsystemBase {
 
         profile = new TrapezoidProfile(constraints);
 
-        SmartDashboard.putData(name, this);
+        DashboardUtils.register(this);
+        
         // controller.setTolerance(.3);
     }
 
@@ -97,9 +100,15 @@ public class ElevatorTemplate extends SubsystemBase {
         this.mainNum=mainNum;
 
         profile = new TrapezoidProfile(constraints);
-
-        SmartDashboard.putData(name, this);
         // controller.setTolerance(.3);
+
+        DashboardUtils.register(this);
+    }
+
+    @Override
+    public void elasticInit() {
+        SmartDashboard.putData("Elevator", this);
+        SmartDashboard.putData("Elevator/Reset Encoder", runOnce(this::resetEncoder));
     }
 
     @Override
