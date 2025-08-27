@@ -1,9 +1,11 @@
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -61,6 +63,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         DashboardUtils.initAll();
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         // // Starts recording to data log
         // DataLogManager.start();
         // // Record both DS control and joystick data
