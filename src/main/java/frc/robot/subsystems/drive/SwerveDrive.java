@@ -115,11 +115,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     public SwerveDrive(boolean isEnabled) {
         this.isEnabled = isEnabled;
         DashboardUtils.register(this);
-            
-
-        if (!isEnabled) { // possible solution for practice only writers
-            SmartDashboard.putData("Swerve Drive", encoderDebug);
-        }
         
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
@@ -144,6 +139,11 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         SmartDashboard.putData("Drive/Drive Pose", field);
         SmartDashboard.putData("Drive/Vision Pose", visionField);
         SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);    
+    }
+
+    @Override
+    public void practiceWriters() {
+        SmartDashboard.putData("Swerve Drive", encoderDebug);
     }
 
     @Override

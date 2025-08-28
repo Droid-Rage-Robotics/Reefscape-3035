@@ -106,6 +106,11 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
     }
 
     @Override
+    public void practiceWriters() {
+        
+    }
+
+    @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Current Position (Degrees)", () -> Math.toDegrees(positionRadian.get()), null);
         builder.addDoubleProperty("Current Position (Radians)", positionRadian::get, null);

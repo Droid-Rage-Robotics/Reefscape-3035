@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardUtils {
-    private static final List<Dashboard> publishers = new ArrayList<>();
+    public enum Match {
+        COMPETITION,
+        PRACTICE
+    }
 
+    private static final List<Dashboard> publishers = new ArrayList<>();
+    public static Match MODE;
+    
     /**
      * Call this function to register the subsystem's {@code elasticInit()} method
      * to be run at robot startup
@@ -21,6 +27,10 @@ public class DashboardUtils {
     public static void initAll() {
         for (Dashboard pub : publishers) {
             pub.elasticInit();
+
+            if(MODE==Match.PRACTICE) {
+                pub.practiceWriters();
+            }
         }
     }
     
@@ -29,6 +39,12 @@ public class DashboardUtils {
          * Place all elastic configs in here to be run at robot startup
          */
         public void elasticInit();
+
+        /**
+         * Place all writers that are not neccesary during a match here 
+         * to only be used during practice to prevent loop overruns
+         */
+        public void practiceWriters();
     }
     
 }

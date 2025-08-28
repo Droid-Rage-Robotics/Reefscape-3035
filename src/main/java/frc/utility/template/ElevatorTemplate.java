@@ -122,6 +122,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     }
 
     @Override
+    public void practiceWriters() {
+        
+    }
+
+    @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Target Position", controller::getSetpoint, null);
         builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);

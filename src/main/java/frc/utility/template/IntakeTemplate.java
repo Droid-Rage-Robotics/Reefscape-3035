@@ -73,6 +73,11 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
 
+    @Override
+    public void practiceWriters() {
+        
+    }
+
     // isElementIn = this::(getTargetPosition() - getEncoderPosition() > 40);
 
     private final Sendable isElementIn =  new Sendable() {
