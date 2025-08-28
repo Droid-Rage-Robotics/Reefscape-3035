@@ -58,6 +58,10 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
 
         profile = new TrapezoidProfile(constraints);
 
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
+
         positionRadian = () -> motors[mainNum].getPosition()+offset;
         targetRadian = controller::getSetpoint;
 
