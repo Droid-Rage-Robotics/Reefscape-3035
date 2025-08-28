@@ -2,10 +2,6 @@ package frc.robot.subsystems.vision;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,8 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.DroidRageConstants.Alignment;
-import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
 
 public class Vision extends SubsystemBase {
     public enum Location {
@@ -96,32 +90,9 @@ public class Vision extends SubsystemBase {
             return angle;
         }
     }
-    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
-    // protected final ShuffleboardValue<Double> tARWriter = ShuffleboardValue
-    //         .create(0.0, "R/tAR", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> tXRWriter = ShuffleboardValue
-    //         .create(0.0, "R/tXR-Rot", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> tYRWriter = ShuffleboardValue
-    //         .create(0.0, "R/tYR-Range", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Boolean> tVRWriter = ShuffleboardValue
-    //         .create(false, "R/tVR", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> iDRWriter = ShuffleboardValue
-    //         .create(0., "R/iDWriter", Vision.class.getSimpleName()).build();
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
-    // protected final ShuffleboardValue<Double> tALWriter = ShuffleboardValue
-    //         .create(0.0, "L/tAL", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> tXLWriter = ShuffleboardValue
-    //         .create(0.0, "L/tXL-Rot", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> tYLWriter = ShuffleboardValue
-    //         .create(0.0, "L/tYL-Range", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Boolean> tVLWriter = ShuffleboardValue
-    //         .create(false, "L/tVL", Vision.class.getSimpleName()).build();
-    // protected final ShuffleboardValue<Double> iDLWriter = ShuffleboardValue
-    //         .create(0., "L/iDWriter", Vision.class.getSimpleName()).build();
-
-    // protected final ShuffleboardValue<String> poseWriter = ShuffleboardValue
-    //         .create("0,0,0", "PoseWriter", Vision.class.getSimpleName()).build();
     protected final Supplier<String> poseWriter = () -> "0,0,0";
     public int targetIds[];
     public PIDController rotController = new PIDController(.095, 0, 0);// .1
@@ -131,10 +102,6 @@ public class Vision extends SubsystemBase {
     boolean doRejectUpdate = false;
     // private SwerveDrive drive;
     private Field2d poseTest = new Field2d();
-    
-    // public final ShuffleboardValue<Boolean> isAlignWriter = ShuffleboardValue
-    //         .create(false, "IsAlign", Vision.class.getSimpleName()).build();
-    // public final Supplier<Boolean> isAlign = () -> false;
     public final AtomicBoolean isAlign = new AtomicBoolean(false);
     // Set Up the team number - http://limelight.local:5801/
 
@@ -225,19 +192,7 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // tARWriter.set(LimelightHelpers.getTA(DroidRageConstants.rightLimelight));
-        // tXRWriter.set(LimelightHelpers.getTX(DroidRageConstants.rightLimelight));
-        // tYRWriter.set(LimelightHelpers.getTY(DroidRageConstants.rightLimelight));
-        // tVRWriter.set(LimelightHelpers.getTV(DroidRageConstants.rightLimelight));
-        // iDRWriter.set(LimelightHelpers.getFiducialID(DroidRageConstants.rightLimelight));
-
-        // tALWriter.set(LimelightHelpers.getTA(DroidRageConstants.leftLimelight));
-        // tXLWriter.set(LimelightHelpers.getTX(DroidRageConstants.leftLimelight));
-        // tYLWriter.set(LimelightHelpers.getTY(DroidRageConstants.leftLimelight));
-        // tVLWriter.set(LimelightHelpers.getTV(DroidRageConstants.leftLimelight));
-        // iDLWriter.set(LimelightHelpers.getFiducialID(DroidRageConstants.leftLimelight));
-
-        if(SwerveDriveConstants.DriveOptions.IS_POSE_UPDATED.get()){
+        // if(SwerveDriveConstants.DriveOptions.IS_POSE_UPDATED.get()){
             // LimelightHelpers.PoseEstimate leftEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.leftLimelight);
             // LimelightHelpers.PoseEstimate rightEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(DroidRageConstants.rightLimelight);
             
@@ -250,8 +205,7 @@ public class Vision extends SubsystemBase {
             //     poseWriter.set(rightEstimate.pose.toString());
             //     drive.resetOdometry(rightEstimate.pose);
             // }
-        }
-         
+        // }
     }
 
     public void setUpVision() {

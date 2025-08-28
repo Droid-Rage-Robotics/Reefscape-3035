@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
-import frc.robot.subsystems.vision.Vision;
-
 
 public final class DroidRageConstants {
     public enum Alignment {
@@ -23,8 +21,7 @@ public final class DroidRageConstants {
     }
     
     public static Alignment alignmentMode = Alignment.LEFT;
-    // private final static ShuffleboardValue<String> alignmentWriter = ShuffleboardValue
-    //     .create(alignmentMode.toString(), "Alignment", Vision.class.getSimpleName()).build();
+
     private static final AtomicReference<String> alignmentWriter = new AtomicReference<>(alignmentMode.toString());
 
     public static void setAlignment(Alignment alignment){
@@ -32,9 +29,6 @@ public final class DroidRageConstants {
         alignmentWriter.set(alignmentMode.toString());
     }
 
-    
-    // private final static ShuffleboardValue<String> elementWriter = ShuffleboardValue
-    //     .create(Element.NONE.toString(), "Element", "Misc").build();
     private static final AtomicReference<String> elementWriter = new AtomicReference<>(Element.NONE.toString());
     //All possible elements
         public enum Element{
@@ -120,7 +114,6 @@ public final class DroidRageConstants {
         FEEDFORWARD,
         TRAPEZOID_PROFILE
     }
-
     
     public interface MutableSupplier<T> {
         T get();

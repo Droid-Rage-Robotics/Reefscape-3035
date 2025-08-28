@@ -43,7 +43,7 @@ public class TalonEx extends CANMotorEx {
 
     @Override
     public void setAlert() {
-        canAlert.set(talon.getStickyFault_Hardware().getValue()); // TODO: Set to correct sticky fault        
+        canAlert.set(talon.getStickyFault_Hardware().getValue());
     }
    
     @Override
