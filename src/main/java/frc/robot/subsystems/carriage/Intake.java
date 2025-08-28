@@ -1,41 +1,20 @@
 package frc.robot.subsystems.carriage;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.motor.CANMotorEx.Direction;
 import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.IntakeTemplate;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Intake extends IntakeTemplate {
     private static class Constants {
         public static final double MAX_SPEED = 800;
         public static final double MIN_SPEED = -800;
     }
-    // private final ShuffleboardValue<Boolean> isElementInWriter = 
-    //     ShuffleboardValue.create(false, "IsElement", Carriage.class.getSimpleName())
-    //     .withWidget(BuiltInWidgets.kBooleanBox)
-    //     .build();
-    // private final ComplexWidgetBuilder builder = ComplexWidgetBuilder
-    //     .create("f", "test", Carriage.class.getSimpleName())
-    //     .withWidget(BuiltInWidgets.kTextView)
-    //     .withSize(2, 1)
-    //     .withPosition(0, 0)
-    //     .withIsEnabled(true)
-    //     .withDefaultValue("Intake");
-
-    // private final Supplier<Boolean> isElementIn = () -> (getTargetPosition() - getEncoderPosition() > 40);
 
     private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
@@ -53,24 +32,9 @@ public class Intake extends IntakeTemplate {
         new SimpleMotorFeedforward(.0, .6, 0.3),  
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
-        Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0);
-        motor.setIsEnabled(isEnabled);
-        //Change
-        SmartDashboard.putData("iintakemotor", motor.getMotor());
-        SmartDashboard.putData("Is Element In", isElementIn);
-        // isElementIn = this::(getTargetPosition() - getEncoderPosition() > 40);
+        Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0, isEnabled);
+        
     }
-
-    
-
-    private final Sendable isElementIn =  new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("Boolean Box");
-            
-            builder.addBooleanProperty("Is Element In", () -> (getTargetPosition() - getEncoderPosition() > 40), null);
-        }
-    };
 
     // public Command setPowerCommand(double power){
     //     return new InstantCommand(()->motor.setPower(power));

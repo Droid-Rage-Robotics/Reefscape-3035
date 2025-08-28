@@ -5,7 +5,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.commands.DisabledCommand;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.motor.CANMotorEx.Direction;
@@ -59,8 +58,7 @@ public class Climb extends ArmTemplate {
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.FEEDFORWARD, "Climb", "Climb", 0);
-        motor.setIsEnabled(isEnabled);
+        Control.FEEDFORWARD, "Climb", "Climb", 0, isEnabled);
         SmartDashboard.putData(this.getName() + "/Reset Encoder",runOnce(this::resetEncoder));
         // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", this.getName());
         setTargetPosition(90);

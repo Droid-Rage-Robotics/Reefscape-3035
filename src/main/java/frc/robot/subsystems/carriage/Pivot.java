@@ -43,8 +43,6 @@ public class Pivot extends ArmAbsoluteTemplate {
         //OLD PROGEJCT - 0.079284, 0.12603, 2.3793, 0.05276
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
-        Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Pivot", 0, encoder);
-        motor.setIsEnabled(isEnabled);
-        
+        Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Pivot", 0, encoder, isEnabled);
     }
 }

@@ -49,7 +49,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         double minPosition,
         Control control,
         String name,
-        int mainNum
+        int mainNum,
+        boolean isEnabled
     ){
         this.motors=motors;
         this.controller=controller;
@@ -60,6 +61,10 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.mainNum=mainNum;
 
         profile = new TrapezoidProfile(constraints);
+
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
 
         DashboardUtils.register(this);
         
@@ -88,7 +93,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         double minPosition,
         Control control,
         String name,
-        int mainNum
+        int mainNum,
+        boolean isEnabled
     ){
         this.motors=motors;
         this.controller=controller;
@@ -98,6 +104,10 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
         this.mainNum=mainNum;
+
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
 
         profile = new TrapezoidProfile(constraints);
         // controller.setTolerance(.3);

@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
+import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 
-public class ArmTemplate extends SubsystemBase {
+public class ArmTemplate extends SubsystemBase implements Dashboard {
     protected final CANMotorEx[] motors;
     protected final PIDController controller;
     protected final ArmFeedforward feedforward;
@@ -29,6 +30,7 @@ public class ArmTemplate extends SubsystemBase {
     protected final TrapezoidProfile profile;
     protected TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
     protected TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+    protected final String name;
 
     public ArmTemplate(
         CANMotorEx[] motors,
@@ -41,7 +43,8 @@ public class ArmTemplate extends SubsystemBase {
         Control control,
         String tabName,
         String subsystemName,
-        int mainNum
+        int mainNum,
+        boolean isEnabled
     ){
         this.motors=motors;
         this.controller=controller;
@@ -51,6 +54,7 @@ public class ArmTemplate extends SubsystemBase {
         this.minPosition=minPosition;
         this.offset=offset;
         this.mainNum=mainNum;
+        this.name=subsystemName;
 
         profile = new TrapezoidProfile(constraints);
 
@@ -72,7 +76,8 @@ public class ArmTemplate extends SubsystemBase {
         Control control,
         String tabName,
         String subsystemName,
-        int mainNum
+        int mainNum,
+        boolean isEnabled
     ){
         this.motors=motors;
         this.controller=controller;
@@ -83,13 +88,21 @@ public class ArmTemplate extends SubsystemBase {
         this.minPosition=minPosition;
         this.offset=offset;
         this.mainNum=mainNum;
+        this.name=subsystemName;
+
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
 
         profile = new TrapezoidProfile(constraints);
 
         positionRadian = () -> motors[mainNum].getPosition()+offset;
         targetRadian = controller::getSetpoint;
+    }
 
-        SmartDashboard.putData(subsystemName, this);
+    @Override
+    public void elasticInit() {
+        SmartDashboard.putData(name, this);
     }
 
     @Override

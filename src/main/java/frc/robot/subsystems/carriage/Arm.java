@@ -42,7 +42,6 @@ public class Arm extends ArmAbsoluteTemplate {
         new TrapezoidProfile.Constraints(.1, .1),
         Constants.MAX_POSITION, Constants.MIN_POSITION, 
                 Constants.OFFSET, 
-        Control.FEEDFORWARD, Carriage.class.getSimpleName(),"Arm", 0, encoder);
-        motor.setIsEnabled(isEnabled);
+        Control.FEEDFORWARD, Carriage.class.getSimpleName(),"Arm", 0, encoder, isEnabled);
     }
 }

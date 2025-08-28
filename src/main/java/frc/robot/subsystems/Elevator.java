@@ -3,15 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.commands.DisabledCommand;
-import frc.utility.DashboardUtils;
-import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
 import frc.utility.motor.CANMotorEx.Direction;
@@ -71,8 +64,6 @@ public class Elevator extends ElevatorTemplate{
         .withIsEnabled(true)
         .withCurrentLimit(50);
     
-    private static TalonEx[] motors = {motorRight, motorLeft};
-    
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
@@ -81,10 +72,7 @@ public class Elevator extends ElevatorTemplate{
         new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION,
         Constants.MIN_POSITION, 
-        Control.FEEDFORWARD, "Elevator", 0);
-        for (TalonEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
-        }
+        Control.FEEDFORWARD, "Elevator", 0, isEnabled);
     }
 
     @Override

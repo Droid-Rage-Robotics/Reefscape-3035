@@ -3,6 +3,7 @@ package frc.utility.template;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,9 +11,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
+import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 
-public class IntakeTemplate extends SubsystemBase{
+public class IntakeTemplate extends SubsystemBase implements Dashboard {
     private final CANMotorEx[] motors;
     private final PIDController controller;
     private final SimpleMotorFeedforward feedforward;
@@ -21,6 +23,7 @@ public class IntakeTemplate extends SubsystemBase{
     private final double minSpeed;
     // private final ShuffleboardValue<Double> errorWriter;
     private final int mainNum;
+    private final String name;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
     private final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
@@ -36,7 +39,8 @@ public class IntakeTemplate extends SubsystemBase{
         Control control,
         String tabName,
         String name,
-        int mainNum
+        int mainNum,
+        boolean isEnabled
     ){
         this.motors=motors;
         this.controller=controller;
@@ -45,10 +49,21 @@ public class IntakeTemplate extends SubsystemBase{
         this.maxSpeed=maxSpeed;
         this.minSpeed=minSpeed;
         this.mainNum=mainNum;
+        this.name=name;
+
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
 
         profile = new TrapezoidProfile(constraints);
         
+    }
+
+    @Override
+    public void elasticInit() {
         SmartDashboard.putData(name, this);
+        SmartDashboard.putData("Is Element In", isElementIn); 
+
     }
 
     @Override
@@ -57,6 +72,16 @@ public class IntakeTemplate extends SubsystemBase{
         builder.addDoubleProperty("Current Speed", motors[mainNum]::getVelocity, null);
         builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
+
+    // isElementIn = this::(getTargetPosition() - getEncoderPosition() > 40);
+
+    private final Sendable isElementIn =  new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Boolean Box");
+            builder.addBooleanProperty("Is Element In", () -> (getTargetPosition() - getEncoderPosition() > 40), null);
+        }
+    };
 
     @Override
     public void periodic() {

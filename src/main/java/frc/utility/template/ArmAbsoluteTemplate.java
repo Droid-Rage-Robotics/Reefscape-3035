@@ -23,11 +23,12 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         String tabName,
         String subsystemName,
         int mainNum,
-        EncoderEx encoder
+        EncoderEx encoder,
+        boolean isEnabled
     ){
         super(motors, controller, feedforward, constraints,
         maxPosition, minPosition, offset, control, tabName,
-        subsystemName, mainNum);
+        subsystemName, mainNum, isEnabled);
         this.encoder=encoder;
 
     }
@@ -45,11 +46,12 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         String tabName,
         String subsystemName,
         int mainNum,
-        EncoderEx encoder
+        EncoderEx encoder,
+        boolean isEnabled
     ){
         super(motors, controller, feedforward, limitSwitch, constraints,
         maxPosition, minPosition, offset, control, tabName,
-        subsystemName, mainNum);
+        subsystemName, mainNum, isEnabled);
         this.encoder=encoder;
 
     }
