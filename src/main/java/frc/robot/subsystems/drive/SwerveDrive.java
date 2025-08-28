@@ -104,7 +104,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         getPose()
         );
 
-    private volatile Speed speed = Speed.NORMAL;
+    private volatile Speed speed = Speed.SLOW;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
     private final Field2d field = new Field2d();

@@ -28,7 +28,7 @@ public class Turning extends Command {
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
-    private static final PIDController turnController = new PIDController(0.006, 0, 0.0005);
+    private static final PIDController turnController = new PIDController(0.01, 0, 0.0005);
 
     // private SlewRateLimiter xLimiter = new
     // SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
@@ -45,14 +45,14 @@ public class Turning extends Command {
         antiTipY.setTolerance(2);
 
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))// SLOW
-                .whileFalse(drive.setSpeed(Speed.SUPER_SLOW));// NORMAL
+                .whileFalse(drive.setSpeed(Speed.SLOW));// NORMAL
         // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
         // .whileFalse(drive.setSpeed(Speed.SLOW));
 
         driver.b().onTrue(drive.setYawCommand(0));
 
         if (elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()) {
-            drive.setSpeed(Speed.SUPER_SLOW);
+            drive.setSpeed(Speed.SLOW);
         }
 
         SmartDashboard.putData("Drive/Turn Goal",turnGoal);
@@ -78,11 +78,13 @@ public class Turning extends Command {
             // turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
+        turnController.enableContinuousInput(0, 360);
+
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), -turnX.get()));
+        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
         
-        goalTurn = (Math.IEEEremainder(goalTurn,360)-90);
+        // goalTurn = (Math.IEEEremainder(goalTurn,360)-90); // -90
         
         // SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
 
