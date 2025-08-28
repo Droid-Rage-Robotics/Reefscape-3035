@@ -4,13 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardUtils {
-    public enum Match {
+    /**
+     * Determines whether writers placed in {@code practiceWriters()}
+     * are enabled or disabled
+     */
+    public enum MatchValue {
+        /**
+         * Writers placed in {@code practiceWriters()} will be disabled
+         * to prevent loop overruns at a competition.
+         */
         COMPETITION,
+
+        /**
+         * Writers placed in {@code practiceWriters()} will be enabled
+         * for access to testing data in Elastic.
+         */
         PRACTICE
     }
 
+    public static class Config {
+        /**
+         * Default is {@code MatchValue.PRACTICE}
+         */
+        public static MatchValue Match = MatchValue.PRACTICE;
+    }
+
     private static final List<Dashboard> publishers = new ArrayList<>();
-    public static Match MODE;
     
     /**
      * Call this function to register the subsystem's {@code elasticInit()} method
@@ -28,7 +47,7 @@ public class DashboardUtils {
         for (Dashboard pub : publishers) {
             pub.elasticInit();
 
-            if(MODE==Match.PRACTICE) {
+            if(Config.Match==MatchValue.PRACTICE) {
                 pub.practiceWriters();
             }
         }
@@ -46,5 +65,4 @@ public class DashboardUtils {
          */
         public void practiceWriters();
     }
-    
 }

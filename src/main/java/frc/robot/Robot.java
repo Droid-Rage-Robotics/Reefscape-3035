@@ -25,7 +25,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.DashboardUtils;
 import frc.utility.Elastic;
-import frc.utility.DashboardUtils.Match;
+import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
-        DashboardUtils.MODE=Match.PRACTICE;
+        DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.initAll();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         // // Starts recording to data log

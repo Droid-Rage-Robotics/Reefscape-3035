@@ -24,8 +24,21 @@ public abstract class CANMotorEx {
         Reversed,
     }
 
+    /**
+     * Determines motor behavior when not recieving
+     * commands for voltage/power
+     */
     public enum ZeroPowerMode {
+        /**
+         * Motor will resist movement when not recieving
+         * commands for voltage/power.
+         */
         Brake,
+
+        /**
+         * Motor will allow free movement when not recieving
+         * commands for voltage/power.
+         */
         Coast,
     }
 
