@@ -24,7 +24,7 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class Turning extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turnX, turnY;
-    private volatile double xSpeed, ySpeed, turnSpeed, goalTurn;
+    private volatile double xSpeed, ySpeed, turnSpeed, turnGoalWriter;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
@@ -82,7 +82,12 @@ public class Turning extends Command {
 
         //Get Turn Now
         // Math.atan2(turnY.get(), turnX.get());
-        goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
+        double goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
+        
+        turnGoalWriter = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
+        turnGoalWriter = (Math.IEEEremainder(goalTurn,360)-90);
+
+
         
         // goalTurn = (Math.IEEEremainder(goalTurn,360)-90); // -90
         
@@ -157,7 +162,7 @@ public class Turning extends Command {
         @Override
         public void initSendable(SendableBuilder builder) {
             builder.setSmartDashboardType("Gyro");
-            builder.addDoubleProperty("Value", () -> goalTurn, null);
+            builder.addDoubleProperty("Value", () -> turnGoalWriter, null);
         }
     };
 }
