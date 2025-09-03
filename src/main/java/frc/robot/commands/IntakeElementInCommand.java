@@ -6,7 +6,7 @@ import frc.robot.subsystems.carriage.Carriage;
 
 public class IntakeElementInCommand extends ParallelCommandGroup {
     public IntakeElementInCommand(CommandXboxController driver, Carriage coralSubsystem) {
-        addRequirements(coralSubsystem.getCoralIntake());
+        addRequirements(coralSubsystem.getIntake());
         addCommands(
             // new ConditionalCommand(
             //     new SequentialCommandGroup(//true

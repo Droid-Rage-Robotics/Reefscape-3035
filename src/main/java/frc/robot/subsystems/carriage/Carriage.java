@@ -91,7 +91,7 @@ public class Carriage {
 
     @Getter private final Arm arm;
     @Getter private final Pivot pivot;
-    @Getter private final Intake coralIntake;
+    @Getter private final Intake intake;
     // private final DigitalInput coralLimitSwitch;
 
     private CarriageValue position;
@@ -100,7 +100,7 @@ public class Carriage {
     public Carriage(Arm arm, Pivot pivot, Intake intake){
         this.arm = arm;
         this.pivot = pivot;
-        this.coralIntake = intake;
+        this.intake = intake;
         arm.setTargetPosition(CarriageValue.INTAKE_HPS.armAngle);
         pivot.setTargetPosition(CarriageValue.INTAKE_HPS.pivotAngle);
         intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
@@ -176,7 +176,7 @@ public class Carriage {
 
     public Command setIntakeCommand(CarriageIntakeValue intakeValue){
         return Commands.sequence(
-            coralIntake.setTargetPositionCommand(intakeValue.getIntakeSpeed()),
+            intake.setTargetPositionCommand(intakeValue.getIntakeSpeed()),
             new ConditionalCommand(
                 DroidRageConstants.setElement(getPosition()), 
                 new SequentialCommandGroup(), 
