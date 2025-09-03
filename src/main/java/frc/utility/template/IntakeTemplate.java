@@ -1,5 +1,7 @@
 package frc.utility.template;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -21,8 +23,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     private final Control control;
     private final double maxSpeed;
     private final double minSpeed;
-    // private final ShuffleboardValue<Double> errorWriter;
     private final int mainNum;
+    private final Supplier<Double> setpoint;
     private final String name;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -51,6 +53,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         this.mainNum=mainNum;
         this.name=name;
 
+        this.setpoint=controller::getSetpoint;
+
         for (CANMotorEx motor: motors) {
             motor.setIsEnabled(isEnabled);
         }
@@ -63,7 +67,6 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     public void elasticInit() {
         SmartDashboard.putData(name, this);
         SmartDashboard.putData("Is Element In", isElementIn); 
-
     }
 
     @Override
@@ -74,10 +77,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     }
 
     @Override
-    public void practiceWriters() {
-        
-    }
-
+    public void practiceWriters() {}
     // isElementIn = this::(getTargetPosition() - getEncoderPosition() > 40);
 
     private final Sendable isElementIn =  new Sendable() {
@@ -96,17 +96,33 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
+            // case FEEDFORWARD:
+            //     setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+            //     +feedforward.calculate(1,1)); //To Change #
+            //     // calculateWithVelocities
+            //     //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
+            //     break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
-                +feedforward.calculate(1,1)); //To Change #
-                // calculateWithVelocities
-                //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
-                break;
-            case TRAPEZOID_PROFILE:
-                current = profile.calculate(0.02, current, goal);
+                setVoltage(
+                    controller.calculate(getEncoderPosition(), controller.getSetpoint())
+                    +feedforward.calculateWithVelocities(controller.getSetpoint(),controller.getSetpoint())); //To Change #
+                    // +feedforward.calculateWithVelocities(1,1)); //To Change #
 
-                setVoltage(controller.calculate(getEncoderPosition(), current.position)
-                        + feedforward.calculate(current.position, current.velocity));
+                break;
+            // case TRAPEZOID_PROFILE:
+            //     current = profile.calculate(0.02, current, goal);
+
+            //     setVoltage(controller.calculate(getEncoderPosition(), current.position)
+            //             + feedforward.calculate(current.position, current.velocity));
+            //     break;
+            case TRAPEZOID_PROFILE:
+                TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
+
+                double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
+                double pid = controller.calculate(getEncoderPosition(), controller.getSetpoint());
+
+                setVoltage(ff + pid);
+                current = next;
                 break;
         };        
     }
@@ -138,9 +154,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     protected void setVoltage(double voltage) {
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
-            
         }
-        
     }
     
     public void resetEncoder() {

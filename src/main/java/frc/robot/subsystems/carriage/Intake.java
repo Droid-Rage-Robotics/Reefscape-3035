@@ -27,9 +27,12 @@ public class Intake extends IntakeTemplate {
     public Intake(boolean isEnabled) {
         super(
         new CANMotorEx[]{motor}, 
-        new PIDController(0.1,0,0), //.15
+        // new PIDController(0.1,0,0), //.15
+        new PIDController(0, 0, 0),
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
-        new SimpleMotorFeedforward(.0, .6, 0.3),  
+        // new SimpleMotorFeedforward(.0, .6, 0.3),  
+        new SimpleMotorFeedforward(3.98, 0, 0),
+        
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0, isEnabled);

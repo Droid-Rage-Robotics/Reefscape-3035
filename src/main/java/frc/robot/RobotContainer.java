@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SysID.DriveSysID;
@@ -14,6 +15,7 @@ import frc.robot.SysID.SysID;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
+import frc.robot.commands.SysId.SysIdCommand;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
@@ -151,9 +153,10 @@ public class RobotContainer {
 	}
 
 	public void sysID(SysID sysID){
-		driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-		driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-		driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
-		driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+		driver.a().onTrue(new SysIdCommand(sysID, driver));
+		// driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+		// driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+		// driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
+		// driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	}
 }

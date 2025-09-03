@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.SysID.SysID;
+import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -25,15 +27,18 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.DashboardUtils;
 import frc.utility.Elastic;
+import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.TalonEx;
 import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false),
         new Pivot(false),
-        new Intake(false) 
+        new Intake(true)
     );
     
     private Climb climb = new Climb(false);
@@ -49,7 +54,7 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();*
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    // private final SysID sysID = new SysID(pivot.getMotor(), pivot, Measurement.ANGLE);
+    private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake(), Measurement.ANGLE);
     // private Field2d field = new Field2d();
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
@@ -63,9 +68,9 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.initAll();
-        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         // // Starts recording to data log
         // DataLogManager.start();
         // // Record both DS control and joystick data
@@ -82,9 +87,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        
-        // field.setRobotPose(drive.getPose());
-        // SmartDashboard.putData("DrivePose",field);
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
