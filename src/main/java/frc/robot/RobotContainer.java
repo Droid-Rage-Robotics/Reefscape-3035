@@ -3,6 +3,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -153,7 +154,8 @@ public class RobotContainer {
 	}
 
 	public void sysID(SysID sysID){
-		driver.a().onTrue(new SysIdCommand(sysID, driver));
+		driver.a().onTrue(new SysIdCommand(sysID));
+		driver.b().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
 		// driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
 		// driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 		// driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
