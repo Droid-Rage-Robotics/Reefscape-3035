@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
+import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 
@@ -60,6 +61,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         }
 
         profile = new TrapezoidProfile(constraints);
+
+        DashboardUtils.register(this);
         
     }
 

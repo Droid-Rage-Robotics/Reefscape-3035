@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();*
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake(), Measurement.ANGLE);
+    // private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake(), Measurement.ANGLE);
     // private Field2d field = new Field2d();
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);

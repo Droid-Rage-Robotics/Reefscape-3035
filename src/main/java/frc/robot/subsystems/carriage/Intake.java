@@ -3,6 +3,7 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -14,6 +15,8 @@ public class Intake extends IntakeTemplate {
     private static class Constants {
         public static final double MAX_SPEED = 800;
         public static final double MIN_SPEED = -800;
+        public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(3);
+        // public static final double ALGAE_GEARING = 2; (Math.PI * Constants.WHEEL_DIAMETER_METERS)/2
     }
 
     private static TalonEx motor = TalonEx.create(31)
@@ -28,15 +31,16 @@ public class Intake extends IntakeTemplate {
         super(
         new CANMotorEx[]{motor}, 
         // new PIDController(0.1,0,0), //.15
-        new PIDController(0, 0, 0),
+        new PIDController(0.025, 0, 0),
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
         // new SimpleMotorFeedforward(.0, .6, 0.3),  
-        new SimpleMotorFeedforward(3.98, 0, 0),
+        // new SimpleMotorFeedforward(3.98, 0, 0),0.125
+        new SimpleMotorFeedforward(0.35, 0.125,0),
         
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0, isEnabled);
-        
+
     }
 
     // public Command setPowerCommand(double power){
