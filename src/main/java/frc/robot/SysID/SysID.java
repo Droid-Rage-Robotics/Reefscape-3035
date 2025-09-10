@@ -51,7 +51,7 @@ public class SysID {
         case ANGLE:
             routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(motor::setVoltage, log -> {
             log.motor("motor")
-                .voltage(appliedVoltage.mut_replace(motor.getVoltage() * RobotController.getBatteryVoltage(), Volts))
+                .voltage(appliedVoltage.mut_replace(motor.getVoltage(), Volts))
                 .angularPosition(angle.mut_replace(motor.getPosition(), Rotations))
                 .angularVelocity(angularVelocity.mut_replace(motor.getVelocity(), RotationsPerSecond));
             }, subsystem)
@@ -59,7 +59,7 @@ public class SysID {
         case DISTANCE:
             routine = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(motor::setVoltage, log -> {
             log.motor("motor")
-                .voltage(appliedVoltage.mut_replace(motor.getVoltage() * RobotController.getBatteryVoltage(), Volts))
+                .voltage(appliedVoltage.mut_replace(motor.getVoltage(), Volts))
                 .linearPosition(distance.mut_replace(motor.getPosition(), Inches))
                 .linearVelocity(linearVelocity.mut_replace(motor.getVelocity(), InchesPerSecond));
             }, subsystem)

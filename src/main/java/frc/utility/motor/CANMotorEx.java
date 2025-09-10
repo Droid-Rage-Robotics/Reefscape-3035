@@ -1,18 +1,15 @@
 package frc.utility.motor;
 
 import java.util.function.Supplier;
-
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 
 public abstract class CANMotorEx {
-    // protected int deviceID; // specific and should not be in the abstract class
     protected Direction direction;
     protected ZeroPowerMode idleMode;
     protected double positionConversionFactor;
     protected double velocityConversionFactor;
-    // protected ShuffleboardValue<Boolean> isEnabledWriter;
     protected Supplier<Boolean> isEnabledWriter;
     protected String subSystemName;
     protected Alert tempAlert;
@@ -70,16 +67,9 @@ public abstract class CANMotorEx {
     }
     public class IsEnabledBuilder {
         public CurrentLimitBuilder withIsEnabled(boolean isEnabled) {
-            // isEnabledWriter = ShuffleboardValue
-            //     .create(isEnabled, "Motors/"+ motorID + " Is Enabled", subSystemName)
-            //     .build();
             isEnabledWriter = () -> isEnabled;
-            // outputWriter = ShuffleboardValue
-            //     .create(0.0, subSystemName +"/"+ motorID +" Output", subSystemName)
-            //     .build();
             tempAlert = new Alert("Temperature Warning: Motor " + motorID, AlertType.kWarning);
             return new CurrentLimitBuilder();
-
         }
     }
 
@@ -90,7 +80,6 @@ public abstract class CANMotorEx {
     //         return (T) CANMotorEx.this;
     //     }
     // }
-    
     
     public class CurrentLimitBuilder {
         @SuppressWarnings("unchecked")
