@@ -12,9 +12,9 @@ public class SysIdCommand extends SequentialCommandGroup {
             new WaitCommand(1),
             sysId.sysIdQuasistatic(SysIdRoutine.Direction.kReverse),
             new WaitCommand(1),
-            sysId.sysIdDynamic(SysIdRoutine.Direction.kForward).withTimeout(10),
+            sysId.sysIdDynamic(SysIdRoutine.Direction.kForward),
             new WaitCommand(1),
-            sysId.sysIdDynamic(SysIdRoutine.Direction.kReverse).withTimeout(10)
+            sysId.sysIdDynamic(SysIdRoutine.Direction.kReverse)
         );
     }
 }
