@@ -19,7 +19,7 @@ public class Intake extends IntakeTemplate {
     private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor(2)
+        .withPositionConversionFactor(1)
         .withSubsystemName(Carriage.class.getSimpleName())
         .withIsEnabled(true)
         .withCurrentLimit(80,80);//60,50
@@ -28,11 +28,11 @@ public class Intake extends IntakeTemplate {
         super(
         new CANMotorEx[]{motor}, 
         // new PIDController(0.1,0,0), //.15
-        new PIDController(0.063753,0,0),
+        new PIDController(0.0020637,0,0),
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),
         // new SimpleMotorFeedforward(.0, .6, 0.3),  
         // new SimpleMotorFeedforward(3.98, 0, 0),0.125
-        new SimpleMotorFeedforward(0.073234,0.090121,0), // ka 0.13167
+        new SimpleMotorFeedforward(0.22808,0.13255,0.034457), // ka 0.034457
         
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_SPEED, Constants.MIN_SPEED, 

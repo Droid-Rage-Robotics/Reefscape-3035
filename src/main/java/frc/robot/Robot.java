@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();*
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    // private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake(), Measurement.ANGLE);
+    private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake());
     // private Field2d field = new Field2d();
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
@@ -69,8 +71,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+        SignalLogger.setPath("/home/lvuser/logs/ctre/");
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.initAll();
+
+        
         // // Starts recording to data log
         // DataLogManager.start();
         // // Record both DS control and joystick data
@@ -122,6 +127,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
+
+        SignalLogger.start();
+
         autonomousCommand = autoChooser.getAutonomousCommand();
         // autonomousCommand = new InstantCommand();
 
@@ -140,6 +148,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+
+        SignalLogger.start();
 
         
         // if (autonomousCommand != null) {
@@ -184,13 +194,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopExit(){
+        SignalLogger.stop();
         // cycleTracker.printAllData();
     }
 
     @Override
     public void autonomousExit(){
+        SignalLogger.stop();
         if (autonomousCommand != null) {
         autonomousCommand.cancel();
         }
+        
     }
 }
