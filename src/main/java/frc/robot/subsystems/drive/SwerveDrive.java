@@ -379,7 +379,11 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     public Command driveAutoReset(){
         return runOnce(()->setYawCommand(getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
-    }      
+    }  
+    
+    public void addSendable() {
+
+    }
 
     public ChassisSpeeds getSpeeds() {//Is this Robot Relative
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());

@@ -141,32 +141,32 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
-            // case FEEDFORWARD:
-            //     setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
-            //     +feedforward.calculate(1,1)); //To Change #
-            //     //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
-            //     break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
-                +feedforward.calculateWithVelocities(1, 1));
+                +feedforward.calculate(1,1)); //To Change #
+                //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
-            // case TRAPEZOID_PROFILE:
-            //     current = profile.calculate(0.02, current, goal);
-                
-            //     setVoltage(controller.calculate(getEncoderPosition(), current.position)
-            //             + feedforward.calculate(current.position, current.velocity));
+            // case FEEDFORWARD:
+            //     setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+            //     +feedforward.calculateWithVelocities(1, 1));
             //     break;
             case TRAPEZOID_PROFILE:
-                // Advance the profile by one loop timestep (0.02s = 20ms)
-                TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
-
-                double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
-
-                double pid = controller.calculate(getEncoderPosition(), controller.getSetpoint());
-
-                setVoltage(ff + pid);
-                current = next;
+                current = profile.calculate(0.02, current, goal);
+                
+                setVoltage(controller.calculate(getEncoderPosition(), current.position)
+                        + feedforward.calculate(current.position, current.velocity));
                 break;
+            // case TRAPEZOID_PROFILE:
+            //     // Advance the profile by one loop timestep (0.02s = 20ms)
+            //     TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
+
+            //     double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
+
+            //     double pid = controller.calculate(getEncoderPosition(), controller.getSetpoint());
+
+            //     setVoltage(ff + pid);
+            //     current = next;
+            //     break;
         }       
     }
 
