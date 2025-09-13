@@ -156,7 +156,9 @@ public class Robot extends TimedRobot {
         //     autonomousCommand.cancel();
         // }
 		DriverStation.silenceJoystickConnectionWarning(true);
-        drive.changeAllianceRotation();
+
+        // drive.changeAllianceRotation(); // NO USE
+        
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
