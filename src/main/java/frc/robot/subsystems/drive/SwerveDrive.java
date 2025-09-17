@@ -243,7 +243,13 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
      * @return the yaw axis rotation of the bot as a double
      */
     public double getHeading() {
-        return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
+        // return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
+        double yaw = pigeon2.getYaw().getValueAsDouble();
+
+        // Normalize to [0, 360)
+        yaw = ((yaw % 360) + 360) % 360;
+
+        return yaw;
     }
 
     public double getPitch() {

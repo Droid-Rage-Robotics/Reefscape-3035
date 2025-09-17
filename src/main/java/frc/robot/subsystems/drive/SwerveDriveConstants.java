@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.util.Units;
 
 public class SwerveDriveConstants {
@@ -58,6 +60,16 @@ public class SwerveDriveConstants {
             return value;
         }
     }
+
+    public static PIDConstants TRANSLATIONAL_PID = new PIDConstants(
+        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
+        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
+        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue());
+
+    public static PIDConstants THETA_PID = new PIDConstants(
+        SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
+        SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
+        SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue());
 
     public enum DriveOptions { 
         IS_FIELD_ORIENTED(true),
