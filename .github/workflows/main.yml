@@ -6,7 +6,7 @@ name: CI
 # events but only for the main branch.
 on:
   push:
-    branches: [ main, OffSeasonChanges ]
+    branches: [ main, OffSeasonChanges, stable ]
   # pull_request:
   #   branches: [ main ]
 
