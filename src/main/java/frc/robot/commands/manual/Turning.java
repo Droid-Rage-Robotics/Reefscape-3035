@@ -19,12 +19,14 @@ import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
+import frc.utility.ControllerUtils;
 import frc.robot.subsystems.drive.SwerveModule;
 
 public class Turning extends Command {
     private final SwerveDrive drive;
+    private final CommandXboxController driver;
     private final Supplier<Double> x, y, turnX, turnY;
-    private volatile double xSpeed, ySpeed, turnSpeed, turnGoalWriter;
+    private volatile double xSpeed, ySpeed, turnSpeed, goalTurn;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
@@ -37,6 +39,7 @@ public class Turning extends Command {
 
     public Turning(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
+        this.driver=driver;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turnX = driver::getRightX;
@@ -55,7 +58,7 @@ public class Turning extends Command {
             drive.setSpeed(Speed.SLOW);
         }
 
-        SmartDashboard.putData("Drive/Turn Goal",turnGoal);
+        SmartDashboard.putData("Drive/Turn Goal", turnGoal);
 
         addRequirements(drive);
     }
@@ -78,20 +81,24 @@ public class Turning extends Command {
             // turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
 
-        turnController.enableContinuousInput(0, 360);
 
-        //Get Turn Now
-        // Math.atan2(turnY.get(), turnX.get());
-        double goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
+        // //Get Turn Now
+        // // Math.atan2(turnY.get(), turnX.get());
+        // double goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
         
-        turnGoalWriter = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
-        turnGoalWriter = (Math.IEEEremainder(goalTurn,360)-90);
+        // turnGoalWriter = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
+        // turnGoalWriter = (Math.IEEEremainder(goalTurn,360)-90);
+
 
 
         
         // goalTurn = (Math.IEEEremainder(goalTurn,360)-90); // -90
         
         // SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
+        
+        goalTurn = ControllerUtils.getRightStickDeg(driver);
+
+        turnController.enableContinuousInput(0, 360);
 
         turnSpeed = turnController.calculate(drive.getHeading(), goalTurn);
 
@@ -162,7 +169,7 @@ public class Turning extends Command {
         @Override
         public void initSendable(SendableBuilder builder) {
             builder.setSmartDashboardType("Gyro");
-            builder.addDoubleProperty("Value", () -> turnGoalWriter, null);
+            builder.addDoubleProperty("Value", () -> goalTurn, null);
         }
     };
 }
