@@ -1,8 +1,10 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,7 +33,6 @@ import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.TalonEx;
 import lombok.Getter;
 
 //Set Voltage instead of set Power
@@ -186,6 +187,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         );
 
         field.setRobotPose(getPose());
+        field.setRobotPose(getPose());
         visionOdometry.update(getRotation2d(), getModulePositions());
         visionField.setRobotPose(getVisionPose());
     }
@@ -265,7 +267,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+        return Rotation2d.fromDegrees(pigeon2.getYaw().getValueAsDouble());
         //THe negative is supposed to help work for teleop; Should FIX
 
     }
@@ -402,10 +404,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return states;
     }
 
-    public TalonEx getFRTurnCanSparkMax(){
-        return frontLeft.getTurnMotor();
-    }
-
     public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
         //No WORK
         setYaw(getHeading() +90);
@@ -419,9 +417,27 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         // }
     }
 
+    
+    
     public void enableSysID() {
         sysId = new DriveSysID(swerveModules, this);
     }
+
+    private final SysIdRoutine routine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive", state.toString()) // Log state with Phoenix SignalLogger class
+            ),
+            new SysIdRoutine.Mechanism(voltage -> {
+                // Apply voltage to all drive and turn motors
+                for (SwerveModule module : swerveModules) {
+                  module.getDriveMotor().setVoltage(voltage);
+                  module.getTurnMotor().setVoltage(voltage);
+                }
+              }, null, this)
+            );
 
     public Command runSysIdQuasistatic(SysIdRoutine.Direction direction) {
         return sysId.sysIdQuasistatic(direction);
@@ -430,6 +446,4 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     public Command runSysIdDynamic(SysIdRoutine.Direction direction) {
         return sysId.sysIdDynamic(direction);
     }
-
-    
 }

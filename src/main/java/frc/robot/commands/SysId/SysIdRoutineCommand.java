@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-public class SysIdCommandB extends SequentialCommandGroup {
-    public SysIdCommandB(SysIdRoutine routine) {
+public class SysIdRoutineCommand extends SequentialCommandGroup {
+    public SysIdRoutineCommand(SysIdRoutine routine) {
         addCommands(
             routine.quasistatic(SysIdRoutine.Direction.kForward),
             new WaitCommand(1),
