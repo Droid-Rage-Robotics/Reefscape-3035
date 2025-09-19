@@ -241,12 +241,16 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     }
 
     /**
-     * Yaw AKA Heading in degrees
+     * Used to get the heading of the robot in degrees
+     * with clockwise rotation of the bot being positive.
+     * DO NOT USE THIS METHOD FOR BUILT-IN METHODS!!!
+     * THEY REQUIRE COUNTERCLOCKWISE POSITIVE FOR CORRECT
+     * CALCULATIONS!
      * @return the yaw axis rotation of the bot as a double
      */
     public double getHeading() {
         // return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
-        double yaw = pigeon2.getYaw().getValueAsDouble();
+        double yaw = -pigeon2.getYaw().getValueAsDouble();
 
         // Normalize to [0, 360)
         yaw = ((yaw % 360) + 360) % 360;
@@ -266,6 +270,12 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return pigeon2.getAngularVelocityZWorld().getValueAsDouble();
     }
 
+    /**
+     * Used to get the heading of the robot in Rotation2d
+     * with counterclocwise rotation being positive.
+     *
+     * @return the yaw axis rotation of the bot as a double
+     */
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(pigeon2.getYaw().getValueAsDouble());
         //THe negative is supposed to help work for teleop; Should FIX
