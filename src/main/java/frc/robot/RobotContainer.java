@@ -44,7 +44,7 @@ public class RobotContainer {
 		SwerveDrive drive,
 		Elevator elevator,
 		Carriage carriage,
-		Climb climb,
+		// Climb climb,
 		Vision vision
 		) {
 		
@@ -60,7 +60,7 @@ public class RobotContainer {
 		elevator.setDefaultCommand(new ManualElevator(elevator, operator::getRightY));
 		// vision.setDefaultCommand(new LightCommand(driver, vision));
 		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
-		climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
+		// climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
 
 		driver.leftBumper()
 			.onTrue(new TeleopAlign(drive, vision, driver));
@@ -78,10 +78,10 @@ public class RobotContainer {
 		driver.x() //To Test
 			.onTrue(new TeleopCommands().barge(elevator, carriage));
 
-		driver.povUp()
-			.onTrue(climb.setTargetPositionCommand(Climb.hold));
-		driver.povDown()
-			.onTrue(climb.setTargetPositionCommand(Climb.climb));
+		// driver.povUp()
+		// 	.onTrue(climb.setTargetPositionCommand(Climb.hold));
+		// driver.povDown()
+		// 	.onTrue(climb.setTargetPositionCommand(Climb.climb));
 
 		// driver.povRight()
 		// 	.onTrue(new TeleopCommands().resetHP(elevator, carriage, CarriageValue.BARGE_HOLD));

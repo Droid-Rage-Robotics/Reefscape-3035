@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
         new Intake(false)
     );
     
-    private Climb climb = new Climb(false);
+    // private Climb climb = new Climb(false);
     private final Vision vision = new Vision();
 
     private final CommandXboxController driver =
@@ -159,7 +159,9 @@ public class Robot extends TimedRobot {
 
         // drive.changeAllianceRotation(); // NO USE
         
-        robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
+        // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
+        robotContainer.configureTeleOpBindings(drive, elevator, carriage, vision);
+
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 
