@@ -30,7 +30,7 @@ public class Turning extends Command {
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
-    private static final PIDController turnController = new PIDController(0.01, 0, 0.00005);
+    private static final PIDController turnController = new PIDController(0.025, 0, 0.00005);
 
     // private SlewRateLimiter xLimiter = new
     // SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
@@ -100,7 +100,7 @@ public class Turning extends Command {
 
         turnController.enableContinuousInput(0, 360);
 
-        turnSpeed = turnController.calculate(drive.getHeading(), goalTurn);
+        turnSpeed = turnController.calculate(drive.getHeading(), -goalTurn);
 
         
         

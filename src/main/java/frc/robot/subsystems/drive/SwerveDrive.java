@@ -136,7 +136,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     @Override
     public void elasticInit() {
         SmartDashboard.putData("Drive/Swerve Drive", this);
-        SmartDashboard.putData("Drive/Gyro", pigeon2);
+        SmartDashboard.putData("Drive/Gyro", heading);
         SmartDashboard.putData("Drive/Drive Pose", field);
         SmartDashboard.putData("Drive/Vision Pose", visionField);
         SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);    
@@ -166,6 +166,14 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
     }
 
+    public final Sendable heading = new Sendable() {
+        @Override
+        public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Gyro");
+            builder.addDoubleProperty("Value", () -> getHeadingCW(), null);
+        }
+    };
+
     public final Sendable encoderDebug = new Sendable() {
         @Override
         public void initSendable(SendableBuilder builder) {
@@ -173,7 +181,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
             builder.addDoubleProperty("Drive/Angle "+frontRight.getPodName(), () -> frontRight.getTurningPosition(), null);
             builder.addDoubleProperty("Drive/Angle "+backLeft.getPodName(), () -> backLeft.getTurningPosition(), null);
             builder.addDoubleProperty("Drive/Angle "+backRight.getPodName(), () -> backRight.getTurningPosition(), null);
-            builder.addDoubleProperty("Drive/Heading", () -> getHeading(), null);
+            builder.addDoubleProperty("Drive/Heading", () -> getHeadingCW(), null);
             builder.addDoubleProperty("Drive/Roll", () -> getRoll(), null);
             builder.addDoubleProperty("Drive/Pitch", () -> getPitch(), null);
         }
@@ -242,13 +250,13 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     /**
      * Used to get the heading of the robot in degrees
-     * with clockwise rotation of the bot being positive.
-     * DO NOT USE THIS METHOD FOR BUILT-IN METHODS!!!
-     * THEY REQUIRE COUNTERCLOCKWISE POSITIVE FOR CORRECT
-     * CALCULATIONS!
-     * @return the yaw axis rotation of the bot as a double
+     * with CLOCKWISE rotation being positive. This
+     * value is wrapped to [0,360]. ONLY USE THIS METHOD
+     * IF YOU KNOW WHAT YOU ARE DOING!
+     * 
+     * @return the heading of the robot as a double
      */
-    public double getHeading() {
+    public double getHeadingCW() {
         // return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
         double yaw = -pigeon2.getYaw().getValueAsDouble();
 
@@ -256,6 +264,17 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         yaw = ((yaw % 360) + 360) % 360;
 
         return yaw;
+    }
+    
+    /**
+     * Used to get the heading of the robot in degrees
+     * with COUNTERCLOCKWISE rotation being positive. This
+     * value is wrapped to [-180, 180].
+     *
+     * @return the heading of the robot as a double
+     */
+    public double getHeading() {
+        return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
     }
 
     public double getPitch() {
@@ -272,14 +291,12 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     /**
      * Used to get the heading of the robot in Rotation2d
-     * with counterclocwise rotation being positive.
+     * with COUNTERCLOCKWISE rotation being positive. 
      *
-     * @return the yaw axis rotation of the bot as a double
+     * @return the heading of the robot as a Rotation2d
      */
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(pigeon2.getYaw().getValueAsDouble());
-        //THe negative is supposed to help work for teleop; Should FIX
-
     }
 
     // public void setPose(Pose2d pose){
