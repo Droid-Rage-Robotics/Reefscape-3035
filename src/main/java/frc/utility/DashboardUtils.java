@@ -3,6 +3,12 @@ package frc.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class DashboardUtils {
     /**
      * Determines whether writers placed in {@code practiceWriters()}
@@ -51,6 +57,9 @@ public class DashboardUtils {
                 pub.practiceWriters();
             }
         }
+
+        SmartDashboard.putData("Distribution", powerDistribution);
+
     }
     
     public interface Dashboard{
@@ -64,5 +73,24 @@ public class DashboardUtils {
          * to only be used during practice to prevent loop overruns
          */
         public void practiceWriters();
+    }
+
+    private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
+    private static final Elastic.Notification notification = new Elastic.Notification();
+    private static final PowerDistribution powerDistribution = new PowerDistribution();
+
+    
+    public static void DisabledPeriodic() {
+        if (RobotController.getBatteryVoltage()<12.5) {
+            batteryAlert.set(true);
+            batteryAlert.setText("Battery Voltage Low");
+            // Elastic.sendNotification(notification
+            //     .withLevel(Elastic.Notification.NotificationLevel.ERROR)
+            //     .withTitle("Battery")
+            //     .withDescription("Battery Low!")
+            //     .withDisplaySeconds(10.0));
+        } else {
+            batteryAlert.set(false);
+        }
     }
 }

@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,10 +27,6 @@ import frc.robot.subsystems.carriage.Pivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 import frc.utility.DashboardUtils;
-import frc.utility.Elastic;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
-import frc.utility.motor.TalonEx;
 import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
@@ -61,11 +56,8 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
     private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
-    private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
-    // private static final Elastic.Notification notification = new Elastic.Notification();
 
     // public boolean teleopRan;
-    private PowerDistribution powerDistribution = new PowerDistribution();
     private Command autonomousCommand;
   
     @Override
@@ -82,11 +74,8 @@ public class Robot extends TimedRobot {
         // DriverStation.startDataLog(DataLogManager.getLog());
         
         // vision.setUpVision();
-        SmartDashboard.putData("Distribution", powerDistribution);
         SmartDashboard.putData("Robot Misc", DroidRageConstants.robotMisc);
-        // teleopRan = false;
         // CameraServer.startAutomaticCapture(); //DO NOT USE
-        
     }
     
     @Override
@@ -99,43 +88,25 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        // if(teleopRan) {
-        //     cycleTracker.printAllData(carriage);
-        // }
     }
     
     @Override
     public void disabledPeriodic() {
-        //In Here, Try using controller to pick the auto
-        if(RobotController.getBatteryVoltage()<12.5){
-            batteryAlert.set(true);
-            batteryAlert.setText("Battery Voltage Low");
-            // Elastic.sendNotification(notification
-            //     .withLevel(Elastic.Notification.NotificationLevel.ERROR)
-            //     .withTitle("Battery")
-            //     .withDescription("Battery Low!")
-            //     .withDisplaySeconds(10.0));
-            // light.setAllColor(light.batteryBlue);
-        } 
-        else{
-            batteryAlert.set(false);
-            // light.flashingColors(light.yellow, light.blue);
-        }
-        // light.setAllColor(light.blue);
+        // DashboardUtils.DisabledPeriodic();
     }
 
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        SignalLogger.start();
+        // SignalLogger.start(); // CTRE Signal Logger
 
-        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = autoChooser.getAutonomousCommand();
         // autonomousCommand = new InstantCommand();
 
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-        }
+        // if (autonomousCommand != null) {
+        //     autonomousCommand.schedule();
+        // }
     }
 
     @Override
@@ -146,11 +117,18 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void autonomousExit(){
+        SignalLogger.stop();
+        if (autonomousCommand != null) {
+        autonomousCommand.cancel();
+        }
+    }
+
+    @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        // SignalLogger.start();
-
+        // SignalLogger.start(); // CTRE Signal Logger
         
         // if (autonomousCommand != null) {
         //     autonomousCommand.cancel();
@@ -167,7 +145,6 @@ public class Robot extends TimedRobot {
 
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
-        // teleopRan = true;
     }
 
     @Override
@@ -181,7 +158,12 @@ public class Robot extends TimedRobot {
 		// } 
     
     }
-    
+
+    @Override
+    public void teleopExit(){
+        SignalLogger.stop();
+        // cycleTracker.printAllData();
+    }
     
     @Override
     public void testInit() {
@@ -195,19 +177,4 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationPeriodic() {}
-
-    @Override
-    public void teleopExit(){
-        SignalLogger.stop();
-        // cycleTracker.printAllData();
-    }
-
-    @Override
-    public void autonomousExit(){
-        SignalLogger.stop();
-        if (autonomousCommand != null) {
-        autonomousCommand.cancel();
-        }
-        
-    }
 }
