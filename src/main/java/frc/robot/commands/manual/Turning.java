@@ -26,7 +26,7 @@ public class Turning extends Command {
     private final SwerveDrive drive;
     private final CommandXboxController driver;
     private final Supplier<Double> x, y, turnX, turnY;
-    private volatile double xSpeed, ySpeed, turnSpeed, goalTurn;
+    private volatile double xSpeed, ySpeed, turnSpeed, rightStickDeg;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
@@ -72,7 +72,6 @@ public class Turning extends Command {
     public void execute() {
         xSpeed = -y.get(); // Forward
         ySpeed = -x.get(); // Strafe
-        // turnSpeed = -turnX.get(); // Turn
 
         // Square inputs
         if (DriveOptions.IS_SQUARED_INPUTS.get()) {
@@ -80,27 +79,12 @@ public class Turning extends Command {
             ySpeed = DroidRageConstants.squareInput(ySpeed);
             // turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
-
-
-        // //Get Turn Now
-        // // Math.atan2(turnY.get(), turnX.get());
-        // double goalTurn = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()))-90;
         
-        // turnGoalWriter = Math.toDegrees(Math.atan2(-turnY.get(), turnX.get()));
-        // turnGoalWriter = (Math.IEEEremainder(goalTurn,360)-90);
-
-
-
-        
-        // goalTurn = (Math.IEEEremainder(goalTurn,360)-90); // -90
-        
-        // SmartDashboard.putNumber("Drive/Turn Goal",goalTurn);
-        
-        goalTurn = ControllerUtils.getRightStickDeg(driver);
+        rightStickDeg = ControllerUtils.getRightStickDeg(driver);
 
         turnController.enableContinuousInput(0, 360);
 
-        turnSpeed = turnController.calculate(drive.getHeading(), -goalTurn);
+        turnSpeed = turnController.calculate(drive.getHeading(), -rightStickDeg); // needs to be negative because calculations are CCW+
 
         
         
@@ -169,7 +153,7 @@ public class Turning extends Command {
         @Override
         public void initSendable(SendableBuilder builder) {
             builder.setSmartDashboardType("Gyro");
-            builder.addDoubleProperty("Value", () -> goalTurn, null);
+            builder.addDoubleProperty("Value", () -> rightStickDeg, null); // doesn't need negative because we observe CW+
         }
     };
 }
