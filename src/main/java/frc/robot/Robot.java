@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,11 +29,11 @@ import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
     private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
-    private final Elevator elevator = new Elevator(false);
+    private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
-        new Arm(false),
-        new Pivot(false),
-        new Intake(false)
+        new Arm(true),
+        new Pivot(true),
+        new Intake(true)
     );
     
     // private Climb climb = new Climb(false);
@@ -62,12 +60,11 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
-        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+        // WebServer.start(5801, Filesystem.getDeployDirectory().getPath());
         SignalLogger.setPath("/home/lvuser/logs/ctre/");
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
-        DashboardUtils.initAll();
+        DashboardUtils.onRobotInit();
 
-        
         // // Starts recording to data log
         // DataLogManager.start();
         // // Record both DS control and joystick data
@@ -87,12 +84,11 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit() {
-    }
+    public void disabledInit() {}
     
     @Override
     public void disabledPeriodic() {
-        // DashboardUtils.DisabledPeriodic();
+        DashboardUtils.onDisabledPeriodic();
     }
 
     @Override

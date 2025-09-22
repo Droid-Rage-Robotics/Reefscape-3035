@@ -1,13 +1,21 @@
 package frc.utility;
 
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.DroidRageConstants;
+import com.sun.net.httpserver.HttpServer;
 
 public class DashboardUtils {
     /**
@@ -35,33 +43,6 @@ public class DashboardUtils {
         public static MatchValue Match = MatchValue.PRACTICE;
     }
 
-    private static final List<Dashboard> publishers = new ArrayList<>();
-    
-    /**
-     * Call this function to register the subsystem's {@code elasticInit()} method
-     * to be run at robot startup
-     * @param subsystem set to {@code this} while in a subsystem class
-     */
-    public static void register(Dashboard subsystem) {
-        publishers.add(subsystem);
-    }
-    
-    /**
-     * Call this once in {@code Robot.robotInit()}
-     */
-    public static void initAll() {
-        for (Dashboard pub : publishers) {
-            pub.elasticInit();
-
-            if(Config.Match==MatchValue.PRACTICE) {
-                pub.practiceWriters();
-            }
-        }
-
-        SmartDashboard.putData("Distribution", powerDistribution);
-
-    }
-    
     public interface Dashboard{
         /**
          * Place all elastic configs in here to be run at robot startup
@@ -75,20 +56,56 @@ public class DashboardUtils {
         public void practiceWriters();
     }
 
+    private static final List<Dashboard> publishers = new ArrayList<>();
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     private static final Elastic.Notification notification = new Elastic.Notification();
     private static final PowerDistribution powerDistribution = new PowerDistribution();
-
     
-    public static void DisabledPeriodic() {
-        if (RobotController.getBatteryVoltage()<12.5) {
+    /**
+     * Call this function to register the subsystem's {@code elasticInit()} method
+     * to be run at robot startup
+     * @param subsystem set to {@code this} while in a subsystem class
+     */
+    public static void register(Dashboard subsystem) {
+        publishers.add(subsystem);
+    }
+    
+    /**
+     * Elastic configurations to run when the robot initializes. Call this once
+     * in {@code Robot.robotInit()}
+     */
+    public static void onRobotInit() {
+        for (Dashboard pub : publishers) {
+            pub.elasticInit();
+
+            if(Config.Match==MatchValue.PRACTICE) {
+                pub.practiceWriters();
+            }
+        }
+
+        if (DroidRageConstants.BatteryLow) {
+            Elastic.sendNotification(notification
+                .withLevel(Elastic.Notification.NotificationLevel.ERROR)
+                .withTitle("Battery")
+                .withDescription("Battery Low!")
+                .withDisplaySeconds(10.0));
+        }
+
+        SmartDashboard.putData("Distribution", powerDistribution);
+
+        // WebServer.start(1181, Filesystem.getDeployDirectory().getAbsolutePath());
+        // PortForwarder.add(5800, "localhost", 1181);
+
+    }
+
+    /**
+     * Elastic configurations to run while the robot is disabled. Call this once
+     * in {@code Robot.disabledPeriodic()}
+     */
+    public static void onDisabledPeriodic() {
+        if (DroidRageConstants.BatteryLow) {
             batteryAlert.set(true);
             batteryAlert.setText("Battery Voltage Low");
-            // Elastic.sendNotification(notification
-            //     .withLevel(Elastic.Notification.NotificationLevel.ERROR)
-            //     .withTitle("Battery")
-            //     .withDescription("Battery Low!")
-            //     .withDisplaySeconds(10.0));
         } else {
             batteryAlert.set(false);
         }
