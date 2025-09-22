@@ -26,7 +26,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final int mainNum;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
-    private final TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+    private TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
     // REV TOUCH SENSOR
 
     /**
@@ -150,23 +150,23 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             //     setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
             //     +feedforward.calculateWithVelocities(1, 1));
             //     break;
-            case TRAPEZOID_PROFILE:
-                current = profile.calculate(0.02, current, goal);
-                
-                setVoltage(controller.calculate(getEncoderPosition(), current.position)
-                        + feedforward.calculate(current.position, current.velocity));
-                break;
             // case TRAPEZOID_PROFILE:
-            //     // Advance the profile by one loop timestep (0.02s = 20ms)
-            //     TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
-
-            //     double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
-
-            //     double pid = controller.calculate(getEncoderPosition(), controller.getSetpoint());
-
-            //     setVoltage(ff + pid);
-            //     current = next;
+            //     current = profile.calculate(0.02, current, goal);
+                
+            //     setVoltage(controller.calculate(getEncoderPosition(), current.position)
+            //             + feedforward.calculate(current.position, current.velocity));
             //     break;
+            case TRAPEZOID_PROFILE:
+                // Advance the profile by one loop timestep (0.02s = 20ms)
+                TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
+
+                double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
+
+                double pid = controller.calculate(getEncoderPosition(), next.position);
+
+                setVoltage(ff + pid);
+                current = next;
+                break;
         }       
     }
 
@@ -185,6 +185,16 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     public void setTargetPosition(double target) {
         if(target>maxPosition||target<minPosition) return;
         controller.setSetpoint(target);
+    }
+
+    public void setGoalState(TrapezoidProfile.State goal) {
+        if(goal.position>maxPosition||goal.position<minPosition) return;
+        current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
+        this.goal=goal;
+    }
+
+    public Command setGoalStateCommand(TrapezoidProfile.State goal) {
+        return new InstantCommand(()->setGoalState(goal));
     }
     
     public double getTargetPosition(){

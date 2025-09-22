@@ -45,6 +45,31 @@ public class Elevator extends ElevatorTemplate{
         }
     }
 
+    public enum GoalValue {
+        START(new TrapezoidProfile.State(0,0)),
+        GROUND(new TrapezoidProfile.State(0,0)),
+        INTAKE_HPS(new TrapezoidProfile.State(0,0)),
+        CLIMB(new TrapezoidProfile.State(0,0)),
+        
+        L1(new TrapezoidProfile.State(0,0)),
+        L2(new TrapezoidProfile.State(7.2,0)),
+        L3(new TrapezoidProfile.State(22,0)),
+
+        L4(new TrapezoidProfile.State(54.5,0)),
+  
+        ALGAE_LOW(new TrapezoidProfile.State(24.1,0)),
+        ALGAE_HIGH(new TrapezoidProfile.State(40,0)),
+        BARGE(new TrapezoidProfile.State(54.5,0)),
+        PROCESSOR(new TrapezoidProfile.State(5,0))
+        ;
+
+        @Getter private final TrapezoidProfile.State goal;
+
+        private GoalValue(TrapezoidProfile.State goal) {
+            this.goal=goal;
+        }
+    }
+
     public double resetPos = 7;
 
     // GearRatio.Type type = GearRatio.Type.DISTANCE;
