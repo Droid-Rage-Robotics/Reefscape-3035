@@ -64,14 +64,14 @@ public class Carriage {
     }
 
     public enum CarriageIntakeValue {
-        INTAKE(30),//50
-        OUTTAKE(-65), //130
-        OUTTAKE_PROCESSOR(-25),
-        OUTTAKE_L1(-50),
-        SHOOT(-700),
+        INTAKE(40), // 50
+        OUTTAKE(-65), // -130
+        OUTTAKE_PROCESSOR(-10), // -25
+        OUTTAKE_L1(-45), // -50
+        SHOOT(-100), // -700
         // HOLD(10),
-        HOLD_ALGAE(30),
-        HOLD_CORAL(3),
+        HOLD_ALGAE(15), // 30
+        HOLD_CORAL(5), // 3
         STOP(0);
 
         @Getter private final double intakeSpeed;
