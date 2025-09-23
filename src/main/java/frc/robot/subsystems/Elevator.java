@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
@@ -18,6 +19,21 @@ public class Elevator extends ElevatorTemplate{
     public static class Constants {
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 55.2;   //40
+        private static final double GEAR_RATIO = 12.0; // motor : sprocket
+        private static final double SPROCKET_TEETH = 24;
+        private static final double CHAIN_PITCH_METERS = Units.inchesToMeters(0.25);
+
+
+        // Derived sprocket pitch diameter
+        private static final double SPROCKET_DIAMETER_METERS =
+            (CHAIN_PITCH_METERS * SPROCKET_TEETH) / Math.PI;
+
+        // Circumference for one sprocket rev
+        private static final double SPROCKET_CIRCUMFERENCE_METERS =
+            Math.PI * SPROCKET_DIAMETER_METERS;
+
+        public static final double MOTOR_ROT_2_METER = SPROCKET_CIRCUMFERENCE_METERS / GEAR_RATIO;
+
     }
 
     public enum ElevatorValue {
@@ -42,31 +58,6 @@ public class Elevator extends ElevatorTemplate{
 
         private ElevatorValue(double height) {
             this.height = height;
-        }
-    }
-
-    public enum GoalValue {
-        START(new TrapezoidProfile.State(0,0)),
-        GROUND(new TrapezoidProfile.State(0,0)),
-        INTAKE_HPS(new TrapezoidProfile.State(0,0)),
-        CLIMB(new TrapezoidProfile.State(0,0)),
-        
-        L1(new TrapezoidProfile.State(0,0)),
-        L2(new TrapezoidProfile.State(7.2,0)),
-        L3(new TrapezoidProfile.State(22,0)),
-
-        L4(new TrapezoidProfile.State(54.5,0)),
-  
-        ALGAE_LOW(new TrapezoidProfile.State(24.1,0)),
-        ALGAE_HIGH(new TrapezoidProfile.State(40,0)),
-        BARGE(new TrapezoidProfile.State(54.5,0)),
-        PROCESSOR(new TrapezoidProfile.State(5,0))
-        ;
-
-        @Getter private final TrapezoidProfile.State goal;
-
-        private GoalValue(TrapezoidProfile.State goal) {
-            this.goal=goal;
         }
     }
 
@@ -95,8 +86,7 @@ public class Elevator extends ElevatorTemplate{
         new PIDController(0.9, 0, 0), //.6
         new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1
         new TrapezoidProfile.Constraints(.5, 0.5),
-        Constants.MAX_POSITION,
-        Constants.MIN_POSITION, 
+        Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
         Control.FEEDFORWARD, "Elevator", 0, isEnabled);
     }
 

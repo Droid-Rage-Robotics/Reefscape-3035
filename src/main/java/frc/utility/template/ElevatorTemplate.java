@@ -23,6 +23,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final Control control;
     private final double maxPosition;
     private final double minPosition;
+    private final double conversionFactor;
     private final int mainNum;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -47,6 +48,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         TrapezoidProfile.Constraints constraints,
         double maxPosition,
         double minPosition,
+        double conversionFactor,
         Control control,
         String name,
         int mainNum,
@@ -58,6 +60,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.control=control;
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
+        this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
 
         profile = new TrapezoidProfile(constraints);
@@ -91,6 +94,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         TrapezoidProfile.Constraints constraints,
         double maxPosition,
         double minPosition,
+        double conversionFactor,
         Control control,
         String name,
         int mainNum,
@@ -103,6 +107,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.control=control;
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
+        this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
 
         for (CANMotorEx motor: motors) {
@@ -184,17 +189,9 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      */
     public void setTargetPosition(double target) {
         if(target>maxPosition||target<minPosition) return;
-        controller.setSetpoint(target);
-    }
-
-    public void setGoalState(TrapezoidProfile.State goal) {
-        if(goal.position>maxPosition||goal.position<minPosition) return;
+        goal = new TrapezoidProfile.State(target,0);
         current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
-        this.goal=goal;
-    }
-
-    public Command setGoalStateCommand(TrapezoidProfile.State goal) {
-        return new InstantCommand(()->setGoalState(goal));
+        controller.setSetpoint(target);
     }
     
     public double getTargetPosition(){
@@ -216,6 +213,10 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
     public double getEncoderPosition() {
         return motors[mainNum].getPosition();
+    }
+
+    public double getVelocity() {
+        return motors[mainNum].getVelocity() * conversionFactor;
     }
 
     public CANMotorEx getMotor() {
