@@ -1,5 +1,9 @@
 package frc.utility.template;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -9,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
@@ -188,10 +193,18 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      * Use this for initialization
      */
     public void setTargetPosition(double target) {
-        if(target>maxPosition||target<minPosition) return;
-        goal = new TrapezoidProfile.State(target,0);
-        current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
-        controller.setSetpoint(target);
+        switch (control) {
+            case PID,FEEDFORWARD:
+                if(target>maxPosition||target<minPosition) return;
+                controller.setSetpoint(target);
+            case TRAPEZOID_PROFILE:
+                if(target>maxPosition||target<minPosition) {
+                    return;
+                } else {
+                    goal = new TrapezoidProfile.State(target,0);
+                    current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
+                }
+        }
     }
     
     public double getTargetPosition(){
@@ -229,5 +242,22 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
     public boolean atSetPoint(){
         return controller.atSetpoint();
+    }
+
+    public SysIdRoutine getSysIdRoutine() {
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
+            ),
+            new SysIdRoutine.Mechanism( 
+                (voltage) -> { 
+                    for(CANMotorEx motor: motors) {
+                        setVoltage(voltage.in(Volts));
+                    }
+                }, null, this)
+        );
     }
 }

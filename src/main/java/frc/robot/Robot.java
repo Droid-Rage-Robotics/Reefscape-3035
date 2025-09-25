@@ -28,7 +28,7 @@ import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(false);//-10 Works
     private final Elevator elevator = new Elevator(true);
     private final Carriage carriage = new Carriage(
         new Arm(true),
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        // SignalLogger.start(); // CTRE Signal Logger
+        SignalLogger.start(); // CTRE Signal Logger
         
         // if (autonomousCommand != null) {
         //     autonomousCommand.cancel();
