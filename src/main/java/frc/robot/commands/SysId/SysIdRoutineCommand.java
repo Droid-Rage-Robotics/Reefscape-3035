@@ -8,12 +8,12 @@ public class SysIdRoutineCommand extends SequentialCommandGroup {
     public SysIdRoutineCommand(SysIdRoutine routine) {
         addCommands(
             routine.quasistatic(SysIdRoutine.Direction.kForward),
-            new WaitCommand(1),
+            new WaitCommand(0.1),
             routine.quasistatic(SysIdRoutine.Direction.kReverse),
-            new WaitCommand(1),
-            routine.dynamic(SysIdRoutine.Direction.kForward).withTimeout(10),
-            new WaitCommand(1),
-            routine.dynamic(SysIdRoutine.Direction.kReverse).withTimeout(10)
+            new WaitCommand(0.1),
+            routine.dynamic(SysIdRoutine.Direction.kForward),
+            new WaitCommand(0.1),
+            routine.dynamic(SysIdRoutine.Direction.kReverse)
         );
     }
 }

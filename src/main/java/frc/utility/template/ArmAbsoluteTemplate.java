@@ -77,6 +77,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
                 setVoltage(controller.calculate(getEncoderPosition(), current.position)
                         + feedforward.calculate(current.position, current.velocity));
                 break;
+            case SYS_ID: break;
         };   
     }
 

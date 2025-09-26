@@ -113,7 +113,8 @@ public final class DroidRageConstants {
     public enum Control{
         PID,
         FEEDFORWARD,
-        TRAPEZOID_PROFILE
+        TRAPEZOID_PROFILE,
+        SYS_ID
     }
     
     public interface MutableSupplier<T> {

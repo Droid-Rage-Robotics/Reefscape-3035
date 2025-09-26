@@ -127,6 +127,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
                 setVoltage(ff + pid);
                 current = next;
                 break;
+            case SYS_ID: break;
         };        
     }
 

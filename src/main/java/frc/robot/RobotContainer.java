@@ -17,6 +17,7 @@ import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.TeleopCommands;
 import frc.robot.commands.Turn180Degrees;
 import frc.robot.commands.SysId.SysIdCommand;
+import frc.robot.commands.SysId.SysIdRoutineCommand;
 import frc.robot.commands.drive.TeleopAlign;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
@@ -161,4 +162,9 @@ public class RobotContainer {
 		// driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
 		// driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	}
+	public void sysID(CommandXboxController driver, SysIdRoutine routine, Carriage carriage) {
+        driver.b().onTrue(carriage.setPositionCommand(CarriageValue.L2));
+		
+		driver.a().onTrue(new SysIdRoutineCommand(routine));
+    }
 }

@@ -145,6 +145,8 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
                 setVoltage(controller.calculate(getEncoderPosition(), current.position)
                         + feedforward.calculate(current.position, current.velocity));
                 break;
+
+            case SYS_ID: break;
         };        
     }
 
