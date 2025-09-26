@@ -7,6 +7,7 @@ import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -177,6 +178,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 setVoltage(ff + pid);
                 current = next;
                 break;
+            case SYS_ID: break;
         }       
     }
 
@@ -197,6 +199,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             case PID,FEEDFORWARD:
                 if(target>maxPosition||target<minPosition) return;
                 controller.setSetpoint(target);
+                break;
             case TRAPEZOID_PROFILE:
                 if(target>maxPosition||target<minPosition) {
                     return;
@@ -204,6 +207,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     goal = new TrapezoidProfile.State(target,0);
                     current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
                 }
+                break;
+            case SYS_ID: break;
         }
     }
     
@@ -212,6 +217,12 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     }
     
     protected void setVoltage(double voltage) {
+        for (CANMotorEx motor: motors) {
+            motor.setVoltage(voltage);
+        }
+    }
+
+    protected void setVoltage(Voltage voltage) {
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -244,20 +255,5 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         return controller.atSetpoint();
     }
 
-    public SysIdRoutine getSysIdRoutine() {
-        return new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, // Use default ramp rate (1 V/s)
-                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-                null, // Use default timeout (10 s)
-                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
-            ),
-            new SysIdRoutine.Mechanism( 
-                (voltage) -> { 
-                    for(CANMotorEx motor: motors) {
-                        setVoltage(voltage.in(Volts));
-                    }
-                }, null, this)
-        );
-    }
+    
 }

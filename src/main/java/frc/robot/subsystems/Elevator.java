@@ -1,10 +1,15 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -85,11 +90,11 @@ public class Elevator extends ElevatorTemplate{
         new CANMotorEx[]{motorRight, motorLeft}, 
         new PIDController(0.9, 0, 0), //.6
         // new PIDController(0, 0, 0), // TRAPEZOID
-        new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1
+        new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1 //2.2696kv
         // new ElevatorFeedforward(0.3, 0, 0.05,0), // TRAPEZOID
         new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
-        Control.FEEDFORWARD, "Elevator", 0, isEnabled);
+        Control.SYS_ID, "Elevator", 0, isEnabled);
     }
 
     @Override
@@ -104,5 +109,22 @@ public class Elevator extends ElevatorTemplate{
     public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
-    }    
+    }
+
+    public SysIdRoutine getSysIdRoutine() {
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                Volts.of(7), // Reduce dynamic step voltage to 4 to prevent brownout
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                motorLeft.setVoltage(voltage);
+                motorRight.setVoltage(voltage);
+            }, null, this)
+        );
+    }
+    
+    
 }

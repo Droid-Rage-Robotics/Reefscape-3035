@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.SysID.SysID;
 import frc.robot.SysID.SysID.Measurement;
+import frc.robot.commands.SysId.ManualSysIdRoutine;
+import frc.robot.commands.SysId.SysIdRoutineCommand;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
@@ -33,7 +35,7 @@ public class Robot extends TimedRobot {
     private final Carriage carriage = new Carriage(
         new Arm(true),
         new Pivot(true),
-        new Intake(true)
+        new Intake(false)
     );
     
     // private Climb climb = new Climb(false);
@@ -49,7 +51,7 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();*
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
-    private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake());
+    // private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake());
     // private Field2d field = new Field2d();
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
@@ -141,6 +143,7 @@ public class Robot extends TimedRobot {
 
         // robotContainer.sysID(driveSysID);
         // robotContainer.sysID(sysID);
+        // robotContainer.sysID(driver, elevator.getSysIdRoutine(),carriage);
     }
 
     @Override
