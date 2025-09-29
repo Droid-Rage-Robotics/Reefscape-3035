@@ -6,6 +6,7 @@ import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -23,7 +24,8 @@ import frc.utility.motor.CANMotorEx;
 //Works
 public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final CANMotorEx[] motors;
-    private final PIDController controller;
+    private PIDController controller;
+    private ProfiledPIDController profiledController;
     private final ElevatorFeedforward feedforward;
     private DigitalInput limitSwitch;
     private final Control control;
@@ -31,8 +33,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final double minPosition;
     private final double conversionFactor;
     private final int mainNum;
-    private final TrapezoidProfile profile;
-    private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
+    private TrapezoidProfile profile;
+    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State(0,0); //initial
+    private TrapezoidProfile.State currentState = new TrapezoidProfile.State(0,0); //initial
+    
+
     private TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
     // REV TOUCH SENSOR
 
@@ -126,6 +131,47 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         DashboardUtils.register(this);
     }
 
+    /**
+     * @param motors - The Motors to Control
+     * @param controller - PID Controller
+     * @param feedforward - Feedforward
+     * @param maxPosition 
+     * @param minPosition
+     * @param control - PID or FEEDFORWARD
+     * @param name - Name of Subsystem
+     * @param mainNum - Motor to use for Encoder
+     */
+    public ElevatorTemplate(
+        CANMotorEx[] motors,
+        ProfiledPIDController profiledcController,
+        ElevatorFeedforward feedforward,
+        double maxPosition,
+        double minPosition,
+        double conversionFactor,
+        Control control,
+        String name,
+        int mainNum,
+        boolean isEnabled
+    ){
+        this.motors=motors;
+        this.profiledController=profiledcController;
+        this.feedforward=feedforward;
+        this.control=control;
+        this.maxPosition=maxPosition;
+        this.minPosition=minPosition;
+        this.conversionFactor=conversionFactor;
+        this.mainNum=mainNum;
+
+        for (CANMotorEx motor: motors) {
+            motor.setIsEnabled(isEnabled);
+        }
+
+        // profile = new TrapezoidProfile(constraints);
+        // controller.setTolerance(.3);
+
+        DashboardUtils.register(this);
+    }
+
     @Override
     public void elasticInit() {
         SmartDashboard.putData("Elevator", this);
@@ -139,9 +185,19 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Target Position", controller::getSetpoint, null);
-        builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
-        builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
+        switch(control) {
+            case TRAPEZOID_PROFILE:
+                builder.addDoubleProperty("Target Position", ()-> profiledController.getSetpoint().position, null);
+                builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
+                builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
+                break;
+
+            default:
+                builder.addDoubleProperty("Target Position", controller::getSetpoint, null);
+                builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
+                builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
+                break;
+        }        
     }
 
     @Override
@@ -169,14 +225,18 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             //     break;
             case TRAPEZOID_PROFILE:
                 // Advance the profile by one loop timestep (0.02s = 20ms)
-                TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
+                // TrapezoidProfile.State next = profile.calculate(0.02, currentState, goal);
 
-                double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
+                // double ff = feedforward.calculateWithVelocities(currentSetpoint.velocity, next.velocity);
 
-                double pid = controller.calculate(getEncoderPosition(), next.position);
+                // double pid = controller.calculate(getEncoderPosition(), next.position);
+
+                double pid = profiledController.calculate(getEncoderPosition());
+
+                double ff = feedforward.calculate(profiledController.getSetpoint().velocity);
 
                 setVoltage(ff + pid);
-                current = next;
+                // currentSetpoint = next;
                 break;
             case SYS_ID: break;
         }       
@@ -204,8 +264,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 if(target>maxPosition||target<minPosition) {
                     return;
                 } else {
-                    goal = new TrapezoidProfile.State(target,0);
-                    current = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
+                    // goal = new TrapezoidProfile.State(target,0);
+                    // currentState = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
+
+                    profiledController.reset(getEncoderPosition(), getVelocity());
+                    profiledController.setGoal(target);
                 }
                 break;
             case SYS_ID: break;

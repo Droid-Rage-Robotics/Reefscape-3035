@@ -6,6 +6,7 @@ import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -88,13 +89,13 @@ public class Elevator extends ElevatorTemplate{
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft}, 
-        new PIDController(0.9, 0, 0), //.6
-        // new PIDController(0, 0, 0), // TRAPEZOID
-        new ElevatorFeedforward(0.1, 0.18, 0, 0.), //.1 //2.2696kv
+        // new PIDController(1, 0, 0), //.6
+        new ProfiledPIDController(1, 0, 0,         
+        new TrapezoidProfile.Constraints(0.5, 0.5)),
+        new ElevatorFeedforward(0.1, 0.18, 0.1, 0), //.1 //2.2696kv
         // new ElevatorFeedforward(0.3, 0, 0.05,0), // TRAPEZOID
-        new TrapezoidProfile.Constraints(.5, 0.5),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
-        Control.SYS_ID, "Elevator", 0, isEnabled);
+        Control.TRAPEZOID_PROFILE, "Elevator", 0, isEnabled);
     }
 
     @Override
