@@ -69,7 +69,7 @@ public class TeleopCommands{
             new WaitUntilCommand(()->
                 Math.abs(carriage.getArm().getTargetPosition()-carriage.getArm().getEncoderPosition())<3),
             elevator.setTargetPositionCommand(ElevatorValue.BARGE),
-            new WaitUntilCommand(()->elevator.getEncoderPosition()>=47),
+            new WaitUntilCommand(()->elevator.getPosition()>=47),
             // new WaitCommand(1),
             carriage.setPositionCommand(CarriageValue.BARGE)
         );
@@ -108,14 +108,14 @@ public class TeleopCommands{
                                 new WaitCommand(.2),
                                 elevator.setTargetPositionCommand(ElevatorValue.GROUND),
 
-                                new WaitUntilCommand(() -> elevator.getEncoderPosition() < elevator.resetPos),
+                                new WaitUntilCommand(() -> elevator.getPosition() < elevator.resetPos),
                                 carriage.getArm().setTargetPositionCommand(value.getArmAngle()),
                                 carriage.getPivot().setTargetPositionCommand(value.getPivotAngle())
                         );
                     case INTAKE_GROUND:
                         yield new SequentialCommandGroup(
                                 elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
-                                new WaitUntilCommand(() -> elevator.getEncoderPosition() <= elevator.resetPos),
+                                new WaitUntilCommand(() -> elevator.getPosition() <= elevator.resetPos),
                                 // carriage.setPositionCommand(CarriageValue.L1),
                                 // carriage.setPositionCommand(value)
                                 carriage.getArm().setTargetPositionCommand(value.getArmAngle()),
@@ -124,7 +124,7 @@ public class TeleopCommands{
                     default:
                         yield new SequentialCommandGroup(
                                 elevator.setTargetPositionCommand(ElevatorValue.INTAKE_HPS),
-                                new WaitUntilCommand(() -> elevator.getEncoderPosition() <= elevator.resetPos),
+                                new WaitUntilCommand(() -> elevator.getPosition() <= elevator.resetPos),
                                 new ParallelCommandGroup(
                                     carriage.getPivot().setTargetPositionCommand(value.getPivotAngle()),
                                     carriage.getArm().setTargetPositionCommand(value.getArmAngle())

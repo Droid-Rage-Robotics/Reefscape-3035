@@ -45,7 +45,7 @@ public class SwerveDriveTeleop extends Command {
 
         driver.b().onTrue(drive.setYawCommand(0));
 
-        if(elevator.getEncoderPosition() >= ElevatorValue.L3.getHeight()){ 
+        if(elevator.getPosition() >= ElevatorValue.L3.getHeight()){ 
             drive.setSpeed(Speed.SLOW);
         }
 

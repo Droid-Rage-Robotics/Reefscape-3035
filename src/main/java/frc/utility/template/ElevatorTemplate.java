@@ -1,7 +1,5 @@
 package frc.utility.template;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -131,7 +129,12 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         DashboardUtils.register(this);
     }
 
+    
     /**
+     * Constructs an Elevator instance that uses a
+     * ProfiledPIDController and feedforward for
+     * control.
+     * 
      * @param motors - The Motors to Control
      * @param controller - PID Controller
      * @param feedforward - Feedforward
@@ -187,9 +190,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     public void initSendable(SendableBuilder builder) {
         switch(control) {
             case TRAPEZOID_PROFILE:
-                builder.addDoubleProperty("Target Position", ()-> profiledController.getSetpoint().position, null);
-                builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
-                builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
+                builder.addDoubleProperty("Target Position", this::getTargetPosition, null);
+                builder.addDoubleProperty("Current Position", this::getPosition, null);
+                builder.addDoubleProperty("Target Velocity", this::getTargetVelocity, null);
+                builder.addDoubleProperty("Current Velocity", this::getVelocity, null);                
+                builder.addDoubleProperty("Applied Voltage", this::getVoltage, null);
                 break;
 
             default:
@@ -204,12 +209,12 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     public void periodic() {
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
+                setVoltage(controller.calculate(getPosition(), controller.getSetpoint()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+                setVoltage(controller.calculate(getPosition(), controller.getSetpoint())
                 +feedforward.calculate(1,1)); //To Change #
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
@@ -231,7 +236,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
                 // double pid = controller.calculate(getEncoderPosition(), next.position);
 
-                double pid = profiledController.calculate(getEncoderPosition());
+                double pid = profiledController.calculate(getPosition());
 
                 double ff = feedforward.calculate(profiledController.getSetpoint().velocity);
 
@@ -267,7 +272,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     // goal = new TrapezoidProfile.State(target,0);
                     // currentState = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
 
-                    profiledController.reset(getEncoderPosition(), getVelocity());
+                    profiledController.reset(getPosition(), getVelocity());
                     profiledController.setGoal(target);
                 }
                 break;
@@ -276,7 +281,14 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     }
     
     public double getTargetPosition(){
-        return controller.getSetpoint();
+        switch (control) {
+            case TRAPEZOID_PROFILE: return profiledController.getSetpoint().position;
+            default: return controller.getSetpoint();
+        }
+    }
+
+    public double getTargetVelocity() {
+        return profiledController.getSetpoint().velocity;
     }
     
     protected void setVoltage(double voltage) {
@@ -293,17 +305,20 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     
     public void resetEncoder() {
         for (CANMotorEx motor: motors) {
-            // motor.getEncoder().setPosition(0);
             motor.resetEncoder(0);
         }
     }
 
-    public double getEncoderPosition() {
+    public double getPosition() {
         return motors[mainNum].getPosition();
     }
 
     public double getVelocity() {
         return motors[mainNum].getVelocity() * conversionFactor;
+    }
+
+    public double getVoltage() {
+        return motors[mainNum].getVoltage();
     }
 
     public CANMotorEx getMotor() {
@@ -314,9 +329,20 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         return motors;
     }
 
-    public boolean atSetPoint(){
-        return controller.atSetpoint();
+    public boolean atSetpoint(){
+        switch (control) {
+            case TRAPEZOID_PROFILE: return profiledController.atSetpoint();
+            default: return controller.atSetpoint();
+        }
     }
 
-    
+    public SysIdRoutine getSysIdRoutine() {
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                null, // Use default step voltage (7 volts)
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
+            ), new SysIdRoutine.Mechanism(this::setVoltage, null, this));
+    }
 }

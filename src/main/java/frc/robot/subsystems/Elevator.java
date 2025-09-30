@@ -1,16 +1,11 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Volts;
-
-import com.ctre.phoenix6.SignalLogger;
-
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.motor.CANMotorEx;
 import frc.utility.motor.TalonEx;
@@ -102,7 +97,7 @@ public class Elevator extends ElevatorTemplate{
     public void periodic() {
         super.periodic();
         // //Ensures that the encoder is always positive
-        if(getEncoderPosition()<0){
+        if(getPosition()<0){
             resetEncoder();
         }
     }
@@ -111,21 +106,4 @@ public class Elevator extends ElevatorTemplate{
         return setTargetPositionCommand(target.getHeight());
         // return new InstantCommand(()->motorRight.setPower(1));
     }
-
-    public SysIdRoutine getSysIdRoutine() {
-        return new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, // Use default ramp rate (1 V/s)
-                Volts.of(7), // Reduce dynamic step voltage to 4 to prevent brownout
-                null, // Use default timeout (10 s)
-                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
-            ),
-            new SysIdRoutine.Mechanism((voltage) -> {
-                motorLeft.setVoltage(voltage);
-                motorRight.setVoltage(voltage);
-            }, null, this)
-        );
-    }
-    
-    
 }
