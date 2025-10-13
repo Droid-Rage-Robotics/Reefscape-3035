@@ -106,9 +106,10 @@ public final class DroidRageConstants {
         return Math.abs(stick) < DroidRageConstants.Gamepad.OPERATOR_STICK_DEADZONE;
     }
 
-    public static CANBus driveCanBus = new CANBus("drive");
-    public static String leftLimelight = "limelight-left";
-    public static String rightLimelight = "limelight-right";
+    public static final CANBus driveCanBus = new CANBus("drive");
+    public static final CANBus rioCanBus = new CANBus();
+    public static final String leftLimelight = "limelight-left";
+    public static final String rightLimelight = "limelight-right";
 
     public enum Control{
         PID,
