@@ -102,7 +102,7 @@ public class TeleopCommands{
     public Command resetHP(Elevator elevator, Carriage carriage, CarriageValue value){
         return SuppliedCommand.create(() -> Commands.sequence(
             switch(carriage.getPosition()){
-                    case BARGE, BARGE_HOLD:
+                    case BARGE, BARGE_HOLD, L4:
                         yield new SequentialCommandGroup(
                                 carriage.setPositionCommand(CarriageValue.L4),
                                 new WaitCommand(.2),

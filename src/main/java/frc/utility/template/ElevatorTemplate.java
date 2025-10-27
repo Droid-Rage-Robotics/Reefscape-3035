@@ -1,5 +1,9 @@
 package frc.utility.template;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -31,12 +35,16 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final double minPosition;
     private final double conversionFactor;
     private final int mainNum;
-    private TrapezoidProfile profile;
-    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State(0,0); //initial
-    private TrapezoidProfile.State currentState = new TrapezoidProfile.State(0,0); //initial
+    private double calculatedVoltage = 0;
+    private double calculatedPID = 0;
+    private double calculatedFF = 0;
+
+    // private TrapezoidProfile profile;
+    // private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State(0,0); //initial
+    // private TrapezoidProfile.State currentState = new TrapezoidProfile.State(0,0); //initial
     
 
-    private TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
+    // private TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
     // REV TOUCH SENSOR
 
     /**
@@ -72,7 +80,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
 
-        profile = new TrapezoidProfile(constraints);
+        // profile = new TrapezoidProfile(constraints);
 
         for (CANMotorEx motor: motors) {
             motor.setIsEnabled(isEnabled);
@@ -123,7 +131,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             motor.setIsEnabled(isEnabled);
         }
 
-        profile = new TrapezoidProfile(constraints);
+        // profile = new TrapezoidProfile(constraints);
         // controller.setTolerance(.3);
 
         DashboardUtils.register(this);
@@ -146,7 +154,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      */
     public ElevatorTemplate(
         CANMotorEx[] motors,
-        ProfiledPIDController profiledcController,
+        ProfiledPIDController profiledController,
         ElevatorFeedforward feedforward,
         double maxPosition,
         double minPosition,
@@ -157,7 +165,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         boolean isEnabled
     ){
         this.motors=motors;
-        this.profiledController=profiledcController;
+        this.profiledController=profiledController;
         this.feedforward=feedforward;
         this.control=control;
         this.maxPosition=maxPosition;
@@ -171,6 +179,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
         // profile = new TrapezoidProfile(constraints);
         // controller.setTolerance(.3);
+        this.profiledController.setTolerance(0.001);
 
         DashboardUtils.register(this);
     }
@@ -190,17 +199,22 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     public void initSendable(SendableBuilder builder) {
         switch(control) {
             case TRAPEZOID_PROFILE:
-                builder.addDoubleProperty("Target Position", this::getTargetPosition, null);
+                builder.addDoubleProperty("Goal Position", this::getGoalPosition, null);
                 builder.addDoubleProperty("Current Position", this::getPosition, null);
-                builder.addDoubleProperty("Target Velocity", this::getTargetVelocity, null);
-                builder.addDoubleProperty("Current Velocity", this::getVelocity, null);                
-                builder.addDoubleProperty("Applied Voltage", this::getVoltage, null);
+                builder.addDoubleProperty("Position Setpoint", this::getPositionSetpoint, null);
+                builder.addDoubleProperty("Velocity Setpoint", this::getVelocitySetpoint, null);
+                builder.addDoubleProperty("Current Velocity", this::getVelocity, null);    
+                builder.addDoubleProperty("Applied Voltage", this::getVoltage, null);            
+                builder.addDoubleProperty("Calculated Voltage", () -> calculatedVoltage, null);
+                builder.addDoubleProperty("Calculated FF", () -> calculatedFF, null);
+                builder.addDoubleProperty("Calculated PID", () -> calculatedPID, null);
+                builder.addDoubleProperty("Position Error", profiledController::getPositionError, null);
                 break;
 
             default:
                 builder.addDoubleProperty("Target Position", controller::getSetpoint, null);
                 builder.addDoubleProperty("Current Position", motors[mainNum]::getPosition, null);
-                builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
+                builder.addDoubleProperty("Applied Voltage", () -> calculatedVoltage, null);
                 break;
         }        
     }
@@ -215,7 +229,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 break;
             case FEEDFORWARD:
                 setVoltage(controller.calculate(getPosition(), controller.getSetpoint())
-                +feedforward.calculate(1,1)); //To Change #
+                +feedforward.calculate(controller.getSetpoint())); //To Change #
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
             // case FEEDFORWARD:
@@ -237,8 +251,10 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 // double pid = controller.calculate(getEncoderPosition(), next.position);
 
                 double pid = profiledController.calculate(getPosition());
+                calculatedPID=pid;
 
                 double ff = feedforward.calculate(profiledController.getSetpoint().velocity);
+                calculatedFF=ff;
 
                 setVoltage(ff + pid);
                 // currentSetpoint = next;
@@ -262,8 +278,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     public void setTargetPosition(double target) {
         switch (control) {
             case PID,FEEDFORWARD:
-                if(target>maxPosition||target<minPosition) return;
-                controller.setSetpoint(target);
+                if(target>maxPosition||target<minPosition) {
+                    return;
+                } else {
+                    controller.setSetpoint(target);
+                }
                 break;
             case TRAPEZOID_PROFILE:
                 if(target>maxPosition||target<minPosition) {
@@ -272,7 +291,6 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     // goal = new TrapezoidProfile.State(target,0);
                     // currentState = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
 
-                    profiledController.reset(getPosition(), getVelocity());
                     profiledController.setGoal(target);
                 }
                 break;
@@ -280,24 +298,30 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         }
     }
     
-    public double getTargetPosition(){
+    public double getGoalPosition(){
         switch (control) {
-            case TRAPEZOID_PROFILE: return profiledController.getSetpoint().position;
+            case TRAPEZOID_PROFILE: return profiledController.getGoal().position;
             default: return controller.getSetpoint();
         }
     }
 
-    public double getTargetVelocity() {
+    public double getVelocitySetpoint() {
         return profiledController.getSetpoint().velocity;
+    }
+
+    public double getPositionSetpoint() {
+        return profiledController.getSetpoint().position;
     }
     
     protected void setVoltage(double voltage) {
+        // calculatedVoltage = voltage;
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
     }
 
     protected void setVoltage(Voltage voltage) {
+        // appliedVoltage = voltage.in(Volts);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -310,7 +334,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     }
 
     public double getPosition() {
-        return motors[mainNum].getPosition();
+        return motors[mainNum].getPosition() * conversionFactor;
     }
 
     public double getVelocity() {

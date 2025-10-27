@@ -126,6 +126,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
+        elevator.resetEncoder();
+
         SignalLogger.start(); // CTRE Signal Logger
         
         // if (autonomousCommand != null) {
