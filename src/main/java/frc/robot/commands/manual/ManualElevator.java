@@ -25,7 +25,7 @@ public class ManualElevator extends Command {
         double move = -elevatorMove.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
-        elevator.setTargetPosition(elevator.getGoalPosition() + move * 0.045);
+        elevator.setTargetPosition(elevator.getGoalPosition() + move * 0.0045);
     }
 
     @Override

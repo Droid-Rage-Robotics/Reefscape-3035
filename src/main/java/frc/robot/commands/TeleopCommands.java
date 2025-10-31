@@ -105,8 +105,9 @@ public class TeleopCommands{
                     case BARGE, BARGE_HOLD, L4:
                         yield new SequentialCommandGroup(
                                 carriage.setPositionCommand(CarriageValue.L4),
-                                new WaitCommand(.2),
+                                new WaitCommand(0.2),
                                 elevator.setTargetPositionCommand(ElevatorValue.GROUND),
+                                new WaitCommand(0.2),
 
                                 new WaitUntilCommand(() -> elevator.getPosition() < elevator.resetPos),
                                 carriage.getArm().setTargetPositionCommand(value.getArmAngle()),
