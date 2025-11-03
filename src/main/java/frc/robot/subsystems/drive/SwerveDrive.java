@@ -32,7 +32,7 @@ import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
-import frc.utility.motor.CANMotorEx.Direction;
+import frc.utility.motor.wip.MotorBase.Direction;
 import lombok.Getter;
 
 //Set Voltage instead of set Power
@@ -58,14 +58,14 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     );
     
     private final SwerveModule frontRight = SwerveModule.create()
-        .withSubsystemName(this, POD.FR)
+        .withSubsystem(this, POD.FR)
         .withDriveMotor(3,Direction.Forward, true)
         .withTurnMotor(1, Direction.Forward, true)
         .withEncoder(2, SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
         EncoderDirection.Forward);
         
     private final SwerveModule backRight = SwerveModule.create()
-        .withSubsystemName(this, POD.BR)
+        .withSubsystem(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Forward, true)
         // .withTurnMotor(4, Direction.Reversed, true)
@@ -73,14 +73,14 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         EncoderDirection.Forward);
 
     private final SwerveModule backLeft = SwerveModule.create()
-        .withSubsystemName(this, POD.BL)
+        .withSubsystem(this, POD.BL)
         .withDriveMotor(9, Direction.Forward, true)
         .withTurnMotor(7, Direction.Forward, true)
         .withEncoder(8, SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
         EncoderDirection.Forward);
     
     private final SwerveModule frontLeft = SwerveModule.create()
-        .withSubsystemName(this, POD.FL)
+        .withSubsystem(this, POD.FL)
         .withDriveMotor(12, Direction.Forward, true)
         .withTurnMotor(10, Direction.Forward, true)
         .withEncoder(11, SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue, 
@@ -203,36 +203,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     @Override
     public void simulationPeriodic() {
         periodic();
-    }
-
-    public void setUpMegaTag() {
-        LimelightHelpers.SetRobotOrientation(
-            "limelight",
-            visionOdometry.getEstimatedPosition().getRotation().getDegrees(),
-            0,
-            0,
-            0,
-            0,
-            0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        boolean doRejectUpdate = false;
-
-        // if our angular velocity is greater than 360 degrees per second, ignore vision updates
-        if(Math.abs(getRate()) > 360)
-        {
-            doRejectUpdate = true;
-        }
-        if(mt2.tagCount == 0)
-        {
-            doRejectUpdate = true;
-        }
-        if(!doRejectUpdate)
-        {
-            visionOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            visionOdometry.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
-        }
     }
 
     public SwerveModulePosition[] getModulePositions() {
@@ -414,10 +384,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     public Command driveAutoReset(){
         return runOnce(()->setYawCommand(getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
-    }  
-    
-    public void addSendable() {
-
     }
 
     public ChassisSpeeds getSpeeds() {//Is this Robot Relative
@@ -431,40 +397,52 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return states;
     }
 
-    public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
-        //No WORK
-        setYaw(getHeading() +90);
-        // switch (DriverStation.getAlliance().get()) {
-        //     case Red:
-        //         setYaw(getHeading() + 180);
-        //         break;
-        //     case Blue:
-        //         setYaw(getHeading());
-        //         break;
-        // }
-    }
-
-    
+    // public void changeAllianceRotation(){//DO THIS AT THE END OF AUTOS ONLY
+    //     //No WORK
+    //     setYaw(getHeading() +90);
+    //     // switch (DriverStation.getAlliance().get()) {
+    //     //     case Red:
+    //     //         setYaw(getHeading() + 180);
+    //     //         break;
+    //     //     case Blue:
+    //     //         setYaw(getHeading());
+    //     //         break;
+    //     // }
+    // } 
     
     public void enableSysID() {
-        sysId = new DriveSysID(swerveModules, this);
+        // sysId = new DriveSysID(swerveModules, this);
     }
 
-    private final SysIdRoutine routine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null, // Use default ramp rate (1 V/s)
-                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-                null, // Use default timeout (10 s)
-                (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive", state.toString()) // Log state with Phoenix SignalLogger class
-            ),
-            new SysIdRoutine.Mechanism(voltage -> {
-                // Apply voltage to all drive and turn motors
-                for (SwerveModule module : swerveModules) {
-                  module.getDriveMotor().setVoltage(voltage);
-                  module.getTurnMotor().setVoltage(voltage);
-                }
-              }, null, this)
-            );
+    public final SysIdRoutine driveSysId = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null, // Use default ramp rate (1 V/s)
+            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+            null, // Use default timeout (10 s)
+            (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_drive", state.toString()) // Log state with Phoenix SignalLogger class
+        ),
+        new SysIdRoutine.Mechanism(voltage -> {
+            // Apply voltage to all drive and turn motors
+            for (SwerveModule module : swerveModules) {
+                module.getDriveMotor().setVoltage(voltage);
+                module.getTurnMotor().setVoltage(voltage);
+            }
+        }, null, this)
+    );
+
+    public final SysIdRoutine turnSysId = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null, // Use default ramp rate (1 V/s)
+            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+            null, // Use default timeout (10 s)
+            (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_turn", state.toString()) // Log state with Phoenix SignalLogger class
+        ),
+        new SysIdRoutine.Mechanism(voltage -> {
+            for (SwerveModule module : swerveModules) {
+                module.getTurnMotor().setVoltage(voltage);
+            }
+        }, null, this)
+    );
 
     public Command runSysIdQuasistatic(SysIdRoutine.Direction direction) {
         return sysId.sysIdQuasistatic(direction);
@@ -472,5 +450,35 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     public Command runSysIdDynamic(SysIdRoutine.Direction direction) {
         return sysId.sysIdDynamic(direction);
+    }
+
+    public void setUpMegaTag() {
+        LimelightHelpers.SetRobotOrientation(
+            "limelight",
+            visionOdometry.getEstimatedPosition().getRotation().getDegrees(),
+            0,
+            0,
+            0,
+            0,
+            0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        boolean doRejectUpdate = false;
+
+        // if our angular velocity is greater than 360 degrees per second, ignore vision updates
+        if(Math.abs(getRate()) > 360)
+        {
+            doRejectUpdate = true;
+        }
+        if(mt2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            visionOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            visionOdometry.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
     }
 }
