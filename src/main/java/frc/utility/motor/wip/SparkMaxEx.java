@@ -14,13 +14,15 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class SparkMaxEx extends MotorBase {
     private final SparkMax motor;
     private final SparkMaxConfig config;
+    private final int deviceId;
     private double conversionFactor = 1;
     private boolean isEnabled;
     private Subsystem subsystem;
 
-    private SparkMaxEx(int deviceId, MotorType motorType) {
+    public SparkMaxEx(int deviceId, MotorType motorType) {
         this.motor = new SparkMax(deviceId, motorType);
         this.config = new SparkMaxConfig();
+        this.deviceId = deviceId;
     }
 
     /**
@@ -30,7 +32,7 @@ public class SparkMaxEx extends MotorBase {
      * @param motorType
      * @return a new SparkMaxEx instance
      */
-    public SparkMaxEx create(int deviceId, MotorType motorType) {
+    public static SparkMaxEx create(int deviceId, MotorType motorType) {
         return new SparkMaxEx(deviceId, motorType);
     }
 
@@ -40,7 +42,7 @@ public class SparkMaxEx extends MotorBase {
      * @param deviceId
      * @return a new SparkMaxEx instance
      */
-    public SparkMaxEx create(int deviceId) {
+    public static SparkMaxEx create(int deviceId) {
         return new SparkMaxEx(deviceId, MotorType.kBrushless);
     }
 
@@ -145,7 +147,8 @@ public class SparkMaxEx extends MotorBase {
      */
     @Override
     public int getDeviceId() {
-        return motor.getDeviceId();
+        // return motor.getDeviceId();
+        return deviceId;
     }
 
     /**
@@ -229,6 +232,18 @@ public class SparkMaxEx extends MotorBase {
     }
 
     /**
+     * Used to control the motor in terms of power
+     * as opposed to manually setting the voltage.
+     * @param power speed in the range of -1 to 1
+     */
+    @Override
+    public void setPower(double power) {
+        if (isEnabled) {
+            motor.set(power);
+        }
+    }
+
+    /**
      * Disables the motor and sets the voltage to 0.
      */
     @Override
@@ -254,5 +269,6 @@ public class SparkMaxEx extends MotorBase {
      */
     public void follow(SparkMaxEx leader, boolean invert) {
         config.follow(leader.getMotor(), invert);
+        burnFlash();
     }
 }

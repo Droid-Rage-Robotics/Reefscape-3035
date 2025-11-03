@@ -17,6 +17,7 @@ public class TalonEx extends MotorBase {
     private final TalonFX motor;
     private final TalonFXConfiguration config;
     private final TalonFXConfigurator configurator;
+    private final int deviceId;
     private final CANBus canBus;
     private double conversionFactor = 1;
     private Subsystem subsystem;
@@ -25,6 +26,7 @@ public class TalonEx extends MotorBase {
     private TalonEx(int deviceId, CANBus canBus) {
         this.motor = new TalonFX(deviceId, canBus);
         this.canBus = canBus;
+        this.deviceId=deviceId;
         this.config = new TalonFXConfiguration(); // Use to change configs
         this.configurator = motor.getConfigurator(); // Use to apply configs
     }
@@ -36,7 +38,7 @@ public class TalonEx extends MotorBase {
      * @param canBus
      * @return a new TalonEx instance
      */
-    public TalonEx create(int deviceId, CANBus canBus) {
+    public static TalonEx create(int deviceId, CANBus canBus) {
         return new TalonEx(deviceId, canBus);
     }
 
@@ -46,7 +48,7 @@ public class TalonEx extends MotorBase {
      * @param deviceId
      * @return a new TalonEx instance
      */
-    public TalonEx create(int deviceId) {
+    public static TalonEx create(int deviceId) {
         return new TalonEx(deviceId, DroidRageConstants.rioCanBus);
     }
 
@@ -195,7 +197,7 @@ public class TalonEx extends MotorBase {
      */
     @Override
     public int getDeviceId() {
-        return motor.getDeviceID();
+        return deviceId;
     }
 
     /**
@@ -247,6 +249,18 @@ public class TalonEx extends MotorBase {
     public void setVoltage(Voltage voltage) {
         if (isEnabled) {
             motor.setVoltage(voltage.in(Volts));
+        }
+    }
+    
+    /**
+     * Used to control the motor in terms of power
+     * as opposed to manually setting the voltage.
+     * @param power speed in the range of -1 to 1
+     */
+    @Override
+    public void setPower(double power) {
+        if (isEnabled) {
+            motor.set(power);
         }
     }
 

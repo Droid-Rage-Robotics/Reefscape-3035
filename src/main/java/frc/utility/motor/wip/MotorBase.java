@@ -43,6 +43,7 @@ public abstract class MotorBase implements Dashboard {
 
     public abstract void setVoltage(double voltage);
     public abstract void setVoltage(Voltage voltage);
+    public abstract void setPower(double value);
     public abstract double getVelocity();
     public abstract double getPosition();
     public abstract int getDeviceId();
