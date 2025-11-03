@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-// import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -64,8 +63,6 @@ public class SwerveModule {
     private PIDController turningPidController;
     private SimpleMotorFeedforward feedforward;
 
-    // private ShuffleboardValue<Double> turnPositionWriter;
-    // private ShuffleboardValue<Double> drivePositionWriter;
     private String subsystemName;
     private SwerveModule.POD podName;
 
@@ -83,17 +80,8 @@ public class SwerveModule {
         public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
             podName = pod;
             subsystemName = base.getClass().getSimpleName();
-            // turnPositionWriter = ShuffleboardValue.create(0.0, 
-            //     "Module/Turn Position (Radians)" + podName.toString(), 
-            //     subsystemName).build();
-            // drivePositionWriter = ShuffleboardValue.create(0.0, 
-            //     "Module/Drive Position (Radians)" + podName.toString(), 
-            //     subsystemName).build();
             return new DriveIDBuilder();
         }
-        // public DriveIDBuilder withSubsystemName(SubsystemBase base, SwerveModule.POD pod) {
-        //     return withSubsystemName(base.getClass().getSimpleName(), pod);
-        // }
     }
     public class DriveIDBuilder {
         public TurnIDBuilder withDriveMotor(int driveMotorId, Direction driveMotorReversed, boolean isEnabled){ 
@@ -129,12 +117,6 @@ public class SwerveModule {
                 //     case Reversed -> SensorDirectionValue.CounterClockwise_Positive;
                 // };
                 config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-                // switch (EncoderRange.ZERO_TO_ONE) {
-                //     case PLUS_MINUS_HALF:
-                //         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-                //     case ZERO_TO_ONE:
-                //         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-                // }
                 config.MagnetSensor.MagnetOffset = (absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD);
                 config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = .5;
                 turnEncoder.getConfigurator().apply(config);
@@ -159,7 +141,6 @@ public class SwerveModule {
     }
 
     public double getDrivePos() {
-        // drivePositionWriter.write(driveMotor.getPosition());
         return driveMotor.getPosition();
     }
 
@@ -168,17 +149,14 @@ public class SwerveModule {
     }
     
     public double getTurningPosition() {
-        // turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
-        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
+        return turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD;
     }
 
     public double getDriveVelocity(){
-        // return driveMotor.getEncoder().getVelocity();
         return driveMotor.getVelocity();
     }
 
     public void resetDriveEncoder(){
-        // driveMotor.getEncoder().setPosition(0);
         driveMotor.setPosition(0);
     }
 
