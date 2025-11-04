@@ -180,4 +180,10 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     public CANMotorEx[] getAllMotor() {
         return motors;
     }
+
+    @Override
+    public void alerts() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alerts'");
+    }
 }

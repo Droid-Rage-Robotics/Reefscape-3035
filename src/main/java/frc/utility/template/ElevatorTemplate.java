@@ -369,4 +369,10 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
             ), new SysIdRoutine.Mechanism(this::setVoltage, null, this));
     }
+
+    @Override
+    public void alerts() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alerts'");
+    }
 }

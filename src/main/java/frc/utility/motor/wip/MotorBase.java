@@ -4,7 +4,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.utility.wip.DashboardUtils.Dashboard;
+import frc.utility.DashboardUtils.Dashboard;
 
 public abstract class MotorBase implements Dashboard {
     /**

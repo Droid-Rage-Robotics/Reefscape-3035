@@ -202,4 +202,10 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
     public boolean atSetpoint(){
         return controller.atSetpoint();
     }
+
+    @Override
+    public void alerts() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alerts'");
+    }
 }

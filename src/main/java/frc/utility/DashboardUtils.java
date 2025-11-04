@@ -1,21 +1,13 @@
 package frc.utility;
 
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants;
-import com.sun.net.httpserver.HttpServer;
 
 public class DashboardUtils {
     /**
@@ -54,6 +46,12 @@ public class DashboardUtils {
          * to only be used during practice to prevent loop overruns
          */
         public void practiceWriters();
+
+        
+        /**
+         * Place any logic for alerts here to be run periodically
+         */
+        public void alerts();
     }
 
     private static final List<Dashboard> publishers = new ArrayList<>();
@@ -110,4 +108,5 @@ public class DashboardUtils {
             batteryAlert.set(false);
         }
     }
+    
 }
