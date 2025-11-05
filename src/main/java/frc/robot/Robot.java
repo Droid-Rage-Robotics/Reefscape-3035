@@ -30,7 +30,8 @@ import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);//-10 Works
+    private final Vision vision = new Vision();
+    private final SwerveDrive drive = new SwerveDrive(vision, true);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false),
@@ -39,7 +40,6 @@ public class Robot extends TimedRobot {
     );
     
     // private Climb climb = new Climb(false);
-    private final Vision vision = new Vision();
 
     private final CommandXboxController driver =
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
         SignalLogger.setPath("/home/lvuser/logs/ctre/");
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.onRobotInit();
+        // drive.setUpMegaTag();
 
         // // Starts recording to data log
         // DataLogManager.start();

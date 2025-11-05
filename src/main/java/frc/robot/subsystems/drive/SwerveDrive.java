@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Volts;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,7 +27,8 @@ import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
-import frc.robot.subsystems.vision.LimelightHelpers;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
@@ -98,12 +98,12 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         getModulePositions()
     );
 
-    private final SwerveDrivePoseEstimator visionOdometry = new SwerveDrivePoseEstimator(
+    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         DRIVE_KINEMATICS, 
         getRotation2d(), 
         getModulePositions(), 
-        getPose()
-        );
+        new Pose2d()
+    );
 
     private volatile Speed speed = Speed.SLOW;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
@@ -112,39 +112,44 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     private final Field2d visionField = new Field2d();
 
     private final boolean isEnabled;
+    private final Vision vision;
 
-    public SwerveDrive(boolean isEnabled) {
+    public SwerveDrive(Vision vision, boolean isEnabled) {
         this.isEnabled = isEnabled;
-        DashboardUtils.register(this);
+        this.vision=vision;
         
         for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
-            // swerveModule.brakeAndCoast^Mode();
+            // swerveModule.brakeAndCoastMode();
         }
 
         // Pigeon Wires are facing the front of the robot
         pigeon2.getConfigurator().apply(new MountPoseConfigs());   
-        // isEnabledWriter.set(isEnabled);
         for(int num = 0; num<4; num++){
             swerveModules[num].setDriveMotorIsEnabled(isEnabled);
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
-        }    
-
+        }   
+        
+        DashboardUtils.register(this);
     }
 
     @Override
     public void elasticInit() {
         SmartDashboard.putData("Drive/Swerve Drive", this);
-        SmartDashboard.putData("Drive/Gyro", heading);
+        SmartDashboard.putData("Drive/Gyro", pigeon2);
         SmartDashboard.putData("Drive/Drive Pose", field);
         SmartDashboard.putData("Drive/Vision Pose", visionField);
-        SmartDashboard.putBoolean("Drive/isEnabled", isEnabled);    
+        SmartDashboard.putBoolean("Drive/Info/isEnabled", isEnabled);
+        SmartDashboard.putData("Drive/Data", data);
     }
 
     @Override
     public void practiceWriters() {
-        SmartDashboard.putData("Swerve Drive", encoderDebug);
+        SmartDashboard.putData("Drive/Angles", frontLeft);
+        SmartDashboard.putData("Drive/Angles", frontRight);
+        SmartDashboard.putData("Drive/Angles", backLeft);
+        SmartDashboard.putData("Drive/Angles", backRight);
     }
 
     @Override
@@ -166,24 +171,11 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         builder.addDoubleProperty("Robot Angle", () -> getRotation2d().getRadians(), null);
     }
 
-    public final Sendable heading = new Sendable() {
+    private final Sendable data = new Sendable() {
         @Override
         public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("Gyro");
-            builder.addDoubleProperty("Value", () -> getHeadingCW(), null);
-        }
-    };
-
-    public final Sendable encoderDebug = new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
-            builder.addDoubleProperty("Drive/Angle "+frontLeft.getPodName(), () -> frontLeft.getTurningPosition(), null);
-            builder.addDoubleProperty("Drive/Angle "+frontRight.getPodName(), () -> frontRight.getTurningPosition(), null);
-            builder.addDoubleProperty("Drive/Angle "+backLeft.getPodName(), () -> backLeft.getTurningPosition(), null);
-            builder.addDoubleProperty("Drive/Angle "+backRight.getPodName(), () -> backRight.getTurningPosition(), null);
-            builder.addDoubleProperty("Drive/Heading", () -> getHeadingCW(), null);
-            builder.addDoubleProperty("Drive/Roll", () -> getRoll(), null);
-            builder.addDoubleProperty("Drive/Pitch", () -> getPitch(), null);
+            builder.addStringProperty("TippingState", () -> tippingState.name(), null);
+            builder.addStringProperty("Speed", () -> speed.name(), null);
         }
     };
      
@@ -195,9 +187,23 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         );
 
         field.setRobotPose(getPose());
-        field.setRobotPose(getPose());
-        visionOdometry.update(getRotation2d(), getModulePositions());
-        visionField.setRobotPose(getVisionPose());
+        
+        vision.getLeftLimelight().setRobotOrientation(
+            pigeon2.getYaw().getValueAsDouble(),
+            0,
+            0,
+            0,
+            0,
+            0);
+        
+        PoseEstimate latest = vision.getLeftLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
+
+        if (latest != null && latest.tagCount > 0) {
+            poseEstimator.addVisionMeasurement(latest.pose, latest.timestampSeconds);
+            visionField.setRobotPose(latest.pose);
+        }
+
+        poseEstimator.update(getRotation2d(), getModulePositions());
     }
 
     @Override
@@ -221,13 +227,12 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     /**
      * Used to get the heading of the robot in degrees
      * with CLOCKWISE rotation being positive. This
-     * value is wrapped to [0,360]. ONLY USE THIS METHOD
+     * value is wrapped to [0,360). ONLY USE THIS METHOD
      * IF YOU KNOW WHAT YOU ARE DOING!
      * 
      * @return the heading of the robot as a double
      */
     public double getHeadingCW() {
-        // return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
         double yaw = -pigeon2.getYaw().getValueAsDouble();
 
         // Normalize to [0, 360)
@@ -269,18 +274,13 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return Rotation2d.fromDegrees(pigeon2.getYaw().getValueAsDouble());
     }
 
-    // public void setPose(Pose2d pose){
-    //     odometry.resetPose(pose);
-    // }
-
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
 
-    public Pose2d getVisionPose() {
-        return visionOdometry.getEstimatedPosition();
+    public Pose2d getEstimatedPose() {
+        return poseEstimator.getEstimatedPosition();
     }
-
 
     public double getTranslationalSpeed() {
         return speed.getTranslationalSpeed();
@@ -308,7 +308,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        // if (!isEnabledWriter.get()) return;
+        if (!isEnabled) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
@@ -324,6 +324,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setFeedforwardModuleStates(states);
     }
+    
     public void setFeedforwardModuleStates(SwerveModuleState[] states) {
         if (!isEnabled) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -344,13 +345,11 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
     public void setTippingState(TippingState tippingState) {
         this.tippingState = tippingState;
-        // tippingStateWriter.set(tippingState.name());
     }
 
     public Command setSpeed(Speed speed) {
         return runOnce(() -> {
             this.speed = speed;
-            // speedStateWriter.set(speed.name());
         });
     }
 
@@ -358,7 +357,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return runOnce(() -> {
             for (SwerveModule swerveModule: swerveModules) {
                 swerveModule.resetDriveEncoder();
-                // pigeon2.setYaw(getAngularSpeed())
             }
         });
     }
@@ -409,10 +407,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     //     //         break;
     //     // }
     // } 
-    
-    public void enableSysID() {
-        // sysId = new DriveSysID(swerveModules, this);
-    }
 
     public final SysIdRoutine driveSysId = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -452,33 +446,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         return sysId.sysIdDynamic(direction);
     }
 
-    public void setUpMegaTag() {
-        LimelightHelpers.SetRobotOrientation(
-            "limelight",
-            visionOdometry.getEstimatedPosition().getRotation().getDegrees(),
-            0,
-            0,
-            0,
-            0,
-            0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        boolean doRejectUpdate = false;
-
-        // if our angular velocity is greater than 360 degrees per second, ignore vision updates
-        if(Math.abs(getRate()) > 360)
-        {
-            doRejectUpdate = true;
-        }
-        if(mt2.tagCount == 0)
-        {
-            doRejectUpdate = true;
-        }
-        if(!doRejectUpdate)
-        {
-            visionOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            visionOdometry.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
-        }
-    }
+    @Override
+    public void alerts() {}
 }
