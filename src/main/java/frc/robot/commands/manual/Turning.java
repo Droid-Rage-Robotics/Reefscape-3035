@@ -25,7 +25,7 @@ import frc.robot.subsystems.drive.SwerveModule;
 public class Turning extends Command {
     private final SwerveDrive drive;
     private final CommandXboxController driver;
-    private final Supplier<Double> x, y, turnX, turnY;
+    private final Supplier<Double> x, y;
     private volatile double xSpeed, ySpeed, turnSpeed, rightStickDeg;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
@@ -42,8 +42,6 @@ public class Turning extends Command {
         this.driver=driver;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
-        this.turnX = driver::getRightX;
-        this.turnY = driver::getRightY;
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 

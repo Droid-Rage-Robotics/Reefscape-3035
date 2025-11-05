@@ -1,7 +1,5 @@
 package frc.utility.template;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -25,7 +23,6 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     private final double maxSpeed;
     private final double minSpeed;
     private final int mainNum;
-    private final Supplier<Double> setpoint;
     private final String name;
     private final TrapezoidProfile profile;
     private TrapezoidProfile.State current = new TrapezoidProfile.State(0,0); //initial
@@ -54,7 +51,6 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         this.mainNum=mainNum;
         this.name=name;
 
-        this.setpoint=controller::getSetpoint;
 
         for (CANMotorEx motor: motors) {
             motor.setIsEnabled(isEnabled);

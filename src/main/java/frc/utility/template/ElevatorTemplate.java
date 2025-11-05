@@ -1,11 +1,6 @@
 package frc.utility.template;
 
-import static edu.wpi.first.units.Units.Volts;
-
-import java.util.function.Supplier;
-
 import com.ctre.phoenix6.SignalLogger;
-
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -260,7 +255,13 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 // currentSetpoint = next;
                 break;
             case SYS_ID: break;
-        }       
+        }
+        
+        if(limitSwitch != null) {
+            if(limitSwitch.get()) {
+                setVoltage(0);
+            }
+        }
     }
 
     @Override

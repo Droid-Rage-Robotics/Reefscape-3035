@@ -4,9 +4,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.vision.LimelightHelpers;
 
 public class CANcoderEx {
     private final CANcoder encoder;
