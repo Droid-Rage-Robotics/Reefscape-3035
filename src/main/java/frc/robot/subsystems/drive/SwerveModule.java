@@ -1,27 +1,26 @@
 package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.encoder.wip.CANcoderEx;
 import frc.utility.motor.wip.MotorBase.Direction;
 import frc.utility.motor.wip.MotorBase.ZeroPowerMode;
 import frc.utility.motor.wip.TalonEx;
 import lombok.Getter;
 
-public class SwerveModule {
+public class SwerveModule implements Sendable {
     public enum POD{
         FL,
         BL,
@@ -56,8 +55,9 @@ public class SwerveModule {
     @Getter private TalonEx driveMotor;
     @Getter private TalonEx turnMotor;
 
-    private CANcoder turnEncoder;
-    private CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    // private CANcoder turnEncoder;
+    private CANcoderEx turnEncoder;
+    // private CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
 
     private PIDController turningPIDController;
     private SimpleMotorFeedforward driveFeedforward;
@@ -101,12 +101,10 @@ public class SwerveModule {
     }
 
     public SwerveModule withEncoder(int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad, EncoderDirection direction) {
-        turnEncoder = new CANcoder(absoluteEncoderId, DroidRageConstants.driveCanBus);
-        
-        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        encoderConfig.MagnetSensor.MagnetOffset = (absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD);
-        encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = .5;
-        turnEncoder.getConfigurator().apply(encoderConfig);
+        turnEncoder = CANcoderEx.create(absoluteEncoderId, DroidRageConstants.driveCanBus)
+            .withDirection(SensorDirectionValue.CounterClockwise_Positive)
+            .withMagnetOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)
+            .withAbsoluteSensorDiscontinuityPoint(0.5);
         
         turningPIDController = new PIDController(SwerveDriveConfig.TURN_KP.getValue(), 0.0, 0.0);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);// Was -Math.PI, Math.PI but changed to 0 and 2PI
@@ -127,7 +125,7 @@ public class SwerveModule {
     }
     
     public double getTurningPosition() {
-        return turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD;
+        return turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD;
     }
 
     public double getDriveVelocity(){
@@ -200,5 +198,10 @@ public class SwerveModule {
     
     public void setDriveMotorIsEnabled(boolean isEnabled) {
         driveMotor.withIsEnabled(isEnabled);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty(getPodName(), () -> getTurningPosition(), null);
     }
 }
