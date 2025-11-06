@@ -87,10 +87,7 @@ public abstract class EncoderEx {
     //         return (T) EncoderEx.this;
     //     }
     // }
-    public CANcoderEx withRange(EncoderRange range){
-        setRange(range);
-        return (CANcoderEx) this;
-    }
+
 
     private final Sendable writers = new Sendable() {
         @Override

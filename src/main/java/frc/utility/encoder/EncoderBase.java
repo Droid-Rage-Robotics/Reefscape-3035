@@ -1,4 +1,4 @@
-package frc.utility.encoder.wip;
+package frc.utility.encoder;
 
 public class EncoderBase {
     
