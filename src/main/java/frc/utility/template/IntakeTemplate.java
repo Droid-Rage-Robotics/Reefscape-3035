@@ -22,6 +22,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     private final Control control;
     private final double maxSpeed;
     private final double minSpeed;
+    private final double conversionFactor;
     private final int mainNum;
     private final String name;
     private final TrapezoidProfile profile;
@@ -36,6 +37,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         TrapezoidProfile.Constraints constraints,
         double maxSpeed,
         double minSpeed,
+        double conversionFactor,
         Control control,
         String tabName,
         String name,
@@ -48,9 +50,9 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         this.control=control;
         this.maxSpeed=maxSpeed;
         this.minSpeed=minSpeed;
+        this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
         this.name=name;
-
 
         for (CANMotorEx motor: motors) {
             motor.setIsEnabled(isEnabled);
@@ -71,7 +73,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Target Speed", controller::getSetpoint, null);
-        builder.addDoubleProperty("Current Speed", motors[mainNum]::getVelocity, null);
+        builder.addDoubleProperty("Current Speed", this::getVelocity, null);
         builder.addDoubleProperty("Applied Voltage", motors[mainNum]::getVoltage, null);
     }
 
@@ -83,7 +85,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         @Override
         public void initSendable(SendableBuilder builder) {
             builder.setSmartDashboardType("Boolean Box");
-            builder.addBooleanProperty("Is Element In", () -> (getTargetPosition() - getEncoderPosition() > 40), null);
+            builder.addBooleanProperty("Is Element In", () -> (getTargetPosition() - getVelocity() > 40), null);
         }
     };
 
@@ -91,7 +93,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     public void periodic() {
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
+                setVoltage(controller.calculate(getVelocity(), controller.getSetpoint()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
@@ -103,8 +105,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
             //     break;
             case FEEDFORWARD:
                 setVoltage(
-                    controller.calculate(getEncoderPosition(), controller.getSetpoint())
-                    +feedforward.calculateWithVelocities(controller.getSetpoint(),controller.getSetpoint())); //To Change #
+                    controller.calculate(getVelocity(), controller.getSetpoint())
+                    +feedforward.calculate(controller.getSetpoint())); //To Change #
                     // +feedforward.calculateWithVelocities(1,1)); //To Change #
 
                 break;
@@ -118,7 +120,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
                 TrapezoidProfile.State next = profile.calculate(0.02, current, goal);
 
                 double ff = feedforward.calculateWithVelocities(current.velocity, next.velocity);
-                double pid = controller.calculate(getEncoderPosition(), controller.getSetpoint());
+                double pid = controller.calculate(getVelocity(), controller.getSetpoint());
 
                 setVoltage(ff + pid);
                 current = next;
@@ -163,10 +165,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         }
     }
 
-    public double getEncoderPosition() {
-        double position = motors[mainNum].getVelocity();
-        // errorWriter.write(getTargetPosition()-position);
-        return position;
+    public double getVelocity() {
+        return motors[mainNum].getVelocity() * conversionFactor;
     }
 
     public CANMotorEx getMotor() {
@@ -178,8 +178,5 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     }
 
     @Override
-    public void alerts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alerts'");
-    }
+    public void alerts() {}
 }

@@ -35,7 +35,7 @@ public class Intake extends IntakeTemplate {
         new SimpleMotorFeedforward(0.22808,0.13255,0.034457), // ka 0.034457
         
         new TrapezoidProfile.Constraints(0, 0),
-        Constants.MAX_SPEED, Constants.MIN_SPEED, 
+        Constants.MAX_SPEED, Constants.MIN_SPEED, 1,
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Intake", 0, isEnabled);
     }
 

@@ -204,8 +204,5 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
     }
 
     @Override
-    public void alerts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alerts'");
-    }
+    public void alerts() {}
 }
