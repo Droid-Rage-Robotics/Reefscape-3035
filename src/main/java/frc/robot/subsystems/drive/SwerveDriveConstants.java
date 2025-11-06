@@ -61,12 +61,12 @@ public class SwerveDriveConstants {
         }
     }
 
-    public static PIDConstants TRANSLATIONAL_PID = new PIDConstants(
+    public static final PIDConstants TRANSLATIONAL_PID = new PIDConstants(
         SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.getValue(), 
         SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.getValue(), 
         SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.getValue());
 
-    public static PIDConstants THETA_PID = new PIDConstants(
+    public static final PIDConstants THETA_PID = new PIDConstants(
         SwerveDriveConstants.SwerveDriveConfig.THETA_KP.getValue(), 
         SwerveDriveConstants.SwerveDriveConfig.THETA_KI.getValue(), 
         SwerveDriveConstants.SwerveDriveConfig.THETA_KD.getValue());

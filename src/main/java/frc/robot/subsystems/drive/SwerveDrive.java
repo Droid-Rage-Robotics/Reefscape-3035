@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants;
-import frc.robot.SysID.DriveSysID;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModule.POD;
@@ -68,7 +67,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         .withSubsystem(this, POD.BR)
         .withDriveMotor(6, Direction.Forward, true)
         .withTurnMotor(4, Direction.Forward, true)
-        // .withTurnMotor(4, Direction.Reversed, true)
         .withEncoder(5, SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::getValue,
         EncoderDirection.Forward);
 
@@ -88,8 +86,6 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     
     @Getter private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
     
-    private DriveSysID sysId;   
-
     private final Pigeon2 pigeon2 = new Pigeon2(13, DroidRageConstants.driveCanBus);
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
@@ -408,42 +404,38 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     //     // }
     // } 
 
-    public final SysIdRoutine driveSysId = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null, // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null, // Use default timeout (10 s)
-            (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_drive", state.toString()) // Log state with Phoenix SignalLogger class
-        ),
-        new SysIdRoutine.Mechanism(voltage -> {
-            // Apply voltage to all drive and turn motors
-            for (SwerveModule module : swerveModules) {
-                module.getDriveMotor().setVoltage(voltage);
-                module.getTurnMotor().setVoltage(voltage);
-            }
-        }, null, this)
-    );
-
-    public final SysIdRoutine turnSysId = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null, // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null, // Use default timeout (10 s)
-            (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_turn", state.toString()) // Log state with Phoenix SignalLogger class
-        ),
-        new SysIdRoutine.Mechanism(voltage -> {
-            for (SwerveModule module : swerveModules) {
-                module.getTurnMotor().setVoltage(voltage);
-            }
-        }, null, this)
-    );
-
-    public Command runSysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysId.sysIdQuasistatic(direction);
+    public SysIdRoutine getDriveSysId() {
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_drive", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(voltage -> {
+                // Apply voltage to all drive and turn motors
+                for (SwerveModule module : swerveModules) {
+                    module.getDriveMotor().setVoltage(voltage);
+                    module.getTurnMotor().setVoltage(voltage);
+                }
+            }, null, this)
+        );
     }
 
-    public Command runSysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysId.sysIdDynamic(direction);
+    public SysIdRoutine getTurnSysId() {
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, // Use default ramp rate (1 V/s)
+                Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                null, // Use default timeout (10 s)
+                (state) -> SignalLogger.writeString("sysid-test-state-SwerveDrive_turn", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(voltage -> {
+                for (SwerveModule module : swerveModules) {
+                    module.getTurnMotor().setVoltage(voltage);
+                }
+            }, null, this)
+        );
     }
 
     @Override
