@@ -60,6 +60,14 @@ public final class TuningAutos {
                 .build()
         );
     }
+
+    public static Command lessForwardTest(SwerveDrive drive) {
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "LessForwardTest")
+                .setMaxVelocity(0.2)
+                .build()
+        );
+    }
     
     private TuningAutos() {}
 }

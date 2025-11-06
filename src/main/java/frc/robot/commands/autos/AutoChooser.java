@@ -24,9 +24,10 @@ import frc.robot.subsystems.carriage.Carriage.CarriageIntakeValue;
 import frc.robot.subsystems.carriage.Carriage.CarriageValue;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.vision.Vision;
-// import frc.utility.shuffleboard.ComplexWidgetBuilder;
+import frc.utility.DashboardUtils;
+import frc.utility.DashboardUtils.Dashboard;
 
-public class AutoChooser {
+public class AutoChooser implements Dashboard {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(SwerveDrive drive, Elevator elevator, Carriage carriage, Vision vision){
@@ -196,12 +197,12 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));
-        // addTuningAuto(drive);
+        addTuningAuto(drive);
         addAutos(drive, elevator, carriage, vision);
         // autoChooser = AutoBuilder.buildAutoChooser();
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        DashboardUtils.register(this);
     }
     
     public  Command getAutonomousCommand() {
@@ -215,6 +216,7 @@ public class AutoChooser {
         autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
         autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
+        autoChooser.addOption("LessForwardTest", TuningAutos.lessForwardTest(drive));
         // // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 
@@ -253,7 +255,7 @@ public class AutoChooser {
 
             // Configure AutoBuilder
             AutoBuilder.configure(
-                drive::getPose,
+                drive::getEstimatedPose,
                 drive::resetOdometry,
                 drive::getSpeeds,
                 drive::setFeedforwardModuleStates,
@@ -283,6 +285,17 @@ public class AutoChooser {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
         }
     }
+
+    @Override
+    public void elasticInit() {
+        SmartDashboard.putData("Autos/AutoChooser", autoChooser);
+    }
+
+    @Override
+    public void practiceWriters() {}
+
+    @Override
+    public void alerts() {}
 
     // public Command autoAlgaePickCommand(){
     //     return new SequentialCommandGroup(

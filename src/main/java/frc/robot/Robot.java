@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 
-import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -52,10 +51,9 @@ public class Robot extends TimedRobot {
 
     // private final DriveSysID driveSysID = new DriveSysID(drive.getSwerveModules(), drive);
     // private final SysID sysID = new SysID(carriage.getIntake().getMotor(), carriage.getIntake());
-    // private Field2d field = new Field2d();
 
     private final RobotContainer robotContainer = new RobotContainer(driver, operator);
-    // private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
+    private final AutoChooser autoChooser = new AutoChooser(drive, elevator, carriage, vision);
 
     // public boolean teleopRan;
     private Command autonomousCommand;
@@ -66,7 +64,6 @@ public class Robot extends TimedRobot {
         SignalLogger.setPath("/home/lvuser/logs/ctre/");
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.onRobotInit();
-        // drive.setUpMegaTag();
 
         // // Starts recording to data log
         // DataLogManager.start();
@@ -100,12 +97,12 @@ public class Robot extends TimedRobot {
 
         // SignalLogger.start(); // CTRE Signal Logger
 
-        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
         // autonomousCommand = new InstantCommand();
 
-        // if (autonomousCommand != null) {
-        //     autonomousCommand.schedule();
-        // }
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
     }
 
     @Override
@@ -171,6 +168,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
     }
+
     @Override
     public void testPeriodic() {}
 
