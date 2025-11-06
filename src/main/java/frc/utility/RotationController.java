@@ -1,7 +1,13 @@
 package frc.utility;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.subsystems.drive.SwerveDrive;
 
 /**
@@ -9,36 +15,43 @@ import frc.robot.subsystems.drive.SwerveDrive;
  * within a certain tolerance of the goal angle, a PID controller is used to hold the robot at that
  * angle.
  */
-public class RotationController {
-    SwerveDrive drive;
-    PIDController controller;
-    PIDController holdController;
-    Constraints constraints;
+public class RotationController implements Sendable {
+    private final SwerveDrive drive;
+    private final PIDController controller;
+    private final PIDController holdController;
+
+    private final Supplier<Double> headingRadians;
+
+    private final AtomicReference<Double> calculation = new AtomicReference<Double>(0.0);
+    private final AtomicReference<Double> holdCalculation = new AtomicReference<Double>(0.0);
+
+    // Constraints constraints;
 
     // @AutoLogOutput(key = "Swerve/RotationController/Output")
+    
+    
     double calculatedValue = 0;
 
     double feedbackSetpoint;
     double tolerance = (Math.PI / 720);
+    
+    
 
-    public RotationController(SwerveDrive drive) {
-        this.drive = drive;
+    public RotationController(SwerveDrive drive, Supplier<Rotation2d> rotation2d) {
+        this.drive=drive;
+
+        headingRadians = () -> rotation2d.get().getRadians();
+
         // config = swerve.config;
         // constraints = new Constraints(config.maxAngularVelocity, config.maxAngularAcceleration);
-        controller =
-                new PIDController(
-                        0,
-                        0,
-                        0);
+        controller = new PIDController(0,0,0);
+        
 
         controller.enableContinuousInput(-Math.PI, Math.PI);
         controller.setTolerance(tolerance * 2);
 
         // These are currently magic number and need to be put into SwerveConfig
-        holdController =
-                new PIDController(
-                        10, 0,
-                        0); // TODO: these probably have to be found again; most likely why robot
+        holdController = new PIDController(10, 0,0); // these probably have to be found again; most likely why robot
         // rotation is slightly oscillating in heading lock
 
         holdController.enableContinuousInput(-Math.PI, Math.PI);
@@ -49,8 +62,8 @@ public class RotationController {
     }
 
     public double calculate(double goalRadians) {
-        double measurement = drive.getRotation2d().getRadians();
-        calculatedValue = controller.calculate(measurement, goalRadians);
+        // calculatedValue = ;
+        calculation.set(controller.calculate(headingRadians.get(), goalRadians));
         // RobotTelemetry.print(
         //         "RotationControllerOutput: "
         //                 + calculatedValue
@@ -61,16 +74,21 @@ public class RotationController {
         //                 + " max: "
         //                 + config.maxAngularVelocity);
         if (atSetpoint()) {
-            // return calculatedValue; // calculateHold(goalRadians);
             return calculatedValue = 0; // calculateHold(goalRadians);
         } else {
             return calculatedValue;
         }
     }
 
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty(null, calculation::get, null);
+        // builder 
+    }
+
     public double calculateHold(double goalRadians) {
-        double calculatedValue =
-                holdController.calculate(drive.getRotation2d().getRadians(), goalRadians);
+        holdCalculation.set(holdController.calculate(drive.getRotation2d().getRadians(), goalRadians));
+
         return calculatedValue;
     }
 
@@ -95,6 +113,8 @@ public class RotationController {
     public void updatePID(double kP, double kI, double kD) {
         controller.setPID(kP, kI, kD);
     }
+
+    
 
     // public void setLaunchPID() {
     //     controller.setPID(
