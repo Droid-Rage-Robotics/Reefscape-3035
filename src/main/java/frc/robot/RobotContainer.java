@@ -157,14 +157,10 @@ public class RobotContainer {
 	public void sysID(SysID sysID){
 		driver.a().onTrue(new SysIdCommand(sysID));
 		driver.b().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-		// driver.povUp().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-		// driver.povDown().whileTrue(sysID.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-		// driver.povLeft().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kForward));
-		// driver.povRight().whileTrue(sysID.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 	}
+	
 	public void sysID(CommandXboxController driver, SysIdRoutine routine, Carriage carriage) {
         driver.b().onTrue(carriage.setPositionCommand(CarriageValue.L2));
-		
 		driver.a().onTrue(new SysIdRoutineCommand(routine));
     }
 }

@@ -60,7 +60,6 @@ public class Robot extends TimedRobot {
   
     @Override
     public void robotInit() {
-        // WebServer.start(5801, Filesystem.getDeployDirectory().getPath());
         SignalLogger.setPath("/home/lvuser/logs/ctre/");
         DashboardUtils.Config.Match = MatchValue.PRACTICE;
         DashboardUtils.onRobotInit();
@@ -72,7 +71,6 @@ public class Robot extends TimedRobot {
         
         // vision.setUpVision();
         SmartDashboard.putData("Robot Misc", DroidRageConstants.robotMisc);
-        // CameraServer.startAutomaticCapture(); //DO NOT USE
     }
     
     @Override
@@ -138,6 +136,7 @@ public class Robot extends TimedRobot {
         // robotContainer.configureTeleOpBindings(drive, elevator, carriage, climb, vision);
         robotContainer.configureTeleOpBindings(drive, elevator, carriage, vision);
 
+        
         // robotContainer.resetClimb(climb);
         // vision.setUpVision(); //Has to be here to set up Limelight Pipelines
 

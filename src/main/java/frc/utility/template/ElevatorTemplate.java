@@ -262,6 +262,9 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 setVoltage(0);
             }
         }
+
+        // //Ensures that the encoder is always positive
+        if (getPosition()<0) resetEncoder();
     }
 
     @Override

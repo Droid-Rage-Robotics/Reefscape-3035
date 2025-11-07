@@ -106,17 +106,7 @@ public class Elevator extends ElevatorTemplate{
     //     Control.FEEDFORWARD, "Elevator", 0, isEnabled);
     // }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-        // //Ensures that the encoder is always positive
-        if(getPosition()<0){
-            resetEncoder();
-        }
-    }
-
     public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
-        // return new InstantCommand(()->motorRight.setPower(1));
     }
 }
