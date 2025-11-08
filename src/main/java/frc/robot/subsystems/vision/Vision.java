@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.DroidRageConstants.Alignment;
+import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.LimelightEx;
@@ -278,6 +279,25 @@ public class Vision extends SubsystemBase implements Dashboard{
             return (int) rightLimelight.getID();
         }
     }
+    
+    public double getClosestDist(PoseEstimate est) {
+        if (est.rawFiducials == null || est.rawFiducials.length == 0) return 999;
+    
+        double minDist = 999;
+        for (var f : est.rawFiducials) {
+            minDist = Math.min(minDist, f.distToRobot);
+        }
+        return minDist;
+    }
+
+    public PoseEstimate getLeftEstimate() {
+        return leftLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();
+    }
+
+    public PoseEstimate getRightEstimate() {
+        return rightLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();
+    }
+    
 
     public Pose2d getPose(String name) {
         switch (DroidRageConstants.alignmentMode) {

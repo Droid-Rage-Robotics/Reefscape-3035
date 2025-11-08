@@ -191,15 +191,31 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
             0,
             0,
             0);
-        
-        PoseEstimate latest = vision.getLeftLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
 
-        if (latest != null && latest.tagCount > 0) {
-            poseEstimator.addVisionMeasurement(latest.pose, latest.timestampSeconds);
-            visionField.setRobotPose(latest.pose);
+        vision.getRightLimelight().setRobotOrientation(
+            pigeon2.getYaw().getValueAsDouble(),
+            0,
+            0,
+            0,
+            0,
+            0);
+        
+        PoseEstimate latestLeft = vision.getLeftEstimate();
+        PoseEstimate latestRight = vision.getRightEstimate();
+
+        poseEstimator.update(getRotation2d(), getModulePositions());        
+
+        if (latestLeft != null && latestLeft.tagCount > 0) {
+            poseEstimator.addVisionMeasurement(latestLeft.pose, latestLeft.timestampSeconds);
+            visionField.setRobotPose(latestLeft.pose);
         }
 
-        poseEstimator.update(getRotation2d(), getModulePositions());
+        if (latestRight != null && latestRight.tagCount > 0) {
+            poseEstimator.addVisionMeasurement(latestRight.pose, latestRight.timestampSeconds);
+            visionField.setRobotPose(latestRight.pose);
+        }
+
+        visionField.setRobotPose(getEstimatedPose());
     }
 
     @Override
