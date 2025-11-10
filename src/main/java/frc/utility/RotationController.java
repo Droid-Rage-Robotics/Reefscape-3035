@@ -31,7 +31,7 @@ public class RotationController implements Sendable {
         holdController.setTolerance(tolerance);
     }
 
-    public static RotationController create(SwerveDrive drive) {
+    public static RotationController create() {
         return new RotationController();
     }
 
