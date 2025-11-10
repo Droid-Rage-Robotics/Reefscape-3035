@@ -30,7 +30,7 @@ import frc.utility.DashboardUtils.MatchValue;
 
 public class Robot extends TimedRobot {
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(vision, true);//-10 Works
+    private final SwerveDrive drive = new SwerveDrive(true, vision);//-10 Works
     private final Elevator elevator = new Elevator(false);
     private final Carriage carriage = new Carriage(
         new Arm(false),

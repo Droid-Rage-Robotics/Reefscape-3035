@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.Volts;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -110,7 +112,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     private final boolean isEnabled;
     private final Vision vision;
 
-    public SwerveDrive(Vision vision, boolean isEnabled) {
+    public SwerveDrive(boolean isEnabled, Vision vision) {
         this.isEnabled = isEnabled;
         this.vision=vision;
         
@@ -149,6 +151,9 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     }
 
     @Override
+    public void alerts() {}
+
+    @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("SwerveDrive");
 
@@ -184,43 +189,48 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
 
         field.setRobotPose(getPose());
         
-        vision.getLeftLimelight().setRobotOrientation(
-            pigeon2.getYaw().getValueAsDouble(),
-            0,
-            0,
-            0,
-            0,
-            0);
-
-        vision.getRightLimelight().setRobotOrientation(
-            pigeon2.getYaw().getValueAsDouble(),
-            0,
-            0,
-            0,
-            0,
-            0);
-        
-        PoseEstimate latestLeft = vision.getLeftEstimate();
-        PoseEstimate latestRight = vision.getRightEstimate();
-
-        poseEstimator.update(getRotation2d(), getModulePositions());        
-
-        if (latestLeft != null && latestLeft.tagCount > 0) {
-            poseEstimator.addVisionMeasurement(latestLeft.pose, latestLeft.timestampSeconds);
-            visionField.setRobotPose(latestLeft.pose);
-        }
-
-        if (latestRight != null && latestRight.tagCount > 0) {
-            poseEstimator.addVisionMeasurement(latestRight.pose, latestRight.timestampSeconds);
-            visionField.setRobotPose(latestRight.pose);
-        }
-
-        visionField.setRobotPose(getEstimatedPose());
+        updateVisionOdometry();
     }
 
     @Override
     public void simulationPeriodic() {
         periodic();
+    }
+
+    public void updateVisionOdometry() {
+        poseEstimator.update(getRotation2d(), getModulePositions());
+
+        PoseEstimate left = vision.getLeftLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
+        PoseEstimate right = vision.getRightLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
+
+        if (left != null && left.tagCount > 0) {
+            double dist = vision.getVisionDistance(left);
+            double std = vision.distanceToStdDev(dist);
+            double stdTheta = Math.toRadians(Math.max(5, dist * 4));
+
+            if (vision.isReasonable(getEstimatedPose(), left.pose))
+                poseEstimator.addVisionMeasurement(
+                    left.pose,
+                    left.timestampSeconds,
+                    VecBuilder.fill(std, std, stdTheta)
+                );
+            }
+
+        if (right != null && right.tagCount > 0) {
+            double dist = vision.getVisionDistance(right);
+            double std = vision.distanceToStdDev(dist);
+            double stdTheta = Math.toRadians(Math.max(5, dist * 4));
+
+            if (vision.isReasonable(getEstimatedPose(), right.pose)) {
+                poseEstimator.addVisionMeasurement(
+                    right.pose,
+                    right.timestampSeconds,
+                    VecBuilder.fill(std, std, stdTheta)
+                );
+            }  
+        }
+
+        visionField.setRobotPose(getEstimatedPose());
     }
 
     public SwerveModulePosition[] getModulePositions() {
@@ -453,7 +463,4 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
             }, null, this)
         );
     }
-
-    @Override
-    public void alerts() {}
 }

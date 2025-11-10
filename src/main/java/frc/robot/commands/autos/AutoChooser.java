@@ -190,10 +190,7 @@ public class AutoChooser implements Dashboard {
         );
 
         createAutoBuilder(drive);
-        // ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
-        //     .withWidget(BuiltInWidgets.kComboBoxChooser)
-        //     .withSize(1, 3);
-
+        
         autoChooser.addOption("NothingAuto", new InstantCommand());
         // autoChooser.addOption("VisionTest", Autos.testVision(drive, vision));
         // autoChooser.addOption("testM", Autos.testM(drive,elevator, carriage, vision));

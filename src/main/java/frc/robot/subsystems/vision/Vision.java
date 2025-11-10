@@ -116,7 +116,11 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
     
-    public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+    public static class Constants {
+        public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+        public static final double MAX_POSITION_JUMP = 1.0;  // meters
+        public static final double MAX_ROTATION_JUMP = 45.0; // degrees
+    }
 
     public int targetIds[];
     public PIDController rotController = new PIDController(.095, 0, 0);// .1
@@ -125,11 +129,11 @@ public class Vision extends SubsystemBase implements Dashboard{
     public final AtomicBoolean isAlign = new AtomicBoolean(false);
     // Set Up the team number - http://limelight.local:5801/
 
-    @Getter private final LimelightEx rightLimelight = LimelightEx.create(DroidRageConstants.rightLimelight)
+    @Getter private final LimelightEx rightLimelight = LimelightEx.create(DroidRageConstants.rightLimelight) // webgui at 10.30.35.12:5801
         .withStreamMode_Standard()
         .withCropWindow(-1, 1, -1, 1);
     
-    @Getter private final LimelightEx leftLimelight = LimelightEx.create(DroidRageConstants.leftLimelight)
+    @Getter private final LimelightEx leftLimelight = LimelightEx.create(DroidRageConstants.leftLimelight) // webgui at 10.30.35.11:5801
         .withStreamMode_Standard()
         .withCropWindow(-1, 1, -1, 1);
 
@@ -280,14 +284,28 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
     
-    public double getClosestDist(PoseEstimate est) {
+    public double getVisionDistance(PoseEstimate est) {
         if (est.rawFiducials == null || est.rawFiducials.length == 0) return 999;
-    
         double minDist = 999;
         for (var f : est.rawFiducials) {
             minDist = Math.min(minDist, f.distToRobot);
         }
         return minDist;
+    }
+    
+    public double distanceToStdDev(double distMeters) {
+        double MIN_STD = 0.05; // 5cm close
+        double MAX_STD = 1.0;  // 1m far away
+        double SLOPE = 0.15;   // uncertainty per meter
+    
+        return Math.min(MAX_STD, MIN_STD + SLOPE * distMeters);
+    }
+
+    public boolean isReasonable(Pose2d current, Pose2d vision) {
+        double posDiff = current.getTranslation().getDistance(vision.getTranslation());
+        double rotDiff = Math.abs(current.getRotation().minus(vision.getRotation()).getDegrees());
+
+        return posDiff < Constants.MAX_POSITION_JUMP && rotDiff < Constants.MAX_ROTATION_JUMP;
     }
 
     public PoseEstimate getLeftEstimate() {

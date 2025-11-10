@@ -18,7 +18,6 @@ import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.motor.CANMotorEx;
 
-//Works
 public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final CANMotorEx[] motors;
     private PIDController controller;
@@ -33,14 +32,6 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private double calculatedVoltage = 0;
     private double calculatedPID = 0;
     private double calculatedFF = 0;
-
-    // private TrapezoidProfile profile;
-    // private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State(0,0); //initial
-    // private TrapezoidProfile.State currentState = new TrapezoidProfile.State(0,0); //initial
-    
-
-    // private TrapezoidProfile.State goal = new TrapezoidProfile.State(0,0);
-    // REV TOUCH SENSOR
 
     /**
      * @param motors - The Motors to Control
@@ -90,7 +81,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      * @param motors - The Motors to Control
      * @param controller - PID Controller
      * @param feedforward - Feedforward
-     * @param limitSwitch - Limit Switch
+     * @param limitSwitch - Limit Switch REV TOUCH SENSOR
      * @param constraints
      * @param maxPosition 
      * @param minPosition
@@ -174,7 +165,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
         // profile = new TrapezoidProfile(constraints);
         // controller.setTolerance(.3);
-        this.profiledController.setTolerance(0.001);
+        // this.profiledController.setTolerance(0.001);
 
         DashboardUtils.register(this);
     }
@@ -238,21 +229,12 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             //             + feedforward.calculate(current.position, current.velocity));
             //     break;
             case TRAPEZOID_PROFILE:
-                // Advance the profile by one loop timestep (0.02s = 20ms)
-                // TrapezoidProfile.State next = profile.calculate(0.02, currentState, goal);
+                calculatedPID = profiledController.calculate(getPosition());
 
-                // double ff = feedforward.calculateWithVelocities(currentSetpoint.velocity, next.velocity);
+                calculatedFF = feedforward.calculate(profiledController.getSetpoint().velocity);
 
-                // double pid = controller.calculate(getEncoderPosition(), next.position);
+                setVoltage(calculatedFF + calculatedPID);
 
-                double pid = profiledController.calculate(getPosition());
-                calculatedPID=pid;
-
-                double ff = feedforward.calculate(profiledController.getSetpoint().velocity);
-                calculatedFF=ff;
-
-                setVoltage(ff + pid);
-                // currentSetpoint = next;
                 break;
             case SYS_ID: break;
         }
@@ -292,9 +274,6 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 if(target>maxPosition||target<minPosition) {
                     return;
                 } else {
-                    // goal = new TrapezoidProfile.State(target,0);
-                    // currentState = new TrapezoidProfile.State(getEncoderPosition(), motors[mainNum].getVelocity());
-
                     profiledController.setGoal(target);
                 }
                 break;
@@ -370,7 +349,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                 null, // Use default ramp rate (1 V/s)
                 null, // Use default step voltage (7 volts)
                 null, // Use default timeout (10 s)
-                (state) -> SignalLogger.writeString("state", state.toString()) // Log state with Phoenix SignalLogger class
+                (state) -> SignalLogger.writeString("sysid-test-state-Elevator", state.toString()) // Log state with Phoenix SignalLogger class
             ), new SysIdRoutine.Mechanism(this::setVoltage, null, this));
     }
 
