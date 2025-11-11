@@ -3,7 +3,6 @@ package frc.utility;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import frc.robot.subsystems.drive.SwerveDrive;
 
 /**
  * Uses a PID Controller to quickly turn the robot to a specified angle. Once the robot is within
