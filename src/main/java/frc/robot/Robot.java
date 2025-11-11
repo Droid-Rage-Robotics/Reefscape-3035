@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     private final Carriage carriage = new Carriage(
         new Arm(false),
         new Pivot(false),
-        new Intake(true)
+        new Intake(false)
     );
     
     // private Climb climb = new Climb(false);

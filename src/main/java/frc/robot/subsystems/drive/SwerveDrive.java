@@ -200,8 +200,8 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
     public void updateVisionOdometry() {
         poseEstimator.update(getRotation2d(), getModulePositions());
 
-        PoseEstimate left = vision.getLeftLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
-        PoseEstimate right = vision.getRightLimelight().getBotPoseEstimate_wpiBlue_MegaTag2();
+        PoseEstimate left = vision.getLeftEstimate();
+        PoseEstimate right = vision.getRightEstimate();
 
         if (left != null && left.tagCount > 0) {
             double dist = vision.getVisionDistance(left);

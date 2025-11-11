@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
 import frc.robot.DroidRageConstants.Alignment;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
+import frc.robot.subsystems.vision.LimelightHelpers.RawFiducial;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.LimelightEx;
@@ -226,8 +227,12 @@ public class Vision extends SubsystemBase implements Dashboard{
         periodic();
     }
 
-    // tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
-    public double gettX(String name) {
+    /**
+     * Gets the horizontal offset from the crosshair to the target in degrees.
+     * @param limelightName Name of the Limelight camera ("" for default)
+     * @return Horizontal offset angle in degrees
+     */
+    public double getTX(String name) {
         if (name == DroidRageConstants.leftLimelight) {
             return leftLimelight.getTX();
         } else {
@@ -235,8 +240,12 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
 
-    // ta Target Area (0% of image to 100% of image)
-    public double gettA(String name) {
+    /**
+     * Gets the target area as a percentage of the image (0-100%).
+     * @param limelightName Name of the Limelight camera ("" for default) 
+     * @return Target area percentage (0-100)
+     */
+    public double getTA(String name) {
         if (name == DroidRageConstants.leftLimelight) {
             return leftLimelight.getTA();
         } else {
@@ -244,8 +253,12 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
 
-    // ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-    public double gettY(String name) {
+    /**
+     * Gets the vertical offset from the crosshair to the target in degrees.
+     * @param limelightName Name of the Limelight camera ("" for default)
+     * @return Vertical offset angle in degrees
+     */
+    public double getTY(String name) {
         if (name == DroidRageConstants.leftLimelight) {
             return leftLimelight.getTY();
         } else {
@@ -253,10 +266,12 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
 
-    // tv Whether the limelight has any valid targets (0 or 1)
-    // isConnected
-    // 0 is __ and 1 is __
-    public boolean gettV(String name) {
+    /**
+     * Does the Limelight have a valid target?
+     * @param limelightName Name of the Limelight camera ("" for default)
+     * @return True if a valid target is present, false otherwise
+     */
+    public boolean getTV(String name) {
         if (name == DroidRageConstants.leftLimelight) {
             return leftLimelight.getTV();
         } else {
@@ -292,6 +307,15 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
         return minDist;
     }
+
+    public double getVisionDistance(RawFiducial[] rawFiducials) {
+        if (rawFiducials == null || rawFiducials.length == 0) return 999;
+        double minDist = 999;
+        for (var f : rawFiducials) {
+            minDist = Math.min(minDist, f.distToRobot);
+        }
+        return minDist;
+    }
     
     public double distanceToStdDev(double distMeters) {
         double MIN_STD = 0.05; // 5cm close
@@ -301,34 +325,49 @@ public class Vision extends SubsystemBase implements Dashboard{
         return Math.min(MAX_STD, MIN_STD + SLOPE * distMeters);
     }
 
+    /**
+     * @apiNote NOT FULLY FUNCTIONAL YET; WILL ALWAYS RETURN TRUE
+     * 
+     * Used to prevent large jumps in position or rotation when using
+     * limelight odometry by checking differences in position between
+     * current and next position estimates.
+     * 
+     * @param current the curremt position of the robot
+     * @param vision the next vision estimate
+     * @return true if the position difference is reasonable; false otherwise
+     */
     public boolean isReasonable(Pose2d current, Pose2d vision) {
         double posDiff = current.getTranslation().getDistance(vision.getTranslation());
         double rotDiff = Math.abs(current.getRotation().minus(vision.getRotation()).getDegrees());
 
-        return posDiff < Constants.MAX_POSITION_JUMP && rotDiff < Constants.MAX_ROTATION_JUMP;
+        // return posDiff < Constants.MAX_POSITION_JUMP && rotDiff < Constants.MAX_ROTATION_JUMP;
+        return true;
     }
 
+    /**
+     * Gets the MegaTag2 Pose2d and timestamp from the left limelight for use with WPILib pose estimator
+     * (addVisionMeasurement) in the WPILib Blue alliance coordinate system.
+     * Make sure you are calling setRobotOrientation() before calling this method.
+     * 
+     * @return a new PoseEstimate
+     */
     public PoseEstimate getLeftEstimate() {
         return leftLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();
     }
 
+    /**
+     * Gets the MegaTag2 Pose2d and timestamp from the right limelight for use with WPILib pose estimator
+     * (addVisionMeasurement) in the WPILib Blue alliance coordinate system.
+     * Make sure you are calling setRobotOrientation() before calling this method.
+     * 
+     * @return a new PoseEstimate
+     */
     public PoseEstimate getRightEstimate() {
         return rightLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();
     }
-    
 
-    public Pose2d getPose(String name) {
-        switch (DroidRageConstants.alignmentMode) {
-            case RIGHT:
-                return rightLimelight.getBotPose2d();
-            case LEFT:
-                return leftLimelight.getBotPose2d();
-            default:
-                return leftLimelight.getBotPose2d();
-        }
-    }
-
-    public Location getLeftLocation(String name, int look) {
+    public Location getLeftLocation(String name) {
+        int look = getID(name);
         if(DroidRageConstants.alignmentMode==Alignment.MIDDLE){
             return Vision.Location.LEFT_A;
         } else if(DroidRageConstants.alignmentMode == Alignment.RIGHT){
@@ -367,7 +406,8 @@ public class Vision extends SubsystemBase implements Dashboard{
 
     }
 
-    public Location getRightLocation(String name, int look) {
+    public Location getRightLocation(String name) {
+        int look = getID(name);
         if (DroidRageConstants.alignmentMode == Alignment.MIDDLE) {
             return Vision.Location.RIGHT_A;
         } else if (DroidRageConstants.alignmentMode == Alignment.LEFT) {
@@ -404,100 +444,65 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
 
+    /**
+     * @return angular velocity to align with an april tag
+     */
     public double aim() {
         double targetingAngularVelocity = 0;
         switch (DroidRageConstants.alignmentMode) {
             case LEFT:
                 targetingAngularVelocity = rotController.calculate(
-                        gettX(DroidRageConstants.leftLimelight),
+                        getTX(DroidRageConstants.leftLimelight),
                         getLeftLocation(DroidRageConstants.leftLimelight).getAngle());
                 break;
             case RIGHT:
                 targetingAngularVelocity = rotController.calculate(
-                        gettX(DroidRageConstants.rightLimelight),
+                        getTX(DroidRageConstants.rightLimelight),
                         getRightLocation(DroidRageConstants.rightLimelight).getAngle());
                 break;
             case MIDDLE:
-                if (gettV(DroidRageConstants.leftLimelight)) {
+                if (getTV(DroidRageConstants.leftLimelight)) {
                     targetingAngularVelocity = rotController.calculate(
-                        gettX(DroidRageConstants.leftLimelight),
+                        getTX(DroidRageConstants.leftLimelight),
                         getLeftLocation(DroidRageConstants.leftLimelight).getAngle());
-                } else if (gettV(DroidRageConstants.rightLimelight)) {
+                } else if (getTV(DroidRageConstants.rightLimelight)) {
                     targetingAngularVelocity = rotController.calculate(
-                        gettX(DroidRageConstants.rightLimelight),
+                        getTX(DroidRageConstants.rightLimelight),
                         getRightLocation(DroidRageConstants.rightLimelight).getAngle());
                 }
         }
         return targetingAngularVelocity;
     }
 
+    /**
+     * @return forward speed to reach an april tag
+     */
     public double range() {
         double targetingForwardSpeed = 0;
         switch (DroidRageConstants.alignmentMode) {
             case LEFT:
                 targetingForwardSpeed = xController.calculate(
-                        gettY(DroidRageConstants.leftLimelight),
+                        getTY(DroidRageConstants.leftLimelight),
                         getLeftLocation(DroidRageConstants.leftLimelight).getDistance());
                 break;
             case RIGHT:
                 targetingForwardSpeed = xController.calculate(
-                        gettY(DroidRageConstants.rightLimelight),
+                        getTY(DroidRageConstants.rightLimelight),
                         getRightLocation(DroidRageConstants.rightLimelight).getDistance());
                 break;
             case MIDDLE:
-                if (gettV(DroidRageConstants.leftLimelight)) {
+                if (getTV(DroidRageConstants.leftLimelight)) {
 					targetingForwardSpeed = xController.calculate(
-                        gettY(DroidRageConstants.leftLimelight),
+                        getTY(DroidRageConstants.leftLimelight),
                         getLeftLocation(DroidRageConstants.leftLimelight).getDistance());
-				} else if (gettV(DroidRageConstants.rightLimelight)) {
+				} else if (getTV(DroidRageConstants.rightLimelight)) {
                     targetingForwardSpeed = xController.calculate(
-                        gettY(DroidRageConstants.rightLimelight),
+                        getTY(DroidRageConstants.rightLimelight),
                         getRightLocation(DroidRageConstants.rightLimelight).getDistance());
                 }
                 
                 break;
         }
         return targetingForwardSpeed;
-    }
-
-    // public double aimAuto(int look) {
-    //     double targetingAngularVelocity = 0;
-    //     switch (DroidRageConstants.alignmentMode) {
-    //         case LEFT:
-    //             targetingAngularVelocity = rotController.calculate(
-    //                     gettX(DroidRageConstants.leftLimelight),
-    //                     getLeftLocation(DroidRageConstants.leftLimelight, look).getAngle());
-    //             break;
-    //         case RIGHT:
-    //             targetingAngularVelocity = rotController.calculate(
-    //                     gettX(DroidRageConstants.rightLimelight),
-    //                     getRightLocation(DroidRageConstants.rightLimelight, look).getAngle());
-    //             break;
-    //     }
-    //     return targetingAngularVelocity;
-    // }
-
-    // public double rangeAuto(int look) {
-    //     double targetingForwardSpeed = 0;
-    //     switch (DroidRageConstants.alignmentMode) {
-    //         case LEFT:
-    //             targetingForwardSpeed = xController.calculate(
-    //                     gettY(DroidRageConstants.leftLimelight),
-    //                     getLeftLocation(DroidRageConstants.leftLimelight, look).getDistance());
-    //             break;
-    //         case RIGHT:
-    //             targetingForwardSpeed = xController.calculate(
-    //                     gettY(DroidRageConstants.rightLimelight),
-    //                     getRightLocation(DroidRageConstants.rightLimelight, look).getDistance());
-    //             break;
-    //     }
-    //     return targetingForwardSpeed;
-    // }
-
-    public Location getRightLocation(String name) {
-        return getRightLocation(name, getID(name));
-    }
-    public Location getLeftLocation(String name) {//Teleop
-        return getLeftLocation(name, getID(name));
     }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
+import frc.robot.subsystems.vision.LimelightHelpers.RawFiducial;
 
 public class LimelightEx implements Sendable{
     private final String name;
@@ -31,30 +32,6 @@ public class LimelightEx implements Sendable{
         LimelightHelpers.setCameraPose_RobotSpace(name,forward,side,up,roll,pitch,yaw);
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public double getTA() {
-        return LimelightHelpers.getTA(name);
-    }
-    
-    public double getTX() {
-        return LimelightHelpers.getTX(name);
-    }
-    
-    public double getTY() {
-        return LimelightHelpers.getTY(name);
-    }
-    
-    public boolean getTV() {
-        return LimelightHelpers.getTV(name);
-    }
-    
-    public double getID() {
-        return LimelightHelpers.getFiducialID(name);
-    }
-
     /** Enables standard side-by-side stream mode. */
     public LimelightEx withStreamMode_Standard() {
         LimelightHelpers.setStreamMode_Standard(name);
@@ -71,6 +48,11 @@ public class LimelightEx implements Sendable{
      */
     public LimelightEx withCropWindow(double cropXMin, double cropXMax, double cropYMin, double cropYMax) {
         LimelightHelpers.setCropWindow(name, cropXMin, cropXMax, cropYMin, cropYMax);
+        return this;
+    }
+
+    public LimelightEx withIdFilter(int[] ids) {
+        LimelightHelpers.SetFiducialIDFiltersOverride(name, ids);
         return this;
     }
 
@@ -111,9 +93,57 @@ public class LimelightEx implements Sendable{
         return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
     }
 
-    public LimelightEx withIdFilter(int[] ids) {
-        LimelightHelpers.SetFiducialIDFiltersOverride(name, ids);
-        return this;
+    /**
+     * Gets the latest raw fiducial/AprilTag detection results from NetworkTables.
+     * 
+     * @return Array of RawFiducial objects containing detection details
+     */
+    public RawFiducial[] getRawFiducials() {
+        return LimelightHelpers.getRawFiducials(name);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Gets the target area as a percentage of the image (0-100%).
+     * 
+     * @return Target area percentage (0-100)
+     */
+    public double getTA() {
+        return LimelightHelpers.getTA(name);
+    }
+    
+    /**
+     * Gets the horizontal offset from the crosshair to the target in degrees.
+     * 
+     * @return Horizontal offset angle in degrees
+     */
+    public double getTX() {
+        return LimelightHelpers.getTX(name);
+    }
+    
+    /**
+     * Gets the vertical offset from the crosshair to the target in degrees.
+     * 
+     * @return Vertical offset angle in degrees
+     */
+    public double getTY() {
+        return LimelightHelpers.getTY(name);
+    }
+    
+    /**
+     * Does the Limelight have a valid target?
+     * 
+     * @return True if a valid target is present, false otherwise
+     */
+    public boolean getTV() {
+        return LimelightHelpers.getTV(name);
+    }
+    
+    public double getID() {
+        return LimelightHelpers.getFiducialID(name);
     }
  
     @Override

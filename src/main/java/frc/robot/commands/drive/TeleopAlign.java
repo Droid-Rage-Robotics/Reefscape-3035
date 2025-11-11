@@ -27,18 +27,18 @@ public class TeleopAlign extends Command{
 	public void execute() {
 		switch (DroidRageConstants.alignmentMode) {
 			case LEFT:
-				if(!vision.gettV(DroidRageConstants.leftLimelight)){
+				if(!vision.getTV(DroidRageConstants.leftLimelight)){
 					return;
 				}
 				break;
 			case RIGHT:
-				if (!vision.gettV(DroidRageConstants.rightLimelight)) {
+				if (!vision.getTV(DroidRageConstants.rightLimelight)) {
 					return;
 				}
 				break;
 			case MIDDLE:
-				if (!vision.gettV(DroidRageConstants.rightLimelight) &&
-						(!vision.gettV(DroidRageConstants.leftLimelight))) {
+				if (!vision.getTV(DroidRageConstants.rightLimelight) &&
+						(!vision.getTV(DroidRageConstants.leftLimelight))) {
 					return;
 				}
 				break;
