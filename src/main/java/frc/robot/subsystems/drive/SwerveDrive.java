@@ -204,7 +204,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
         PoseEstimate right = vision.getRightEstimate();
 
         if (left != null && left.tagCount > 0) {
-            double dist = vision.getVisionDistance(left);
+            double dist = vision.closestTagDistance(left);
             double std = vision.distanceToStdDev(dist);
             double stdTheta = Math.toRadians(Math.max(5, dist * 4));
 
@@ -217,7 +217,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
             }
 
         if (right != null && right.tagCount > 0) {
-            double dist = vision.getVisionDistance(right);
+            double dist = vision.closestTagDistance(right);
             double std = vision.distanceToStdDev(dist);
             double stdTheta = Math.toRadians(Math.max(5, dist * 4));
 

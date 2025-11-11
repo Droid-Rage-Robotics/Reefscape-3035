@@ -299,7 +299,14 @@ public class Vision extends SubsystemBase implements Dashboard{
         }
     }
     
-    public double getVisionDistance(PoseEstimate est) {
+    /**
+     * Used to get the distance to the closest april tag seen by the limelight
+     * from a pose estimate.
+     * 
+     * @param est a pose estimate
+     * @return distance in meters
+     */
+    public double closestTagDistance(PoseEstimate est) {
         if (est.rawFiducials == null || est.rawFiducials.length == 0) return 999;
         double minDist = 999;
         for (var f : est.rawFiducials) {
@@ -308,13 +315,53 @@ public class Vision extends SubsystemBase implements Dashboard{
         return minDist;
     }
 
-    public double getVisionDistance(RawFiducial[] rawFiducials) {
+    /**
+     * Used to get the distance to the closest april tag seen by the limelight.
+     * 
+     * @param rawFiducials an array of raw fiducials from the limelight
+     * @return distance in meters
+     */
+    public double closestTagDistance(RawFiducial[] rawFiducials) {
         if (rawFiducials == null || rawFiducials.length == 0) return 999;
         double minDist = 999;
         for (var f : rawFiducials) {
             minDist = Math.min(minDist, f.distToRobot);
         }
         return minDist;
+    }
+
+    /**
+     * Used to get the distance to a specific april tag.
+     * 
+     * @param rawFiducials an array of raw fiducials from the limelight
+     * @param id the id of the april tag
+     * @return distance in meters
+     */
+    public double getDistanceToTag(RawFiducial[] rawFiducials, int id) {
+        if (rawFiducials == null || rawFiducials.length == 0) return 999;
+        double distance = 999;
+        for (RawFiducial f : rawFiducials) {
+            if (f.id == id) {
+                distance = Math.min(distance, f.distToRobot);
+            }
+        }
+        return distance;
+    }
+    
+    public RawFiducial[] getRawFiducials() {
+        return switch (DroidRageConstants.alignmentMode) {
+            case LEFT -> leftLimelight.getRawFiducials();
+            case RIGHT -> rightLimelight.getRawFiducials();
+            case MIDDLE -> {
+                if (getTV(DroidRageConstants.leftLimelight)) {
+                    yield leftLimelight.getRawFiducials();
+                } else if (getTV(DroidRageConstants.rightLimelight)) {
+                    yield rightLimelight.getRawFiducials();
+                } else {
+                    yield null;
+                }
+            }
+        };
     }
     
     public double distanceToStdDev(double distMeters) {
