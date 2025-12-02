@@ -90,7 +90,6 @@ public class DashboardUtils {
         }
 
         SmartDashboard.putData("Distribution", powerDistribution);
-
     }
 
     /**
@@ -105,5 +104,4 @@ public class DashboardUtils {
             batteryAlert.set(false);
         }
     }
-    
 }

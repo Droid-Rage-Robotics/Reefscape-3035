@@ -86,6 +86,7 @@ public class SparkMaxEx extends MotorBase {
      */
     public SparkMaxEx withSupplyCurrentLimit(int value) {
         config.smartCurrentLimit(value);
+        burnFlash();
         return this;
     }
 
@@ -101,6 +102,7 @@ public class SparkMaxEx extends MotorBase {
             case Forward -> false;
             case Reversed -> true;
         });
+        burnFlash();
         return this;
     }
 
@@ -115,6 +117,7 @@ public class SparkMaxEx extends MotorBase {
             case Brake -> IdleMode.kBrake;
             case Coast -> IdleMode.kCoast;
         });
+        burnFlash();
         return this;
     }
 
@@ -147,7 +150,6 @@ public class SparkMaxEx extends MotorBase {
      */
     @Override
     public int getDeviceId() {
-        // return motor.getDeviceId();
         return deviceId;
     }
 
