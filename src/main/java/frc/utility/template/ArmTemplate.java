@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.DashboardUtils.Dashboard;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 
 public class ArmTemplate extends SubsystemBase implements Dashboard {
-    protected final CANMotorEx[] motors;
+    protected final MotorBase[] motors;
     protected final PIDController controller;
     protected final ArmFeedforward feedforward;
     protected DigitalInput limitSwitch;
@@ -33,7 +33,7 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
     protected final String name;
 
     public ArmTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
         TrapezoidProfile.Constraints constraints,
@@ -58,8 +58,8 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
 
         profile = new TrapezoidProfile(constraints);
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         positionRadian = () -> motors[mainNum].getPosition()+offset;
@@ -69,7 +69,7 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
     }
 
     public ArmTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
         DigitalInput limitSwitch,
@@ -94,8 +94,8 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
         this.mainNum=mainNum;
         this.name=subsystemName;
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         profile = new TrapezoidProfile(constraints);
@@ -173,13 +173,13 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
         return controller.getSetpoint();
     }
     protected void setVoltage(double voltage) {
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             // motor.getEncoder().setPosition(0);
             motor.resetEncoder(0);
         }
@@ -191,11 +191,11 @@ public class ArmTemplate extends SubsystemBase implements Dashboard {
         return radian;
     }
 
-    public CANMotorEx getMotor(){
+    public MotorBase getMotor(){
         return motors[mainNum];
     }
     
-    public CANMotorEx[] getAllMotor() {
+    public MotorBase[] getAllMotor() {
         return motors;
     }
 

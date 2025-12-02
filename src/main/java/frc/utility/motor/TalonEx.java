@@ -10,154 +10,267 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.DroidRageConstants;
 
-public class TalonEx extends CANMotorEx {
-    private final TalonFX talon;
+public class TalonEx extends MotorBase {
+    private final TalonFX motor;
     private final TalonFXConfiguration config;
     private final TalonFXConfigurator configurator;
-    private final Alert canAlert;
-    private CANBus canbus;
+    private final int deviceId;
+    private final CANBus canBus;
+    private double conversionFactor = 1;
+    private Subsystem subsystem;
+    private boolean isEnabled;
     
-    private TalonEx(TalonFX motor) {
-        this.talon = motor;
+    private TalonEx(int deviceId, CANBus canBus) {
+        this.motor = new TalonFX(deviceId, canBus);
+        this.canBus = canBus;
+        this.deviceId=deviceId;
         this.config = new TalonFXConfiguration(); // Use to change configs
-        this.configurator = talon.getConfigurator(); // Use to apply configs
-        canAlert = new Alert("CAN Fault", AlertType.kWarning);
+        this.configurator = motor.getConfigurator(); // Use to apply configs
     }
 
-    public static DirectionBuilder create(int deviceID, CANBus canbus) {
-        TalonEx motor = new TalonEx(new TalonFX(deviceID, canbus));
-        motor.motorID = deviceID;
-        motor.canbus = canbus;
-        return motor.new DirectionBuilder();
-    }
-    
-    public static DirectionBuilder create(int deviceID) {
-        TalonEx motor = new TalonEx(new TalonFX(deviceID));
-        motor.motorID = deviceID;
-        return motor.new DirectionBuilder();
+    /**
+     * Creates a new TalonEx instance with the specified
+     * device id and canbus
+     * @param deviceId
+     * @param canBus
+     * @return a new TalonEx instance
+     */
+    public static TalonEx create(int deviceId, CANBus canBus) {
+        return new TalonEx(deviceId, canBus);
     }
 
-    @Override
-    public void setAlert() {
-        canAlert.set(talon.getStickyFault_Hardware().getValue());
+    /**
+     * Creates a new TalonEx instance with the specified
+     * device id and the default (rio) canbus.
+     * @param deviceId
+     * @return a new TalonEx instance
+     */
+    public static TalonEx create(int deviceId) {
+        return new TalonEx(deviceId, DroidRageConstants.rioCanBus);
     }
-   
+
+    /**
+     * Used to enable/disable the motor.
+     * @param isEnabled
+     * @return TalonEx (for call chaining)
+     */
     @Override
-    public void setDirection(Direction direction) {
+    public TalonEx withIsEnabled(boolean isEnabled) {
+        this.isEnabled=isEnabled;
+        return this;
+    }
+
+    /**
+     * Used to set a conversion factor to be applied to
+     * the raw position/velocity of the motor. Defaults
+     * to 1.
+     * @param conversionFactor
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withConversionFactor(double conversionFactor) {
+        this.conversionFactor=conversionFactor;
+        return this;
+    }
+
+    /**
+     * Used to set the subsystem that this motor is a
+     * part of.
+     * @param subsystem
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withSubsystem(Subsystem subsystem){
+        this.subsystem = subsystem;
+        return this;
+    }
+
+    /**
+     * Used to set the supply current limit of the motor.
+     * Defaults to 70 Amps.
+     * @param value
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withSupplyCurrentLimit(double value) {
+        config.CurrentLimits.SupplyCurrentLimit = value;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        configurator.apply(config);
+        return this;
+    }
+
+    /**
+     * Used to set the stator current limit of the motor.
+     * Defaults to 120 Amps.
+     * @param value
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withStatorCurrentLimit(double value) {
+        config.CurrentLimits.StatorCurrentLimit = value;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        configurator.apply(config);
+        return this;
+    }
+
+    /**
+     * Used to set the direction of the motor. Defaults to
+     * forward (clockwise-positive motion). Can be reversed
+     * to create counter-clockwise positive motion.
+     * @param direction
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withDirection(Direction direction) {
         config.MotorOutput.Inverted = switch (direction) {
             case Forward -> InvertedValue.Clockwise_Positive;
             case Reversed -> InvertedValue.CounterClockwise_Positive;
         };
         configurator.apply(config);
+        return this;
     }
 
-    @Override
-    public void setIdleMode(ZeroPowerMode mode) {
-        talon.setNeutralMode(switch (mode) {
+    /**
+     * Used to set the motor behavior when given zero output
+     * voltage.
+     * @param mode
+     * @return TalonEx (for call chaining)
+     */
+    public TalonEx withIdleMode(ZeroPowerMode mode) {
+        motor.setNeutralMode(switch (mode) {
             case Brake -> NeutralModeValue.Brake;
             case Coast -> NeutralModeValue.Coast;
         });
+        return this;
     }
 
-    @Override
-    public void setSupplyCurrentLimit(double currentLimit) {
-        config.CurrentLimits.SupplyCurrentLimit = currentLimit;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        configurator.apply(config);
-    }
-
-    @Override
-    public void setStatorCurrentLimit(double currentLimit){
-        config.CurrentLimits.StatorCurrentLimit = currentLimit;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        configurator.apply(config);
-    }
-
-    @Override
-    public void setPower(double power) {
-        if (isEnabledWriter.get()) {
-            talon.set(power);
-        }
-        // if (DroidRageConstants.removeWriterWriter.get()) {
-        //     outputWriter.set(power);
-        // }
-        
-        tempAlertLogic();
-    }
-
-    @Override
-    public void setVoltage(double outputVolts) {
-        if(isEnabledWriter.get()){
-            talon.setVoltage(outputVolts);
-        }
-        // if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
-        //     outputWriter.set(outputVolts);
-        // }
-        
-        tempAlertLogic();
-    }
-
-    @Override
-    public void setVoltage(Voltage voltage) {
-        talon.setVoltage(voltage.in(Volts)/RobotController.getBatteryVoltage());
-    }
-    
-    public void setPosition(double position) {
-        talon.setPosition(position);
-    }
-
-    // Already in rotations per sec so, just covert to
+    /**
+     * Used to get the velocity of the motor. Default units
+     * with default conversion factor of 1 are in rotations
+     * per second. Custom conversion factors are automatically
+     * applied.
+     * @return the velocity of the motor
+     */
     @Override
     public double getVelocity() {
-        return talon.getVelocity().getValueAsDouble()*positionConversionFactor;
+        return motor.getVelocity().getValueAsDouble() * conversionFactor;
     }
 
-    @Override
-    public double getSpeed() {
-        return talon.get();
-    }
-
+    /**
+     * Used to get the position of the motor. Default units
+     * with default conversion factor of 1 are in rotations.
+     * Custom conversion factors are automatically applied.
+     * @return the positon of the motor
+     */
     @Override
     public double getPosition() {
-        return talon.getPosition().getValueAsDouble()*positionConversionFactor;
+        return motor.getPosition().getValueAsDouble() * conversionFactor;
     }
 
+    /**
+     * Used to get the temperature of the motor.
+     * Default units are in Celsius.
+     * @return the temperature as a double
+     */
     @Override
-    public int getDeviceID() {
-        return talon.getDeviceID();
+    public double getTemp() {
+        return motor.getDeviceTemp().getValueAsDouble();
     }
-     
+
+    /**
+     * Used to get the applied voltage to the motor.
+     * @return the applied voltage to the motor
+     */
+    @Override
+    public double getVoltage() {
+        return motor.getMotorVoltage().getValueAsDouble();
+    }
+
+    /**
+     * Used to get the canbus of the motor.
+     * @return a CANBus object
+     */
     public CANBus getCANBus() {
-        return canbus;
+        return canBus;
     }
 
+    /**
+     * Used to get the device id of the motor.
+     * @return the device id as an int
+     */
     @Override
-    public double getVoltage(){
-        return talon.getMotorVoltage().getValueAsDouble();
+    public int getDeviceId() {
+        return deviceId;
     }
 
+    /**
+     * Used to get the subsystem that the motor
+     * is a part of.
+     * @return a subsystem
+     */
+    public Subsystem getSubsystem() {
+        return this.subsystem;
+    }
+
+    /**
+     * Used to get the raw TalonFX object. Make
+     * sure you know what you are doing!
+     * @return a TalonFX object
+     */
+    public TalonFX getMotor() {
+        return motor;
+    }
+
+    /**
+     * Used to reset the encoder of the motor to a
+     * specific position in rotations.
+     * @param value
+     */
     @Override
-    public double getTemp(){
-        return talon.getDeviceTemp().getValueAsDouble();
+    public void resetEncoder(double value) {
+        motor.setPosition(value);
     }
 
+    /**
+     * Used to apply a voltage to the motor. Does
+     * nothing if the motor is disabled.
+     * @param voltage voltage
+     */
     @Override
-    public void resetEncoder(int num) {
-        talon.setPosition(num);
+    public void setVoltage(double voltage) {
+        if (isEnabled) {
+            motor.setVoltage(voltage);
+        }
     }
 
-    public void testTemp(double tempToCheck, double lowerSupply, double lowerStator){
-        if(getTemp() > tempToCheck) {}
-        
-        // return talon.getDeviceTemp().getValueAsDouble();
-    }
-
-    public TalonFX getMotor(){
-        return talon;
+    /**
+     * Used to apply a voltage to the motor. Does
+     * nothing if the motor is disabled.
+     * @param voltage voltage
+     */
+    @Override
+    public void setVoltage(Voltage voltage) {
+        if (isEnabled) {
+            motor.setVoltage(voltage.in(Volts));
+        }
     }
     
+    /**
+     * Used to control the motor in terms of power
+     * as opposed to manually setting the voltage.
+     * @param power speed in the range of -1 to 1
+     */
+    @Override
+    public void setPower(double power) {
+        if (isEnabled) {
+            motor.set(power);
+        }
+    }
+
+    /**
+     * Disables the motor and sets the voltage to 0.
+     */
+    @Override
+    public void stop() {
+        withIsEnabled(false);
+        motor.setVoltage(0);
+    }
 }

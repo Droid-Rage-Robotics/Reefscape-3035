@@ -4,10 +4,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 import frc.utility.motor.TalonEx;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.MotorBase.Direction;
+import frc.utility.motor.MotorBase.ZeroPowerMode;
 import frc.utility.template.IntakeTemplate;
 
 public class Intake extends IntakeTemplate {
@@ -19,14 +19,15 @@ public class Intake extends IntakeTemplate {
     private static TalonEx motor = TalonEx.create(31)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor(1)
-        .withSubsystemName(Carriage.class.getSimpleName())
+        .withConversionFactor(1)
+        .withSubsystem(null)
         .withIsEnabled(true)
-        .withCurrentLimit(80,80);//60,50
+        .withSupplyCurrentLimit(80)//60,50
+        .withStatorCurrentLimit(80);
 
     public Intake(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motor}, 
+        new MotorBase[]{motor}, 
         // new PIDController(0.1,0,0), //.15
         new PIDController(0.0020637,0,0),
         // new SimpleMotorFeedforward(0.025, 0.01,0.01),

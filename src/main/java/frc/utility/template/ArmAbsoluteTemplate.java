@@ -6,7 +6,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.EncoderEx;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 import frc.utility.motor.SparkMaxEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
@@ -85,7 +85,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     protected void setVoltage(double voltage) {
         // if (!encoder.isConnectedWriter.get()) return;
         // voltageWriter.set(voltage);
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }

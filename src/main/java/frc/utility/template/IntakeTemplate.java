@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 
 public class IntakeTemplate extends SubsystemBase implements Dashboard {
-    private final CANMotorEx[] motors;
+    private final MotorBase[] motors;
     private final PIDController controller;
     private final SimpleMotorFeedforward feedforward;
     private final Control control;
@@ -31,7 +31,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
 
 
     public IntakeTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         PIDController controller,
         SimpleMotorFeedforward feedforward,
         TrapezoidProfile.Constraints constraints,
@@ -54,8 +54,8 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         this.mainNum=mainNum;
         this.name=name;
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         profile = new TrapezoidProfile(constraints);
@@ -154,13 +154,13 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
     }
 
     protected void setVoltage(double voltage) {
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.resetEncoder(0);
         }
     }
@@ -169,11 +169,11 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
         return motors[mainNum].getVelocity() * conversionFactor;
     }
 
-    public CANMotorEx getMotor() {
+    public MotorBase getMotor() {
         return motors[mainNum];
     }
 
-    public CANMotorEx[] getAllMotor() {
+    public MotorBase[] getAllMotor() {
         return motors;
     }
 

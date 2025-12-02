@@ -33,7 +33,7 @@ import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
-import frc.utility.motor.wip.MotorBase.Direction;
+import frc.utility.motor.MotorBase.Direction;
 import lombok.Getter;
 
 //Set Voltage instead of set Power

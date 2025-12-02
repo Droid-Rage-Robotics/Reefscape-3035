@@ -6,10 +6,12 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 import frc.utility.motor.TalonEx;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.MotorBase.Direction;
+import frc.utility.motor.MotorBase.ZeroPowerMode;
+// import frc.utility.motor.CANMotorEx.Direction;
+// import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ElevatorTemplate;
 
 public class Elevator extends ElevatorTemplate{
@@ -71,22 +73,22 @@ public class Elevator extends ElevatorTemplate{
     private static TalonEx motorRight = TalonEx.create(15)
         .withDirection(Direction.Reversed)
         .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(1)
-        .withSubsystemName("Elevator")
+        .withConversionFactor(1)
+        .withSubsystem(null)
         .withIsEnabled(true)
-        .withCurrentLimit(50);
+        .withSupplyCurrentLimit(50);
 
     private static TalonEx motorLeft = TalonEx.create(14)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Coast)
-        .withPositionConversionFactor(1)
-        .withSubsystemName("Elevator")
+        .withConversionFactor(1)
+        .withSubsystem(null)
         .withIsEnabled(true)
-        .withCurrentLimit(50);
+        .withSupplyCurrentLimit(50);
     
     public Elevator(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motorRight, motorLeft},
+        new MotorBase[]{motorRight, motorLeft},
         new ProfiledPIDController(20, 0, 0,         
         // new TrapezoidProfile.Constraints(0.5/Constants.MOTOR_ROT_2_METER, 0.5/Constants.MOTOR_ROT_2_METER)),
         new TrapezoidProfile.Constraints(1.2, 1)), // meters per sec

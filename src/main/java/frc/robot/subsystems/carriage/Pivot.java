@@ -7,8 +7,8 @@ import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.SparkAbsoluteEncoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
 import frc.utility.motor.SparkMaxEx;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.MotorBase.Direction;
+import frc.utility.motor.MotorBase.ZeroPowerMode;
 import frc.utility.template.ArmAbsoluteTemplate;
 
 public class Pivot extends ArmAbsoluteTemplate {
@@ -21,10 +21,10 @@ public class Pivot extends ArmAbsoluteTemplate {
     private static SparkMaxEx motor = SparkMaxEx.create(27)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor(1)
-        .withSubsystemName(Carriage.class.getSimpleName())
+        .withConversionFactor(1)
+        .withSubsystem(null)
         .withIsEnabled(true)
-        .withCurrentLimit(50);
+        .withSupplyCurrentLimit(50);
     
     private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
         .withDirection(EncoderDirection.Forward)

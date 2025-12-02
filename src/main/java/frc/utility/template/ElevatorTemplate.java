@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 
 public class ElevatorTemplate extends SubsystemBase implements Dashboard {
-    private final CANMotorEx[] motors;
+    private final MotorBase[] motors;
     private PIDController controller;
     private ProfiledPIDController profiledController;
     private final ElevatorFeedforward feedforward;
@@ -45,7 +45,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      * @param mainNum - Motor to use for Encoder
      */
     public ElevatorTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         PIDController controller,
         ElevatorFeedforward feedforward,
         TrapezoidProfile.Constraints constraints,
@@ -68,8 +68,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
 
         // profile = new TrapezoidProfile(constraints);
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         DashboardUtils.register(this);
@@ -90,7 +90,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      * @param mainNum - Motor to use for Encoder
      */
     public ElevatorTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         PIDController controller,
         ElevatorFeedforward feedforward,
         DigitalInput limitSwitch,
@@ -113,8 +113,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         // profile = new TrapezoidProfile(constraints);
@@ -139,7 +139,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
      * @param mainNum - Motor to use for Encoder
      */
     public ElevatorTemplate(
-        CANMotorEx[] motors,
+        MotorBase[] motors,
         ProfiledPIDController profiledController,
         ElevatorFeedforward feedforward,
         double maxPosition,
@@ -159,8 +159,8 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         this.conversionFactor=conversionFactor;
         this.mainNum=mainNum;
 
-        for (CANMotorEx motor: motors) {
-            motor.setIsEnabled(isEnabled);
+        for (MotorBase motor: motors) {
+            motor.withIsEnabled(isEnabled);
         }
 
         // profile = new TrapezoidProfile(constraints);
@@ -298,20 +298,20 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     
     protected void setVoltage(double voltage) {
         // calculatedVoltage = voltage;
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }
 
     protected void setVoltage(Voltage voltage) {
         // appliedVoltage = voltage.in(Volts);
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (CANMotorEx motor: motors) {
+        for (MotorBase motor: motors) {
             motor.resetEncoder(0);
         }
     }
@@ -328,11 +328,11 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
         return motors[mainNum].getVoltage();
     }
 
-    public CANMotorEx getMotor() {
+    public MotorBase getMotor() {
         return motors[mainNum];
     }
 
-    public CANMotorEx[] getAllMotor() {
+    public MotorBase[] getAllMotor() {
         return motors;
     }
 

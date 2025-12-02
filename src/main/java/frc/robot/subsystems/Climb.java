@@ -5,10 +5,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.motor.CANMotorEx;
+import frc.utility.motor.MotorBase;
 import frc.utility.motor.TalonEx;
-import frc.utility.motor.CANMotorEx.Direction;
-import frc.utility.motor.CANMotorEx.ZeroPowerMode;
+import frc.utility.motor.MotorBase.Direction;
+import frc.utility.motor.MotorBase.ZeroPowerMode;
 import frc.utility.template.ArmTemplate;
 
 public class Climb extends ArmTemplate {
@@ -35,11 +35,12 @@ public class Climb extends ArmTemplate {
     private static TalonEx motor = TalonEx.create(34)
         .withDirection(Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
-        .withPositionConversionFactor( .008)//(125/1)*(48/16); .02 //.008
+        .withConversionFactor( .008)//(125/1)*(48/16); .02 //.008
         //.0166
-        .withSubsystemName("Climb")
+        .withSubsystem(null)
         .withIsEnabled(true)
-        .withCurrentLimit(120,120);
+        .withSupplyCurrentLimit(120)
+        .withStatorCurrentLimit(120);
         // .0605
     // 0.002666666
 
@@ -52,7 +53,7 @@ public class Climb extends ArmTemplate {
         
     public Climb(boolean isEnabled) {
         super(
-        new CANMotorEx[]{motor}, 
+        new MotorBase[]{motor}, 
         new PIDController(150,0,0), //kp: 45
         //31
         new ArmFeedforward(0, 0.11, 0.3,0.15), //ks: 0.14 kv:0.1

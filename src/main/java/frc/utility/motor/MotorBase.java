@@ -1,4 +1,4 @@
-package frc.utility.motor.wip;
+package frc.utility.motor;
 
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
@@ -52,6 +52,7 @@ public abstract class MotorBase implements Dashboard {
     public abstract double getVoltage();
     public abstract void resetEncoder(double value);
     public abstract void stop();
+    public abstract MotorBase withIsEnabled(boolean isEnabled);
 
     private final Alert tempAlert = new Alert("Temperature Warning: Motor " + getDeviceId() +" at " + getSubsystem(), AlertType.kWarning);
 
