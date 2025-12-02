@@ -53,7 +53,7 @@ public class RobotContainer {
 
 		RumbleCommand rum = new RumbleCommand(driver);
 
-		driver.b().whileTrue(rum);
+		// driver.b().whileTrue(rum);
 
 		// Slow Mode and Gyro Reset in the Default Command
 		drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver, elevator));
@@ -63,8 +63,8 @@ public class RobotContainer {
 		// vision.setDefaultCommand(new RumbleCommand(elevator, carriage, driver, operator, vision));
 		// climb.setDefaultCommand(new ManualClimb(climb, operator::getLeftY));
 
-		// driver.leftBumper()
-		// 	.onTrue(new TeleopAlign(drive, vision, driver));
+		driver.leftBumper()
+			.onTrue(new TeleopAlign(drive, vision, driver));
 		driver.rightStick()
 			.onTrue(new InstantCommand(() -> DroidRageConstants.setAlignment((DroidRageConstants.Alignment.RIGHT))));
 		driver.leftStick()
