@@ -87,10 +87,12 @@ public class Elevator extends ElevatorTemplate{
     public Elevator(boolean isEnabled) {
         super(
         new CANMotorEx[]{motorRight, motorLeft},
-        new ProfiledPIDController(40, 0, 0,         
+        new ProfiledPIDController(20, 0, 0,         
         // new TrapezoidProfile.Constraints(0.5/Constants.MOTOR_ROT_2_METER, 0.5/Constants.MOTOR_ROT_2_METER)),
         new TrapezoidProfile.Constraints(1.2, 1)), // meters per sec
-        new ElevatorFeedforward(0.1, 0.18, 0.1868, 0),
+        // new ElevatorFeedforward(0.1, 0.18, 0.1868, 0),
+        new ElevatorFeedforward(0.0374602, 0.17, 0.170813, 0), // correct as of 12/1/2025
+
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
         Control.TRAPEZOID_PROFILE, "Elevator", 0, isEnabled);
     }

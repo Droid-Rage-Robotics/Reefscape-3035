@@ -184,7 +184,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     @Override
     public void initSendable(SendableBuilder builder) {
         switch(control) {
-            case TRAPEZOID_PROFILE:
+            case TRAPEZOID_PROFILE, SYS_ID:
                 builder.addDoubleProperty("Goal Position", this::getGoalPosition, null);
                 builder.addDoubleProperty("Current Position", this::getPosition, null);
                 builder.addDoubleProperty("Position Setpoint", this::getPositionSetpoint, null);
