@@ -124,7 +124,7 @@ public class SwerveDriveTeleop extends Command {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        drive.setModuleStates(states);
+        drive.setFeedforwardModuleStates(states);
     }
 
     @Override
