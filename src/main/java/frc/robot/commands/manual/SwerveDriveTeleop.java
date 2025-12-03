@@ -2,6 +2,7 @@ package frc.robot.commands.manual;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.drive.SwerveModule;
 
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
+    private final Elevator elevator;
     private final Supplier<Double> x, y, turn;
     private volatile double xSpeed, ySpeed, turnSpeed;
     private Rotation2d heading;
@@ -32,6 +34,7 @@ public class SwerveDriveTeleop extends Command {
 
     public SwerveDriveTeleop(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
+        this.elevator = elevator;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         this.turn = driver::getRightX;
@@ -45,11 +48,7 @@ public class SwerveDriveTeleop extends Command {
 
         driver.b().onTrue(drive.setYawCommand(0));
 
-        if(elevator.getPosition() >= ElevatorValue.L3.getHeight()){ 
-            drive.setSpeed(Speed.SLOW);
-        }
-
-        addRequirements(drive);
+        addRequirements(drive, elevator);
     }
 
     @Override
@@ -87,10 +86,6 @@ public class SwerveDriveTeleop extends Command {
             ySpeed = modifiedYSpeed;
         }
 
-        
-       
-        
-
         // Apply Anti-Tip
         double xTilt = drive.getRoll(); //Is this Roll or pitch
         double yTilt = drive.getPitch();// Is this Roll or pitch
@@ -107,15 +102,29 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
+        double translationalScale = 0;
+
+        if (elevator.getPosition() >= 0.5 * Elevator.Constants.MAX_POSITION){ 
+            var height = elevator.getPosition();
+            var maxHeight = Elevator.Constants.MAX_POSITION;
+
+            var scale = 1.0 - (height / maxHeight) * 0.6;
+
+            MathUtil.clamp(scale, 0.2, 1.0);
+            
+            // drive.setSpeed(Speed.SLOW);
+            translationalScale = scale;
+        }
+
         // Smooth driving and apply speed
         xSpeed = 
-            xSpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-            drive.getTranslationalSpeed();
+            (xSpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) * 
+            translationalScale;
         ySpeed = 
-            ySpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-            drive.getTranslationalSpeed();
+            (ySpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) *
+            translationalScale;
         turnSpeed = 
             turnSpeed *
             SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
@@ -124,7 +133,7 @@ public class SwerveDriveTeleop extends Command {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        drive.setFeedforwardModuleStates(states);
+        drive.setModuleStates(states);
     }
 
     @Override

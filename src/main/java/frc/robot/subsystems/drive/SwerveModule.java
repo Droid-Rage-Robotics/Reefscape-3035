@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,7 +14,6 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.utility.encoder.CANcoderEx;
 import frc.utility.encoder.EncoderEx.EncoderDirection;
@@ -155,7 +153,6 @@ public class SwerveModule implements Sendable {
             return;
         }
         desiredState.optimize(getState().angle);
-        desiredState.optimize(getState().angle);
         driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         turnMotor.setPower((turningPIDController.calculate(getTurningPosition(), desiredState.angle.getRadians()))*1);
     }
@@ -167,75 +164,65 @@ public class SwerveModule implements Sendable {
             return;
         }
         desiredState.optimize(getState().angle);
-        desiredState.optimize(getState().angle);
         driveMotor.setVoltage(driveFeedforward.calculate(state.speedMetersPerSecond));
         turnMotor.setPower(turningPIDController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
     }
 
     // private SlewRateLimiter speedLimiter = new SlewRateLimiter()
+
+    // public SwerveModuleState clampStateForHeight(SwerveModuleState state) {
+    //     double scale = getHeightScale();
     
-    public double getHeightScale() {
-        double height = 0;   // you must implement this
-        double maxHeight = Elevator.Constants.MAX_POSITION;
-
-        // Scale from 1.0 (ground) to something smaller as height increases
-        double scale = 1.0 - (height / maxHeight) * 0.6;  // reduce max speed by 60% at max height
-        return MathUtil.clamp(scale, 0.2, 1.0); // never drop below 20% power
-    }
-
-    public SwerveModuleState clampStateForHeight(SwerveModuleState state) {
-        double scale = getHeightScale();
+    //     double maxSpeed = Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * scale;
     
-        double maxSpeed = Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * scale;
+    //     // Limit speed
+    //     double limitedSpeed = MathUtil.clamp(
+    //         state.speedMetersPerSecond,
+    //         -maxSpeed,
+    //         maxSpeed
+    //     );
     
-        // Limit speed
-        double limitedSpeed = MathUtil.clamp(
-            state.speedMetersPerSecond,
-            -maxSpeed,
-            maxSpeed
-        );
-    
-        return new SwerveModuleState(limitedSpeed, state.angle);
-    }
+    //     return new SwerveModuleState(limitedSpeed, state.angle);
+    // }
 
-    private double lastSpeed = 0;
+    // private double lastSpeed = 0;
 
-    public double clampAcceleration(double desiredSpeed) {
-        double scale = getHeightScale();
+    // public double clampAcceleration(double desiredSpeed) {
+    //     double scale = getHeightScale();
 
-        // double maxAccel = Constants.PHYSICAL_MAX_ACCELERATION_ * scale;
+    //     // double maxAccel = Constants.PHYSICAL_MAX_ACCELERATION_ * scale;
 
-        double maxAccel = 0;
+    //     double maxAccel = 0;
 
-        double dt = 0.02; // 20ms loop
+    //     double dt = 0.02; // 20ms loop
 
-        double maxDelta = maxAccel * dt;
+    //     double maxDelta = maxAccel * dt;
 
-        double delta = desiredSpeed - lastSpeed;
+    //     double delta = desiredSpeed - lastSpeed;
 
-        if (delta > maxDelta) delta = maxDelta;
-        if (delta < -maxDelta) delta = -maxDelta;
+    //     if (delta > maxDelta) delta = maxDelta;
+    //     if (delta < -maxDelta) delta = -maxDelta;
 
-        lastSpeed += delta;
-        return lastSpeed;
-    }
+    //     lastSpeed += delta;
+    //     return lastSpeed;
+    // }
 
     
 
-    public void setFeedforwardStated(SwerveModuleState state) {
-        SwerveModuleState desiredState = state;
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
-        }
+    // public void setFeedforwardStated(SwerveModuleState state) {
+    //     SwerveModuleState desiredState = state;
+    //     if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+    //         stop();
+    //         return;
+    //     }
         
-        desiredState.optimize(getState().angle);
+    //     desiredState.optimize(getState().angle);
 
         
 
-        driveMotor.setVoltage(driveFeedforward.calculate(state.speedMetersPerSecond));
-        turnMotor.setPower(turningPIDController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
-    }
+    //     driveMotor.setVoltage(driveFeedforward.calculate(state.speedMetersPerSecond));
+    //     turnMotor.setPower(turningPIDController.calculate(getTurningPosition(), desiredState.angle.getRadians()));
+    // }
 
 
     public void stop(){
