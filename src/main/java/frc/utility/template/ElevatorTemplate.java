@@ -1,6 +1,7 @@
 package frc.utility.template;
 
 import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -20,10 +21,10 @@ import frc.utility.motor.MotorBase;
 
 public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private final MotorBase[] motors;
-    private PIDController controller;
-    private ProfiledPIDController profiledController;
+    private final PIDController controller;
+    private final ProfiledPIDController profiledController;
     private final ElevatorFeedforward feedforward;
-    private DigitalInput limitSwitch;
+    private final DigitalInput limitSwitch;
     private final Control control;
     private final double maxPosition;
     private final double minPosition;
@@ -33,141 +34,122 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     private double calculatedPID = 0;
     private double calculatedFF = 0;
 
-    /**
-     * @param motors - The Motors to Control
-     * @param controller - PID Controller
-     * @param feedforward - Feedforward
-     * @param constraints
-     * @param maxPosition 
-     * @param minPosition
-     * @param control - PID or FEEDFORWARD
-     * @param name - Name of Subsystem
-     * @param mainNum - Motor to use for Encoder
-     */
-    public ElevatorTemplate(
-        MotorBase[] motors,
-        PIDController controller,
-        ElevatorFeedforward feedforward,
-        TrapezoidProfile.Constraints constraints,
-        double maxPosition,
-        double minPosition,
-        double conversionFactor,
-        Control control,
-        String name,
-        int mainNum,
-        boolean isEnabled
-    ){
-        this.motors=motors;
-        this.controller=controller;
-        this.feedforward=feedforward;
-        this.control=control;
-        this.maxPosition=maxPosition;
-        this.minPosition=minPosition;
-        this.conversionFactor=conversionFactor;
-        this.mainNum=mainNum;
-
-        // profile = new TrapezoidProfile(constraints);
-
-        for (MotorBase motor: motors) {
-            motor.withIsEnabled(isEnabled);
-        }
-
-        DashboardUtils.register(this);
-        
-        // controller.setTolerance(.3);
-    }
-
-    /**
-     * @param motors - The Motors to Control
-     * @param controller - PID Controller
-     * @param feedforward - Feedforward
-     * @param limitSwitch - Limit Switch REV TOUCH SENSOR
-     * @param constraints
-     * @param maxPosition 
-     * @param minPosition
-     * @param control - PID or FEEDFORWARD
-     * @param name - Name of Subsystem
-     * @param mainNum - Motor to use for Encoder
-     */
-    public ElevatorTemplate(
-        MotorBase[] motors,
-        PIDController controller,
-        ElevatorFeedforward feedforward,
-        DigitalInput limitSwitch,
-        TrapezoidProfile.Constraints constraints,
-        double maxPosition,
-        double minPosition,
-        double conversionFactor,
-        Control control,
-        String name,
-        int mainNum,
-        boolean isEnabled
-    ){
-        this.motors=motors;
-        this.controller=controller;
-        this.feedforward=feedforward;
-        this.limitSwitch=limitSwitch;
-        this.control=control;
-        this.maxPosition=maxPosition;
-        this.minPosition=minPosition;
-        this.conversionFactor=conversionFactor;
-        this.mainNum=mainNum;
-
-        for (MotorBase motor: motors) {
-            motor.withIsEnabled(isEnabled);
-        }
-
-        // profile = new TrapezoidProfile(constraints);
-        // controller.setTolerance(.3);
-
-        DashboardUtils.register(this);
-    }
-
     
-    /**
-     * Constructs an Elevator instance that uses a
-     * ProfiledPIDController and feedforward for
-     * control.
-     * 
-     * @param motors - The Motors to Control
-     * @param controller - PID Controller
-     * @param feedforward - Feedforward
-     * @param maxPosition 
-     * @param minPosition
-     * @param control - PID or FEEDFORWARD
-     * @param name - Name of Subsystem
-     * @param mainNum - Motor to use for Encoder
-     */
     public ElevatorTemplate(
         MotorBase[] motors,
-        ProfiledPIDController profiledController,
+        double kP,
+        double kI,
+        double kD,
         ElevatorFeedforward feedforward,
-        double maxPosition,
-        double minPosition,
+        TrapezoidProfile.Constraints constraints,
+        double maxHeight,
+        double minHeight,
         double conversionFactor,
         Control control,
         String name,
         int mainNum,
         boolean isEnabled
-    ){
-        this.motors=motors;
-        this.profiledController=profiledController;
-        this.feedforward=feedforward;
-        this.control=control;
-        this.maxPosition=maxPosition;
-        this.minPosition=minPosition;
-        this.conversionFactor=conversionFactor;
-        this.mainNum=mainNum;
+    ) {
+        switch (control) {
+            case TRAPEZOID_PROFILE:
+                this.motors=motors;
+                this.limitSwitch = null;
+                this.feedforward=feedforward;
+                this.control=control;
+                this.maxPosition=maxHeight;
+                this.minPosition=minHeight;
+                this.conversionFactor=conversionFactor;
+                this.mainNum=mainNum;
+                
+                this.controller = null;
+                this.profiledController = new ProfiledPIDController(kP, kI, kD, constraints);
 
-        for (MotorBase motor: motors) {
-            motor.withIsEnabled(isEnabled);
+                for (MotorBase motor: motors) {
+                    motor.withIsEnabled(isEnabled);
+                }
+
+                DashboardUtils.register(this);
+                break;
+        
+            default:
+                this.motors=motors;
+                this.limitSwitch=null;
+                this.feedforward=feedforward;
+                this.control=control;
+                this.maxPosition=maxHeight;
+                this.minPosition=minHeight;
+                this.conversionFactor=conversionFactor;
+                this.mainNum=mainNum;
+            
+                this.controller = new PIDController(kP, kI, kD);
+                this.profiledController = null;
+
+                for (MotorBase motor: motors) {
+                    motor.withIsEnabled(isEnabled);
+                }
+
+                DashboardUtils.register(this);
+                break;
         }
+    }
 
-        // profile = new TrapezoidProfile(constraints);
-        // controller.setTolerance(.3);
-        // this.profiledController.setTolerance(0.001);
+    public ElevatorTemplate(
+        MotorBase[] motors,
+        DigitalInput limitSwitch,
+        double kP,
+        double kI,
+        double kD,
+        ElevatorFeedforward feedforward,
+        TrapezoidProfile.Constraints constraints,
+        double maxHeight,
+        double minHeight,
+        double conversionFactor,
+        Control control,
+        String name,
+        int mainNum,
+        boolean isEnabled
+    ) {
+        switch (control) {
+            case TRAPEZOID_PROFILE:
+                this.motors=motors;
+                this.limitSwitch=limitSwitch;
+                this.feedforward=feedforward;
+                this.control=control;
+                this.maxPosition=maxHeight;
+                this.minPosition=minHeight;
+                this.conversionFactor=conversionFactor;
+                this.mainNum=mainNum;
+                
+                this.controller = null;
+                this.profiledController = new ProfiledPIDController(kP, kI, kD, constraints);
 
-        DashboardUtils.register(this);
+                for (MotorBase motor: motors) {
+                    motor.withIsEnabled(isEnabled);
+                }
+
+                DashboardUtils.register(this);
+                break;
+        
+            default:
+                this.motors=motors;
+                this.limitSwitch=limitSwitch;
+                this.feedforward=feedforward;
+                this.control=control;
+                this.maxPosition=maxHeight;
+                this.minPosition=minHeight;
+                this.conversionFactor=conversionFactor;
+                this.mainNum=mainNum;
+            
+                this.controller = new PIDController(kP, kI, kD);
+                this.profiledController = null;
+
+                for (MotorBase motor: motors) {
+                    motor.withIsEnabled(isEnabled);
+                }
+
+                DashboardUtils.register(this);
+                break;
+        }
     }
 
     @Override
@@ -222,12 +204,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
             //     setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
             //     +feedforward.calculateWithVelocities(1, 1));
             //     break;
-            // case TRAPEZOID_PROFILE:
-            //     current = profile.calculate(0.02, current, goal);
-                
-            //     setVoltage(controller.calculate(getEncoderPosition(), current.position)
-            //             + feedforward.calculate(current.position, current.velocity));
-            //     break;
+
             case TRAPEZOID_PROFILE:
                 calculatedPID = profiledController.calculate(getPosition());
 
@@ -289,22 +266,26 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
     }
 
     public double getVelocitySetpoint() {
-        return profiledController.getSetpoint().velocity;
+        return switch (control) {
+            case TRAPEZOID_PROFILE -> profiledController.getSetpoint().velocity;
+            default -> 0;
+        };
     }
 
     public double getPositionSetpoint() {
-        return profiledController.getSetpoint().position;
+        return switch (control) {
+            case TRAPEZOID_PROFILE -> profiledController.getSetpoint().position;
+            default -> 0;
+        };
     }
     
     protected void setVoltage(double voltage) {
-        // calculatedVoltage = voltage;
         for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
     }
 
     protected void setVoltage(Voltage voltage) {
-        // appliedVoltage = voltage.in(Volts);
         for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }

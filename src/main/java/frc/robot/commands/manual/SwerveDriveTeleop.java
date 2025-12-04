@@ -48,7 +48,7 @@ public class SwerveDriveTeleop extends Command {
 
         driver.b().onTrue(drive.setYawCommand(0));
 
-        addRequirements(drive, elevator);
+        addRequirements(drive);
     }
 
     @Override
@@ -102,19 +102,13 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
-        double translationalScale = 0;
+        var height = elevator.getPosition();
+        var maxHeight = Elevator.Constants.MAX_HEIGHT;
 
-        if (elevator.getPosition() >= 0.5 * Elevator.Constants.MAX_POSITION){ 
-            var height = elevator.getPosition();
-            var maxHeight = Elevator.Constants.MAX_POSITION;
+        var translationalScale = 1.0 - (height / maxHeight) * 0.95;
 
-            var scale = 1.0 - (height / maxHeight) * 0.6;
-
-            MathUtil.clamp(scale, 0.2, 1.0);
+        translationalScale = MathUtil.clamp(translationalScale, 0.01, 0.75);
             
-            // drive.setSpeed(Speed.SLOW);
-            translationalScale = scale;
-        }
 
         // Smooth driving and apply speed
         xSpeed = 

@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,13 +9,9 @@ import frc.utility.motor.MotorBase;
 import frc.utility.motor.TalonEx;
 import frc.utility.motor.MotorBase.Direction;
 import frc.utility.motor.MotorBase.ZeroPowerMode;
-// import frc.utility.motor.CANMotorEx.Direction;
-// import frc.utility.motor.CANMotorEx.ZeroPowerMode;
 import frc.utility.template.ElevatorTemplate;
 
 public class Elevator extends ElevatorTemplate{
-    // 2
-    //Gear Ratio: 9:1
     public static class Constants {
         private static final double GEAR_RATIO = 12.0; // motor : sprocket
         private static final double SPROCKET_TEETH = 24;
@@ -33,8 +28,8 @@ public class Elevator extends ElevatorTemplate{
 
         public static final double MOTOR_ROT_2_METER = SPROCKET_CIRCUMFERENCE_METERS / GEAR_RATIO;
 
-        public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 50.5 * Constants.MOTOR_ROT_2_METER;   //40
+        public static final double MIN_HEIGHT = 0;
+        public static final double MAX_HEIGHT = 50.5 * Constants.MOTOR_ROT_2_METER;   //40
 
 
     }
@@ -89,26 +84,13 @@ public class Elevator extends ElevatorTemplate{
     public Elevator(boolean isEnabled) {
         super(
         new MotorBase[]{motorRight, motorLeft},
-        new ProfiledPIDController(20, 0, 0,         
-        // new TrapezoidProfile.Constraints(0.5/Constants.MOTOR_ROT_2_METER, 0.5/Constants.MOTOR_ROT_2_METER)),
-        new TrapezoidProfile.Constraints(1.2, 1)), // meters per sec
+        80, 0, 0,         
+        new ElevatorFeedforward(0.0374602, 0, 0.170813, 0), // correct as of 12/1/2025
+        new TrapezoidProfile.Constraints(1.2, 1), // meters per sec
         // new ElevatorFeedforward(0.1, 0.18, 0.1868, 0),
-        new ElevatorFeedforward(0.0374602, 0.17, 0.170813, 0), // correct as of 12/1/2025
-
-        Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
+        Constants.MAX_HEIGHT, Constants.MIN_HEIGHT, Constants.MOTOR_ROT_2_METER, 
         Control.TRAPEZOID_PROFILE, "Elevator", 0, isEnabled);
     }
-
-    // public Elevator(boolean isEnabled) {
-    //     super(
-    //     new CANMotorEx[]{motorRight, motorLeft}, 
-    //     new PIDController(0, 0, 0), //.6   
-    //     new ElevatorFeedforward(0.1, 0.18, 0.1627, 0), //.1 //2.2696kv
-    //     new TrapezoidProfile.Constraints(0.5, 0.5),
-    //     // new ElevatorFeedforward(0.3, 0, 0.05,0), // TRAPEZOID
-    //     Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.MOTOR_ROT_2_METER, 
-    //     Control.FEEDFORWARD, "Elevator", 0, isEnabled);
-    // }
 
     public Command setTargetPositionCommand(ElevatorValue target) {
         return setTargetPositionCommand(target.getHeight());
