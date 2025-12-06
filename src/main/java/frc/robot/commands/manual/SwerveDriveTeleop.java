@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorValue;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDrive.TippingState;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
@@ -102,23 +101,26 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
-        var height = elevator.getPosition();
-        var maxHeight = Elevator.Constants.MAX_HEIGHT;
+        double translationalSpeed;
 
-        var translationalScale = 1.0 - (height / maxHeight) * 0.95;
+        if (elevator.getPosition() >= (0.15 * Elevator.Constants.MAX_HEIGHT)) {
+            translationalSpeed = 1.0 - (elevator.getPosition() / Elevator.Constants.MAX_HEIGHT) * 0.95;
 
-        translationalScale = MathUtil.clamp(translationalScale, 0.01, 0.75);
-            
-
+            translationalSpeed = MathUtil.clamp(translationalSpeed, 0.01, 0.75);
+        }
+        else {
+            translationalSpeed = drive.getTranslationalSpeed();
+        }
+        
         // Smooth driving and apply speed
         xSpeed = 
             (xSpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) * 
-            translationalScale;
+            translationalSpeed;
         ySpeed = 
             (ySpeed *
             SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) *
-            translationalScale;
+            translationalSpeed;
         turnSpeed = 
             turnSpeed *
             SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
