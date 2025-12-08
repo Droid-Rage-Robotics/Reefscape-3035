@@ -4,7 +4,13 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
+    {
+      "type": "java",
+      "name": "MatchTimerSpeaker",
+      "request": "launch",
+      "mainClass": "frc.utility.MatchTimerSpeaker",
+      "projectName": "Reefscape-3035"
+    },
     {
       "type": "wpilib",
       "name": "WPILib Desktop Debug",
