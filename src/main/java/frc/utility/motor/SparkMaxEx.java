@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.measure.Voltage;
@@ -260,6 +261,12 @@ public class SparkMaxEx extends MotorBase {
      */
     public void burnFlash() {
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+
+    public void setAbsoluteEncoderConfig(AbsoluteEncoderConfig config) {
+        config.setSparkMaxDataPortConfig();
+        this.config.absoluteEncoder.apply(config);
+        burnFlash();
     }
 
     /**

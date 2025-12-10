@@ -6,11 +6,13 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.DroidRageConstants;
 
-public class CANcoderEx {
+public class CANcoderEx extends EncoderBase {
     private final CANcoder encoder;
     private final CANcoderConfiguration config;
+    private final int deviceId;
 
     private CANcoderEx(int deviceId, CANBus canBus) {
+        this.deviceId=deviceId;
         this.encoder = new CANcoder(deviceId, canBus);
         this.config = new CANcoderConfiguration();
     }
@@ -139,12 +141,19 @@ public class CANcoderEx {
         return this;
     }
 
+    @Override
     public double getAbsolutePosition() {
         return encoder.getAbsolutePosition().getValueAsDouble();
     }
 
+    @Override
     public double getVelocity() {
         return encoder.getVelocity().getValueAsDouble();
+    }
+
+    @Override
+    public int getDeviceId() {
+        return deviceId;
     }
 
     

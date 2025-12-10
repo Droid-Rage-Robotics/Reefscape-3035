@@ -32,7 +32,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import frc.utility.DashboardUtils;
 import frc.utility.DashboardUtils.Dashboard;
-import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.encoder.EncoderBase.EncoderDirection;
 import frc.utility.motor.MotorBase.Direction;
 import lombok.Getter;
 

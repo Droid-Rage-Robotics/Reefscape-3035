@@ -1,55 +1,249 @@
 package frc.utility.encoder;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import lombok.Getter;
-import lombok.Setter;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
 
-public class AbsoluteDutyEncoderRIO extends EncoderEx {
-    private final DutyCycleEncoder encoder;
-    @Getter(onMethod = @__(@Override)) private final int deviceID; // Should work
-    @Setter(onMethod = @__(@Override)) private double offset = 0; // Should work
-    @Getter(onMethod = @__(@Override)) private double velocity; // No use; here for compatibility
-    @Setter(onMethod = @__(@Override)) private EncoderRange range; // No use; here for compatibility
-    
-    public String name;
-    
-    private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder, int deviceID){
-        this.encoder=encoder;
-        this.deviceID = deviceID;
-        encoder.setAssumedFrequency(975.6);
-    }
-    
-    public static DirectionBuilder create(int deviceID) {
-        AbsoluteDutyEncoderRIO encoder = new AbsoluteDutyEncoderRIO(
-            new DutyCycleEncoder(deviceID), deviceID);
-        return encoder.new DirectionBuilder();
-    }
+public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, AutoCloseable {
+	private final DutyCycle dutyCycle;
+	private final DigitalInput digitalInput;
+	private final int deviceId;
+	private EncoderDirection direction = EncoderDirection.Forward;
+	private double conversionFactor = 1;
+	
+	private int m_frequencyThreshold = 100;
+	private double range = 1;
+	private double offset = 0;
+	private double m_periodNanos;
+	private double m_sensorMin;
+	private double m_sensorMax = 1.0;
 
-    @Override
-    public void setDirection(EncoderDirection direction) {
-        switch (direction) {
-            case Forward -> encoder.setInverted(false);
-            case Reversed -> encoder.setInverted(true);
-        }
-        this.direction = direction;
-    }
+	private SimDevice m_simDevice;
+	private SimDouble m_simPosition;
+	private SimBoolean m_simIsConnected;
+	
+	private AbsoluteDutyEncoderRIO(int deviceId) {
+		this.deviceId = deviceId;
+		this.digitalInput = new DigitalInput(deviceId);
+		this.dutyCycle = new DutyCycle(digitalInput);
 
-    @Override
-    public double getPosition() {
-        double givenPos = encoder.get();
+		m_simDevice = SimDevice.create("DutyCycle:DutyCycleEncoder", dutyCycle.getSourceChannel());
 
-        // Handle direction inversion
-        if (direction == EncoderDirection.Reversed) {
-            givenPos = 1 - givenPos;
-        }
+		if (m_simDevice != null) {
+				m_simPosition = m_simDevice.createDouble("Position", SimDevice.Direction.kInput, 0.0);
+				m_simIsConnected = m_simDevice.createBoolean("Connected", SimDevice.Direction.kInput, true);
+		}
 
-        // Correct for rollover (values between 0 and 1)
-        if (givenPos < 0) {
-            givenPos = 1 + givenPos;  // Wrap around positive
-        } else if (givenPos >= 1) {
-            givenPos = givenPos - 1;  // Wrap around to stay between 0 and 1
-        }
+		SendableRegistry.addLW(this, "DutyCycle Encoder", dutyCycle.getSourceChannel());
 
-        return givenPos - offset;
-    }
+		// encoder.setAssumedFrequency(975.6);
+	}
+	
+	public static AbsoluteDutyEncoderRIO create(int deviceId) {
+		return new AbsoluteDutyEncoderRIO(deviceId);
+	}
+
+	public AbsoluteDutyEncoderRIO withDirection(EncoderDirection value) {
+		direction=value;
+		return this;
+	}
+
+	public AbsoluteDutyEncoderRIO withZeroOffset(double value) {
+		offset=value;
+		return this;
+	}
+
+	public AbsoluteDutyEncoderRIO withConversionFactor(double value) {
+		conversionFactor=value;
+		return this;
+	}
+
+	/**
+	 * Used to set the value to report at maximum travel
+	 * @param value
+	 * @return
+	 */
+	public AbsoluteDutyEncoderRIO withRange(double value) {
+		range=value;
+		return this;
+	}
+
+
+	/**
+	 * Get the encoder value since the last reset.
+	 *
+	 * <p>This is reported in rotations since the last reset.
+	 *
+	 * @return the encoder value in rotations
+	 */
+	@Override
+	public double getAbsolutePosition() {
+		if (m_simPosition != null) {
+		return m_simPosition.get();
+		}
+
+		double pos;
+		// Compute output percentage (0-1)
+		if (m_periodNanos == 0.0) {
+			pos = dutyCycle.getOutput();
+		} else {
+			int highTime = dutyCycle.getHighTimeNanoseconds();
+			pos = highTime / m_periodNanos;
+		}
+
+		// Map sensor range if range isn't full
+		pos = mapSensorRange(pos);
+
+		// Compute full range and offset
+		pos = pos * range - offset;
+
+		// Map from 0 - Full Range
+		double result = MathUtil.inputModulus(pos, 0, range);
+		
+		// Invert if necessary
+		if (direction==EncoderDirection.Reversed) {
+			return range - result;
+		}
+		
+		return result * conversionFactor;
+  	}
+
+	@Override
+	public double getVelocity() {
+		return 0;
+	}
+
+	@Override
+	public int getDeviceId() {
+		return deviceId;
+	}
+
+	private double mapSensorRange(double pos) {
+		// map sensor range
+		if (pos < m_sensorMin) {
+			pos = m_sensorMin;
+		}
+		if (pos > m_sensorMax) {
+			pos = m_sensorMax;
+		}
+		pos = (pos - m_sensorMin) / (m_sensorMax - m_sensorMin);
+		return pos;
+	}
+
+	
+
+  /**
+   * Set the encoder duty cycle range. As the encoder needs to maintain a duty cycle, the duty cycle
+   * cannot go all the way to 0% or all the way to 100%. For example, an encoder with a 4096 us
+   * period might have a minimum duty cycle of 1 us / 4096 us and a maximum duty cycle of 4095 /
+   * 4096 us. Setting the range will result in an encoder duty cycle less than or equal to the
+   * minimum being output as 0 rotation, the duty cycle greater than or equal to the maximum being
+   * output as 1 rotation, and values in between linearly scaled from 0 to 1.
+   *
+   * @param min minimum duty cycle (0-1 range)
+   * @param max maximum duty cycle (0-1 range)
+   */
+  public void setDutyCycleRange(double min, double max) {
+	m_sensorMin = MathUtil.clamp(min, 0.0, 1.0);
+	m_sensorMax = MathUtil.clamp(max, 0.0, 1.0);
+  }
+
+  /**
+   * Get the frequency in Hz of the duty cycle signal from the encoder.
+   *
+   * @return duty cycle frequency in Hz
+   */
+  public int getFrequency() {
+	return dutyCycle.getFrequency();
+  }
+
+  /**
+   * Get if the sensor is connected
+   *
+   * <p>This uses the duty cycle frequency to determine if the sensor is connected. By default, a
+   * value of 100 Hz is used as the threshold, and this value can be changed with {@link
+   * #setConnectedFrequencyThreshold(int)}.
+   *
+   * @return true if the sensor is connected
+   */
+  public boolean isConnected() {
+	if (m_simIsConnected != null) {
+	  return m_simIsConnected.get();
+	}
+	return getFrequency() > m_frequencyThreshold;
+  }
+
+	/**
+	 * Change the frequency threshold for detecting connection used by {@link #isConnected()}.
+	 *
+	 * @param frequency the minimum frequency in Hz.
+	 */
+	public void setConnectedFrequencyThreshold(int frequency) {
+		if (frequency < 0) {
+			frequency = 0;
+		}
+
+		m_frequencyThreshold = frequency;
+	}
+
+	/**
+	 * Sets the assumed frequency of the connected device.
+	 *
+	 * <p>By default, the DutyCycle engine has to compute the frequency of the input signal. This can
+	 * result in both delayed readings and jumpy readings. To solve this, you can pass the expected
+	 * frequency of the sensor to this function. This will use that frequency to compute the DutyCycle
+	 * percentage, rather than the computed frequency.
+	 *
+	 * @param frequency the assumed frequency of the sensor
+	 */
+	public void setAssumedFrequency(double frequency) {
+		if (frequency == 0.0) {
+			m_periodNanos = 0.0;
+		} else {
+			m_periodNanos = 1000000000 / frequency;
+		}
+	}
+
+	/**
+	 * Get the FPGA index for the DutyCycleEncoder.
+	 *
+	 * @return the FPGA index
+	 */
+	public int getFPGAIndex() {
+		return dutyCycle.getFPGAIndex();
+	}
+
+	/**
+	 * Get the channel of the source.
+	 *
+	 * @return the source channel
+	 */
+	public int getSourceChannel() {
+		return dutyCycle.getSourceChannel();
+	}
+
+	@Override
+	public void close() {
+		dutyCycle.close();
+
+		if (digitalInput != null) {
+			digitalInput.close();
+		}
+		if (m_simDevice != null) {
+			m_simDevice.close();
+		}
+	}
+
+ 	@Override
+	public void initSendable(SendableBuilder builder) {
+		builder.setSmartDashboardType("AbsoluteEncoder");
+		builder.addDoubleProperty("Position", this::getAbsolutePosition, null);
+		builder.addBooleanProperty("Is Connected", this::isConnected, null);
+	}
 }

@@ -1,8 +1,8 @@
 package frc.robot.subsystems.carriage;
 
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.encoder.SparkAbsoluteEncoderEx;
-import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.encoder.AbsoluteDutyEncoderRIO;
+import frc.utility.encoder.EncoderBase.EncoderDirection;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.MotorBase.Direction;
 import frc.utility.motor.MotorBase.ZeroPowerMode;
@@ -26,11 +26,15 @@ public class Arm extends ArmAbsoluteTemplate {
         .withIsEnabled(true)
         .withSupplyCurrentLimit(50);
     
-    private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
+    // private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
+    //     .withDirection(EncoderDirection.Forward)
+    //     .withZeroOffset(0.0574237);
+    //     // .withSubsystemBase("arm", Carriage.class.getSimpleName());
+
+    private static final AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(0)
         .withDirection(EncoderDirection.Forward)
-        // .withPositionConversionFactor(2 * Math.PI)
-        .withOffset(0) // Not Used
-        .withSubsystemBase("arm", Carriage.class.getSimpleName());
+        .withZeroOffset(0.0574237)
+        .withRange(1);
         
     public Arm(boolean isEnabled) {
         super(
@@ -44,4 +48,5 @@ public class Arm extends ArmAbsoluteTemplate {
                 Constants.OFFSET, 
         Control.FEEDFORWARD, Carriage.class.getSimpleName(),"Arm", 0, encoder, isEnabled);
     }
+    
 }

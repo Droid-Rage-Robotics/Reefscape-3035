@@ -4,8 +4,8 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.encoder.SparkAbsoluteEncoderEx;
-import frc.utility.encoder.EncoderEx.EncoderDirection;
+import frc.utility.encoder.AbsoluteDutyEncoderRIO;
+import frc.utility.encoder.EncoderBase.EncoderDirection;
 import frc.utility.motor.SparkMaxEx;
 import frc.utility.motor.MotorBase.Direction;
 import frc.utility.motor.MotorBase.ZeroPowerMode;
@@ -26,11 +26,11 @@ public class Pivot extends ArmAbsoluteTemplate {
         .withIsEnabled(true)
         .withSupplyCurrentLimit(50);
     
-    private static SparkAbsoluteEncoderEx encoder = SparkAbsoluteEncoderEx.create(motor)
+    private static AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(1)
         .withDirection(EncoderDirection.Forward)
-        // .withPositionConversionFactor(1)
-        .withOffset(0)
-        .withSubsystemBase("pivot", Carriage.class.getSimpleName());
+        .withZeroOffset(0)
+        .withRange(1);
+        // .withSubsystemBase("pivot", Carriage.class.getSimpleName());
 
     public Pivot(boolean isEnabled) {
         super(
