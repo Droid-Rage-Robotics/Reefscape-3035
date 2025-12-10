@@ -170,7 +170,7 @@ public class Vision extends SubsystemBase implements Dashboard{
         rotController.setTolerance(.7);//.5
         xController.setTolerance(.7);//.4
 
-        DashboardUtils.register(this);
+        DashboardUtils.registerDashboard(this);
     }
 
     @Override

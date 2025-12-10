@@ -199,7 +199,7 @@ public class AutoChooser implements Dashboard {
         // autoChooser = AutoBuilder.buildAutoChooser();
         carriage.setPositionCommand(CarriageValue.INTAKE_HPS);
 
-        DashboardUtils.register(this);
+        DashboardUtils.registerDashboard(this);
     }
     
     public  Command getAutonomousCommand() {

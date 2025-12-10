@@ -60,7 +60,7 @@ public class IntakeTemplate extends SubsystemBase implements Dashboard {
 
         profile = new TrapezoidProfile(constraints);
 
-        DashboardUtils.register(this);
+        DashboardUtils.registerDashboard(this);
         
     }
 

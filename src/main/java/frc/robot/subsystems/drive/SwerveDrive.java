@@ -129,7 +129,7 @@ public class SwerveDrive extends SubsystemBase implements Dashboard {
             swerveModules[num].setTurnMotorIsEnabled(isEnabled);
         }   
         
-        DashboardUtils.register(this);
+        DashboardUtils.registerDashboard(this);
     }
 
     @Override

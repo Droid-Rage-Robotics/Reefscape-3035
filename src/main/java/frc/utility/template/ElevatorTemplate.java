@@ -68,7 +68,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     motor.withIsEnabled(isEnabled);
                 }
 
-                DashboardUtils.register(this);
+                DashboardUtils.registerDashboard(this);
                 break;
         
             default:
@@ -88,7 +88,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     motor.withIsEnabled(isEnabled);
                 }
 
-                DashboardUtils.register(this);
+                DashboardUtils.registerDashboard(this);
                 break;
         }
     }
@@ -127,7 +127,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     motor.withIsEnabled(isEnabled);
                 }
 
-                DashboardUtils.register(this);
+                DashboardUtils.registerDashboard(this);
                 break;
         
             default:
@@ -147,7 +147,7 @@ public class ElevatorTemplate extends SubsystemBase implements Dashboard {
                     motor.withIsEnabled(isEnabled);
                 }
 
-                DashboardUtils.register(this);
+                DashboardUtils.registerDashboard(this);
                 break;
         }
     }

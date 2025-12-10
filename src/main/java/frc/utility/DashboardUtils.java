@@ -54,7 +54,13 @@ public class DashboardUtils {
         public void alerts();
     }
 
-    private static final List<Dashboard> publishers = new ArrayList<>();
+    public interface Periodic {
+        public void periodic();
+    }
+
+    private static final List<Dashboard> dashboardPublishers = new ArrayList<>();
+    private static final List<Periodic> periodicPublishers = new ArrayList<>();
+
     private static final Alert batteryAlert = new Alert("Battery Voltage", AlertType.kWarning);
     private static final Elastic.Notification notification = new Elastic.Notification();
     private static final PowerDistribution powerDistribution = new PowerDistribution();
@@ -64,8 +70,19 @@ public class DashboardUtils {
      * to be run at robot startup
      * @param subsystem set to {@code this} while in a subsystem class
      */
-    public static void register(Dashboard subsystem) {
-        publishers.add(subsystem);
+    public static void registerDashboard(Dashboard subsystem) {
+        dashboardPublishers.add(subsystem);
+    }
+    
+    /**
+     * Call this function to register a class's {@code periodic()} method
+     * to be run at robot startup
+     * 
+     * <p>DO NOT USE THIS IN A SUBSYSTEM!!!
+     * @param value set to {@code this} while in a class
+     */
+    public static void registerPeriodic(Periodic value) {
+        periodicPublishers.add(value);
     }
     
     /**
@@ -73,7 +90,7 @@ public class DashboardUtils {
      * in {@code Robot.robotInit()}
      */
     public static void onRobotInit() {
-        for (Dashboard pub : publishers) {
+        for (Dashboard pub : dashboardPublishers) {
             pub.elasticInit();
 
             if(Config.Match==MatchValue.PRACTICE) {
@@ -102,6 +119,16 @@ public class DashboardUtils {
             batteryAlert.setText("Battery Voltage Low");
         } else {
             batteryAlert.set(false);
+        }
+    }
+
+    /**
+     * Configurations to run periodically. Call this once
+     * in {@code Robot.robotPeriodic()}
+     */
+    public static void onRobotPeriodic() {
+        for (Periodic pub : periodicPublishers) {
+            pub.periodic();
         }
     }
 }
