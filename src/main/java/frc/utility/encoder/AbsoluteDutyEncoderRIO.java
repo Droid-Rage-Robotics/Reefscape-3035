@@ -9,8 +9,10 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.Timer;
+import frc.utility.DashboardUtils.Periodic;
 
-public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, AutoCloseable {
+public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, AutoCloseable, Periodic {
 	private final DutyCycle dutyCycle;
 	private final DigitalInput digitalInput;
 	private final int deviceId;
@@ -27,6 +29,11 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 	private SimDevice m_simDevice;
 	private SimDouble m_simPosition;
 	private SimBoolean m_simIsConnected;
+
+	private double velocity = 0;
+
+	private double lastPos = 0;
+    private double lastTime;
 	
 	private AbsoluteDutyEncoderRIO(int deviceId) {
 		this.deviceId = deviceId;
@@ -41,8 +48,30 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 		}
 
 		SendableRegistry.addLW(this, "DutyCycle Encoder", dutyCycle.getSourceChannel());
+        
+		lastTime = Timer.getFPGATimestamp();
 
 		// encoder.setAssumedFrequency(975.6);
+	}
+
+	@Override
+	public void periodic() {
+		double currentTime = Timer.getFPGATimestamp();
+        double currentPos = getAbsolutePosition();  // 0–1 rev
+
+        double dt = currentTime - lastTime;
+        if (dt <= 0) return;
+
+        // Compute shortest-wrap-around difference in revolutions
+        double delta = currentPos - lastPos;
+        delta = (delta + 0.5) % 1.0 - 0.5;   // ensures result in [-0.5, 0.5)
+
+        // Convert to rotations per second
+        velocity = delta / dt;
+
+        // Update history
+        lastPos = currentPos;
+        lastTime = currentTime;
 	}
 	
 	public static AbsoluteDutyEncoderRIO create(int deviceId) {
@@ -116,7 +145,11 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 
 	@Override
 	public double getVelocity() {
-		return 0;
+		if(direction==EncoderDirection.Reversed){
+			velocity = -velocity;
+		}
+		
+		return velocity * conversionFactor;
 	}
 
 	@Override
