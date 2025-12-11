@@ -15,7 +15,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     public static class Constants {
         public static final double MAX_POSITION = 246;//200
         public static final double MIN_POSITION = 100;//100
-        public static final double OFFSET = Math.PI;
+        // public static final double OFFSET = Math.PI;
+        public static final double OFFSET = 0;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(27)
@@ -26,9 +27,9 @@ public class Pivot extends ArmAbsoluteTemplate {
         .withIsEnabled(true)
         .withSupplyCurrentLimit(50);
     
-    private static AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(1)
+    private static AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(2)
         .withDirection(EncoderDirection.Forward)
-        .withZeroOffset(0)
+        .withZeroOffset(-0.017564) // 0.11036038276843468 RAD
         .withRange(1);
         // .withSubsystemBase("pivot", Carriage.class.getSimpleName());
 

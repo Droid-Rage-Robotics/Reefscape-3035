@@ -15,7 +15,8 @@ public class Arm extends ArmAbsoluteTemplate {
     public static class Constants {
         public static final double MAX_POSITION = 215;
         public static final double MIN_POSITION = 45;
-        public static final double OFFSET = Math.PI;
+        // public static final double OFFSET = Math.PI;
+        public static final double OFFSET = 0;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(17)
@@ -33,7 +34,7 @@ public class Arm extends ArmAbsoluteTemplate {
 
     private static final AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(0)
         .withDirection(EncoderDirection.Forward)
-        .withZeroOffset(0.0574237)
+        .withZeroOffset(-0.953304) // 5.989784902362448 RAD
         .withRange(1);
         
     public Arm(boolean isEnabled) {
