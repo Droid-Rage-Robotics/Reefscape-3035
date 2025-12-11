@@ -3,14 +3,15 @@ package frc.utility.template;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.DroidRageConstants.Control;
-import frc.utility.encoder.EncoderEx;
+import frc.utility.encoder.EncoderBase;
 import frc.utility.motor.MotorBase;
 import frc.utility.motor.SparkMaxEx;
 
 public class ArmAbsoluteTemplate extends ArmTemplate {
-    protected EncoderEx encoder;
+    protected EncoderBase encoder;
     public ArmAbsoluteTemplate(
         SparkMaxEx[] motors,
         PIDController controller,
@@ -23,7 +24,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         String tabName,
         String subsystemName,
         int mainNum,
-        EncoderEx encoder,
+        EncoderBase encoder,
         boolean isEnabled
     ){
         super(motors, controller, feedforward, constraints,
@@ -46,7 +47,7 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
         String tabName,
         String subsystemName,
         int mainNum,
-        EncoderEx encoder,
+        EncoderBase encoder,
         boolean isEnabled
     ){
         super(motors, controller, feedforward, limitSwitch, constraints,
@@ -58,15 +59,15 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
 
     @Override
     public void periodic() {
-        encoder.periodic();
+        // encoder.periodic();
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get()));
+                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), targetRadian.get())
+                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
                 +feedforward.calculate(getEncoderPosition(),.7)); 
                 // + feedforward.calculate(getTargetPosition(), .5)); 
                 //ks * Math.signum(velocity) + kg * Math.cos(pos) + kv * velocity + ka * acceleration; ^^
@@ -84,7 +85,6 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     @Override
     protected void setVoltage(double voltage) {
         // if (!encoder.isConnectedWriter.get()) return;
-        // voltageWriter.set(voltage);
         for (MotorBase motor: motors) {
             motor.setVoltage(voltage);
         }
@@ -92,12 +92,6 @@ public class ArmAbsoluteTemplate extends ArmTemplate {
     
     @Override
     public double getEncoderPosition() {
-        double radian = (encoder.getRadian() + offset) % (Math.PI*2);
-        // double radian = encoder.getPosition();
-        positionRadian = () -> radian;
-        // positionRadianWriter.write(radian);
-        // positionDegreeWriter.write(Math.toDegrees(radian));
-        return radian;
+        return (Units.rotationsToRadians(encoder.getAbsolutePosition()) + offset) % (Math.PI*2);
     }
-    
 }
