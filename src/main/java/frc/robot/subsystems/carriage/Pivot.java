@@ -3,6 +3,7 @@ package frc.robot.subsystems.carriage;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DroidRageConstants.Control;
 import frc.utility.encoder.AbsoluteDutyEncoderRIO;
 import frc.utility.encoder.EncoderBase.EncoderDirection;
@@ -15,8 +16,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     public static class Constants {
         public static final double MAX_POSITION = 246;//200
         public static final double MIN_POSITION = 100;//100
-        // public static final double OFFSET = Math.PI;
-        public static final double OFFSET = 0;
+        public static final double OFFSET = Math.PI;
+        // public static final double OFFSET = 0;
     }
     
     private static SparkMaxEx motor = SparkMaxEx.create(27)
@@ -29,7 +30,8 @@ public class Pivot extends ArmAbsoluteTemplate {
     
     private static AbsoluteDutyEncoderRIO encoder = AbsoluteDutyEncoderRIO.create(2)
         .withDirection(EncoderDirection.Forward)
-        .withZeroOffset(-0.017564) // 0.11036038276843468 RAD
+        .withZeroOffset(0.05470208887) // works i guess
+        // OLD VALUES //0.9916014247900357 //0.8880354222008856
         .withRange(1);
         // .withSubsystemBase("pivot", Carriage.class.getSimpleName());
 
@@ -45,5 +47,9 @@ public class Pivot extends ArmAbsoluteTemplate {
         new TrapezoidProfile.Constraints(0, 0),
         Constants.MAX_POSITION, Constants.MIN_POSITION, Constants.OFFSET, 
         Control.FEEDFORWARD, Carriage.class.getSimpleName(), "Pivot", 0, encoder, isEnabled);
+
+        SmartDashboard.putData(encoder);
     }
+    
+    
 }
