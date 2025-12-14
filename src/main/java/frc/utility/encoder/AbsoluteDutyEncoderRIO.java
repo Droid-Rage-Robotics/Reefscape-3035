@@ -103,6 +103,33 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 		return this;
 	}
 
+	public void zero() {
+		double raw = getRawPositionInternal();   // raw in rotations before offset/scale/direction
+
+		offset = raw;  // shift so current position becomes 0
+
+		System.out.println("=== Encoder " + deviceId + " Zeroed ===");
+		System.out.println("Add this to your robot constants:");
+		System.out.println("    .withZeroOffset(" + offset + ");");
+	}
+
+	private double getRawPositionInternal() {
+		double pos;
+
+		if (m_simPosition != null)
+			pos = m_simPosition.get();
+		else if (m_periodNanos == 0.0)
+			pos = dutyCycle.getOutput();
+		else
+			pos = dutyCycle.getHighTimeNanoseconds() / m_periodNanos;
+
+		// Map sensor range
+		pos = mapSensorRange(pos);
+
+		// Scale into [0..range)
+		return pos * range;
+	}
+
 
 	/**
 	 * Get the encoder value since the last reset.
@@ -113,34 +140,22 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 	 */
 	@Override
 	public double getAbsolutePosition() {
-		if (m_simPosition != null) {
-		return m_simPosition.get();
+		double raw = getRawPositionInternal();            // in [0..range)
+
+		double shifted = MathUtil.inputModulus(
+			raw - offset,
+			0,
+			range
+		);
+
+		// Optional inversion
+		if (direction == EncoderDirection.Reversed) {
+			shifted = range - shifted;
 		}
 
-		double pos;
-		// Compute output percentage (0-1)
-		if (m_periodNanos == 0.0) {
-			pos = dutyCycle.getOutput();
-		} else {
-			int highTime = dutyCycle.getHighTimeNanoseconds();
-			pos = highTime / m_periodNanos;
-		}
+		// Apply scaling last
+		return shifted * conversionFactor;
 
-		// Map sensor range if range isn't full
-		pos = mapSensorRange(pos);
-
-		// Compute full range and offset
-		pos = pos * range - offset;
-
-		// Map from 0 - Full Range
-		double result = MathUtil.inputModulus(pos, 0, range);
-		
-		// Invert if necessary
-		if (direction==EncoderDirection.Reversed) {
-			return range - result;
-		}
-		
-		return result * conversionFactor;
   	}
 
 	@Override
@@ -278,5 +293,7 @@ public class AbsoluteDutyEncoderRIO extends EncoderBase implements Sendable, Aut
 		builder.setSmartDashboardType("AbsoluteEncoder");
 		builder.addDoubleProperty("Position", this::getAbsolutePosition, null);
 		builder.addBooleanProperty("Is Connected", this::isConnected, null);
+		builder.addBooleanProperty("Zero Encoder", () -> false, (x) -> { if (x) zero(); });
+		builder.addDoubleProperty("Zero Offset", () -> offset, null);
 	}
 }
