@@ -106,7 +106,7 @@ public class SwerveDriveTeleop extends Command {
         if (elevator.getPosition() >= (0.15 * Elevator.Constants.MAX_HEIGHT)) {
             translationalSpeed = 1.0 - (elevator.getPosition() / Elevator.Constants.MAX_HEIGHT) * 0.95;
 
-            translationalSpeed = MathUtil.clamp(translationalSpeed, 0.01, 0.75);
+            translationalSpeed = MathUtil.clamp(translationalSpeed, 0.01, drive.getTranslationalSpeed());
         }
         else {
             translationalSpeed = drive.getTranslationalSpeed();
