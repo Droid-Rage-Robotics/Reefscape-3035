@@ -1,9 +1,5 @@
 package frc.robot.subsystems.carriage;
 
-import java.util.concurrent.atomic.AtomicReference;
-
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -15,11 +11,6 @@ import frc.robot.DroidRageConstants;
 import lombok.Getter;
 
 public class Carriage {
-    // private final ShuffleboardValue<String> positionWriter = 
-    //     ShuffleboardValue.create("None", "CarriagePosition", "Carriage")
-    //     .build();
-    private final AtomicReference<String> positionWriter = new AtomicReference<>("None");
-    
     public enum CarriageValue{
         // START(45, 230),
         INTAKE_HPS(68, 230),
@@ -34,7 +25,8 @@ public class Carriage {
         L2(105, 233),
         L3(105, 230),
 
-        L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
+        // L4(113.5,243),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
+        L4(125,215),//116,241 //!!CAN NOT BE HIGHER THAN THIS FOR PIVOT!!!
         
         BARGE(108, 127),
         BARGE_HOLD(130,130),
@@ -105,28 +97,15 @@ public class Carriage {
         pivot.setTargetPosition(CarriageValue.INTAKE_HPS.pivotAngle);
         intake.setTargetPosition(CarriageIntakeValue.STOP.intakeSpeed);
         position = CarriageValue.INTAKE_HPS;
-        positionWriter.set(position.name());
-        SmartDashboard.putData("Carriage", writer);
-        // this.coralLimitSwitch = new DigitalInput(0);
+        SmartDashboard.putString("Carriage/Position", "INTAKE_HPS");
     }
-
-    private final Sendable writer = new Sendable() {
-        @Override
-        public void initSendable(SendableBuilder builder) {
-            builder.addStringProperty("Position", positionWriter::get, null);
-        };
-    };
-
     
     public CarriageValue getPosition() {
         return position;
     }
     
     public Command setPositionCommand(CarriageValue targetPos) {
-        // position = targetPos;
-        // positionWriter.set(position.name());
-        return Commands.sequence(
-            
+        return Commands.sequence(    
             // isHighReset(),
             switch (targetPos) {
                 case INTAKE_HPS, INTAKE_HPS_BLOCK ->  new SequentialCommandGroup(
@@ -163,14 +142,18 @@ public class Carriage {
                         pivot.setTargetPositionCommand(targetPos.getPivotAngle())
                     );
             },
-            setPosition(targetPos)
+            
+            new InstantCommand(() -> position=targetPos),
+
+            new InstantCommand(()-> SmartDashboard.putString("Carriage/Position", targetPos.name()))
+
+            // setPosition(targetPos)
         );
     }
     /** Not something to Command anything other than to make the writers reflect the position */
-    public Command setPosition(CarriageValue targetPos) {
-        return new SequentialCommandGroup(
-            new InstantCommand(()-> position = targetPos),
-            new InstantCommand(() -> positionWriter.set(position.name()))
+     public Command setPosition(CarriageValue targetPos) {
+         return new SequentialCommandGroup(
+            new InstantCommand(()-> position = targetPos)
         );
     }
 
