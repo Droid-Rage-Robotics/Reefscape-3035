@@ -252,7 +252,7 @@ public class AutoChooser implements Dashboard {
 
             // Configure AutoBuilder
             AutoBuilder.configure(
-                drive::getEstimatedPose,
+                drive::getPose,
                 drive::resetOdometry,
                 drive::getSpeeds,
                 drive::setFeedforwardModuleStates,
