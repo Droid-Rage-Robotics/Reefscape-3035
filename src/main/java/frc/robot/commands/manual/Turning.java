@@ -2,6 +2,7 @@ package frc.robot.commands.manual;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -10,6 +11,8 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.Elevator;
@@ -24,13 +27,17 @@ import frc.robot.subsystems.drive.SwerveModule;
 
 public class Turning extends Command {
     private final SwerveDrive drive;
+    private final Elevator elevator;
     private final CommandXboxController driver;
     private final Supplier<Double> x, y;
-    private volatile double xSpeed, ySpeed, turnSpeed, rightStickDeg;
+    private volatile double xSpeed, ySpeed, turnSpeed;
+    private double rightStickDeg;
     private Rotation2d heading;
     private static final PIDController antiTipY = new PIDController(0.006, 0, 0.0005);
     private static final PIDController antiTipX = new PIDController(0.006, 0, 0.0005);
     private static final PIDController turnController = new PIDController(0.025, 0, 0.00005);
+
+    private final double TURN_CONTROLLER_DEADZONE = 0.05;
 
     // private SlewRateLimiter xLimiter = new
     // SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.getValue());
@@ -39,18 +46,22 @@ public class Turning extends Command {
 
     public Turning(SwerveDrive drive, CommandXboxController driver, Elevator elevator) {
         this.drive = drive;
+        this.elevator=elevator;
         this.driver=driver;
         this.x = driver::getLeftX;
         this.y = driver::getLeftY;
         antiTipX.setTolerance(2);
         antiTipY.setTolerance(2);
 
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))// SLOW
-                .whileFalse(drive.setSpeed(Speed.SLOW));// NORMAL
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
-        // .whileFalse(drive.setSpeed(Speed.SLOW));
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
+                .whileFalse(drive.setSpeed(Speed.SLOW));
+        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
+        // .whileFalse(drive.setSpeed(Speed.NORMAL));
 
-        driver.b().onTrue(drive.setYawCommand(0));
+        driver.b().onTrue(new SequentialCommandGroup(
+            drive.setYawCommand(0),
+            new InstantCommand(()->rightStickDeg=0)
+        ));
 
         if (elevator.getPosition() >= ElevatorValue.L3.getHeight()) {
             drive.setSpeed(Speed.SLOW);
@@ -58,12 +69,14 @@ public class Turning extends Command {
 
         SmartDashboard.putData("Drive/Turn Goal", turnGoal);
 
+        turnController.enableContinuousInput(0, 360);
+
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
-
+        rightStickDeg=drive.getHeadingCW();
     }
 
     @Override
@@ -77,17 +90,15 @@ public class Turning extends Command {
             ySpeed = DroidRageConstants.squareInput(ySpeed);
             // turnSpeed = DroidRageConstants.squareInput(turnSpeed);
         }
-        
-        rightStickDeg = ControllerUtils.getRightStickDeg(driver);
 
-        turnController.enableContinuousInput(0, 360);
+        if (!(Math.abs(driver.getRightX())<TURN_CONTROLLER_DEADZONE)||!(Math.abs(driver.getRightY())<TURN_CONTROLLER_DEADZONE)) {
+            rightStickDeg = ControllerUtils.getRightStickDeg(driver);
+            
+        }
 
         turnSpeed = turnController.calculate(drive.getHeading(), -rightStickDeg); // needs to be negative because calculations are CCW+
 
-        
-        
-
-        // Apply Field Oriented
+        // Apply Field Oriented 
         if (DriveOptions.IS_FIELD_ORIENTED.get()) {
             double modifiedXSpeed = xSpeed;
             double modifiedYSpeed = ySpeed;
@@ -120,16 +131,30 @@ public class Turning extends Command {
         // if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE)
         //     turnSpeed = 0;
 
+        double translationalSpeed;
+
+        if (elevator.getPosition() >= (0.15 * Elevator.Constants.MAX_HEIGHT)) {
+            translationalSpeed = 1.0 - (elevator.getPosition() / Elevator.Constants.MAX_HEIGHT) * 0.95;
+
+            translationalSpeed = MathUtil.clamp(translationalSpeed, 0.01, drive.getTranslationalSpeed());
+        }
+        else {
+            translationalSpeed = drive.getTranslationalSpeed();
+        }
+
         // Smooth driving and apply speed
-        xSpeed = xSpeed *
-                SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-                drive.getTranslationalSpeed();
-        ySpeed = ySpeed *
-                SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-                drive.getTranslationalSpeed();
-        turnSpeed = turnSpeed *
-                SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() *
-                drive.getAngularSpeed();
+        xSpeed = 
+            (xSpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) * 
+            translationalSpeed;
+        ySpeed = 
+            (ySpeed *
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND) *
+            translationalSpeed;
+        turnSpeed = 
+            turnSpeed *
+            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.getValue() * 
+            drive.getAngularSpeed();
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
