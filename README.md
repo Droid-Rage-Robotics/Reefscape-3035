@@ -2,13 +2,11 @@
 
 ## Overview
 
-This repository contains the competition code for Team 3035's 2025 FRC robot, **Angler**, built for the **Reefscape** season.
+This repository contains the competition code for Team 3035's FRC robot, **Angler**, from the 2025 **Reefscape** season.
 
 ---
 
 ## Season Summary
-
-The 2025 season saw Team 3035 compete at two FIRST in Texas district events, the District Championship, and the World Championship.
 
 ### Events Attended
 
